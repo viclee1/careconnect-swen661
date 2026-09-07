@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/routing/routes.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/haptics.dart';
@@ -199,24 +201,8 @@ class SettingsScreen extends StatelessWidget {
   /// Sign-out belongs to the authentication screens, which land on another
   /// branch. The control is present so the section matches the design; it says
   /// plainly that it is not wired up rather than failing silently.
-  Future<void> _confirmSignOut(BuildContext context) async {
-    await showDialog<void>(
-      context: context,
-      builder: (BuildContext dialogContext) => AlertDialog(
-        icon: const Icon(Icons.logout, size: 32),
-        title: const Text('Sign out is not ready yet'),
-        content: const Text(
-          'Signing out arrives with the login and signup screens, which are '
-          'being built on another branch. Nothing has changed.',
-        ),
-        actions: <Widget>[
-          FilledButton(
-            onPressed: () => Navigator.of(dialogContext).pop(),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
+  void _confirmSignOut(BuildContext context) {
+    context.go(Routes.welcome);
   }
 }
 

@@ -28,7 +28,7 @@ DateTime _todayAt(int hour, int minute) {
 /// deliberately taller than a real handset so a whole screen is laid out in one
 /// viewport and assertions do not have to scroll to reach the last row.
 void usePhoneSurface(WidgetTester tester) {
-  tester.view.physicalSize = const Size(400, 3400);
+  tester.view.physicalSize = const Size(450, 3400);
   tester.view.devicePixelRatio = 1.0;
   addTearDown(tester.view.reset);
 }

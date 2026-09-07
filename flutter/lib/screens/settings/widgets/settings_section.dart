@@ -53,7 +53,10 @@ class SettingsSection extends StatelessWidget {
               border: Border.all(color: AppColors.border),
             ),
             clipBehavior: Clip.antiAlias,
-            child: Column(children: children),
+            child: Material(
+              type: MaterialType.transparency,
+              child: Column(children: children),
+            ),
           ),
         ],
       ),
