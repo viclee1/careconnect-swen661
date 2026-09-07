@@ -3,11 +3,13 @@
 The mobile build of CareConnect for **SWEN 661 Team 2 (The Acuity Health Group)**,
 targeting care recipients who are deaf or hard of hearing.
 
-> **Scope of this branch.** This branch delivers the three screens assigned to
-> **Victor Lee** in the Week 4 split — **Contacts**, **Messaging** (reached from
-> Contacts) and **Accessibility Settings** — plus the shared application shell
-> they need in order to run and be tested on their own. Justin's screens (Login,
-> Signup, Home, My Day) and Rehman's screens (Appointments, Medicines,
+> **Scope of this branch.** This branch delivers the four screens assigned to
+> **Justin Zhang** in the Week 4, **Sign Up**, **Sign In**, **Home** and **My Day** 
+> plus the shared application shell
+> they need in order to run and be tested on their own. Victor's screens (Contacts,
+> Messaging, Settings) are also present with minimal changes. The only change made 
+> was to the settings files to link the sign-out button to the Splash page.
+> Rehman's screens (Appointments, Medicines,
 > Memories) land on their own branches; their navigation destinations already
 > exist here as clearly-labelled placeholders. See [Adding a screen](#adding-a-screen).
 >
@@ -45,13 +47,15 @@ screen will not let you switch the visible alert banner off.
 
 ## Screens in this branch
 
-| Screen | Route | What it does |
-|:-------|:------|:-------------|
-| **Contacts** | `/contacts` | One list, Joyce first with a **Primary** pill, then the GP, the two children and the medical helpline. Each row shows the lettered avatar, the relationship, a preview of the latest message, and a count of messages **waiting** — a number *and* the word, never a bare dot. The banner at the top explains Notify. Tapping a row opens the conversation. |
-| **Messaging** | `/contacts/:contactId` | The conversation, opened from a card. Day separators, delivery state written out ("Read"), transcripts for voicemail, caption status for video, in-thread CareConnect alerts, a validated composer, and the **Notify** action. Warns, with a link into Settings, when captions are off and the thread contains a video. On a tablet it also offers the prototype's "Call *name* now" — a captioned video call, never audio-only. |
-| **Accessibility Settings** | `/settings` | A live WCAG conformance badge, then Visual Alerts, Captions (size, colour, live preview), Audio (volume, L/R balance), Vibration (three named rhythms, tap to feel), and Account. Persisted with `SharedPreferences`. |
+| Screen      | Route | What it does                                                                           |
+|:------------|:------|:---------------------------------------------------------------------------------------|
+| **Welcome** | `/welcome` | Initial splash screen linking to sign up and sign in.                                  |
+| **Sign In** | `/sign-in` | Form asking for email and password, letting the user sign into their account.          |
+| **Sign Up** | `/sign-up` | Form asking for name, email, password, and password confirmation to create an account. |
+| **Home**    | `/home` | A dashboard showing the most urgent notifications and activites of the day.            |
+| **My Day**  | `/my-day` | Shows a checklist of activities the user needs to do today.                            |
 
-Placeholders exist at `/home`, `/my-day`, `/appointments`, `/medicines` and
+Placeholders exist at `/appointments`, `/medicines` and
 `/memories` so the prototype's six-destination navigation works end to end. They
 are **not** functional screens and do not count toward the assignment's 7–10
 screen requirement.
@@ -60,26 +64,6 @@ Screens are laid out for **phone and tablet**: contact rows stack in one column
 below 720dp and go two across above it; the phone's bottom bar becomes the
 prototype's left sidebar on a tablet, with Settings listed in it rather than
 behind the app-bar gear.
-
-### Notify — the signature interaction
-
-The prototype's answer to a phone call. Tapping it:
-
-1. plays one bright, **non-strobing** pulse across the screen, carrying the
-   words "Alert sent to *name*" — a preview of what the other person sees;
-2. fires a haptic, if vibration is on in Settings;
-3. writes a line into the conversation saying the alert went and that no sound
-   was played.
-
-Step 3 matters more than it looks. An action whose only trace was a flash would
-leave a deaf user with no way to check afterwards that it actually went.
-
-The pulse is deliberately a single slow fade rather than a strobe: anything
-flashing more than three times a second risks triggering a seizure (WCAG 2.2
-success criterion 2.3.1), and the pattern that helps this app's users must not
-be the pattern that harms someone else.
-
----
 
 ## Architecture
 
@@ -97,9 +81,13 @@ lib/
 ├── state/                       # ChangeNotifier controllers (no widget imports)
 ├── widgets/                     # shared UI: scaffold, banners, badges
 └── screens/
+    ├── auth/
     ├── contacts/
+    ├── home/
     ├── messaging/
+    ├── my_day/
     ├── settings/
+    ├── splash/
     └── pending/                 # teammates' destinations, clearly labelled
 ```
 
@@ -314,17 +302,25 @@ dart pub global activate coverage
 
 ## Team member contributions — Week 4
 
-| Member | Screens |
-|:-------|:--------|
-| Justin Zhang | Login, Signup, Home, My Day |
-| Rehman Uddin | Appointments, Medicines, Memories |
-| **Victor Lee** | **Contacts, Messaging, Accessibility Settings** — plus the shared shell on this branch: theme, router, navigation, models, repositories, Provider controllers, and the shared widgets |
+| Member           | Screens                                                                                                                                                                           |
+|:-----------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Justin Zhang** | Login, Signup, Home, My Day                                                                                                                                                       |
+| Rehman Uddin     | Appointments, Medicines, Memories                                                                                                                                                 |
+| Victor Lee       | Contacts, Messaging, Accessibility Settings — plus the shared shell on this branch: theme, router, navigation, models, repositories, Provider controllers, and the shared widgets |
 
 ---
 
 ## AI usage summary
 
-Claude (Opus) was used on this branch to:
+Gemini 3 Flash was used for Sign In, Sign Up, Home, My Day
+
+- read the Week 3 design prototype and rebuild five screens against it,
+  including the Splash screen, Sign Up, Sign In, Home, and My Day pages.
+- Generated unit and widget tests for the relevant pages and the new Sign Out feature in the settings
+
+Rejected AI suggestions: New top header that clashed with the existing headers from Victor's initial pages.
+
+Claude (Opus) was used on this branch (Contacts, Messaging, Accessibility Settings) to:
 
 - scaffold the Flutter project and translate the Assignment 3 colour palette and
   typography scale into `ThemeData`;
