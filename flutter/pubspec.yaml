@@ -1,0 +1,30 @@
+name: careconnect_mobile
+description: >-
+  CareConnect mobile — a hearing-accessible care companion for deaf and
+  hard-of-hearing care recipients. SWEN 661 Team 2 (The Acuity Health Group).
+publish_to: "none"
+version: 0.4.0+4
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State management (Assignment 4 requirement: Provider or Riverpod).
+  provider: ^6.1.0
+
+  # Declarative navigation built on Navigator 2.0.
+  go_router: ">=13.0.0 <17.0.0"
+
+  # Local persistence for the accessibility settings.
+  shared_preferences: ^2.2.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true

@@ -1,0 +1,20 @@
+# Analysis configuration for the CareConnect Flutter client.
+# Run `flutter analyze` from the `flutter/` directory; the expected result is
+# "No issues found!".
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    prefer_single_quotes: true
+    avoid_print: true
+
+analyzer:
+  exclude:
+    - "coverage/**"
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**

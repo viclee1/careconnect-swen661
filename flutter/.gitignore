@@ -1,0 +1,20 @@
+# Flutter / Dart
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+pubspec.lock
+
+# Coverage output (regenerate with `flutter test --coverage`)
+coverage/html/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Platform folders are generated locally, see README
+# (uncomment if your team decides not to commit them)
