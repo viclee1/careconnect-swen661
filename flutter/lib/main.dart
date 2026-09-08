@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'app.dart';
 import 'data/contact_repository.dart';
+import 'data/daily_tasks_repository.dart';
 import 'data/message_repository.dart';
 import 'data/settings_repository.dart';
 
@@ -17,6 +18,7 @@ void main() {
       contactRepository: MockContactRepository(),
       messageRepository: MockMessageRepository(),
       settingsRepository: SharedPreferencesSettingsRepository(),
+      dailyTasksRepository: InMemoryDailyTasksRepository(),
     ),
   );
 }

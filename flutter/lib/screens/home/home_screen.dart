@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
+import '../../state/daily_tasks_controller.dart';
 import '../../widgets/alert_banner.dart';
 import '../../widgets/app_scaffold.dart';
 
@@ -11,7 +13,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
-  bool _showAppointmentNotification = true;
   bool _isIncomingCall = false;
   bool _isActiveCall = false;
   late AnimationController _flashController;
@@ -52,34 +53,73 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   }
 
   Widget _buildHomeContent() {
+    final dailyTasks = context.watch<DailyTasksController>();
+
     return ListView(
       padding: const EdgeInsets.all(AppTheme.gutter),
       children: [
-        if (_showAppointmentNotification)
+        if (dailyTasks.showNotification) ...[
           Padding(
             padding: const EdgeInsets.only(bottom: 16),
             child: AlertBanner(
-              tone: AlertTone.info, title: 'Upcoming appointment',
+              tone: AlertTone.info,
+              title: 'Upcoming appointment',
               message: 'You have a video call with Maria today at 3:00 PM.',
-              action: FilledButton(onPressed: () => setState(() => _showAppointmentNotification = false), style: FilledButton.styleFrom(backgroundColor: AppColors.primaryDark, foregroundColor: Colors.white), child: const Text('OK')),
+              action: FilledButton(
+                onPressed: () => dailyTasks.dismissNotification(),
+                style: FilledButton.styleFrom(
+                  backgroundColor: AppColors.primaryDark,
+                  foregroundColor: Colors.white,
+                ),
+                child: const Text('OK'),
+              ),
             ),
           ),
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(color: AppColors.secondaryLight, borderRadius: BorderRadius.circular(AppTheme.radius), border: Border.all(color: AppColors.border)),
-          child: Row(children: [
-            Container(padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2), decoration: BoxDecoration(color: AppColors.primaryDark, borderRadius: BorderRadius.circular(4)), child: const Text('CC', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12))),
-            const SizedBox(width: 12),
-            const Expanded(child: Text('Upcoming: Video call with Maria at 3:00 PM', style: TextStyle(fontWeight: FontWeight.w600, color: AppColors.primaryDark))),
-          ]),
-        ),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: AppColors.secondaryLight,
+              borderRadius: BorderRadius.circular(AppTheme.radius),
+              border: Border.all(color: AppColors.border),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryDark,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: const Text(
+                    'CC',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                const Expanded(
+                  child: Text(
+                    'Upcoming: Video call with Maria at 3:00 PM',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.primaryDark,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
         const SizedBox(height: 24),
         Text("Here's your day, Margaret", style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontSize: 28, fontWeight: FontWeight.bold)),
         const SizedBox(height: 12),
         Row(children: [
-          const Expanded(child: ClipRRect(borderRadius: const BorderRadius.all(Radius.circular(4)), child: LinearProgressIndicator(value: 0.3, backgroundColor: AppColors.secondaryLight, valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryDark), minHeight: 12))),
+          Expanded(child: ClipRRect(borderRadius: const BorderRadius.all(Radius.circular(4)), child: LinearProgressIndicator(value: dailyTasks.progress, backgroundColor: AppColors.secondaryLight, valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryDark), minHeight: 12))),
           const SizedBox(width: 16),
-          Text('3 of 10 done', style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600, color: AppColors.secondaryDark)),
+          Text('${dailyTasks.doneCount} of ${dailyTasks.totalCount} done', style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600, color: AppColors.secondaryDark)),
         ]),
         const SizedBox(height: 32),
         Text('Next thing to do', style: Theme.of(context).textTheme.titleLarge),
@@ -165,7 +205,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             Container(width: 90, height: 90, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(45), border: Border.all(color: AppColors.primaryDark, width: 4), boxShadow: const [BoxShadow(blurRadius: 8, color: Colors.black26)]), child: const Icon(Icons.person, size: 50, color: AppColors.primaryDark)),
           ])),
           const Spacer(),
-          Container(width: double.infinity, padding: const EdgeInsets.all(20), decoration: BoxDecoration(color: Colors.black87, borderRadius: BorderRadius.circular(AppTheme.radius), border: Border.all(color: Colors.white24)), child: const Text('[CC LIVE] "Hi Mum! Can you hear me? I\'m calling to check in on you."', style: TextStyle(color: Colors.white, fontSize: 20, height: 1.4), textAlign: TextAlign.center)),
+          if (_isCCEnabled)
+            Container(width: double.infinity, padding: const EdgeInsets.all(20), decoration: BoxDecoration(color: Colors.black87, borderRadius: BorderRadius.circular(AppTheme.radius), border: Border.all(color: Colors.white24)), child: const Text('[CC LIVE] "Hi Mum! Can you hear me? I\'m calling to check in on you."', style: TextStyle(color: Colors.white, fontSize: 20, height: 1.4), textAlign: TextAlign.center)),
           const SizedBox(height: 24),
           _buildActiveCallControls(),
           const SizedBox(height: 32),

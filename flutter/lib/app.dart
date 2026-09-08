@@ -6,9 +6,11 @@ import 'core/routing/app_router.dart';
 import 'core/routing/routes.dart';
 import 'core/theme/app_theme.dart';
 import 'data/contact_repository.dart';
+import 'data/daily_tasks_repository.dart';
 import 'data/message_repository.dart';
 import 'data/settings_repository.dart';
 import 'state/contacts_controller.dart';
+import 'state/daily_tasks_controller.dart';
 import 'state/messages_controller.dart';
 import 'state/settings_controller.dart';
 
@@ -23,12 +25,14 @@ class CareConnectApp extends StatefulWidget {
     required this.contactRepository,
     required this.messageRepository,
     required this.settingsRepository,
+    required this.dailyTasksRepository,
     this.initialLocation = Routes.initial,
   });
 
   final ContactRepository contactRepository;
   final MessageRepository messageRepository;
   final SettingsRepository settingsRepository;
+  final DailyTasksRepository dailyTasksRepository;
   final String initialLocation;
 
   @override
@@ -56,6 +60,11 @@ class _CareConnectAppState extends State<CareConnectApp> {
         ChangeNotifierProvider<SettingsController>(
           create: (_) =>
               SettingsController(repository: widget.settingsRepository)..load(),
+        ),
+        ChangeNotifierProvider<DailyTasksController>(
+          create: (_) => DailyTasksController(
+            repository: widget.dailyTasksRepository,
+          ),
         ),
       ],
       child: MaterialApp.router(
