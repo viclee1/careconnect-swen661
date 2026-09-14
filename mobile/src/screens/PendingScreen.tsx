@@ -22,7 +22,7 @@ export function PendingScreen({
 }: {
   title: string;
   owner: string;
-  onOpenSettings: () => void;
+  onOpenSettings?: () => void;
 }) {
   return (
     <View style={styles.screen}>

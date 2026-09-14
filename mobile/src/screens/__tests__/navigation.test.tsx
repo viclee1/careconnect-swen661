@@ -1,6 +1,6 @@
-import { act, fireEvent, screen } from '@testing-library/react-native';
+import { act, fireEvent, screen, within } from '@testing-library/react-native';
 
-import { renderApp } from '../../test-support/harness';
+import { renderApp, useTabletSize } from '../../test-support/harness';
 
 describe('navigation', () => {
   it('opens on Contacts', async () => {
@@ -133,6 +133,31 @@ describe('navigation', () => {
     await screen.findByText('Home is still being built');
 
     await fireEvent.press(screen.getByLabelText('Settings'));
+    expect(await screen.findByText('Accessibility Settings')).toBeTruthy();
+  });
+
+  it('on a tablet, a sidebar with full labels replaces the bottom bar and lists Settings', async () => {
+    useTabletSize();
+    await renderApp();
+    await screen.findByTestId('contact-c1');
+
+    // Full labels, not the phone bar's cramped abbreviations.
+    expect(within(screen.getByTestId('tab-Appointments')).getByText('Appointments')).toBeTruthy();
+
+    // The sidebar carries Settings itself, so the header gear is gone.
+    expect(screen.queryByLabelText('Settings')).toBeNull();
+    expect(screen.getByTestId('tab-Settings')).toBeTruthy();
+  });
+
+  it("the tablet sidebar's Settings item opens Settings", async () => {
+    useTabletSize();
+    await renderApp();
+    await screen.findByTestId('contact-c1');
+
+    await act(async () => {
+      await fireEvent.press(screen.getByTestId('tab-Settings'));
+    });
+
     expect(await screen.findByText('Accessibility Settings')).toBeTruthy();
   });
 });

@@ -28,7 +28,7 @@ export function ContactsScreen({
   onOpenSettings,
 }: {
   onOpenThread: (contact: Contact) => void;
-  onOpenSettings: () => void;
+  onOpenSettings?: () => void;
 }) {
   const contacts = useContacts();
   const messages = useMessages();
