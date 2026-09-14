@@ -16,11 +16,8 @@ targeting care recipients who are deaf or hard of hearing.
 > Both clients are built to match the **Week 3 design prototype**. Where the
 > prototype and the original React web client disagreed, the prototype won.
 
-**Status:** 214 tests passing, **91.9 % line coverage**, `eslint` and `tsc`
+**Status:** 229 tests passing, **96.1 % line coverage**, `eslint` and `tsc`
 clean. The framework comparison (Assignment 5 Part 3) is not in this branch.
-Coverage is well above the assignment's 60 % floor but down from the ~99 %
-Victor's screens hold alone — Justin's newly-merged Home, My Day, Sign In and
-Sign Up screens don't have their own tests yet.
 
 ---
 
@@ -171,17 +168,17 @@ eas build --platform ios         # requires an Apple developer account
 ```bash
 npm run lint            # eslint — expected: no output
 npm run typecheck       # tsc --noEmit — expected: no output
-npm test                # 214 tests
+npm test                # 229 tests
 npm run test:coverage   # writes coverage/lcov-report/index.html
 ```
 
 ### Coverage
 
 ```
-Statements   : 91.48 % ( 591/646 )
-Branches     : 83.41 % ( 362/434 )
-Functions    : 85.02 % ( 210/247 )
-Lines        : 91.94 % ( 525/571 )
+Statements   : 96.13 % ( 621/646 )
+Branches     : 88.01 % ( 382/434 )
+Functions    : 93.52 % ( 231/247 )
+Lines        : 96.14 % ( 549/571 )
 ```
 
 Open `coverage/lcov-report/index.html` for the browsable report and screenshot
@@ -234,6 +231,13 @@ screens, rendered inside the real navigator and providers:
   tablet — the bar becoming a full-label sidebar with its own Settings entry,
   reaching a teammate screen the same way the bottom bar does, and dropping the
   header gear on every screen, placeholders included
+- Sign In / Sign Up render their forms and forward to `onSignIn` / `onSignUp` /
+  `onSignUp` ↔ `onSignIn` on the matching button and link presses
+- Home renders its dashboard, dismisses the daily-task notification, and walks
+  the simulated incoming call end to end — decline, answer into the active-call
+  UI, and toggle CC, mute and pause from there
+- My Day renders its task list, toggles a task's done state on press, and
+  dismisses its notification
 
 ---
 
@@ -259,17 +263,17 @@ screens, rendered inside the real navigator and providers:
 
 ## Team member contributions — Week 5
 
-| Member | Screens |
-|:-------|:--------|
-| Justin Zhang | Welcome, Sign In, Sign Up, Home, My Day |
-| Rehman Uddin | Appointments, Medicines, Memories |
-| **Victor Lee** | **Contacts, Messaging, Accessibility Settings** — plus the shared shell on this branch: theme, navigation, models, repositories, Context providers, shared components, and the test harness |
+| Member       | Screens                                                                                                                                                                                 |
+|:-------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Justin Zhang | Welcome, Sign In, Sign Up, Home, My Day                                                                                                                                                 |
+| Rehman Uddin | Appointments, Medicines, Memories                                                                                                                                                       |
+| Victor Lee   | Contacts, Messaging, Accessibility Settings — plus the shared shell on this branch: theme, navigation, models, repositories, Context providers, shared components, and the test harness |
 
 ---
 
 ## AI usage summary
 
-Claude (Opus) was used on this branch to:
+Claude (Opus) and Gemini was used on this branch to:
 
 - scaffold the Expo project and port the Flutter client's architecture into
   React Native — Provider became Context, `ChangeNotifier` became pure helpers
