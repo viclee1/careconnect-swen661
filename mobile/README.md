@@ -14,7 +14,7 @@ targeting care recipients who are deaf or hard of hearing.
 > Both clients are built to match the **Week 3 design prototype**. Where the
 > prototype and the original React web client disagreed, the prototype won.
 
-**Status:** 210 tests passing, **99.1 % line coverage**, `eslint` and `tsc`
+**Status:** 214 tests passing, **99.2 % line coverage**, `eslint` and `tsc`
 clean. The framework comparison (Assignment 5 Part 3) is not in this branch.
 
 ---
@@ -108,7 +108,10 @@ the conversation and Settings. The six top-level destinations live in the tab
 navigator with `animation: 'none'`, so switching tabs swaps the page and nothing
 else moves; the bar belongs to the navigator rather than to any screen, so it is
 mounted once and never animates. The conversation and Settings sit above the
-tabs and cover the bar the way a screen you come back from should.
+tabs and cover the bar the way a screen you come back from should. From the
+tablet breakpoint up, the bar becomes a 220px left sidebar with full labels and
+a Settings entry of its own — matching the Flutter client's `AppShell` — and
+each screen's header gear is hidden, since the sidebar already offers Settings.
 
 **Persistence.** `AsyncStorage` under one key. A corrupt or partially written
 value degrades to safe defaults rather than throwing on startup — which matters
@@ -215,7 +218,10 @@ screens, rendered inside the real navigator and providers:
   and previews a rhythm without changing any setting
 - Navigation: list → conversation → back, the six-destination bar, tab selection
   state, the header gear, the bar hiding on Settings, the cross-screen caption
-  warning, and a failed load that explains itself and recovers on retry
+  warning, a failed load that explains itself and recovers on retry, and — on a
+  tablet — the bar becoming a full-label sidebar with its own Settings entry,
+  reaching a teammate screen the same way the bottom bar does, and dropping the
+  header gear on every screen, placeholders included
 
 ---
 
@@ -235,8 +241,6 @@ screens, rendered inside the real navigator and providers:
 - **Sign out is not wired up.** It belongs with the authentication screens on
   another branch, so the control is present and says so rather than failing
   silently.
-- The tablet layout widens the contact list to two columns and constrains reading
-  width, but does not reproduce the Flutter client's left sidebar.
 
 ---
 

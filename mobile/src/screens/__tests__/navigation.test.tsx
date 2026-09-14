@@ -160,4 +160,39 @@ describe('navigation', () => {
 
     expect(await screen.findByText('Accessibility Settings')).toBeTruthy();
   });
+
+  it('the tablet sidebar reaches a teammate screen, same as the bottom bar', async () => {
+    useTabletSize();
+    await renderApp();
+    await screen.findByTestId('contact-c1');
+
+    await act(async () => {
+      await fireEvent.press(screen.getByTestId('tab-Medicines'));
+    });
+
+    expect(await screen.findByText('Medicines is still being built')).toBeTruthy();
+    expect(screen.queryByTestId('contact-c1')).toBeNull();
+
+    await act(async () => {
+      await fireEvent.press(screen.getByTestId('tab-Contacts'));
+    });
+
+    expect(await screen.findByTestId('contact-c1')).toBeTruthy();
+  });
+
+  it('a teammate placeholder also drops its header gear on a tablet', async () => {
+    useTabletSize();
+    await renderApp();
+    await screen.findByTestId('contact-c1');
+
+    await act(async () => {
+      await fireEvent.press(screen.getByTestId('tab-Home'));
+    });
+
+    // The sidebar carries Settings on every tab, placeholders included, so
+    // the header gear must not reappear as a second way to reach it.
+    expect(await screen.findByText('Home is still being built')).toBeTruthy();
+    expect(screen.queryByLabelText('Settings')).toBeNull();
+    expect(screen.getByTestId('tab-Settings')).toBeTruthy();
+  });
 });
