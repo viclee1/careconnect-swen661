@@ -4,21 +4,15 @@ The Expo build of CareConnect for **SWEN 661 Team 2 (The Acuity Health Group)**,
 targeting care recipients who are deaf or hard of hearing.
 
 > **Scope of this branch.** This is the Week 5 React Native port of the three
-> screens assigned to **Victor Lee** — **Contacts**, **Messaging** and
-> **Accessibility Settings** — feature-for-feature with the Week 4 Flutter
-> client in [`../flutter`](../flutter). Justin's screens (Welcome, Sign In,
-> Sign Up, Home, My Day) and Rehman's (Appointments, Medicines, Memories) land
-> on their own branches; their navigation destinations already exist here as
-> clearly-labelled placeholders.
+> screens assigned to **Justin Zhang** — Welcome, Sign In,
+> Sign Up, Home, and My Day, feature-for-feature with the Week 4 Flutter
+> client in [`../flutter`](../flutter). Victor's screens (Contacts, Messaging, and
+> Accessibility Settings) are also present on this branch. Rehman's screens (Appointments, Medicines, Memories) land
+> on their own branches.
 >
 > Both clients are built to match the **Week 3 design prototype**. Where the
 > prototype and the original React web client disagreed, the prototype won.
-
-**Status:** 210 tests passing, **99.1 % line coverage**, `eslint` and `tsc`
-clean. The framework comparison (Assignment 5 Part 3) is not in this branch.
-
 ---
-
 ## What the application does
 
 CareConnect is a daily companion for a care recipient and the people looking
@@ -48,29 +42,15 @@ screen will not let you switch the visible alert banner off.
 
 ## Screens
 
-| Screen | What it does |
-|:-------|:-------------|
-| **Contacts** | One list, Joyce first with a **Primary** pill, then the GP, the two children and the medical helpline. Each row shows the lettered avatar, the relationship, a preview of the latest message, and a count of messages **waiting** — a number *and* the word. Tapping a row opens the conversation. |
-| **Messaging** | Day separators, delivery state written out ("Read"), transcripts for voicemail, caption status for video, in-thread CareConnect alerts, a validated composer, and the **Notify** action. Warns, with a link into Settings, when captions are off and the conversation contains a video. On a tablet it also offers "Call *name* now" — a captioned video call, never audio-only. |
-| **Accessibility Settings** | A live WCAG conformance badge, then Visual Alerts, Captions (size, colour, live preview), Audio (volume, L/R balance), Vibration (three named rhythms, tap to feel), and Account. Persisted with `AsyncStorage`. |
+| Screen      | What it does                                                                                               |
+|:------------|:-----------------------------------------------------------------------------------------------------------|
+| **Sign Up** | Form for the user to create an account                                                                     |
+| **Sign In** | Form for the user to sign into their account                                                               |
+| **Home**    | The dashboard of the app, displaying small messages about the day and the notifications they have received |
+| **My Day**  | Displays a check list of activities the user needs to do for the day                                       |
 
-Placeholders stand in for Home, My Day, Appointments, Medicines and Memories so
-the prototype's six-destination navigation works end to end. They are **not**
-functional screens and do not count toward the assignment's screen requirement.
-
-### Notify — the signature interaction
-
-Tapping it plays one **non-strobing** pulse across the screen carrying the words
-"Alert sent to *name*", fires a haptic if vibration is on in Settings, and writes
-a line into the conversation saying the alert went and that no sound was played.
-
-That last step matters more than it looks: an action whose only trace was a flash
-would leave a deaf user with no way to check afterwards that it actually went.
-
-The pulse is deliberately a single slow fade. Anything flashing more than three
-times a second risks triggering a seizure (WCAG 2.2 SC 2.3.1), and the pattern
-that helps this app's users must not be the pattern that harms someone else.
-
+Placeholders stand in for Appointments, Medicines and Memories so
+the prototype's six-destination navigation works end to end.
 ---
 
 ## Architecture
@@ -242,17 +222,17 @@ screens, rendered inside the real navigator and providers:
 
 ## Team member contributions — Week 5
 
-| Member | Screens |
-|:-------|:--------|
-| Justin Zhang | Welcome, Sign In, Sign Up, Home, My Day |
-| Rehman Uddin | Appointments, Medicines, Memories |
-| **Victor Lee** | **Contacts, Messaging, Accessibility Settings** — plus the shared shell on this branch: theme, navigation, models, repositories, Context providers, shared components, and the test harness |
+| Member       | Screens                                                                                                                                                                                 |
+|:-------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Justin Zhang | Welcome, Sign In, Sign Up, Home, My Day                                                                                                                                                 |
+| Rehman Uddin | Appointments, Medicines, Memories                                                                                                                                                       |
+| Victor Lee   | Contacts, Messaging, Accessibility Settings — plus the shared shell on this branch: theme, navigation, models, repositories, Context providers, shared components, and the test harness |
 
 ---
 
 ## AI usage summary
 
-Claude (Opus) was used on this branch to:
+Claude (Opus) and Gemini was used on this branch to:
 
 - scaffold the Expo project and port the Flutter client's architecture into
   React Native — Provider became Context, `ChangeNotifier` became pure helpers

@@ -235,6 +235,7 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings: () => void }) {
                   onPress={() => setIsPaused(!isPaused)}
                 />
                 <ToggleButton
+                  testID="toggle-cc"
                   icon="closed-caption"
                   label="CC"
                   isActive={isCCEnabled}
@@ -314,15 +315,17 @@ function ToggleButton({
   label,
   isActive,
   onPress,
+  testID,
 }: {
   icon: IconName;
   label: string;
   isActive: boolean;
   onPress: () => void;
+  testID?: string;
 }) {
   const color = isActive ? 'white' : 'rgba(255,255,255,0.54)';
   return (
-    <TouchableOpacity onPress={onPress} style={styles.toggleButton}>
+    <TouchableOpacity onPress={onPress} style={styles.toggleButton} testID={testID}>
       <Icon name={icon} size={36} color={color} />
       <Text style={[styles.toggleLabel, { color }]}>{label}</Text>
     </TouchableOpacity>
