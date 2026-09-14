@@ -273,7 +273,7 @@ screens, rendered inside the real navigator and providers:
 
 ## AI usage summary
 
-Claude (Opus) and Gemini was used on this branch to:
+Claude (Opus) and Gemini were used on this branch to:
 
 - scaffold the Expo project and port the Flutter client's architecture into
   React Native — Provider became Context, `ChangeNotifier` became pure helpers
