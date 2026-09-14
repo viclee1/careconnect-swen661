@@ -10,6 +10,10 @@ import {
   type ContactRepository,
 } from '../data/contactRepository';
 import {
+  createMockDailyTasksRepository,
+  type DailyTasksRepository,
+} from '../data/dailyTasksRepository';
+import {
   createMockMessageRepository,
   type MessageRepository,
 } from '../data/messageRepository';
@@ -18,6 +22,8 @@ import {
   type SettingsRepository,
 } from '../data/settingsRepository';
 import type { AccessibilitySettings } from '../models/accessibilitySettings';
+import type { AppDestination } from '../navigation/destinations';
+import type { RootStackParamList } from '../navigation/routes';
 import { RootNavigator } from '../navigation/RootNavigator';
 
 /**
@@ -55,7 +61,10 @@ export interface HarnessOptions {
   contactRepository?: ContactRepository;
   messageRepository?: MessageRepository;
   settingsRepository?: SettingsRepository;
+  dailyTasksRepository?: DailyTasksRepository;
   settings?: Partial<AccessibilitySettings>;
+  initialRouteName?: keyof RootStackParamList;
+  initialTabName?: AppDestination;
 }
 
 function buildRepositories(options: HarnessOptions) {
@@ -78,6 +87,7 @@ function buildRepositories(options: HarnessOptions) {
     messageRepository:
       options.messageRepository ?? createMockMessageRepository({ now: kTestNow }),
     settingsRepository,
+    dailyTasksRepository: options.dailyTasksRepository ?? createMockDailyTasksRepository(),
   };
 }
 
@@ -109,5 +119,9 @@ export function renderWithProviders(ui: ReactElement, options: HarnessOptions = 
  * assembles them.
  */
 export function renderApp(options: HarnessOptions = {}) {
-  return renderWithProviders(<RootNavigator />, options);
+  const { initialRouteName = 'Tabs', initialTabName = 'Contacts', ...rest } = options;
+  return renderWithProviders(
+    <RootNavigator initialRouteName={initialRouteName} initialTabName={initialTabName} />,
+    rest,
+  );
 }

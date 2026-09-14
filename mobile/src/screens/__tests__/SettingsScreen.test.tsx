@@ -200,16 +200,14 @@ describe('interaction', () => {
     expect(await repository.load()).toEqual(defaultSettings);
   });
 
-  it('sign out says plainly that it is not wired up yet', async () => {
+  it('sign out routes back to the welcome screen', async () => {
     await renderApp();
     await openSettings();
 
     await fireEvent.press(screen.getByText('Sign out'));
 
-    expect(await screen.findByText('Sign out is not ready yet')).toBeTruthy();
-
-    await fireEvent.press(screen.getByText('OK'));
-    expect(screen.queryByText('Sign out is not ready yet')).toBeNull();
+    expect(await screen.findByText('Your daily companion for calm, confident care.')).toBeTruthy();
+    expect(screen.queryByText('Accessibility Settings')).toBeNull();
   });
 });
 

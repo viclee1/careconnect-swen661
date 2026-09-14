@@ -21,6 +21,7 @@ export function AppButton({
   accessibilityHint,
   fullWidth = false,
   tone = colors.primaryDark,
+  labelColor,
   testID,
 }: {
   label: string;
@@ -32,10 +33,11 @@ export function AppButton({
   accessibilityHint?: string;
   fullWidth?: boolean;
   tone?: string;
+  labelColor?: string;
   testID?: string;
 }) {
   const filled = variant === 'filled';
-  const ink = filled ? colors.primaryLight : tone;
+  const ink = labelColor ?? (filled ? colors.primaryLight : tone);
 
   return (
     <Pressable

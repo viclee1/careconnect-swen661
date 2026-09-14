@@ -9,10 +9,15 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { useResponsive } from '../hooks/useResponsive';
 import { ContactsScreen } from '../screens/ContactsScreen';
+import { HomeScreen } from '../screens/HomeScreen';
 import { MessageThreadScreen } from '../screens/MessageThreadScreen';
+import { MyDayScreen } from '../screens/MyDayScreen';
 import { PendingScreen } from '../screens/PendingScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
-import { destinations } from './destinations';
+import { SignInScreen } from '../screens/SignInScreen';
+import { SignUpScreen } from '../screens/SignUpScreen';
+import { WelcomeScreen } from '../screens/WelcomeScreen';
+import { destinations, type AppDestination } from './destinations';
 import type { RootStackParamList, TabParamList } from './routes';
 import { TabBar } from './TabBar';
 
@@ -22,8 +27,8 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 type RootNav = NavigationProp<RootStackParamList>;
 
 /**
- * Stands in for the five destinations other team members own. One component
- * serves all of them; it reads which one it is from the route.
+ * Stands in for the three destinations Rehman owns. One component serves all
+ * of them; it reads which one it is from the route.
  */
 function PendingRoute() {
   const route = useRoute();
@@ -40,6 +45,22 @@ function PendingRoute() {
       // the Flutter client's AppScaffold hides it.
       onOpenSettings={isTablet ? undefined : () => navigation.navigate('Settings')}
     />
+  );
+}
+
+function HomeRoute() {
+  const navigation = useNavigation<RootNav>();
+  const { isTablet } = useResponsive();
+  return (
+    <HomeScreen onOpenSettings={isTablet ? undefined : () => navigation.navigate('Settings')} />
+  );
+}
+
+function MyDayRoute() {
+  const navigation = useNavigation<RootNav>();
+  const { isTablet } = useResponsive();
+  return (
+    <MyDayScreen onOpenSettings={isTablet ? undefined : () => navigation.navigate('Settings')} />
   );
 }
 
@@ -66,13 +87,13 @@ function ContactsRoute() {
  * and `TabBar` draws it with full labels plus Settings, matching the Flutter
  * client's `AppShell`.
  */
-function TabsNavigator() {
+function TabsNavigator({ initialRouteName = 'Home' }: { initialRouteName?: AppDestination }) {
   const navigation = useNavigation<RootNav>();
   const { isTablet } = useResponsive();
 
   return (
     <Tab.Navigator
-      initialRouteName="Contacts"
+      initialRouteName={initialRouteName}
       backBehavior="none"
       screenOptions={{
         headerShown: false,
@@ -87,13 +108,43 @@ function TabsNavigator() {
         />
       )}
     >
-      <Tab.Screen name="Home" component={PendingRoute} />
-      <Tab.Screen name="MyDay" component={PendingRoute} />
+      <Tab.Screen name="Home" component={HomeRoute} />
+      <Tab.Screen name="MyDay" component={MyDayRoute} />
       <Tab.Screen name="Appointments" component={PendingRoute} />
       <Tab.Screen name="Medicines" component={PendingRoute} />
       <Tab.Screen name="Memories" component={PendingRoute} />
       <Tab.Screen name="Contacts" component={ContactsRoute} />
     </Tab.Navigator>
+  );
+}
+
+function WelcomeRoute() {
+  const navigation = useNavigation<RootNav>();
+  return (
+    <WelcomeScreen
+      onGetStarted={() => navigation.navigate('SignUp')}
+      onSignIn={() => navigation.navigate('SignIn')}
+    />
+  );
+}
+
+function SignInRoute() {
+  const navigation = useNavigation<RootNav>();
+  return (
+    <SignInScreen
+      onSignIn={() => navigation.navigate('Tabs')}
+      onSignUp={() => navigation.navigate('SignUp')}
+    />
+  );
+}
+
+function SignUpRoute() {
+  const navigation = useNavigation<RootNav>();
+  return (
+    <SignUpScreen
+      onSignUp={() => navigation.navigate('Tabs')}
+      onSignIn={() => navigation.navigate('SignIn')}
+    />
   );
 }
 
@@ -115,6 +166,7 @@ function SettingsRoute() {
   return (
     <SettingsScreen
       onBack={() => (navigation.canGoBack() ? navigation.goBack() : navigation.navigate('Tabs'))}
+      onSignOut={() => navigation.navigate('Welcome')}
     />
   );
 }
@@ -122,16 +174,28 @@ function SettingsRoute() {
 /**
  * The root stack.
  *
- * A conversation and the Settings screen sit above the tabs rather than inside
- * them, so each covers the bottom bar the way a screen you come back from
- * should. Settings appears without an animation, matching the Flutter client;
- * a conversation keeps the platform's push animation because it is a
+ * Welcome, Sign In and Sign Up sit below the tabs and are where the app
+ * starts by default; a conversation and the Settings screen sit above the
+ * tabs, so each covers the bar the way a screen you come back from should.
+ * Settings appears without an animation, matching the Flutter client; a
+ * conversation keeps the platform's push animation because it is a
  * drill-down and the back-swipe should feel normal.
  */
-export function RootNavigator() {
+export function RootNavigator({
+  initialRouteName = 'Welcome',
+  initialTabName = 'Home',
+}: {
+  initialRouteName?: keyof RootStackParamList;
+  initialTabName?: AppDestination;
+}) {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Tabs" component={TabsNavigator} />
+    <Stack.Navigator initialRouteName={initialRouteName} screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Welcome" component={WelcomeRoute} />
+      <Stack.Screen name="SignIn" component={SignInRoute} />
+      <Stack.Screen name="SignUp" component={SignUpRoute} />
+      <Stack.Screen name="Tabs">
+        {() => <TabsNavigator initialRouteName={initialTabName} />}
+      </Stack.Screen>
       <Stack.Screen name="MessageThread" component={MessageThreadRoute} />
       <Stack.Screen name="Settings" component={SettingsRoute} options={{ animation: 'none' }} />
     </Stack.Navigator>

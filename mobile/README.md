@@ -3,19 +3,24 @@
 The Expo build of CareConnect for **SWEN 661 Team 2 (The Acuity Health Group)**,
 targeting care recipients who are deaf or hard of hearing.
 
-> **Scope of this branch.** This is the Week 5 React Native port of the three
-> screens assigned to **Victor Lee** — **Contacts**, **Messaging** and
-> **Accessibility Settings** — feature-for-feature with the Week 4 Flutter
-> client in [`../flutter`](../flutter). Justin's screens (Welcome, Sign In,
-> Sign Up, Home, My Day) and Rehman's (Appointments, Medicines, Memories) land
-> on their own branches; their navigation destinations already exist here as
-> clearly-labelled placeholders.
+> **Scope of this branch.** This is the Week 5 React Native port, built
+> feature-for-feature with the Week 4 Flutter client in
+> [`../flutter`](../flutter). **Victor Lee** owns **Contacts**, **Messaging**
+> and **Accessibility Settings**, plus the shared shell (theme, navigation,
+> models, repositories, Context providers, test harness); **Justin Zhang**
+> owns **Welcome, Sign In, Sign Up, Home** and **My Day**, merged in from his
+> own branch. **Rehman Uddin**'s screens (Appointments, Medicines, Memories)
+> land on their own branch; their navigation destinations exist here as
+> clearly-labelled placeholders in the meantime.
 >
 > Both clients are built to match the **Week 3 design prototype**. Where the
 > prototype and the original React web client disagreed, the prototype won.
 
-**Status:** 214 tests passing, **99.2 % line coverage**, `eslint` and `tsc`
+**Status:** 214 tests passing, **91.9 % line coverage**, `eslint` and `tsc`
 clean. The framework comparison (Assignment 5 Part 3) is not in this branch.
+Coverage is well above the assignment's 60 % floor but down from the ~99 %
+Victor's screens hold alone — Justin's newly-merged Home, My Day, Sign In and
+Sign Up screens don't have their own tests yet.
 
 ---
 
@@ -52,10 +57,14 @@ screen will not let you switch the visible alert banner off.
 |:-------|:-------------|
 | **Contacts** | One list, Joyce first with a **Primary** pill, then the GP, the two children and the medical helpline. Each row shows the lettered avatar, the relationship, a preview of the latest message, and a count of messages **waiting** — a number *and* the word. Tapping a row opens the conversation. |
 | **Messaging** | Day separators, delivery state written out ("Read"), transcripts for voicemail, caption status for video, in-thread CareConnect alerts, a validated composer, and the **Notify** action. Warns, with a link into Settings, when captions are off and the conversation contains a video. On a tablet it also offers "Call *name* now" — a captioned video call, never audio-only. |
-| **Accessibility Settings** | A live WCAG conformance badge, then Visual Alerts, Captions (size, colour, live preview), Audio (volume, L/R balance), Vibration (three named rhythms, tap to feel), and Account. Persisted with `AsyncStorage`. |
+| **Accessibility Settings** | A live WCAG conformance badge, then Visual Alerts, Captions (size, colour, live preview), Audio (volume, L/R balance), Vibration (three named rhythms, tap to feel), and Account. Persisted with `AsyncStorage`. Sign out routes back to Welcome. |
+| **Welcome** | The app's entry point: the accessibility promise up front (visual alerts, captions everywhere, vibration patterns) with **Get Started** and **Sign In** actions. |
+| **Sign In / Sign Up** | Email-and-password forms into the app. Unauthenticated for now — see Known issues. |
+| **Home** | The dashboard: a daily-task progress banner and a simulated incoming captioned video call (a non-strobing flash, answer/decline, and in-call volume, balance, mute, pause and caption controls) — a working demonstration of the "call" this app always means. |
+| **My Day** | The task list behind Home's progress banner: a progress bar, and tappable task cards that toggle done/not-done. |
 
-Placeholders stand in for Home, My Day, Appointments, Medicines and Memories so
-the prototype's six-destination navigation works end to end. They are **not**
+Placeholders stand in for Appointments, Medicines and Memories so the
+prototype's six-destination navigation works end to end. They are **not**
 functional screens and do not count toward the assignment's screen requirement.
 
 ### Notify — the signature interaction
@@ -77,26 +86,29 @@ that helps this app's users must not be the pattern that harms someone else.
 
 ```
 src/
-├── AppProviders.tsx      # the three contexts, with repositories injected
+├── AppProviders.tsx      # the four contexts, with repositories injected
 ├── theme/                # Assignment 3 palette, typography scale, spacing
 ├── models/               # Contact, Message, AccessibilitySettings,
-│                         #   VibrationPattern — plain data plus pure helpers
+│                         #   VibrationPattern, DailyTask — plain data plus
+│                         #   pure helpers
 ├── data/                 # repository interfaces + in-memory implementations
 ├── state/                # Context providers and their hooks
 ├── hooks/                # useResponsive
 ├── utils/                # formatters, validators, haptic playback
 ├── components/           # shared UI: header, banners, badges, buttons
-├── navigation/           # destinations, the custom tab bar, the root stack
+├── navigation/           # destinations, the custom tab bar / sidebar, the root stack
 └── screens/
     ├── contacts/  messaging/  settings/
+    ├── WelcomeScreen.tsx  SignInScreen.tsx  SignUpScreen.tsx
+    ├── HomeScreen.tsx  MyDayScreen.tsx
     └── PendingScreen.tsx
 ```
 
-**State management — Context API.** Three providers (`ContactsProvider`,
-`MessagesProvider`, `SettingsProvider`), each exposing a hook that throws
-outside its provider. Business logic lives in `src/models` and `src/utils` as
-pure functions, so it is unit tested without rendering anything, and the
-providers stay thin.
+**State management — Context API.** Four providers (`ContactsProvider`,
+`MessagesProvider`, `SettingsProvider`, `DailyTasksProvider`), each exposing a
+hook that throws outside its provider. Business logic lives in `src/models`
+and `src/utils` as pure functions, so it is unit tested without rendering
+anything, and the providers stay thin.
 
 Shared state earns its keep in two visible places: opening a conversation clears
 that contact's badge back on the Contacts screen without passing anything
@@ -159,17 +171,17 @@ eas build --platform ios         # requires an Apple developer account
 ```bash
 npm run lint            # eslint — expected: no output
 npm run typecheck       # tsc --noEmit — expected: no output
-npm test                # 210 tests
+npm test                # 214 tests
 npm run test:coverage   # writes coverage/lcov-report/index.html
 ```
 
 ### Coverage
 
 ```
-Statements   : 98.49 % ( 525/533 )
-Branches     : 88.73 % ( 331/373 )
-Functions    : 98.41 % ( 186/189 )
-Lines        : 99.14 % ( 464/468 )
+Statements   : 91.48 % ( 591/646 )
+Branches     : 83.41 % ( 362/434 )
+Functions    : 85.02 % ( 210/247 )
+Lines        : 91.94 % ( 525/571 )
 ```
 
 Open `coverage/lcov-report/index.html` for the browsable report and screenshot
@@ -238,9 +250,10 @@ screens, rendered inside the real navigator and providers:
   rather than an arbitrary waveform, so each rhythm plays as a sequence of
   impacts and pauses. That is enough to tell them apart by feel; a true waveform
   needs a native module.
-- **Sign out is not wired up.** It belongs with the authentication screens on
-  another branch, so the control is present and says so rather than failing
-  silently.
+- **Sign in and sign up are unauthenticated.** Both forms take input but do not
+  validate or store it — "Sign in" and "Create account" navigate straight into
+  the app regardless of what, if anything, was typed. An account store and
+  real validation belong with a backend, which is out of scope this week.
 
 ---
 

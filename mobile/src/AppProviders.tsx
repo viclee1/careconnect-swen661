@@ -1,9 +1,11 @@
 import { useEffect, type ReactNode } from 'react';
 
 import type { ContactRepository } from './data/contactRepository';
+import type { DailyTasksRepository } from './data/dailyTasksRepository';
 import type { MessageRepository } from './data/messageRepository';
 import type { SettingsRepository } from './data/settingsRepository';
 import { ContactsProvider } from './state/ContactsProvider';
+import { DailyTasksProvider } from './state/DailyTasksProvider';
 import { MessagesProvider } from './state/MessagesProvider';
 import { SettingsProvider, useSettings } from './state/SettingsProvider';
 
@@ -26,18 +28,22 @@ export function AppProviders({
   contactRepository,
   messageRepository,
   settingsRepository,
+  dailyTasksRepository,
   children,
 }: {
   contactRepository: ContactRepository;
   messageRepository: MessageRepository;
   settingsRepository: SettingsRepository;
+  dailyTasksRepository: DailyTasksRepository;
   children: ReactNode;
 }) {
   return (
     <SettingsProvider repository={settingsRepository}>
       <LoadSettings>
         <ContactsProvider repository={contactRepository}>
-          <MessagesProvider repository={messageRepository}>{children}</MessagesProvider>
+          <MessagesProvider repository={messageRepository}>
+            <DailyTasksProvider repository={dailyTasksRepository}>{children}</DailyTasksProvider>
+          </MessagesProvider>
         </ContactsProvider>
       </LoadSettings>
     </SettingsProvider>

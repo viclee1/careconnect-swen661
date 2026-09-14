@@ -1,8 +1,10 @@
 # CareConnect React Native client — working notes
 
 SWEN 661 Team 2, Week 5. This is the Expo port of the Week 4 Flutter client in
-`../flutter`. Victor owns Contacts, Messaging and Accessibility Settings; the
-other destinations are placeholders their owners will replace.
+`../flutter`. Victor owns Contacts, Messaging and Accessibility Settings, plus
+the shared shell; Justin owns Welcome, Sign In, Sign Up, Home and My Day,
+merged in from his own branch. Appointments, Medicines and Memories are still
+placeholders — Rehman's, on his own branch.
 
 ## The rule everything else follows
 
@@ -59,5 +61,5 @@ assignment, not just the style guide:
   `npm install` with explicit versions works, and `npx expo install --fix`
   aligns them later on an unrestricted machine.
 - `android/` and `ios/` are not committed. Use EAS, or `npx expo prebuild`.
-- Do not implement Home, My Day, Appointments, Medicines or Memories. They are
-  `PendingScreen` placeholders owned by Justin and Rehman.
+- Do not implement Appointments, Medicines or Memories. They are `PendingScreen`
+  placeholders owned by Rehman, on his own branch.

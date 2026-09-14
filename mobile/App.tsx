@@ -4,6 +4,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { AppProviders } from './src/AppProviders';
 import { createMockContactRepository } from './src/data/contactRepository';
+import { createMockDailyTasksRepository } from './src/data/dailyTasksRepository';
 import { createMockMessageRepository } from './src/data/messageRepository';
 import { createAsyncStorageSettingsRepository } from './src/data/settingsRepository';
 import { RootNavigator } from './src/navigation/RootNavigator';
@@ -22,6 +23,7 @@ export default function App() {
         contactRepository={createMockContactRepository()}
         messageRepository={createMockMessageRepository()}
         settingsRepository={createAsyncStorageSettingsRepository()}
+        dailyTasksRepository={createMockDailyTasksRepository()}
       >
         <NavigationContainer>
           <StatusBar style="light" />

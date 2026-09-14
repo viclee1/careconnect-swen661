@@ -38,7 +38,13 @@ import { VibrationPatternRow } from './settings/VibrationPatternRow';
  * into a state where an alert would reach them by sound alone: the visible
  * banner is fixed on, and only the layers on top of it can be changed.
  */
-export function SettingsScreen({ onBack }: { onBack: () => void }) {
+export function SettingsScreen({
+  onBack,
+  onSignOut,
+}: {
+  onBack: () => void;
+  onSignOut?: () => void;
+}) {
   const { settings, update } = useSettings();
   const [signOutNotice, setSignOutNotice] = useState(false);
 
@@ -244,24 +250,25 @@ export function SettingsScreen({ onBack }: { onBack: () => void }) {
             description="Margaret Whitfield · Care Recipient"
           >
             <View style={styles.accountBlock}>
+              <AppButton
+                label="Sign out"
+                icon="logout"
+                variant="outlined"
+                tone={colors.errorText}
+                fullWidth
+                onPress={onSignOut ?? (() => setSignOutNotice(true))}
+              />
               {signOutNotice ? (
-                <AlertBanner
-                  tone="info"
-                  icon="logout"
-                  title="Sign out is not ready yet"
-                  message="Signing out arrives with the login and signup screens, which are being built on another branch. Nothing has changed."
-                  action={<AppButton label="OK" onPress={() => setSignOutNotice(false)} />}
-                />
-              ) : (
-                <AppButton
-                  label="Sign out"
-                  icon="logout"
-                  variant="outlined"
-                  tone={colors.errorText}
-                  fullWidth
-                  onPress={() => setSignOutNotice(true)}
-                />
-              )}
+                <View style={{ marginTop: 16 }}>
+                  <AlertBanner
+                    tone="info"
+                    icon="logout"
+                    title="Sign out is not ready yet"
+                    message="Signing out arrives with the login and signup screens, which are being built on another branch. Nothing has changed."
+                    action={<AppButton label="OK" onPress={() => setSignOutNotice(false)} />}
+                  />
+                </View>
+              ) : null}
             </View>
           </SettingsSection>
         </ScrollView>

@@ -8,6 +8,9 @@ import type { AppDestination } from './destinations';
  * a device.
  */
 export type RootStackParamList = {
+  Welcome: undefined;
+  SignIn: undefined;
+  SignUp: undefined;
   Tabs: undefined;
   MessageThread: { contactId: string };
   Settings: undefined;
