@@ -1,0 +1,18 @@
+{
+  "build": {
+    "production": {
+      "channel": "production"
+    },
+    "preview": {
+      "channel": "preview"
+    },
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    }
+  },
+  "submit": {},
+  "cli": {
+    "version": ">= 7.0.0"
+  }
+}
