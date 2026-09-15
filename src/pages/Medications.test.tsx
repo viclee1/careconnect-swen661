@@ -165,7 +165,9 @@ describe('Medications Utility Function Edge Cases', () => {
 
   it('should handle leap year dates', () => {
     const leapDate = new Date('2024-02-29');
-    expect(leapDate.getDate()).toBe(29);
+    // A date-only ISO string parses as UTC midnight; getUTCDate() keeps this
+    // assertion correct regardless of the machine's local timezone.
+    expect(leapDate.getUTCDate()).toBe(29);
   });
 
   it('should handle DST transition dates', () => {
@@ -206,7 +208,7 @@ describe('Medications Storage Persistence', () => {
     dayMap['2026-09-15'] = { 'med1': false, 'med2': true };
     dayMap['2026-09-16'] = { 'med1': true, 'med2': true };
     
-    Object.entries(dayMap).forEach(([day, meds]) => {
+    Object.values(dayMap).forEach((meds) => {
       expect(Object.keys(meds)).toHaveLength(2);
     });
   });

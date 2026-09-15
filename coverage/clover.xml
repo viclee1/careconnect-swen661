@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1789479381306" clover="3.2.0">
-  <project timestamp="1789479381306" name="All files">
+<coverage generated="1789493661819" clover="3.2.0">
+  <project timestamp="1789493661819" name="All files">
     <metrics statements="106" coveredstatements="66" conditionals="108" coveredconditionals="48" methods="52" coveredmethods="24" elements="266" coveredelements="138" complexity="0" loc="106" ncloc="106" packages="1" files="3" classes="3"/>
-    <file name="Appointments.tsx" path="C:\Users\uddin\copilot-worktrees\careconnect-swen661\89uddinrt-refactored-system\src\pages\Appointments.tsx">
+    <file name="Appointments.tsx" path="/Users/victorlee/Documents/GitHub/careconnect-swen661/src/pages/Appointments.tsx">
       <metrics statements="45" coveredstatements="42" conditionals="46" coveredconditionals="42" methods="25" coveredmethods="21"/>
       <line num="1" count="1" type="stmt"/>
       <line num="2" count="1" type="stmt"/>
@@ -50,7 +50,7 @@
       <line num="339" count="6" type="stmt"/>
       <line num="358" count="6" type="stmt"/>
     </file>
-    <file name="Medications.tsx" path="C:\Users\uddin\copilot-worktrees\careconnect-swen661\89uddinrt-refactored-system\src\pages\Medications.tsx">
+    <file name="Medications.tsx" path="/Users/victorlee/Documents/GitHub/careconnect-swen661/src/pages/Medications.tsx">
       <metrics statements="40" coveredstatements="18" conditionals="36" coveredconditionals="6" methods="16" coveredmethods="3"/>
       <line num="1" count="1" type="stmt"/>
       <line num="2" count="1" type="stmt"/>
@@ -93,7 +93,7 @@
       <line num="135" count="0" type="stmt"/>
       <line num="149" count="0" type="stmt"/>
     </file>
-    <file name="Memories.tsx" path="C:\Users\uddin\copilot-worktrees\careconnect-swen661\89uddinrt-refactored-system\src\pages\Memories.tsx">
+    <file name="Memories.tsx" path="/Users/victorlee/Documents/GitHub/careconnect-swen661/src/pages/Memories.tsx">
       <metrics statements="21" coveredstatements="6" conditionals="26" coveredconditionals="0" methods="11" coveredmethods="0"/>
       <line num="1" count="1" type="stmt"/>
       <line num="2" count="1" type="stmt"/>

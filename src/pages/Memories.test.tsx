@@ -4,17 +4,15 @@ import { render } from '@testing-library/react';
 import './Memories';
 
 // Unit tests for memory functionality
-function filterMemoriesByCategory(
-  memories: Array<{ category: string }>,
+function filterMemoriesByCategory<T extends { category: string }>(
+  memories: T[],
   category: string
-): Array<{ category: string }> {
+): T[] {
   if (category === 'All') return memories;
   return memories.filter(m => m.category === category);
 }
 
-function sortByPinned(
-  memories: Array<{ pinned?: boolean }>
-): Array<{ pinned?: boolean }> {
+function sortByPinned<T extends { pinned?: boolean }>(memories: T[]): T[] {
   return [...memories].sort((a, b) => {
     if (a.pinned && !b.pinned) return -1;
     if (!a.pinned && b.pinned) return 1;
@@ -238,11 +236,8 @@ describe('Memories Component Rendering (Integration Tests)', () => {
   });
 
   it('should attempt to render the component', () => {
-    try {
-      render(document.createElement('div'));
-    } catch (error) {
-      expect(error).toBeDefined();
-    }
+    const { container } = render(<div>test</div>);
+    expect(container).toBeDefined();
   });
 
   it('should handle component lifecycle', () => {
@@ -271,7 +266,7 @@ describe('Memories Responsive Design', () => {
 
 describe('Memories List Management', () => {
   it('should add memory to list', () => {
-    let memories = [];
+    const memories = [];
     memories.push({ id: '1', title: 'Beach Day', category: 'Places' });
     expect(memories).toHaveLength(1);
   });
@@ -311,7 +306,7 @@ describe('Memories List Management', () => {
   });
 
   it('should handle empty memories list', () => {
-    const memories: any[] = [];
+    const memories: unknown[] = [];
     expect(memories).toHaveLength(0);
   });
 });
@@ -399,13 +394,13 @@ describe('Memories Category Management', () => {
 
 describe('Memories Pin/Unpin Functionality', () => {
   it('should pin memory', () => {
-    let memory = { id: '1', title: 'Memory', pinned: false };
+    const memory = { id: '1', title: 'Memory', pinned: false };
     memory.pinned = true;
     expect(memory.pinned).toBe(true);
   });
 
   it('should unpin memory', () => {
-    let memory = { id: '1', title: 'Memory', pinned: true };
+    const memory = { id: '1', title: 'Memory', pinned: true };
     memory.pinned = false;
     expect(memory.pinned).toBe(false);
   });
@@ -532,7 +527,7 @@ describe('Memories Search & Filter', () => {
   });
 
   it('should preserve filter state during search', () => {
-    let activeFilter = 'Family';
+    const activeFilter = 'Family';
     const searchTerm = 'beach';
     expect(activeFilter).toBe('Family');
     expect(searchTerm).toBeTruthy();
@@ -641,7 +636,7 @@ describe('Memories Advanced Scenarios', () => {
   });
 
   it('should handle memory sorting by date', () => {
-    let memories = [
+    const memories = [
       { id: '1', title: 'Mem1', date: '2026-09-15' },
       { id: '2', title: 'Mem2', date: '2026-09-10' },
       { id: '3', title: 'Mem3', date: '2026-09-20' },
@@ -872,7 +867,7 @@ describe('Memories Rendering Scenarios', () => {
   });
 
   it('should handle concurrent pin/unpin operations', () => {
-    let memory = { id: '1', title: 'Memory', pinned: false };
+    const memory = { id: '1', title: 'Memory', pinned: false };
     
     // Simulate rapid clicking
     memory.pinned = !memory.pinned; // true
@@ -1060,13 +1055,13 @@ describe('Memories Complex Filtering & Sorting', () => {
       { id: '3', date: '2026-03-20' },
     ];
     
-    const grouped = {};
+    const grouped: Record<string, typeof memories> = {};
     memories.forEach(mem => {
       const year = mem.date.substring(0, 4);
       if (!grouped[year]) grouped[year] = [];
       grouped[year].push(mem);
     });
-    
+
     expect(grouped['2026']).toHaveLength(2);
     expect(grouped['2025']).toHaveLength(1);
   });
@@ -1143,13 +1138,17 @@ describe('Memories Utility Function Edge Cases', () => {
 
   it('should handle leap year dates', () => {
     const date = new Date('2024-02-29');
-    expect(date.getDate()).toBe(29);
+    // A date-only ISO string parses as UTC midnight; getUTCDate() keeps this
+    // assertion correct regardless of the machine's local timezone.
+    expect(date.getUTCDate()).toBe(29);
   });
 
   it('should handle timezone aware dates', () => {
     const isoDate = '2026-09-15T12:00:00Z';
     const date = new Date(isoDate);
-    expect(date.toISOString()).toBe(isoDate);
+    // toISOString() always includes milliseconds, even when the source
+    // string didn't specify any.
+    expect(date.toISOString()).toBe('2026-09-15T12:00:00.000Z');
   });
 });
 

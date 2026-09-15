@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from '@jest/globals';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import Appointments from './Appointments';
 
 // Unit test for time formatting
@@ -292,13 +292,18 @@ describe('Appointments Time Calculations', () => {
 
   it('should handle appointment at leap year date', () => {
     const date = new Date('2024-02-29');
-    expect(date.getDate()).toBe(29);
+    // A date-only ISO string parses as UTC midnight; reading it back with
+    // getUTCDate() keeps the assertion correct regardless of the machine's
+    // local timezone (getDate() would roll back to the 28th west of UTC).
+    expect(date.getUTCDate()).toBe(29);
   });
 
   it('should handle timezone conversion', () => {
     const isoTime = '2026-09-18T14:30:00Z';
     const date = new Date(isoTime);
-    expect(date.toISOString()).toBe(isoTime);
+    // toISOString() always includes milliseconds, even when the source
+    // string didn't specify any.
+    expect(date.toISOString()).toBe('2026-09-18T14:30:00.000Z');
   });
 });
 
@@ -602,7 +607,9 @@ describe('Appointments Filtering Advanced', () => {
 
   it('should sort by date ascending', () => {
     const sorted = [...appointments].sort((a, b) => a.date.localeCompare(b.date));
-    expect(sorted[0].date).toBeLessThanOrEqual(sorted[sorted.length - 1].date);
+    // Dates are "YYYY-MM-DD" strings, not numbers — toBeLessThanOrEqual
+    // requires a numeric operand, so compare with a plain string comparison.
+    expect(sorted[0].date <= sorted[sorted.length - 1].date).toBe(true);
   });
 
   it('should sort by doctor name', () => {
@@ -630,7 +637,9 @@ describe('Appointments Notification & Reminders', () => {
     const currentTime = new Date('2026-09-18T14:29:00').getTime();
     const reminderMinutes = 1;
     const shouldShow = (appointmentTime - currentTime) / 60000 <= reminderMinutes;
-    expect(shouldShow).toBe(false);
+    // Current time is exactly one minute before the appointment, which is
+    // the reminder threshold itself — the reminder should fire.
+    expect(shouldShow).toBe(true);
   });
 
   it('should format reminder message', () => {
@@ -650,7 +659,10 @@ describe('Appointments Notification & Reminders', () => {
 
 describe('Appointments User Actions', () => {
   it('should handle appointment cancellation', () => {
-    let appointment = { id: '1', status: 'scheduled' };
+    let appointment: { id: string; status: string; cancelledAt?: string } = {
+      id: '1',
+      status: 'scheduled',
+    };
     appointment = { ...appointment, status: 'cancelled', cancelledAt: new Date().toISOString() };
     expect(appointment.status).toBe('cancelled');
     expect(appointment.cancelledAt).toBeTruthy();
@@ -664,7 +676,10 @@ describe('Appointments User Actions', () => {
   });
 
   it('should handle appointment confirmation', () => {
-    let appointment = { id: '1', status: 'pending' };
+    let appointment: { id: string; status: string; confirmedAt?: string } = {
+      id: '1',
+      status: 'pending',
+    };
     appointment = { ...appointment, status: 'confirmed', confirmedAt: new Date().toISOString() };
     expect(appointment.status).toBe('confirmed');
     expect(appointment.confirmedAt).toBeTruthy();
@@ -752,7 +767,7 @@ describe('Appointments Sorting Complex Scenarios', () => {
   });
 
   it('should sort by status priority', () => {
-    const statusPriority = { 'pending': 1, 'confirmed': 2, 'completed': 3 };
+    const statusPriority: Record<string, number> = { 'pending': 1, 'confirmed': 2, 'completed': 3 };
     const appointments = [
       { status: 'completed', doctor: 'Dr. A' },
       { status: 'pending', doctor: 'Dr. B' },
@@ -793,7 +808,7 @@ describe('Appointments Statistics & Aggregations', () => {
       { status: 'scheduled' },
       { status: 'cancelled' },
     ];
-    const byStatus = appointments.reduce((acc, a) => {
+    const byStatus = appointments.reduce((acc: Record<string, number>, a) => {
       acc[a.status] = (acc[a.status] || 0) + 1;
       return acc;
     }, {});
@@ -807,7 +822,7 @@ describe('Appointments Statistics & Aggregations', () => {
       { doctor: 'Dr. Chen' },
       { doctor: 'Dr. Smith' },
     ];
-    const doctorCounts = {};
+    const doctorCounts: Record<string, number> = {};
     appointments.forEach(a => {
       doctorCounts[a.doctor] = (doctorCounts[a.doctor] || 0) + 1;
     });
@@ -825,7 +840,7 @@ describe('Appointments Statistics & Aggregations', () => {
       { date: '2026-10-05' },
       { date: '2026-10-10' },
     ];
-    const byMonth = appointments.reduce((acc, a) => {
+    const byMonth = appointments.reduce((acc: Record<string, number>, a) => {
       const month = a.date.substring(0, 7);
       acc[month] = (acc[month] || 0) + 1;
       return acc;
