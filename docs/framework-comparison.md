@@ -70,7 +70,7 @@ Maintainability felt roughly equivalent — TypeScript's structural types
 caught prop-shape mistakes during the port that Dart's nominal types would
 also catch, and React Native's provider/hook split mirrors Flutter's
 controller/model split closely. Both suites clear the assignment's 60% floor
-comfortably (Flutter: 220 tests, 98.8% coverage; React Native: 271 tests,
+comfortably (Flutter: 220 tests, 98.8% coverage; React Native: 274 tests,
 96.5%).
 
 ## 5. Recommendation

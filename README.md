@@ -297,7 +297,7 @@ careconnect-swen661/
 │   └── README.md                    # points back to this section
 ├── mobile/                          # React Native + Expo — Android & iOS (in progress, see below)
 │   ├── src/                         # screens, navigation, state, models, data, components, theme
-│   ├── src/screens/__tests__/       # 229 tests — screens, navigation, component behavior
+│   ├── src/**/__tests__/            # 274 tests — models, state, screens, navigation, component behavior
 │   ├── coverage/                    # lcov-report + lcov.info (generated locally, gitignored)
 │   └── README.md                    # points back to this section
 ├── desktop/                         # (planned) Electron — Windows
@@ -776,7 +776,7 @@ npm run typecheck
 npm run test:coverage
 ```
 
-271 tests at 96.5% line coverage against a 60% floor. An `npm audit` plus a
+274 tests at 96.5% line coverage against a 60% floor. An `npm audit` plus a
 manual secrets/network review found 13 moderate, build-tooling-only
 dependency advisories and no code-level issues — see
 [`mobile/docs/security-scan.md`](mobile/docs/security-scan.md).

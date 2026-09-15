@@ -17,7 +17,7 @@ targeting care recipients who are deaf or hard of hearing.
 > Both clients are built to match the **Week 3 design prototype**. Where the
 > prototype and the original React web client disagreed, the prototype won.
 
-**Status:** 271 tests passing, **96.5 % line coverage**, `eslint` and `tsc`
+**Status:** 274 tests passing, **96.5 % line coverage**, `eslint` and `tsc`
 clean. The framework comparison (Assignment 5 Part 3) is not in this branch.
 
 ---
@@ -180,7 +180,7 @@ installable, and not what the assignment submission asks for.
 ```bash
 npm run lint            # eslint — expected: no output
 npm run typecheck       # tsc --noEmit — expected: no output
-npm test                # 271 tests
+npm test                # 274 tests
 npm run test:coverage   # writes coverage/lcov-report/index.html
 ```
 
