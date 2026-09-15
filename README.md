@@ -536,7 +536,6 @@ Appointment list and accessible add/edit form.
 
 Timestamped log of taken/skipped doses and check-ins.
 
-│   └── screenshots/                 # README images (01-landing.png … 14-caregiver-activity.png)
 ![Caregiver activity log](docs/screenshots/14-caregiver-activity.png)
 
 ---
@@ -682,6 +681,12 @@ genhtml flutter/coverage/lcov.info -o flutter/coverage/html && open flutter/cove
 
 A pre-rendered copy is also checked in at [`flutter/coverage/html/index.html`](flutter/coverage/html/index.html).
 
+### Adding a screen
+
+1. Add the path and name to `lib/core/routing/routes.dart` (most already exist).
+2. Replace the `PendingScreen` in `lib/core/routing/app_router.dart` with the real screen — one line per route, inside the `ShellRoute` and wrapped in `page(...)` so it inherits the persistent navigation and swaps without a transition.
+3. Build the screen inside `AppScaffold`, which supplies the app bar. Navigation is not the screen's concern — `AppShell` owns it, and `kDestinations` already lists every destination.
+
 ### Known issues or limitations
 
 Data lives in memory except for accessibility settings; video, audio, and the captioned call are represented in the UI but not backed by a real media pipeline; vibration patterns are approximated with named haptic impacts; sign in/up validate their forms but don't check a real account store yet.
@@ -784,6 +789,10 @@ Week 5:
 ### AI usage summary
 
 Claude (Opus) and Gemini were used on this branch to scaffold the Expo project and port the Flutter client's architecture into React Native — Provider became Context, `ChangeNotifier` became pure helpers plus thin providers, and `go_router` became React Navigation — to translate the Assignment 3 theme, to draft the screens and shared components, and to generate the Jest and React Native Testing Library test suite, including edge cases not on the original list (`NaN` slider values, whitespace-only messages, corrupt stored preferences, an attempt to disable the visual alert banner by editing storage). Every generated file was reviewed, and the whole suite was run before submission.
+
+### Framework comparison: Flutter vs. React Native
+
+Assignment 5, Part 3 deliverable — development experience, performance, accessibility implementation, code complexity, and a recommendation, grounded in the Contacts and Accessibility Settings ports above: **[`docs/framework-comparison.md`](docs/framework-comparison.md)**.
 
 ---
 
