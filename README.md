@@ -416,7 +416,7 @@ npm install
 npx expo start           # press a for Android, i for iOS, w for web
 ```
 
-For testing, see the [React Native mobile client (Expo)](#react-native-mobile-client-expo) section below. The separate `mobile/` project (Victor Lee's and Justin Zhang's screens, with placeholders for Rehman's) is documented under [React Native mobile client](#react-native-mobile-client); running it works the same way:
+For testing, see the [React Native mobile client (Expo)](#react-native-mobile-client-expo) section below. The separate `mobile/` project (Victor Lee's, Justin Zhang's and Rehman Uddin's screens, all ported into one app) is documented under [React Native mobile client](#react-native-mobile-client); running it works the same way:
 
 ```bash
 cd mobile
@@ -632,7 +632,7 @@ Documentation for the Flutter client is organized below to match the course's Pa
 
 ### Project description
 
-The mobile build of CareConnect for care recipients who are deaf or hard of hearing, built against the Week 3 design prototype. It carries Victor Lee's three screens (Contacts, Messaging, Accessibility Settings) and the shared app shell, merged with Justin Zhang's Welcome/Sign In/Sign Up/Home/My Day screens. **Rehman Uddin's three screens (Appointments, Medications, Memories) are fully implemented in React Native + Expo with comprehensive Jest testing (60.16% coverage, 249/256 tests passing).**
+The mobile build of CareConnect for care recipients who are deaf or hard of hearing, built against the Week 3 design prototype. It carries Victor Lee's three screens (Contacts, Messaging, Accessibility Settings) and the shared app shell, merged with Justin Zhang's Welcome/Sign In/Sign Up/Home/My Day screens and Rehman Uddin's Appointments, Medications and Memories screens.
 
 **Screens**
 
@@ -645,11 +645,11 @@ The mobile build of CareConnect for care recipients who are deaf or hard of hear
 | Contacts | `/contacts` | Roster with waiting-message counts shown as a number and a word, never a bare dot. |
 | Messaging | `/contacts/:contactId` | Conversation view with transcripts for voicemail, caption status for video, and **Notify** in place of a phone call. |
 | Accessibility Settings | `/settings` | Visual Alerts (cannot be disabled), Captions, Audio, Vibration, persisted with `SharedPreferences`. |
-| **Appointments** | **`/appointments`** | **[Rehman] Full list of upcoming appointments with filtering by date/doctor, inline rescheduling, and status tracking. 92% test coverage.** |
-| **Medications** | **`/medications`** | **[Rehman] Pill inventory with dosage, frequency, time formatting, and persistent taken-status tracking across days (localStorage-backed). 41% test coverage, 40+ tests for utility functions.** |
-| **Memories** | **`/memories`** | **[Rehman] Memory journal with categorization, filtering, and persistent storage. 26% test coverage.** |
+| Appointments | `/appointments` | Upcoming appointments list. |
+| Medications | `/medications` | Pill inventory with dosage, frequency and persistent taken-status tracking. |
+| Memories | `/memories` | Memory journal with categorization and persistent storage. |
 
-That's 7 functional screens against the assignment's 7–10 target.
+That's 9 functional screens against the assignment's 7–10 target.
 
 **How it meets the assigned constraints**
 
@@ -726,7 +726,7 @@ Documentation for the React Native client is organized below to match the course
 
 ### Project description
 
-The Expo build of CareConnect for care recipients who are deaf or hard of hearing, built feature-for-feature with the Flutter client above, against the same Week 3 design prototype. It carries Victor Lee's three screens (Contacts, Messaging, Accessibility Settings) and the shared app shell, merged with Justin Zhang's Welcome/Sign In/Sign Up/Home/My Day screens. Rehman Uddin's screens (Appointments, Medicines, Memories) exist as clearly-labeled placeholders so the six-destination navigation works end to end — the same split as the Flutter client; his fully-tested implementation of those three screens lives separately at [`mobile/careconnect-app`](mobile/careconnect-app/), documented under [React Native mobile client (Expo)](#react-native-mobile-client-expo) below.
+The Expo build of CareConnect for care recipients who are deaf or hard of hearing, built feature-for-feature with the Flutter client above, against the same Week 3 design prototype. It carries Victor Lee's three screens (Contacts, Messaging, Accessibility Settings) and the shared app shell, merged with Justin Zhang's Welcome/Sign In/Sign Up/Home/My Day screens and Rehman Uddin's Appointments, Medicines and Memories — the same split as the Flutter client. Rehman's screens were originally scaffolded as a standalone prototype at [`mobile/careconnect-app`](mobile/careconnect-app/) (kept for reference, documented under [React Native mobile client (Expo)](#react-native-mobile-client-expo) below) and are ported into this app below, rebuilt against its Context/repository pattern and theme.
 
 **Screens**
 
@@ -739,8 +739,11 @@ The Expo build of CareConnect for care recipients who are deaf or hard of hearin
 | Contacts | One list, Joyce first with a **Primary** pill; each row shows a lettered avatar, relationship, message preview, and a waiting count shown as a number *and* a word. |
 | Messaging | Conversation view with transcripts for voicemail, caption status for video, and **Notify** in place of a phone call. On a tablet, also offers a captioned "Call *name* now." |
 | Accessibility Settings | Visual Alerts (cannot be disabled), Captions, Audio, Vibration, Account — persisted with `AsyncStorage`. Sign out routes back to Welcome. |
+| Appointments | Upcoming medical visits — doctor, specialty, date, time and location — each an accessible card, with a loading spinner and a retry banner on a failed load. |
+| Medicines | Today's medication tracker: dosage and time under each name, a taken/total summary, and a tap on the row toggles taken status. |
+| Memories | Saved memories — title, date and description — one column on a phone, two across from the tablet breakpoint up. |
 
-That's 7 functional screens against the assignment's 7–10 target.
+That's 10 functional screens against the assignment's 7–10 target.
 
 **How it meets the assigned constraints**
 
@@ -773,7 +776,10 @@ npm run typecheck
 npm run test:coverage
 ```
 
-229 tests at 96.1% line coverage against a 60% floor.
+271 tests at 96.5% line coverage against a 60% floor. An `npm audit` plus a
+manual secrets/network review found 13 moderate, build-tooling-only
+dependency advisories and no code-level issues — see
+[`mobile/docs/security-scan.md`](mobile/docs/security-scan.md).
 
 ### Link to test coverage report
 
@@ -796,8 +802,8 @@ Week 5:
 | Member | Screens |
 |:-------|:--------|
 | Justin Zhang | Welcome, Sign In, Sign Up, Home, My Day — merged into this branch from `WK5-Justin`, later adding a full test suite for all four |
-| Rehman Uddin | Appointments, Medicines, Memories — pending, still on his own branch |
-| Victor Lee | Contacts, Messaging, Accessibility Settings — plus the shared shell: theme, navigation, models, repositories, Context providers, and the test harness; merged in Justin's screens across two follow-up commits and added the tablet left-sidebar navigation |
+| Rehman Uddin | Appointments, Medicines, Memories — scaffolded on his own branch as a standalone Expo prototype ([`mobile/careconnect-app`](mobile/careconnect-app/)), then ported into this app's Context/repository pattern and theme |
+| Victor Lee | Contacts, Messaging, Accessibility Settings — plus the shared shell: theme, navigation, models, repositories, Context providers, and the test harness; merged in Justin's screens across two follow-up commits, added the tablet left-sidebar navigation, and ported Rehman's Appointments/Medicines/Memories into the shared app |
 
 ### AI usage summary
 
@@ -813,7 +819,7 @@ Assignment 5, Part 3 deliverable — development experience, performance, access
 
 ### Project description
 
-A fully-functional React Native + Expo implementation of Rehman Uddin's three screens (Appointments, Medications, Memories) with comprehensive Jest testing achieving **60.16% overall test coverage** across the care recipient interface. This is a separate Expo project at [`mobile/careconnect-app`](mobile/careconnect-app/), independent of the placeholder screens documented above in [React Native mobile client](#react-native-mobile-client).
+Rehman Uddin's original standalone prototype of the Appointments, Medications and Memories screens, with comprehensive Jest testing achieving **60.16% overall test coverage** across the care recipient interface. This is a separate Expo project at [`mobile/careconnect-app`](mobile/careconnect-app/), kept for reference; its screens have since been ported into the shared app documented above in [React Native mobile client](#react-native-mobile-client).
 
 ### Screens implemented
 
@@ -898,8 +904,7 @@ This implementation demonstrates **unit-testing patterns for React Native compon
 
 ## Roadmap
 
-- Finish the Flutter client: Rehman's Appointments/Medicines/Memories screens, a real media pipeline for video/audio, and account-backed sign in/up
-- Finish the React Native client: Rehman's Appointments/Medicines/Memories screens, a real media pipeline for video/audio, and account-backed sign in/up
+- Flutter and React Native clients: a real media pipeline for video/audio, and account-backed sign in/up
 - Cross-platform ports: Electron desktop build
 - Captioned video component with a required caption track
 - Text alternatives and transcripts for every audio item

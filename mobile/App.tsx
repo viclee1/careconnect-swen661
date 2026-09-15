@@ -3,8 +3,11 @@ import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { AppProviders } from './src/AppProviders';
+import { createMockAppointmentRepository } from './src/data/appointmentRepository';
 import { createMockContactRepository } from './src/data/contactRepository';
 import { createMockDailyTasksRepository } from './src/data/dailyTasksRepository';
+import { createMockMedicineRepository } from './src/data/medicineRepository';
+import { createMockMemoryRepository } from './src/data/memoryRepository';
 import { createMockMessageRepository } from './src/data/messageRepository';
 import { createAsyncStorageSettingsRepository } from './src/data/settingsRepository';
 import { RootNavigator } from './src/navigation/RootNavigator';
@@ -24,6 +27,9 @@ export default function App() {
         messageRepository={createMockMessageRepository()}
         settingsRepository={createAsyncStorageSettingsRepository()}
         dailyTasksRepository={createMockDailyTasksRepository()}
+        appointmentRepository={createMockAppointmentRepository()}
+        medicineRepository={createMockMedicineRepository()}
+        memoryRepository={createMockMemoryRepository()}
       >
         <NavigationContainer>
           <StatusBar style="light" />

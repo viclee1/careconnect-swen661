@@ -5,6 +5,13 @@ const expo = require('eslint-config-expo/flat');
 module.exports = [
   ...expo,
   {
-    ignores: ['node_modules/**', 'coverage/**', '.expo/**', 'android/**', 'ios/**'],
+    ignores: [
+      'node_modules/**',
+      'coverage/**',
+      '.expo/**',
+      'android/**',
+      'ios/**',
+      'careconnect-app/**',
+    ],
   },
 ];

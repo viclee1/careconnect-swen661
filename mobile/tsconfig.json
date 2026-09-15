@@ -6,5 +6,9 @@
       "jest"
     ],
     "jsx": "react-jsx"
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "careconnect-app"
+  ]
 }

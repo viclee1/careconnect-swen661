@@ -2,7 +2,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { defaultSettings, withSettings } from '../../models/accessibilitySettings';
 import { waitingCount } from '../../models/message';
+import {
+  createFlakyAppointmentRepository,
+  createMockAppointmentRepository,
+} from '../appointmentRepository';
 import { createFlakyContactRepository, createMockContactRepository } from '../contactRepository';
+import { createMockMedicineRepository } from '../medicineRepository';
+import { createFlakyMemoryRepository, createMockMemoryRepository } from '../memoryRepository';
 import { createMockMessageRepository } from '../messageRepository';
 import {
   createAsyncStorageSettingsRepository,
@@ -28,6 +34,59 @@ describe('contact repository', () => {
     const repository = createFlakyContactRepository(1);
     await expect(repository.fetchContacts()).rejects.toThrow('offline');
     await expect(repository.fetchContacts()).resolves.toHaveLength(5);
+  });
+});
+
+describe('appointment repository', () => {
+  it('returns the seeded appointments', async () => {
+    const appointments = await createMockAppointmentRepository().fetchAppointments();
+    expect(appointments.map((a) => a.doctor)).toEqual(['Dr. Robert Chen', 'Dr. Sarah Jenkins']);
+  });
+
+  it('the flaky variant fails, then recovers', async () => {
+    const repository = createFlakyAppointmentRepository(1);
+    await expect(repository.fetchAppointments()).rejects.toThrow('offline');
+    await expect(repository.fetchAppointments()).resolves.toHaveLength(2);
+  });
+});
+
+describe('medicine repository', () => {
+  it('returns the seeded medicines', () => {
+    const medicines = createMockMedicineRepository().getMedicines();
+    expect(medicines.map((m) => m.name)).toEqual(['Amlodipine', 'Metformin', 'Atorvastatin']);
+  });
+
+  it('updates one medicine without touching the others', () => {
+    const repository = createMockMedicineRepository();
+    repository.setTaken('med2', true);
+
+    const medicines = repository.getMedicines();
+    expect(medicines.find((m) => m.id === 'med2')?.taken).toBe(true);
+    expect(medicines.find((m) => m.id === 'med1')?.taken).toBe(true);
+    expect(medicines.find((m) => m.id === 'med3')?.taken).toBe(false);
+  });
+
+  it('does not mutate the seed array passed in', () => {
+    const seed = [{ id: 'x', name: 'Test', dosage: '1 mg', time: '9:00 am', taken: false }];
+    const repository = createMockMedicineRepository(seed);
+    repository.setTaken('x', true);
+    expect(seed[0].taken).toBe(false);
+  });
+});
+
+describe('memory repository', () => {
+  it('returns the seeded memories', async () => {
+    const memories = await createMockMemoryRepository().fetchMemories();
+    expect(memories.map((m) => m.title)).toEqual([
+      'Family Picnic at Quiet Waters',
+      'First Day of School',
+    ]);
+  });
+
+  it('the flaky variant fails, then recovers', async () => {
+    const repository = createFlakyMemoryRepository(1);
+    await expect(repository.fetchMemories()).rejects.toThrow('offline');
+    await expect(repository.fetchMemories()).resolves.toHaveLength(2);
   });
 });
 

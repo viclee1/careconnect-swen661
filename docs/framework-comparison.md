@@ -2,14 +2,13 @@
 
 SWEN 661 Team 2 (The Acuity Health Group) — Victor Lee, Rehman Uddin, Justin Zhang
 
-Both clients implement the same CareConnect screens — Contacts, Messaging,
-Accessibility Settings, Welcome, Sign In, Sign Up, Home, and My Day — plus the
-same tablet-breakpoint left-sidebar navigation. The one divergence is
-Appointments, Medicines, and Memories: Flutter wires these to simple real
-screens, while React Native still renders `PendingScreen` placeholders per an
-explicit instruction not to build them out of scope. That's a
-team-scheduling difference, not a framework one, but it affects the
-code-complexity numbers below.
+Both clients implement the same ten CareConnect screens — Contacts, Messaging,
+Accessibility Settings, Welcome, Sign In, Sign Up, Home, My Day, Appointments,
+Medicines, and Memories — plus the same tablet-breakpoint left-sidebar
+navigation. Appointments, Medicines and Memories were the last screens
+finished on the React Native side: Rehman scaffolded them separately as a
+standalone Expo prototype, and they were ported into the shared app and
+rebuilt against its Context/repository pattern once that branch merged.
 
 ## 1. Development Experience
 
@@ -70,13 +69,9 @@ hand-built in a single `AppShell` widget.
 Maintainability felt roughly equivalent — TypeScript's structural types
 caught prop-shape mistakes during the port that Dart's nominal types would
 also catch, and React Native's provider/hook split mirrors Flutter's
-controller/model split closely. Flutter carries all eleven screens where
-React Native carries eight real screens plus three `PendingScreen` stubs
-(scope, not maintainability). Both suites clear the assignment's 60% floor
-comfortably (Flutter: 220 tests, 98.8% coverage; React Native: 229 tests,
-96.1%), though Flutter's terseness let the three stub screens hit high
-coverage with only one smoke test apiece — a reminder that a coverage number
-alone doesn't prove depth of testing.
+controller/model split closely. Both suites clear the assignment's 60% floor
+comfortably (Flutter: 220 tests, 98.8% coverage; React Native: 271 tests,
+96.5%).
 
 ## 5. Recommendation
 

@@ -41,7 +41,7 @@ describe('navigation', () => {
     expect(screen.getAllByText('waiting', { includeHiddenElements: true })).toHaveLength(1);
   });
 
-  it("the bottom bar reaches a teammate's screen", async () => {
+  it('the bottom bar reaches Medicines', async () => {
     await renderApp();
     await screen.findByTestId('contact-c1');
 
@@ -49,8 +49,7 @@ describe('navigation', () => {
       await fireEvent.press(screen.getByTestId('tab-Medicines'));
     });
 
-    expect(await screen.findByText('Medicines is still being built')).toBeTruthy();
-    expect(screen.getByText(/Rehman/)).toBeTruthy();
+    expect(await screen.findByText("Today's medication tracker")).toBeTruthy();
     expect(screen.queryByTestId('contact-c1')).toBeNull();
 
     await act(async () => {
@@ -123,14 +122,14 @@ describe('navigation', () => {
     expect(await screen.findByText('Accessibility Settings')).toBeTruthy();
   });
 
-  it('a teammate placeholder can reach Settings too', async () => {
+  it('Appointments can reach Settings too', async () => {
     await renderApp();
     await screen.findByTestId('contact-c1');
 
     await act(async () => {
       await fireEvent.press(screen.getByTestId('tab-Appointments'));
     });
-    await screen.findByText('Appointments is still being built');
+    await screen.findByText('Upcoming medical visits');
 
     await fireEvent.press(screen.getByLabelText('Settings'));
     expect(await screen.findByText('Accessibility Settings')).toBeTruthy();
@@ -161,7 +160,7 @@ describe('navigation', () => {
     expect(await screen.findByText('Accessibility Settings')).toBeTruthy();
   });
 
-  it('the tablet sidebar reaches a teammate screen, same as the bottom bar', async () => {
+  it('the tablet sidebar reaches Medicines, same as the bottom bar', async () => {
     useTabletSize();
     await renderApp();
     await screen.findByTestId('contact-c1');
@@ -170,7 +169,7 @@ describe('navigation', () => {
       await fireEvent.press(screen.getByTestId('tab-Medicines'));
     });
 
-    expect(await screen.findByText('Medicines is still being built')).toBeTruthy();
+    expect(await screen.findByText("Today's medication tracker")).toBeTruthy();
     expect(screen.queryByTestId('contact-c1')).toBeNull();
 
     await act(async () => {
@@ -180,7 +179,7 @@ describe('navigation', () => {
     expect(await screen.findByTestId('contact-c1')).toBeTruthy();
   });
 
-  it('a teammate placeholder also drops its header gear on a tablet', async () => {
+  it('Appointments also drops its header gear on a tablet', async () => {
     useTabletSize();
     await renderApp();
     await screen.findByTestId('contact-c1');
@@ -189,9 +188,9 @@ describe('navigation', () => {
       await fireEvent.press(screen.getByTestId('tab-Appointments'));
     });
 
-    // The sidebar carries Settings on every tab, placeholders included, so
-    // the header gear must not reappear as a second way to reach it.
-    expect(await screen.findByText('Appointments is still being built')).toBeTruthy();
+    // The sidebar carries Settings on every tab, so the header gear must not
+    // reappear as a second way to reach it.
+    expect(await screen.findByText('Upcoming medical visits')).toBeTruthy();
     expect(screen.queryByLabelText('Settings')).toBeNull();
     expect(screen.getByTestId('tab-Settings')).toBeTruthy();
   });

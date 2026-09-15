@@ -6,6 +6,10 @@ import { SafeAreaProvider, type Metrics } from 'react-native-safe-area-context';
 
 import { AppProviders } from '../AppProviders';
 import {
+  createMockAppointmentRepository,
+  type AppointmentRepository,
+} from '../data/appointmentRepository';
+import {
   createMockContactRepository,
   type ContactRepository,
 } from '../data/contactRepository';
@@ -13,6 +17,14 @@ import {
   createMockDailyTasksRepository,
   type DailyTasksRepository,
 } from '../data/dailyTasksRepository';
+import {
+  createMockMedicineRepository,
+  type MedicineRepository,
+} from '../data/medicineRepository';
+import {
+  createMockMemoryRepository,
+  type MemoryRepository,
+} from '../data/memoryRepository';
 import {
   createMockMessageRepository,
   type MessageRepository,
@@ -62,6 +74,9 @@ export interface HarnessOptions {
   messageRepository?: MessageRepository;
   settingsRepository?: SettingsRepository;
   dailyTasksRepository?: DailyTasksRepository;
+  appointmentRepository?: AppointmentRepository;
+  medicineRepository?: MedicineRepository;
+  memoryRepository?: MemoryRepository;
   settings?: Partial<AccessibilitySettings>;
   initialRouteName?: keyof RootStackParamList;
   initialTabName?: AppDestination;
@@ -88,6 +103,9 @@ function buildRepositories(options: HarnessOptions) {
       options.messageRepository ?? createMockMessageRepository({ now: kTestNow }),
     settingsRepository,
     dailyTasksRepository: options.dailyTasksRepository ?? createMockDailyTasksRepository(),
+    appointmentRepository: options.appointmentRepository ?? createMockAppointmentRepository(),
+    medicineRepository: options.medicineRepository ?? createMockMedicineRepository(),
+    memoryRepository: options.memoryRepository ?? createMockMemoryRepository(),
   };
 }
 

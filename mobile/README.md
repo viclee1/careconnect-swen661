@@ -9,14 +9,15 @@ targeting care recipients who are deaf or hard of hearing.
 > and **Accessibility Settings**, plus the shared shell (theme, navigation,
 > models, repositories, Context providers, test harness); **Justin Zhang**
 > owns **Welcome, Sign In, Sign Up, Home** and **My Day**, merged in from his
-> own branch. **Rehman Uddin**'s screens (Appointments, Medicines, Memories)
-> land on their own branch; their navigation destinations exist here as
-> clearly-labelled placeholders in the meantime.
+> own branch; **Rehman Uddin** owns **Appointments, Medicines** and
+> **Memories**, ported in from his standalone Expo prototype at
+> [`careconnect-app/`](careconnect-app/) and rebuilt against this app's
+> Context providers, repositories and theme.
 >
 > Both clients are built to match the **Week 3 design prototype**. Where the
 > prototype and the original React web client disagreed, the prototype won.
 
-**Status:** 229 tests passing, **96.1 % line coverage**, `eslint` and `tsc`
+**Status:** 271 tests passing, **96.5 % line coverage**, `eslint` and `tsc`
 clean. The framework comparison (Assignment 5 Part 3) is not in this branch.
 
 ---
@@ -59,10 +60,11 @@ screen will not let you switch the visible alert banner off.
 | **Sign In / Sign Up** | Email-and-password forms into the app. Unauthenticated for now — see Known issues. |
 | **Home** | The dashboard: a daily-task progress banner and a simulated incoming captioned video call (a non-strobing flash, answer/decline, and in-call volume, balance, mute, pause and caption controls) — a working demonstration of the "call" this app always means. |
 | **My Day** | The task list behind Home's progress banner: a progress bar, and tappable task cards that toggle done/not-done. |
+| **Appointments** | Upcoming medical visits — doctor, specialty, date, time and location — each rendered as one accessible card. Loading and failed-load states match Contacts: a spinner, then a retry banner that explains what happened rather than showing an empty list. |
+| **Medicines** | Today's medication tracker: dosage and time under each name, a taken/total summary, and a tap on the row toggles taken status with `accessibilityRole="checkbox"` carrying the state in words, never colour alone. |
+| **Memories** | The care recipient's saved memories — title, date and description — laid out one column on a phone and two across from the tablet breakpoint up, matching Contacts' and Appointments' layout rule. |
 
-Placeholders stand in for Appointments, Medicines and Memories so the
-prototype's six-destination navigation works end to end. They are **not**
-functional screens and do not count toward the assignment's screen requirement.
+That's ten functional screens against the assignment's 7–10 target.
 
 ### Notify — the signature interaction
 
@@ -83,11 +85,11 @@ that helps this app's users must not be the pattern that harms someone else.
 
 ```
 src/
-├── AppProviders.tsx      # the four contexts, with repositories injected
+├── AppProviders.tsx      # the seven contexts, with repositories injected
 ├── theme/                # Assignment 3 palette, typography scale, spacing
 ├── models/               # Contact, Message, AccessibilitySettings,
-│                         #   VibrationPattern, DailyTask — plain data plus
-│                         #   pure helpers
+│                         #   VibrationPattern, DailyTask, Appointment,
+│                         #   Medicine, Memory — plain data plus pure helpers
 ├── data/                 # repository interfaces + in-memory implementations
 ├── state/                # Context providers and their hooks
 ├── hooks/                # useResponsive
@@ -95,17 +97,23 @@ src/
 ├── components/           # shared UI: header, banners, badges, buttons
 ├── navigation/           # destinations, the custom tab bar / sidebar, the root stack
 └── screens/
-    ├── contacts/  messaging/  settings/
+    ├── contacts/  messaging/  settings/  appointments/  medicines/  memories/
     ├── WelcomeScreen.tsx  SignInScreen.tsx  SignUpScreen.tsx
     ├── HomeScreen.tsx  MyDayScreen.tsx
-    └── PendingScreen.tsx
+    └── AppointmentsScreen.tsx  MedicinesScreen.tsx  MemoriesScreen.tsx
 ```
 
-**State management — Context API.** Four providers (`ContactsProvider`,
-`MessagesProvider`, `SettingsProvider`, `DailyTasksProvider`), each exposing a
-hook that throws outside its provider. Business logic lives in `src/models`
-and `src/utils` as pure functions, so it is unit tested without rendering
-anything, and the providers stay thin.
+`careconnect-app/` alongside `src/` is a separate, standalone Expo project —
+Rehman's original scaffold, kept for reference with its own `node_modules`
+and `tsconfig.json`, excluded from this app's lint and typecheck. Its screens
+were ported into `src/screens/` above rather than run directly.
+
+**State management — Context API.** Seven providers (`ContactsProvider`,
+`MessagesProvider`, `SettingsProvider`, `DailyTasksProvider`,
+`AppointmentsProvider`, `MedicinesProvider`, `MemoriesProvider`), each
+exposing a hook that throws outside its provider. Business logic lives in
+`src/models` and `src/utils` as pure functions, so it is unit tested without
+rendering anything, and the providers stay thin.
 
 Shared state earns its keep in two visible places: opening a conversation clears
 that contact's badge back on the Contacts screen without passing anything
@@ -154,9 +162,13 @@ If your installed Expo SDK differs from the one this was built against
 ```bash
 npm install -g eas-cli
 eas login
-eas build --platform android     # produces the APK
-eas build --platform ios         # requires an Apple developer account
+eas build --platform android --profile preview   # produces an installable .apk
+eas build --platform ios                          # requires an Apple developer account
 ```
+
+`eas.json`'s `preview` profile sets `android.buildType: "apk"`, since the
+default Android profile produces an `.aab` (App Bundle) — not directly
+installable, and not what the assignment submission asks for.
 
 `android/` and `ios/` are not committed — Expo generates them. Run
 `npx expo prebuild` if you need the native projects locally.
@@ -168,21 +180,25 @@ eas build --platform ios         # requires an Apple developer account
 ```bash
 npm run lint            # eslint — expected: no output
 npm run typecheck       # tsc --noEmit — expected: no output
-npm test                # 229 tests
+npm test                # 271 tests
 npm run test:coverage   # writes coverage/lcov-report/index.html
 ```
 
 ### Coverage
 
 ```
-Statements   : 96.13 % ( 621/646 )
-Branches     : 88.01 % ( 382/434 )
-Functions    : 93.52 % ( 231/247 )
-Lines        : 96.14 % ( 549/571 )
+Statements   : 96.47 % ( 739/766 )
+Branches     : 88.86 % ( 431/485 )
+Functions    : 93.89 % ( 277/295 )
+Lines        : 96.48 % ( 658/682 )
 ```
 
 Open `coverage/lcov-report/index.html` for the browsable report and screenshot
 the summary for the submission. The assignment floor is 60 %.
+
+`npm audit` plus a manual secrets/network review found 13 moderate,
+build-tooling-only dependency advisories and no code-level issues — see
+[`docs/security-scan.md`](docs/security-scan.md).
 
 ### What is tested
 
@@ -201,8 +217,10 @@ the summary for the submission. The assignment floor is 60 %.
 - `formatters` / `validators` — 12-hour clock edge cases, calendar-day vs
   elapsed-hours labels, composer length and blank rules
 - `haptics` — one impact per vibrating pulse, silence when vibration is off
+- `Appointment` / `Medicine` / `Memory` — the sentence assistive technology
+  announces for each, including the taken/not-taken wording
 - the repositories, including the flaky variants and the AsyncStorage round-trip
-- the three context hooks via `renderHook`, including their failure paths and
+- the seven context hooks via `renderHook`, including their failure paths and
   the fact that each throws outside its provider
 
 **React Native Testing Library component tests** — behaviour through the real
@@ -225,12 +243,17 @@ screens, rendered inside the real navigator and providers:
   word, refuses to unlock the visual banner, flips the conformance badge when
   captions go off, repaints the caption preview in yellow, drives both sliders,
   and previews a rhythm without changing any setting
+- Appointments, Medicines and Memories render their seeded lists, announce each
+  card as one sentence, and — Appointments and Memories — show a spinner while
+  loading, a retry banner that explains a failed load, and recover on retry;
+  Medicines toggles a medicine's taken state on press and updates the
+  taken/total summary
 - Navigation: list → conversation → back, the six-destination bar, tab selection
   state, the header gear, the bar hiding on Settings, the cross-screen caption
   warning, a failed load that explains itself and recovers on retry, and — on a
   tablet — the bar becoming a full-label sidebar with its own Settings entry,
-  reaching a teammate screen the same way the bottom bar does, and dropping the
-  header gear on every screen, placeholders included
+  reaching every destination the same way the bottom bar does, and dropping the
+  header gear on every screen
 - Sign In / Sign Up render their forms and forward to `onSignIn` / `onSignUp` /
   `onSignUp` ↔ `onSignIn` on the matching button and link presses
 - Home renders its dashboard, dismisses the daily-task notification, and walks
@@ -284,6 +307,12 @@ Claude (Opus) and Gemini were used on this branch to:
   the original list — `NaN` slider values, whitespace-only messages, corrupt
   stored preferences, calendar-day vs elapsed-hours grouping, and an attempt to
   disable the visual alert banner by editing storage;
+- port Rehman's `AppointmentsScreen` / `MedicinesScreen` / `MemoriesScreen`
+  (originally a static-data prototype in the standalone `careconnect-app/`
+  project) into `src/`, rebuilding them against this app's repository/Context
+  pattern, theme and accessibility conventions, and wiring them into the
+  navigator in place of the `PendingScreen` placeholders — Claude Code, working
+  from the assignment brief and this codebase's existing patterns;
 - write this README.
 
 Rejected AI suggestions: phone call-to-action buttons on contact cards, and

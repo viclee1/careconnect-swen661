@@ -23,6 +23,12 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "primaryColor": "#0F5272"
+    "primaryColor": "#0F5272",
+    "extra": {
+      "eas": {
+        "projectId": "5a9d648b-5bb2-46f1-b8eb-23551b462c2f"
+      }
+    },
+    "owner": "vlee842"
   }
 }

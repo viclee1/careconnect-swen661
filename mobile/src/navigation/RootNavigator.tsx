@@ -8,16 +8,18 @@ import {
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { useResponsive } from '../hooks/useResponsive';
+import { AppointmentsScreen } from '../screens/AppointmentsScreen';
 import { ContactsScreen } from '../screens/ContactsScreen';
 import { HomeScreen } from '../screens/HomeScreen';
+import { MedicinesScreen } from '../screens/MedicinesScreen';
+import { MemoriesScreen } from '../screens/MemoriesScreen';
 import { MessageThreadScreen } from '../screens/MessageThreadScreen';
 import { MyDayScreen } from '../screens/MyDayScreen';
-import { PendingScreen } from '../screens/PendingScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
 import { SignInScreen } from '../screens/SignInScreen';
 import { SignUpScreen } from '../screens/SignUpScreen';
 import { WelcomeScreen } from '../screens/WelcomeScreen';
-import { destinations, type AppDestination } from './destinations';
+import type { AppDestination } from './destinations';
 import type { RootStackParamList, TabParamList } from './routes';
 import { TabBar } from './TabBar';
 
@@ -26,23 +28,31 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 type RootNav = NavigationProp<RootStackParamList>;
 
-/**
- * Stands in for the three destinations Rehman owns. One component serves all
- * of them; it reads which one it is from the route.
- */
-function PendingRoute() {
-  const route = useRoute();
+function AppointmentsRoute() {
   const navigation = useNavigation<RootNav>();
   const { isTablet } = useResponsive();
-  const entry = destinations.find((item) => item.destination === route.name);
-
   return (
-    <PendingScreen
-      title={entry?.label ?? route.name}
-      owner={entry?.owner ?? 'A teammate'}
-      // The tablet sidebar already lists Settings, so the header gear would
-      // be a second way to reach the same place — hidden there exactly as
-      // the Flutter client's AppScaffold hides it.
+    <AppointmentsScreen
+      onOpenSettings={isTablet ? undefined : () => navigation.navigate('Settings')}
+    />
+  );
+}
+
+function MedicinesRoute() {
+  const navigation = useNavigation<RootNav>();
+  const { isTablet } = useResponsive();
+  return (
+    <MedicinesScreen
+      onOpenSettings={isTablet ? undefined : () => navigation.navigate('Settings')}
+    />
+  );
+}
+
+function MemoriesRoute() {
+  const navigation = useNavigation<RootNav>();
+  const { isTablet } = useResponsive();
+  return (
+    <MemoriesScreen
       onOpenSettings={isTablet ? undefined : () => navigation.navigate('Settings')}
     />
   );
@@ -110,9 +120,9 @@ function TabsNavigator({ initialRouteName = 'Home' }: { initialRouteName?: AppDe
     >
       <Tab.Screen name="Home" component={HomeRoute} />
       <Tab.Screen name="MyDay" component={MyDayRoute} />
-      <Tab.Screen name="Appointments" component={PendingRoute} />
-      <Tab.Screen name="Medicines" component={PendingRoute} />
-      <Tab.Screen name="Memories" component={PendingRoute} />
+      <Tab.Screen name="Appointments" component={AppointmentsRoute} />
+      <Tab.Screen name="Medicines" component={MedicinesRoute} />
+      <Tab.Screen name="Memories" component={MemoriesRoute} />
       <Tab.Screen name="Contacts" component={ContactsRoute} />
     </Tab.Navigator>
   );
