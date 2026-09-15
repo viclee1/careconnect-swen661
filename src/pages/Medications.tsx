@@ -8,7 +8,7 @@ const TODAY = new Date().toISOString().split('T')[0];
 
 const LS_MEDS_KEY = 'careconnect_meds_taken';
 
-function loadTakenFromStorage(): Record<string, boolean> {
+export function loadTakenFromStorage(): Record<string, boolean> {
   try {
     const raw = localStorage.getItem(LS_MEDS_KEY);
     return raw ? JSON.parse(raw) : {};
@@ -17,11 +17,11 @@ function loadTakenFromStorage(): Record<string, boolean> {
   }
 }
 
-function saveTakenToStorage(takenMap: Record<string, boolean>) {
+export function saveTakenToStorage(takenMap: Record<string, boolean>) {
   localStorage.setItem(LS_MEDS_KEY, JSON.stringify(takenMap));
 }
 
-function formatTime(time: string) {
+export function formatTime(time: string) {
   const [h, m] = time.split(':').map(Number);
   const suffix = h >= 12 ? 'pm' : 'am';
   return `${h % 12 || 12}:${String(m).padStart(2, '0')} ${suffix}`;
