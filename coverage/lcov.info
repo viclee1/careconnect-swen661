@@ -1,5 +1,5 @@
 TN:
-SF:src\pages\Appointments.tsx
+SF:src/pages/Appointments.tsx
 FN:21,fmt12
 FN:28,formatFullDate
 FN:39,formatDateTime
@@ -149,7 +149,7 @@ BRF:46
 BRH:42
 end_of_record
 TN:
-SF:src\pages\Medications.tsx
+SF:src/pages/Medications.tsx
 FN:11,loadTakenFromStorage
 FN:20,saveTakenToStorage
 FN:24,formatTime
@@ -266,7 +266,7 @@ BRF:36
 BRH:6
 end_of_record
 TN:
-SF:src\pages\Memories.tsx
+SF:src/pages/Memories.tsx
 FN:26,Memories
 FN:31,(anonymous_1)
 FN:34,(anonymous_2)
