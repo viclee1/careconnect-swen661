@@ -35,4 +35,13 @@ abstract final class AppColors {
 
   /// Hairline borders. Decorative only — never the sole carrier of meaning.
   static const Color border = Color(0xFFC7DCE6);
+
+  /// Destructive call action (decline / end call). White text/icon on this
+  /// fill measures 5.62:1 — Material's default `Colors.red` only reaches
+  /// 3.68:1 and fails the 4.5:1 normal-text/UI-icon requirement.
+  static const Color dangerAction = Color(0xFFC62828);
+
+  /// Affirmative call action (answer). White text/icon on this fill measures
+  /// 5.13:1 — Material's default `Colors.green` only reaches 2.78:1.
+  static const Color successAction = Color(0xFF2E7D32);
 }

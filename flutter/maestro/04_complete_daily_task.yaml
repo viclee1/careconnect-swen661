@@ -1,0 +1,11 @@
+appId: com.example.careconnect_mobile
+name: "Critical flow 4 — My Day -> completing a task updates progress"
+---
+- launchApp:
+    clearState: true
+- tapOn: "I already have an account"
+- tapOn: "Sign in"
+- tapOn: "Go to My Day"
+- assertVisible: ".*0 of 7 done.*"
+- tapOn: ".*Morning check-in.*"
+- assertVisible: ".*1 of 7 done.*"
