@@ -1,0 +1,18 @@
+appId: edu.umgc.swen661.careconnect
+name: "Critical flow 3 - Contacts to open a conversation to send a message"
+---
+- launchApp:
+    clearState: true
+- tapOn: "I already have an account"
+- assertVisible: "Sign in to your account."
+- tapOn: "Sign in"
+- assertVisible: "Here's your day, Margaret"
+- tapOn: "Go to Contacts"
+- tapOn: ".*Joyce.*"
+- tapOn: "Message Joyce"
+- tapOn:
+    text: "Cancel"
+    optional: true
+- inputText: "Calling to say hello!"
+- tapOn: "Send message to Joyce"
+- assertVisible: ".*Calling to say hello!.*"

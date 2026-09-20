@@ -1,0 +1,10 @@
+appId: edu.umgc.swen661.careconnect
+name: "Critical flow 1 - Welcome to Sign in to Home"
+---
+- launchApp:
+    clearState: true
+- assertVisible: "CareConnect"
+- tapOn: "I already have an account"
+- assertVisible: "Welcome back"
+- tapOn: "Sign in"
+- assertVisible: "Here's your day, Margaret"
