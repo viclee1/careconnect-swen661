@@ -66,6 +66,82 @@ screen will not let you switch the visible alert banner off.
 
 That's ten functional screens against the assignment's 7–10 target.
 
+### Accessibility Addons (09/20/26)
+
+Key Accessibility Enhancements:
+
+• Semantic Navigation & Roles:
+
+◦ Added accessibilityRole="header" to all major screen headings and section titles (Home, My Day, Appointments, etc.).
+
+◦ Correctly identified buttons and links using accessibilityRole="button" and accessibilityRole="link".
+
+• Form Accessibility (SignIn/SignUp):
+
+◦ Every TextInput now carries an accessibilityLabel and accessibilityHint, ensuring users with screen readers understand exactly what information is required.
+
+• Accessible Progress Indicators:
+
+◦ The task progress bars on the Dashboard and My Day screens now use accessibilityRole="progressbar".
+
+◦ They provide dynamic accessibilityValue updates (e.g., "3 of 7 tasks completed") so the current status is announced in real-time.
+
+• Call Simulation Overlay:
+
+◦ The Incoming Call and Active Call modals are now fully accessible.
+
+◦ Added labels for the "LIVE" status, caller information, and accessible controls for volume and balance sliders.
+
+◦ Live captions (CC) are marked with accessibilityLiveRegion="polite" to ensure they are announced as they appear.
+
+• Task List Items:
+
+◦ The My Day and Medicines items now act as semantic checkboxes (accessibilityRole="checkbox").
+
+◦ The completion state is explicitly carried via accessibilityState={{ checked: ... }} and reflected in the descriptive labels.
+
+• Touch Targets:
+
+◦ Verified that all interactive elements maintain a minimum hit box of 48x48 points (exceeding the 44x44 requirement).
+
+---
+
+## Maestro E2E Tests
+
+The app includes a suite of [Maestro](https://maestro.mobile.dev/) UI tests for end-to-end verification of critical user flows.
+
+### Prerequisites
+
+Maestro drives the native application directly. Before running tests, you must build and install the app on your Android emulator or iOS simulator:
+
+```bash
+# For Android
+npx expo run:android
+
+```
+### Running the tests
+
+Once the app is installed and visible on your device/emulator:
+
+```bash
+# Run all critical flows
+maestro test maestro/
+
+# Run a specific flow (e.g., Sign In)
+maestro test maestro/01_sign_in.yaml
+```
+
+### Test Cases
+
+| File | Description |
+|:-----|:------------|
+| `01_sign_in.yaml` | Verifies the Welcome -> Sign In -> Home dashboard transition. |
+| `02_bottom_navigation.yaml` | Confirms that every tab in the bottom bar reaches its target screen. |
+| `03_send_message.yaml` | Tests opening a contact conversation and sending a text message. |
+| `04_complete_daily_task.yaml` | Verifies that checking off a task on My Day updates the progress banner. |
+| `05_toggle_accessibility_setting.yaml` | Confirms that changing a preference in Settings takes effect immediately. |
+| `06_accessibility_screen_reader_navigation.yaml` | Navigates the entire app using only screen-reader labels to verify semantics. |
+
 ### Notify — the signature interaction
 
 Tapping it plays one **non-strobing** pulse across the screen carrying the words

@@ -1,0 +1,19 @@
+appId: edu.umgc.swen661.careconnect
+name: "Accessibility-focused flow - navigating purely by screen-reader labels"
+---
+- launchApp:
+    clearState: true
+- tapOn: "I already have an account"
+- assertVisible: "Sign in to your account."
+- tapOn: "Sign in"
+- assertVisible: "Home, current screen"
+- tapOn: "Go to My Day"
+- assertVisible: "My Day, current screen"
+- tapOn: "Go to Appointments"
+- assertVisible: "Appointments, current screen"
+- tapOn: "Go to Medicines"
+- assertVisible: "Medicines, current screen"
+- tapOn: "Go to Memories"
+- assertVisible: "Memories, current screen"
+- tapOn: "Go to Contacts"
+- assertVisible: "Contacts, current screen"

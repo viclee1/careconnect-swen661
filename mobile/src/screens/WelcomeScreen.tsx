@@ -21,7 +21,9 @@ export function WelcomeScreen({
         <View style={styles.header}>
           <View style={styles.logoRow}>
             <Icon name="favorite" size={28} color={colors.primaryLight} />
-            <Text style={styles.logoText}>CareConnect</Text>
+            <Text style={styles.logoText} accessibilityRole="header">
+              CareConnect
+            </Text>
           </View>
           <StatusBadge
             icon="accessibility-new"
@@ -32,14 +34,18 @@ export function WelcomeScreen({
         </View>
 
         <View style={styles.hero}>
-          <Text style={styles.display}>Your daily companion for calm, confident care.</Text>
+          <Text style={styles.display} accessibilityRole="header">
+            Your daily companion for calm, confident care.
+          </Text>
           <Text style={styles.tagline}>
             For people who need a little help remembering, and the people who care for them.
           </Text>
         </View>
 
         <View style={styles.featureCard}>
-          <Text style={styles.featureCardTitle}>Built for hearing accessibility</Text>
+          <Text style={styles.featureCardTitle} accessibilityRole="header">
+            Built for hearing accessibility
+          </Text>
           <FeatureItem
             icon="remove-red-eye"
             title="Visual alerts"

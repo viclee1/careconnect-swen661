@@ -1,0 +1,13 @@
+appId: edu.umgc.swen661.careconnect
+name: "Critical flow 4 - My Day to completing a task updates progress"
+---
+- launchApp:
+    clearState: true
+- tapOn: "I already have an account"
+- assertVisible: "Sign in to your account."
+- tapOn: "Sign in"
+- assertVisible: "Here's your day, Margaret"
+- tapOn: "Go to My Day"
+- assertVisible: ".*0 of 7 done.*"
+- tapOn: ".*Morning check-in.*"
+- assertVisible: ".*1 of 7 done.*"

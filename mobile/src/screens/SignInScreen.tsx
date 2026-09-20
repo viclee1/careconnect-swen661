@@ -26,11 +26,15 @@ export function SignInScreen({
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
           <Icon name="favorite" size={28} color={colors.primaryDark} />
-          <Text style={styles.logoText}>CareConnect</Text>
+          <Text style={styles.logoText} accessibilityRole="header">
+            CareConnect
+          </Text>
         </View>
 
         <View style={styles.hero}>
-          <Text style={styles.headline}>Welcome back</Text>
+          <Text style={styles.headline} accessibilityRole="header">
+            Welcome back
+          </Text>
           <Text style={styles.subheadline}>Sign in to your account.</Text>
         </View>
 
@@ -41,6 +45,9 @@ export function SignInScreen({
             placeholder="e.g. alex@example.com"
             keyboardType="email-address"
             autoCapitalize="none"
+            accessible
+            accessibilityLabel="Email address"
+            accessibilityHint="Enter the email address you used to sign up"
           />
 
           <View style={{ height: 24 }} />
@@ -50,9 +57,17 @@ export function SignInScreen({
             style={styles.input}
             placeholder="Enter your password"
             secureTextEntry
+            accessible
+            accessibilityLabel="Password"
+            accessibilityHint="Enter your account password"
           />
 
-          <TouchableOpacity style={styles.forgotPassword}>
+          <TouchableOpacity
+            style={styles.forgotPassword}
+            accessibilityRole="button"
+            accessibilityLabel="Forgot password?"
+            accessibilityHint="Triggers a password reset flow"
+          >
             <Text style={styles.forgotPasswordText}>Forgot password?</Text>
           </TouchableOpacity>
 
@@ -63,11 +78,17 @@ export function SignInScreen({
             onPress={onSignIn}
             variant="filled"
             fullWidth
+            accessibilityHint="Signs you into your CareConnect account"
           />
 
           <View style={styles.footer}>
             <Text style={styles.footerText}>New here? </Text>
-            <TouchableOpacity onPress={onSignUp}>
+            <TouchableOpacity
+              onPress={onSignUp}
+              accessibilityRole="link"
+              accessibilityLabel="Create an account"
+              accessibilityHint="Navigates to the sign up screen"
+            >
               <Text style={styles.linkText}>Create an account</Text>
             </TouchableOpacity>
           </View>

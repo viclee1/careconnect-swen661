@@ -85,9 +85,22 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings?: () => void }) 
           </View>
         )}
 
-        <Text style={styles.greeting}>{"Here's your day, Margaret"}</Text>
+        <Text style={styles.greeting} accessibilityRole="header">
+          {"Here's your day, Margaret"}
+        </Text>
 
-        <View style={styles.progressRow}>
+        <View
+          style={styles.progressRow}
+          accessible
+          accessibilityRole="progressbar"
+          accessibilityLabel="Daily task progress"
+          accessibilityValue={{
+            min: 0,
+            max: totalCount,
+            now: doneCount,
+            text: `${doneCount} of ${totalCount} tasks completed`,
+          }}
+        >
           <View style={styles.progressBarContainer}>
             <View style={[styles.progressBar, { width: `${progress * 100}%` }]} />
           </View>
@@ -134,7 +147,14 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings?: () => void }) 
         <View style={{ height: 40 }} />
       </ScrollView>
 
-      <Modal visible={isIncomingCall} transparent animationType="none" statusBarTranslucent>
+      <Modal
+        visible={isIncomingCall}
+        transparent
+        animationType="none"
+        statusBarTranslucent
+        accessibilityLabel="Incoming call from Maria"
+        accessibilityViewIsModal
+      >
         <Animated.View
           style={[
             styles.incomingOverlay,
@@ -149,37 +169,53 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings?: () => void }) 
         >
           <SafeAreaView style={styles.incomingContent} edges={['top', 'bottom']}>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <View style={styles.incomingAvatar}>
+              <View style={styles.incomingAvatar} accessibilityElementsHidden>
                 <Icon name="person" size={80} color="white" />
               </View>
-              <Text style={styles.incomingName}>Maria</Text>
+              <Text style={styles.incomingName} accessibilityRole="header">
+                Maria
+              </Text>
               <Text style={styles.incomingSubtitle}>Your daughter</Text>
             </View>
 
             <View style={styles.incomingActions}>
-              <CallButton icon="call-end" label="Decline" color="#FF4B5C" onPress={declineCall} />
-              <CallButton icon="videocam" label="Answer" color="#4BCB66" onPress={answerCall} />
+              <CallButton
+                icon="call-end"
+                label="Decline"
+                color="#FF4B5C"
+                onPress={declineCall}
+                accessibilityHint="Declines the incoming call and returns to dashboard"
+              />
+              <CallButton
+                icon="videocam"
+                label="Answer"
+                color="#4BCB66"
+                onPress={answerCall}
+                accessibilityHint="Answers the call with captioned video"
+              />
             </View>
             <View style={{ height: 60 }} />
           </SafeAreaView>
         </Animated.View>
       </Modal>
 
-      <Modal visible={isActiveCall} animationType="slide">
-        <View style={styles.activeCallContainer}>
+      <Modal visible={isActiveCall} animationType="slide" accessibilityViewIsModal>
+        <View style={styles.activeCallContainer} accessibilityLabel="Active video call with Maria">
           <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.activeCallHeader}>
               <View style={{ flex: 1 }}>
-                <Text style={styles.activeCallTitle}>Maria</Text>
+                <Text style={styles.activeCallTitle} accessibilityRole="header">
+                  Maria
+                </Text>
                 <Text style={styles.activeCallSubtitle}>Your daughter · Video call</Text>
               </View>
-              <View style={styles.liveBadge}>
+              <View style={styles.liveBadge} accessible accessibilityLabel="Live call status">
                 <Text style={styles.liveText}>LIVE</Text>
               </View>
             </View>
 
             <View style={styles.activeCallContent}>
-              <View style={styles.mainAvatarContainer}>
+              <View style={styles.mainAvatarContainer} accessibilityElementsHidden>
                 <View style={styles.mainAvatar}>
                   <Icon name="person" size={140} color="white" />
                 </View>
@@ -190,7 +226,12 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings?: () => void }) 
             </View>
 
             {isCCEnabled && (
-              <View style={styles.ccContainer}>
+              <View
+                style={styles.ccContainer}
+                accessible
+                accessibilityLabel="Live captions"
+                accessibilityLiveRegion="polite"
+              >
                 <Text style={styles.ccText}>
                   {'[CC LIVE] "Hi Mum! Can you hear me? I\'m calling to check in on you."'}
                 </Text>
@@ -199,7 +240,7 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings?: () => void }) 
 
             <View style={styles.activeCallControls}>
               <View style={styles.controlRow}>
-                <Icon name="volume-up" size={28} color="white" />
+                <Icon name="volume-up" size={28} color="white" accessibilityElementsHidden />
                 <Slider
                   style={{ flex: 1, height: 40 }}
                   minimumValue={0}
@@ -209,11 +250,22 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings?: () => void }) 
                   minimumTrackTintColor="white"
                   maximumTrackTintColor="rgba(255,255,255,0.24)"
                   thumbTintColor="white"
+                  accessibilityLabel="Call volume"
+                  accessibilityValue={{
+                    min: 0,
+                    max: 100,
+                    now: volume,
+                    text: `${Math.round(volume)} percent`,
+                  }}
                 />
-                <Text style={styles.controlValue}>{Math.round(volume)}</Text>
+                <Text style={styles.controlValue} accessibilityElementsHidden>
+                  {Math.round(volume)}
+                </Text>
               </View>
               <View style={styles.controlRow}>
-                <Text style={styles.balanceLabel}>L</Text>
+                <Text style={styles.balanceLabel} accessibilityElementsHidden>
+                  L
+                </Text>
                 <Slider
                   style={{ flex: 1, height: 40 }}
                   value={balance}
@@ -221,8 +273,22 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings?: () => void }) 
                   minimumTrackTintColor="white"
                   maximumTrackTintColor="rgba(255,255,255,0.24)"
                   thumbTintColor="white"
+                  accessibilityLabel="Audio balance"
+                  accessibilityValue={{
+                    min: 0,
+                    max: 1,
+                    now: balance,
+                    text:
+                      balance === 0.5
+                        ? 'Centered'
+                        : balance < 0.5
+                          ? 'Leaning left'
+                          : 'Leaning right',
+                  }}
                 />
-                <Text style={styles.balanceLabel}>R</Text>
+                <Text style={styles.balanceLabel} accessibilityElementsHidden>
+                  R
+                </Text>
               </View>
 
               <View style={styles.toggleRow}>
@@ -231,12 +297,18 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings?: () => void }) 
                   label="Mute"
                   isActive={isMuted}
                   onPress={() => setIsMuted(!isMuted)}
+                  accessibilityRole="switch"
+                  accessibilityState={{ checked: isMuted }}
+                  accessibilityHint="Toggles microphone on or off"
                 />
                 <ToggleButton
                   icon={isPaused ? 'play-arrow' : 'pause'}
                   label="Pause"
                   isActive={isPaused}
                   onPress={() => setIsPaused(!isPaused)}
+                  accessibilityRole="switch"
+                  accessibilityState={{ checked: isPaused }}
+                  accessibilityHint="Pauses or resumes the video stream"
                 />
                 <ToggleButton
                   testID="toggle-cc"
@@ -244,6 +316,9 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings?: () => void }) 
                   label="CC"
                   isActive={isCCEnabled}
                   onPress={() => setIsCCEnabled(!isCCEnabled)}
+                  accessibilityRole="switch"
+                  accessibilityState={{ checked: isCCEnabled }}
+                  accessibilityHint="Toggles live captions on or off"
                 />
               </View>
 
@@ -255,6 +330,7 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings?: () => void }) 
                   variant="filled"
                   icon="call-end"
                   fullWidth
+                  accessibilityHint="Disconnects the call and returns to dashboard"
                 />
               </View>
             </View>
@@ -298,18 +374,28 @@ function CallButton({
   label,
   color,
   onPress,
+  accessibilityHint,
 }: {
   icon: IconName;
   label: string;
   color: string;
   onPress: () => void;
+  accessibilityHint?: string;
 }) {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.callButtonContainer}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={styles.callButtonContainer}
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      accessibilityHint={accessibilityHint}
+    >
       <View style={[styles.callButtonCircle, { backgroundColor: color }]}>
         <Icon name={icon} size={40} color="white" />
       </View>
-      <Text style={styles.callButtonLabel}>{label}</Text>
+      <Text style={styles.callButtonLabel} accessibilityElementsHidden>
+        {label}
+      </Text>
     </TouchableOpacity>
   );
 }
@@ -320,18 +406,34 @@ function ToggleButton({
   isActive,
   onPress,
   testID,
+  accessibilityRole,
+  accessibilityState,
+  accessibilityHint,
 }: {
   icon: IconName;
   label: string;
   isActive: boolean;
   onPress: () => void;
   testID?: string;
+  accessibilityRole?: 'button' | 'switch';
+  accessibilityState?: any;
+  accessibilityHint?: string;
 }) {
   const color = isActive ? 'white' : 'rgba(255,255,255,0.54)';
   return (
-    <TouchableOpacity onPress={onPress} style={styles.toggleButton} testID={testID}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={styles.toggleButton}
+      testID={testID}
+      accessibilityRole={accessibilityRole ?? 'button'}
+      accessibilityState={accessibilityState}
+      accessibilityLabel={label}
+      accessibilityHint={accessibilityHint}
+    >
       <Icon name={icon} size={36} color={color} />
-      <Text style={[styles.toggleLabel, { color }]}>{label}</Text>
+      <Text style={[styles.toggleLabel, { color }]} accessibilityElementsHidden>
+        {label}
+      </Text>
     </TouchableOpacity>
   );
 }

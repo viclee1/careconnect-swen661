@@ -27,7 +27,11 @@ export function MedicineCard({
       accessibilityRole="checkbox"
       accessibilityState={{ checked: medicine.taken }}
       accessibilityLabel={medicineSemanticLabel(medicine)}
-      style={[styles.card, medicine.taken && styles.cardTaken]}
+      style={[
+        styles.card,
+        medicine.taken && styles.cardTaken,
+        { opacity: medicine.taken ? 0.6 : 1.0 },
+      ]}
     >
       <View style={styles.iconCircle}>
         <Icon name="medication" size={24} color={colors.primaryLight} />

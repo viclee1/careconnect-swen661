@@ -19,7 +19,11 @@ export function MedicinesScreen({ onOpenSettings }: { onOpenSettings?: () => voi
         onOpenSettings={onOpenSettings}
       />
       <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.summary}>
+        <Text
+          style={styles.summary}
+          accessible
+          accessibilityLabel={`${takenCount} of ${totalCount} medications taken`}
+        >
           {takenCount} of {totalCount} taken
         </Text>
         <View style={styles.list}>

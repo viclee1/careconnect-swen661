@@ -30,13 +30,20 @@ describe('MedicinesScreen', () => {
     });
 
     expect(await screen.findByText('2 of 3 taken')).toBeTruthy();
-    expect(screen.getByTestId('medicine-med2').props.accessibilityState.checked).toBe(true);
+    const med2 = screen.getByTestId('medicine-med2');
+    expect(med2.props.accessibilityState.checked).toBe(true);
+    // Accessibility: Check for faded effect (opacity 0.6)
+    const styles = Array.isArray(med2.props.style) ? med2.props.style : [med2.props.style];
+    expect(styles).toEqual(expect.arrayContaining([expect.objectContaining({ opacity: 0.6 })]));
 
     await act(async () => {
       await fireEvent.press(row);
     });
 
     expect(await screen.findByText('1 of 3 taken')).toBeTruthy();
+    // Accessibility: Check for full opacity (1.0)
+    const resetStyles = Array.isArray(med2.props.style) ? med2.props.style : [med2.props.style];
+    expect(resetStyles).toEqual(expect.arrayContaining([expect.objectContaining({ opacity: 1.0 })]));
   });
 
   it('announces the taken status in words', async () => {

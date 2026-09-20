@@ -36,7 +36,7 @@ export function AppointmentsScreen({ onOpenSettings }: { onOpenSettings?: () => 
         <ScrollView contentContainerStyle={styles.content}>
           {isLoading ? (
             <View style={styles.loading}>
-              <ActivityIndicator accessibilityLabel="Loading appointments" />
+              <ActivityIndicator accessible accessibilityLabel="Loading appointments" />
             </View>
           ) : error ? (
             <AlertBanner
