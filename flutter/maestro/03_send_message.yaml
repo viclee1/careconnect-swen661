@@ -1,0 +1,19 @@
+appId: com.example.careconnect_mobile
+name: "Critical flow 3 — Contacts -> open a conversation -> send a message"
+---
+- launchApp:
+    clearState: true
+- tapOn: "I already have an account"
+- tapOn: "Sign in"
+- tapOn: "Go to Contacts"
+- tapOn: ".*Joyce.*"
+- tapOn: "Message Joyce"
+# The emulator's stylus-handwriting onboarding popup can appear the first
+# time a text field is focused on some Android system images; dismiss it if
+# it shows up so it doesn't cover the compose bar underneath it.
+- tapOn:
+    text: "Cancel"
+    optional: true
+- inputText: "Calling to say hello!"
+- tapOn: "Send message to Joyce"
+- assertVisible: ".*Calling to say hello!.*"

@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites>
+  <testsuite name="Test Suite" device="medium_phone" tests="6" failures="0" time="102.426" timestamp="2026-09-17T23:02:35">
+    <testcase id="Critical flow 5 — an accessibility preference takes effect immediately" name="Critical flow 5 — an accessibility preference takes effect immediately" classname="Critical flow 5 — an accessibility preference takes effect immediately" file="maestro/05_toggle_accessibility_setting.yaml" time="16.542" timestamp="2026-09-17T23:02:35" status="SUCCESS"/>
+    <testcase id="Critical flow 3 — Contacts -> open a conversation -> send a message" name="Critical flow 3 — Contacts -> open a conversation -> send a message" classname="Critical flow 3 — Contacts -> open a conversation -> send a message" file="maestro/03_send_message.yaml" time="30.091" timestamp="2026-09-17T23:02:51" status="SUCCESS"/>
+    <testcase id="Critical flow 2 — bottom navigation reaches every destination" name="Critical flow 2 — bottom navigation reaches every destination" classname="Critical flow 2 — bottom navigation reaches every destination" file="maestro/02_bottom_navigation.yaml" time="17.94" timestamp="2026-09-17T23:03:21" status="SUCCESS"/>
+    <testcase id="Accessibility-focused flow — navigating purely by screen-reader labels" name="Accessibility-focused flow — navigating purely by screen-reader labels" classname="Accessibility-focused flow — navigating purely by screen-reader labels" file="maestro/06_accessibility_screen_reader_navigation.yaml" time="17.595" timestamp="2026-09-17T23:03:39" status="SUCCESS"/>
+    <testcase id="Critical flow 1 — Welcome -> Sign in -> Home" name="Critical flow 1 — Welcome -> Sign in -> Home" classname="Critical flow 1 — Welcome -> Sign in -> Home" file="maestro/01_sign_in.yaml" time="7.978" timestamp="2026-09-17T23:03:57" status="SUCCESS"/>
+    <testcase id="Critical flow 4 — My Day -> completing a task updates progress" name="Critical flow 4 — My Day -> completing a task updates progress" classname="Critical flow 4 — My Day -> completing a task updates progress" file="maestro/04_complete_daily_task.yaml" time="12.263" timestamp="2026-09-17T23:04:05" status="SUCCESS"/>
+  </testsuite>
+</testsuites>

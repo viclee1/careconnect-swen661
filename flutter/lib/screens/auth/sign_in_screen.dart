@@ -45,7 +45,7 @@ class SignInScreen extends StatelessWidget {
               const SizedBox(height: 24),
               Wrap(alignment: WrapAlignment.center, crossAxisAlignment: WrapCrossAlignment.center, children: [
                 const Text('New here? '),
-                TextButton(onPressed: () => context.go(Routes.signUp), style: TextButton.styleFrom(padding: EdgeInsets.zero, minimumSize: Size.zero, tapTargetSize: MaterialTapTargetSize.shrinkWrap), child: Text('Create an account', style: textTheme.bodyMedium?.copyWith(color: AppColors.primaryDark, fontWeight: FontWeight.bold))),
+                TextButton(onPressed: () => context.go(Routes.signUp), style: TextButton.styleFrom(minimumSize: const Size(48, 48)), child: Text('Create an account', style: textTheme.bodyMedium?.copyWith(color: AppColors.primaryDark, fontWeight: FontWeight.bold))),
               ]),
             ],
           ),

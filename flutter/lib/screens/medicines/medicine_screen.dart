@@ -23,22 +23,25 @@ class _MedicineScreenState extends State<MedicineScreen> {
         itemCount: medications.length,
         itemBuilder: (context, index) {
           final med = medications[index];
-          return Semantics(
-            label: 'Medication ${med['name']}, dosage ${med['dosage']}, scheduled for ${med['time']}. Status: ${med['taken'] ? "Taken" : "Not taken"}',
-            child: Card(
-              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: CheckboxListTile(
-                title: Text(med['name'], style: const TextStyle(fontWeight: FontWeight.bold)),
-                subtitle: Text('Dosage: ${med['dosage']}\nTime: ${med['time']}'),
-                isThreeLine: true,
-                secondary: const Icon(Icons.medication, color: Colors.green),
-                value: med['taken'],
-                onChanged: (bool? value) {
-                  setState(() {
-                    medications[index]['taken'] = value ?? false;
-                  });
-                },
-              ),
+          // CheckboxListTile already exposes the correct "checkbox" role plus
+          // its checked state and title/subtitle text to screen readers.
+          // Wrapping it in a second Semantics node with a hand-written label
+          // used to make TalkBack/VoiceOver announce the medication twice —
+          // once from the custom label, once from the tile's own semantics —
+          // so the native tile is left to speak for itself.
+          return Card(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: CheckboxListTile(
+              title: Text(med['name'], style: const TextStyle(fontWeight: FontWeight.bold)),
+              subtitle: Text('Dosage: ${med['dosage']}\nTime: ${med['time']}'),
+              isThreeLine: true,
+              secondary: const Icon(Icons.medication, color: Colors.green),
+              value: med['taken'],
+              onChanged: (bool? value) {
+                setState(() {
+                  medications[index]['taken'] = value ?? false;
+                });
+              },
             ),
           );
         },

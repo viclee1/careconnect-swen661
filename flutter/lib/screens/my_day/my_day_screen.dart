@@ -34,7 +34,11 @@ class _MyDayScreenState extends State<MyDayScreen> {
               ),
             ),
           Row(children: [
-            Expanded(child: ClipRRect(borderRadius: const BorderRadius.all(Radius.circular(6)), child: LinearProgressIndicator(value: dailyTasks.progress, backgroundColor: AppColors.secondaryLight, valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primaryDark), minHeight: 12))),
+            // Without semanticsLabel this merges with the adjacent "X of Y
+            // done" text into one confusing announcement — e.g. "0, 0 of 7
+            // done" — because the indicator's own auto-generated percentage
+            // value and the sibling Text share one accessibility node.
+            Expanded(child: ClipRRect(borderRadius: const BorderRadius.all(Radius.circular(6)), child: LinearProgressIndicator(value: dailyTasks.progress, backgroundColor: AppColors.secondaryLight, valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primaryDark), minHeight: 12, semanticsLabel: 'Tasks completed today'))),
             const SizedBox(width: 16),
             Text('${dailyTasks.doneCount} of ${dailyTasks.totalCount} done', style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600, color: AppColors.secondaryDark)),
           ]),
