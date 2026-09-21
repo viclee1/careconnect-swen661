@@ -257,6 +257,35 @@ installable, and not what the assignment submission asks for.
 `android/` and `ios/` are not committed — Expo generates them. Run
 `npx expo prebuild` if you need the native projects locally.
 
+### Building for Android locally (for Maestro, or a debug APK without EAS)
+
+```bash
+npx expo run:android      # prebuilds android/ and installs a debug build on a
+                           # connected device/emulator — this is what maestro/
+                           # needs a build for
+```
+
+**Use JDK 17 or 21 to run Gradle, not whatever the newest JDK on your machine
+is.** On JDK 25/26, the native Android build fails during
+`react-native-screens:configureCMakeDebug[arm64-v8a]` with a "restricted
+method in java.lang.System has been called" warning right before the
+failure. This was confirmed to be a JDK-25/26-vs-Gradle-9 native-toolchain
+incompatibility, not a defect in `react-native-screens`, Expo's CMake
+integration, or this app: the exact same Gradle/NDK/CMake versions built the
+APK successfully once pointed at JDK 17.
+
+If `java -version` isn't already 17 or 21, either set `JAVA_HOME` to one
+before running the command above, or point Gradle at one directly by adding
+to `android/gradle.properties` after `npx expo prebuild` has generated it:
+
+```properties
+org.gradle.java.home=/path/to/your/jdk-17-or-21
+```
+
+(That file isn't committed, since it's inside the generated `android/`
+directory and the JDK path is machine-specific — you'll need to re-add this
+line after every `expo prebuild`.)
+
 ---
 
 ## Tests

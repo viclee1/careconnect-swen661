@@ -23,10 +23,16 @@ the same way for the same user.
   documented ratios in `src/theme/colors.ts`, computed against the WCAG relative-luminance
   formula (not eyeballed).
 - Maestro E2E flow files exist (`mobile/maestro/*.yaml`) mirroring the Flutter client's
-  flows, but **could not be run against a live build in this environment** — `npx expo
-  run:android` failed during the native `react-native-screens` CMake build step before
-  producing an installable APK. This is recorded as an open item below, not a pass/fail
-  result.
+  flows, but **have not actually been run yet**. The build blocker that first prevented
+  this has since been root-caused: `npx expo run:android` failed on one machine (JDK 25)
+  during the native `react-native-screens` CMake step, but `./gradlew app:assembleDebug`
+  succeeded cleanly on a second, independent machine with the *same* Gradle/NDK/CMake
+  versions, once the build was pointed at JDK 17 instead. This confirms the failure is a
+  JDK-25/26-vs-Gradle-9 native-toolchain incompatibility, not a defect in
+  `react-native-screens`, Expo's CMake integration, or this app — see "Building for
+  Android" in `mobile/README.md`. The APK itself now builds; the Maestro flows still need
+  to actually be run against it on a device/emulator, which is recorded as an open item
+  below.
 - Manual screen-reader testing: **not performed in this environment** (no TalkBack/
   VoiceOver device pass was completed for the RN client at the time of this report).
   This is a materially different (weaker) evaluation basis than the Flutter client's
@@ -113,13 +119,15 @@ mobile app throughout (e.g. "page" → "screen").
    biggest gap in this report's evidence relative to the Flutter VPAT, and the
    assignment's required screen-reader demonstration video for this client is
    outstanding.
-2. **Maestro E2E flows are unverified.** `mobile/maestro/*.yaml` exists (six flows
-   mirroring the Flutter client's), but `npx expo run:android` failed during the native
-   `react-native-screens` CMake build step in this environment before an installable
-   APK could be produced, so none of the flows have actually been run against a live
-   build. Needs a clean run on a different machine or CI before submission — this may
-   be an environment/toolchain issue (JDK/NDK/CMake version mismatch) rather than a
-   defect in the app itself, but it is unconfirmed either way.
+2. **Maestro E2E flows have not been run against a live build yet.** `mobile/maestro/*.yaml`
+   exists (six flows mirroring the Flutter client's). The original build blocker — `npx
+   expo run:android` failing during the native `react-native-screens` CMake step — is
+   now root-caused rather than unconfirmed: `./gradlew app:assembleDebug` completed
+   successfully on a second machine with the same Gradle 9.3.1/NDK 27.1.12297006/CMake
+   3.22.1 versions once the build was pointed at JDK 17 instead of JDK 25/26 (see
+   "Building for Android" in `mobile/README.md`). So the APK now builds; what's still
+   outstanding is actually running the six Maestro flows against it on a device or
+   emulator and capturing the results, matching what was done for the Flutter client.
 3. ~~Touch targets on two text-only links are undersized.~~ **Fixed.** "Forgot
    password?" (Sign In) and the "Create an account"/"Sign in" footer links (Sign In,
    Sign Up) now carry `hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}`, bringing
