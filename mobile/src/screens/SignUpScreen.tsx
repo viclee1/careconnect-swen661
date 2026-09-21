@@ -101,6 +101,7 @@ export function SignUpScreen({
             <Text style={styles.footerText}>Already have an account? </Text>
             <TouchableOpacity
               onPress={onSignIn}
+              hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
               accessibilityRole="link"
               accessibilityLabel="Sign in"
               accessibilityHint="Navigates to the sign in screen"

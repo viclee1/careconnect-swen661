@@ -64,6 +64,9 @@ export function SignInScreen({
 
           <TouchableOpacity
             style={styles.forgotPassword}
+            // The label's own line height is ~24pt; this pads the tap target
+            // up to the app's 48pt minimum without growing the visible text.
+            hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
             accessibilityRole="button"
             accessibilityLabel="Forgot password?"
             accessibilityHint="Triggers a password reset flow"
@@ -85,6 +88,7 @@ export function SignInScreen({
             <Text style={styles.footerText}>New here? </Text>
             <TouchableOpacity
               onPress={onSignUp}
+              hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
               accessibilityRole="link"
               accessibilityLabel="Create an account"
               accessibilityHint="Navigates to the sign up screen"

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
+  AccessibilityInfo,
   StyleSheet,
   Text,
   View,
@@ -35,8 +36,29 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings?: () => void }) 
 
   const { showNotification, dismissNotification, progress, doneCount, totalCount } = useDailyTasks();
 
+  // The avatar glow below is purely decorative — unlike VisualFlash (the
+  // Notify pulse), it carries no information on its own, so a user who has
+  // Reduce Motion turned on gets a static glow instead of a looping one
+  // rather than losing anything essential.
+  const [reduceMotionEnabled, setReduceMotionEnabled] = useState(false);
+
   useEffect(() => {
-    if (isIncomingCall) {
+    let mounted = true;
+    AccessibilityInfo.isReduceMotionEnabled().then((enabled) => {
+      if (mounted) setReduceMotionEnabled(enabled);
+    });
+    const subscription = AccessibilityInfo.addEventListener(
+      'reduceMotionChanged',
+      setReduceMotionEnabled
+    );
+    return () => {
+      mounted = false;
+      subscription.remove();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isIncomingCall && !reduceMotionEnabled) {
       Animated.loop(
         Animated.sequence([
           Animated.timing(flashAnim, {
@@ -53,8 +75,9 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings?: () => void }) 
       ).start();
     } else {
       flashAnim.stopAnimation();
+      flashAnim.setValue(0.6);
     }
-  }, [isIncomingCall, flashAnim]);
+  }, [isIncomingCall, reduceMotionEnabled, flashAnim]);
 
   const simulateCall = () => setIsIncomingCall(true);
   const declineCall = () => setIsIncomingCall(false);

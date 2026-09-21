@@ -59,7 +59,7 @@ mobile app throughout (e.g. "page" → "screen").
 | 2.1.2 No Keyboard Trap | Supports | No custom focus-scoping code exists anywhere in the app. |
 | 2.1.4 Character Key Shortcuts | Not Applicable | No single-character keyboard shortcuts are implemented. |
 | 2.2.1 Timing Adjustable | Not Applicable | No session or content time limits exist in the app. |
-| 2.2.2 Pause, Stop, Hide | Partially Supports | The incoming-call avatar glow and the Notify "visual flash" pulse auto-play with no pause control. Both are short, user-triggered (not background/ambient), and non-essential to completing any task, but strictly offer no pause/stop, and the app does not check `AccessibilityInfo.isReduceMotionEnabled()` to skip them for users who have Reduce Motion turned on at the OS level. See Known Limitations. |
+| 2.2.2 Pause, Stop, Hide | Supports | **Fixed this cycle.** The incoming-call avatar glow is a purely decorative looping pulse; `HomeScreen` now checks `AccessibilityInfo.isReduceMotionEnabled()` on mount and subscribes to `reduceMotionChanged`, and skips starting the loop (holding the glow at a static opacity) whenever Reduce Motion is on. The Notify "visual flash" is deliberately left animating regardless of this setting: it is the single, brief (~900ms), non-repeating fade that *is* the visual alert for a deaf/hard-of-hearing user — WCAG's "essential to the functionality or the information being conveyed" exemption for 2.3.3-style motion accommodations applies, and disabling it would remove the app's core notification mechanism for exactly the users who most need it. |
 | 2.3.1 Three Flashes or Below Threshold | Supports | The Notify "visual flash" is documented in `CLAUDE.md` as a single slow fade specifically to stay under the WCAG 2.3.1 flash-rate threshold; the Home-screen incoming-call glow is a single ~1.5s fade, not a strobe. |
 | 2.4.1 Bypass Blocks | Not Applicable | Native mobile screens do not re-render a repeated navigation block on every "page load" the way a website does. |
 | 2.4.2 Page Titled | Supports | Every screen renders a header-role title via `AppHeader`, announced on arrival. |
@@ -120,20 +120,14 @@ mobile app throughout (e.g. "page" → "screen").
    build. Needs a clean run on a different machine or CI before submission — this may
    be an environment/toolchain issue (JDK/NDK/CMake version mismatch) rather than a
    defect in the app itself, but it is unconfirmed either way.
-3. **Touch targets on two text-only links are undersized.** `layout.minTouchTarget`
-   (48) is used consistently across buttons, the tab bar, and form controls — but the
-   "Forgot password?" link (Sign In) and the "Create an account"/"Sign in" footer links
-   (Sign In, Sign Up) are plain `TouchableOpacity`s wrapping only their label text, with
-   no `minHeight`, padding, or `hitSlop`. Measured against their text's line height,
-   these render at roughly 24px tall — well under the 44×44pt minimum this assignment
-   requires (and under Apple/Google's own guidance), and `hitSlop` is not used anywhere
-   in the codebase as a mitigation. This is the same class of bug found and fixed on the
-   Flutter client's equivalent links (`MaterialTapTargetSize.shrinkWrap`); the RN
-   equivalent has not been fixed as of this report.
-4. **No `AccessibilityInfo.isReduceMotionEnabled()` check anywhere.** The incoming-call
-   glow and the Notify visual-flash pulse always animate; a user with the OS-level
-   Reduce Motion preference enabled gets no accommodation. Related to the 2.2.2 finding
-   above.
+3. ~~Touch targets on two text-only links are undersized.~~ **Fixed.** "Forgot
+   password?" (Sign In) and the "Create an account"/"Sign in" footer links (Sign In,
+   Sign Up) now carry `hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}`, bringing
+   their effective tap target to roughly 48pt tall — matching `layout.minTouchTarget`
+   without changing their visible size.
+4. ~~No `AccessibilityInfo.isReduceMotionEnabled()` check anywhere.~~ **Fixed** for the
+   incoming-call glow — see 2.2.2 above. (VisualFlash is intentionally left unaffected;
+   see that row's remarks for why.)
 5. **Landscape orientation (1.3.4) and every dynamic-text-scale step (1.4.4)** were
    verified by code review (no orientation lock, no font-scale override) rather than by
    capturing every intermediate visual state manually.
@@ -153,6 +147,8 @@ mobile app throughout (e.g. "page" → "screen").
 | Contrast | `src/screens/HomeScreen.tsx` | Incoming-call text contrast varied with an animated scrim and could dip to ~2.64:1 | Backdrop is now fixed opaque black; the pulse animates a decorative glow instead |
 | Contrast | `src/screens/HomeScreen.tsx` | Toggle-button inactive state `rgba(255,255,255,0.54)` measured 3.68:1 | Raised to 0.7 alpha (5.07:1) |
 | Build correctness | `src/screens/HomeScreen.tsx` | `accessibilityElementsHidden` passed directly to the custom `Icon` component, which doesn't declare that prop (`tsc` error TS2322) | Removed — `Icon` already hides decorative icons by default, so this changed nothing at runtime, only fixed the type error |
+| Touch target | `src/screens/SignInScreen.tsx`, `SignUpScreen.tsx` | "Forgot password?"/"Create an account"/"Sign in" were plain `TouchableOpacity`s with no `minHeight`/padding, rendering at ~24pt tall | Added `hitSlop={{top:12,bottom:12,left:8,right:8}}` to reach ~48pt without changing visible size |
+| Motion | `src/screens/HomeScreen.tsx` | The incoming-call avatar glow looped regardless of the OS Reduce Motion setting | Added an `AccessibilityInfo.isReduceMotionEnabled()`/`reduceMotionChanged` check; the loop is skipped (glow held static) when Reduce Motion is on |
 
 Accessibility props (`accessibilityRole`, `accessibilityLabel`, `accessibilityHint`,
 `accessibilityState`, `accessibilityValue`) across Sign In, Sign Up, Welcome, My Day, and

@@ -102,11 +102,15 @@ Key Accessibility Enhancements:
 
 • Touch Targets:
 
-◦ `layout.minTouchTarget` (48pt) is used consistently across buttons, the tab bar, and form controls. Two text-only links — "Forgot password?" (Sign In) and the "Create an account"/"Sign in" footer links (Sign In, Sign Up) — are not yet covered: they render at roughly their text's line height (~24pt), under the 44pt minimum. See the VPAT below.
+◦ `layout.minTouchTarget` (48pt) is used consistently across buttons, the tab bar, and form controls. The three text-only links that weren't covered — "Forgot password?" (Sign In) and the "Create an account"/"Sign in" footer links (Sign In, Sign Up) — now carry `hitSlop` padding their tap target to roughly 48pt without changing their visible size.
+
+• Reduce Motion:
+
+◦ The incoming-call avatar glow checks `AccessibilityInfo.isReduceMotionEnabled()` (and subscribes to `reduceMotionChanged`) and holds at a static opacity instead of looping when the OS Reduce Motion setting is on. The Notify "visual flash" is deliberately exempt — it's the single, brief, non-repeating fade that *is* the visual alert this app exists to provide, not decorative motion.
 
 Full WCAG 2.1 Level A/AA criterion-by-criterion conformance status, remarks, and known
-limitations (including the touch-target gap above and an unverified Maestro/APK build in
-this environment) are in [`docs/VPAT-WCAG2.1-AA.md`](docs/VPAT-WCAG2.1-AA.md).
+limitations (including an unverified Maestro/APK build in this environment) are in
+[`docs/VPAT-WCAG2.1-AA.md`](docs/VPAT-WCAG2.1-AA.md).
 
 ---
 
