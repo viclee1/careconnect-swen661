@@ -102,7 +102,11 @@ Key Accessibility Enhancements:
 
 • Touch Targets:
 
-◦ Verified that all interactive elements maintain a minimum hit box of 48x48 points (exceeding the 44x44 requirement).
+◦ `layout.minTouchTarget` (48pt) is used consistently across buttons, the tab bar, and form controls. Two text-only links — "Forgot password?" (Sign In) and the "Create an account"/"Sign in" footer links (Sign In, Sign Up) — are not yet covered: they render at roughly their text's line height (~24pt), under the 44pt minimum. See the VPAT below.
+
+Full WCAG 2.1 Level A/AA criterion-by-criterion conformance status, remarks, and known
+limitations (including the touch-target gap above and an unverified Maestro/APK build in
+this environment) are in [`docs/VPAT-WCAG2.1-AA.md`](docs/VPAT-WCAG2.1-AA.md).
 
 ---
 
