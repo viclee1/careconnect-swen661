@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites>
+  <testsuite name="Test Suite" device="test" tests="6" failures="1" time="125.476" timestamp="2026-09-21T19:18:04">
+    <testcase id="Critical flow 5 - an accessibility preference takes effect immediately" name="Critical flow 5 - an accessibility preference takes effect immediately" classname="Critical flow 5 - an accessibility preference takes effect immediately" file="maestro/05_toggle_accessibility_setting.yaml" time="14.628" timestamp="2026-09-21T19:18:04" status="SUCCESS"/>
+    <testcase id="Critical flow 3 - Contacts to open a conversation to send a message" name="Critical flow 3 - Contacts to open a conversation to send a message" classname="Critical flow 3 - Contacts to open a conversation to send a message" file="maestro/03_send_message.yaml" time="46.185" timestamp="2026-09-21T19:18:19" status="ERROR">
+      <failure>Element not found: Text matching regex: Send message to Joyce</failure>
+    </testcase>
+    <testcase id="Critical flow 2 - bottom navigation reaches every destination" name="Critical flow 2 - bottom navigation reaches every destination" classname="Critical flow 2 - bottom navigation reaches every destination" file="maestro/02_bottom_navigation.yaml" time="21.786" timestamp="2026-09-21T19:19:05" status="SUCCESS"/>
+    <testcase id="Accessibility-focused flow - navigating purely by screen-reader labels" name="Accessibility-focused flow - navigating purely by screen-reader labels" classname="Accessibility-focused flow - navigating purely by screen-reader labels" file="maestro/06_accessibility_screen_reader_navigation.yaml" time="20.737" timestamp="2026-09-21T19:19:27" status="SUCCESS"/>
+    <testcase id="Critical flow 1 - Welcome to Sign in to Home" name="Critical flow 1 - Welcome to Sign in to Home" classname="Critical flow 1 - Welcome to Sign in to Home" file="maestro/01_sign_in.yaml" time="8.615" timestamp="2026-09-21T19:19:48" status="SUCCESS"/>
+    <testcase id="Critical flow 4 - My Day to completing a task updates progress" name="Critical flow 4 - My Day to completing a task updates progress" classname="Critical flow 4 - My Day to completing a task updates progress" file="maestro/04_complete_daily_task.yaml" time="13.508" timestamp="2026-09-21T19:19:56" status="SUCCESS"/>
+  </testsuite>
+</testsuites>
