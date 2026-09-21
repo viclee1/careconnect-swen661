@@ -155,22 +155,35 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings?: () => void }) 
         accessibilityLabel="Incoming call from Maria"
         accessibilityViewIsModal
       >
-        <Animated.View
-          style={[
-            styles.incomingOverlay,
-            {
-              // eslint-disable-next-line react-hooks/refs
-              backgroundColor: flashAnim.interpolate({
-                inputRange: [0.6, 1.0],
-                outputRange: ['rgba(0,0,0,0.48)', 'rgba(0,0,0,0.8)'],
-              }),
-            },
-          ]}
-        >
+        {/*
+          The backdrop used to be this Animated.View's own backgroundColor,
+          interpolating between rgba(0,0,0,0.48) and rgba(0,0,0,0.8) with
+          flashAnim. That made "Your daughter" text's contrast depend on both
+          the animation phase and whatever content happened to be behind the
+          transparent Modal, and it could fail 4.5:1 at the dim end of the
+          range. The backdrop is now a fixed, fully opaque black — 10:1+ for
+          every text node here regardless of animation phase — and the pulse
+          instead animates a glow behind the avatar, which carries no text.
+        */}
+        <View style={styles.incomingOverlay}>
           <SafeAreaView style={styles.incomingContent} edges={['top', 'bottom']}>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <View style={styles.incomingAvatar} accessibilityElementsHidden>
-                <Icon name="person" size={80} color="white" />
+              <View style={styles.avatarWrapper}>
+                <Animated.View
+                  style={[
+                    styles.incomingAvatarGlow,
+                    {
+                      // eslint-disable-next-line react-hooks/refs
+                      opacity: flashAnim.interpolate({
+                        inputRange: [0.6, 1.0],
+                        outputRange: [0.25, 0.55],
+                      }),
+                    },
+                  ]}
+                />
+                <View style={styles.incomingAvatar} accessibilityElementsHidden>
+                  <Icon name="person" size={80} color="white" />
+                </View>
               </View>
               <Text style={styles.incomingName} accessibilityRole="header">
                 Maria
@@ -182,21 +195,21 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings?: () => void }) 
               <CallButton
                 icon="call-end"
                 label="Decline"
-                color="#FF4B5C"
+                color={colors.dangerAction}
                 onPress={declineCall}
                 accessibilityHint="Declines the incoming call and returns to dashboard"
               />
               <CallButton
                 icon="videocam"
                 label="Answer"
-                color="#4BCB66"
+                color={colors.successAction}
                 onPress={answerCall}
                 accessibilityHint="Answers the call with captioned video"
               />
             </View>
             <View style={{ height: 60 }} />
           </SafeAreaView>
-        </Animated.View>
+        </View>
       </Modal>
 
       <Modal visible={isActiveCall} animationType="slide" accessibilityViewIsModal>
@@ -240,7 +253,11 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings?: () => void }) 
 
             <View style={styles.activeCallControls}>
               <View style={styles.controlRow}>
-                <Icon name="volume-up" size={28} color="white" accessibilityElementsHidden />
+                {/* Icon hides decorative icons from the accessibility tree by
+                    default (see components/Icon.tsx) — accessibilityElementsHidden
+                    isn't a prop it forwards, so passing it here failed typecheck
+                    without changing anything at runtime. */}
+                <Icon name="volume-up" size={28} color="white" />
                 <Slider
                   style={{ flex: 1, height: 40 }}
                   minimumValue={0}
@@ -326,7 +343,7 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings?: () => void }) 
                 <AppButton
                   label="End call"
                   onPress={endCall}
-                  tone="#FF4B5C"
+                  tone={colors.dangerAction}
                   variant="filled"
                   icon="call-end"
                   fullWidth
@@ -419,7 +436,10 @@ function ToggleButton({
   accessibilityState?: any;
   accessibilityHint?: string;
 }) {
-  const color = isActive ? 'white' : 'rgba(255,255,255,0.54)';
+  // rgba(255,255,255,0.54) measures 3.68:1 on this screen's primaryDark
+  // background and fails 4.5:1; 0.7 alpha (5.07:1) is the least-dimmed shade
+  // that still passes.
+  const color = isActive ? 'white' : 'rgba(255,255,255,0.7)';
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -572,9 +592,22 @@ const styles = StyleSheet.create({
   incomingOverlay: {
     flex: 1,
     zIndex: 1000,
+    backgroundColor: 'black',
   },
   incomingContent: {
     flex: 1,
+  },
+  avatarWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 24,
+  },
+  incomingAvatarGlow: {
+    position: 'absolute',
+    width: 160,
+    height: 160,
+    borderRadius: 80,
+    backgroundColor: colors.successAction,
   },
   incomingAvatar: {
     width: 120,
@@ -583,7 +616,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primaryDark,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 24,
   },
   incomingName: {
     fontSize: 40,
@@ -639,7 +671,7 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.8)',
   },
   liveBadge: {
-    backgroundColor: '#FF4B5C',
+    backgroundColor: colors.dangerAction,
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 6,
