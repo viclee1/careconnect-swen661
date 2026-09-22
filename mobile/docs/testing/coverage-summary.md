@@ -1,48 +1,76 @@
 # React Native test coverage — Assignment 6
 
-Generated from `npm run test:coverage` (Jest + `@testing-library/react-native`). The raw
-report is committed at `mobile/coverage/lcov.info` (mirrors
-`flutter/coverage/lcov.info`); the browsable HTML report (`coverage/lcov-report/`) is
-regenerated locally and gitignored, same as Flutter's `coverage/html/`. Regenerate with:
+Generated from `npm run test:coverage` (Jest + React Native Testing Library). The raw
+`lcov.info` and the browsable HTML report (`coverage-html/index.html`) are committed
+next to this file, because `mobile/coverage/` itself is gitignored. To regenerate:
 
 ```bash
+cd mobile
 npm run test:coverage
-open coverage/lcov-report/index.html   # browsable report
+open coverage/lcov-report/index.html
+# refresh the committed evidence
+cp coverage/lcov.info docs/testing/lcov.info
+rm -rf docs/testing/coverage-html && cp -R coverage/lcov-report docs/testing/coverage-html
 ```
 
-## Headline number
+## Headline numbers
 
-**96.9% line coverage (673/694 lines), 96.9% statement coverage** across every source
-file — well past the assignment's 60% minimum — via **279 tests** across 30 suites:
+| Metric | Covered | Total | % |
+|---|---:|---:|---:|
+| Statements | 755 | 779 | 96.9% |
+| **Lines** | **673** | **694** | **97.0%** |
+| Functions | 282 | 299 | 94.3% |
+| Branches | 443 | 503 | 88.1% |
 
-| Suite | Covers |
-|---|---|
-| `src/*/__tests__/*.test.ts(x)` — component tests | Every screen, including accessibility props/roles/state |
-| `src/state/__tests__/*.test.tsx` | All seven providers (Contacts, Messages, Settings, Daily Tasks, Appointments, Medicines, Memories) |
-| `src/screens/__tests__/accessibility_theme.test.tsx` | RNTL accessibility-role/label queries (`findByRole`, `findByLabelText`) — the specific matcher style the assignment asks for |
-| `src/screens/__tests__/navigation.test.tsx` | Full-app integration suite: renders the real navigator + providers, drives multi-screen flows end to end — the Jest-based "integration tests" the assignment asks for on the RN side |
+**286 tests in 31 suites, all passing**, across 70 source files — well past the
+assignment's 60% minimum and the 75% target. `npm run typecheck` and `npm run lint` are
+clean.
 
-`mobile/maestro/*.yaml` (6 E2E flows) are not instrumented by `npm run test:coverage` —
-Jest's coverage collector only instruments code running inside the Jest/JSDOM-style test
-environment, not a real app process on a device/emulator — so their results are tracked
-separately as pass/fail evidence (`mobile/docs/testing/maestro-results.xml`) rather than
-folded into this line-coverage number. They exercise real on-device behavior (actual
-native navigation, actual keyboard/window resize, actual Android accessibility tree)
-that Jest's simulated environment cannot reproduce — see `mobile/docs/VPAT-WCAG2.1-AA.md`
-for the Maestro-only bug that found (message composer becoming unreachable when the
-keyboard opens, since fixed and re-verified on a real emulator).
+| Suite | Tests | Covers |
+|---|---:|---|
+| `src/models/__tests__` | 78 | Pure logic: contacts, messages, vibration patterns, accessibility settings clamping, appointments, medicines, memories |
+| `src/data/__tests__` | 21 | Repositories, including the failure paths |
+| `src/state/__tests__` | 44 | Context providers: contacts, messages, settings, appointments, medicines, memories |
+| `src/utils/__tests__` | 24 | Formatters, validators, haptics |
+| `src/screens/__tests__` (screens) | 94 | Every screen rendered through the real providers: roles, labels, interactions, loading/error states |
+| `src/screens/__tests__/navigation.test.tsx` | 13 | **Integration:** the whole app, navigator and providers included, driven tab to tab |
+| `src/screens/__tests__/accessibility_*.test.tsx` | 12 | **Accessibility** (see below) |
+
+## Accessibility tests (counted in the numbers above)
+
+`accessibility_theme.test.tsx` (5) asserts, through RNTL's role and label queries, that:
+screen titles have the `header` role and the theme's type size; `AppButton` keeps the
+48pt minimum height; and the Home progress bar exposes `progressbar` with a spoken value
+("0 of 7 tasks completed").
+
+`accessibility_motion_targets.test.tsx` (7) covers the two fixes recorded in the VPAT:
+
+- **Touch targets (the app's 48pt minimum, which exceeds the assignment's 44pt):** "Forgot password?", "Create an
+  account" and the Sign Up "Sign in" link keep a hit area that reaches 48pt
+  (24pt line + 12pt `hitSlop` above and below), and keep their `link`/`button` roles.
+- **Reduce Motion (2.2.2):** the incoming-call glow loops when Reduce Motion is off,
+  stays static when it is already on, stops looping when the setting is switched on
+  mid-call, and the screen unsubscribes from `reduceMotionChanged` on unmount. The call
+  itself stays fully usable when motion is reduced.
+
+These two files added assertions rather than percentage points: the code they exercise
+was already executed by other tests, so line coverage did not move. They exist so that a
+refactor cannot silently undo the fixes.
 
 ## Files below 100% line coverage
 
-| File | Lines | Notes |
-|---|---:|---|
-| `src/navigation/RootNavigator.tsx` | 74.54% | Route-definition wiring (`<Stack.Screen>`/`<Tab.Screen>` declarations) — exercised indirectly by every screen test, but several `onPress`/`navigate` callback bodies aren't independently unit-tested |
-| `src/screens/SettingsScreen.tsx` | 80% | A few branches in the caption-size/color pickers and the "not wired up yet" sign-out path |
-| `src/state/DailyTasksProvider.tsx` | 95.45% | One defensive branch |
-| `src/screens/MessageThreadScreen.tsx` | 95.12% | Two lines in the `KeyboardAvoidingView` platform branch and an edge case in the empty-contact path |
+| File | Lines |
+|---|---:|
+| `src/navigation/RootNavigator.tsx` | 41/55 |
+| `src/screens/SettingsScreen.tsx` | 16/20 |
+| `src/screens/MessageThreadScreen.tsx` | 39/41 |
+| `src/state/DailyTasksProvider.tsx` | 21/22 |
 
-Every other file — including all of `src/theme`, `src/models`, `src/data`, `src/hooks`,
-and every other screen — is at 100% line coverage. None of these gaps are in
-accessibility-relevant code paths; the accessibility props, roles, states, and contrast
-tokens added this cycle are all covered by
-`src/screens/__tests__/accessibility_theme.test.tsx` and the per-screen test suites.
+## What is not measured
+
+- **The Maestro E2E flows** (`mobile/maestro/*.yaml`) and any run on a device are not
+  instrumented by Jest, so they are not in this number. Their pass/fail results are
+  recorded separately in `maestro-results.xml` in this folder.
+- **Real screen-reader behavior.** Jest can check that the accessibility props are set
+  (role, label, state, value); it cannot hear what VoiceOver or TalkBack actually says.
+  That needs a manual pass on a device.

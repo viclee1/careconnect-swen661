@@ -15,7 +15,7 @@ the same way for the same user.
 
 - Manual code review of every screen against each WCAG 2.1 success criterion.
 - Automated checks: `npm run typecheck` (TypeScript), `npm run lint` (ESLint), and
-  `npm run test:coverage` (Jest + React Native Testing Library) — 279 tests, 96.9% line
+  `npm run test:coverage` (Jest + React Native Testing Library) — 286 tests, 97.0% line
   coverage, including RNTL accessibility-role/label queries
   (`src/screens/__tests__/accessibility_theme.test.tsx`) and a full-app navigation
   integration suite (`src/screens/__tests__/navigation.test.tsx`).
@@ -164,6 +164,8 @@ Medicines, plus the RNTL accessibility-role test suite and the Maestro flow file
 added in the same pass but predate the contrast/typecheck fixes above — see
 `mobile/README.md`'s "Accessibility Addons" section for that changelog.
 
-All contrast fixes are covered by the existing regression suite: 279 Jest tests
-(unchanged pass count and coverage before/after the fix), `npm run typecheck`, and
-`npm run lint`, all clean as of this report.
+The contrast fixes were verified against the existing 279-test regression suite, which
+passed with unchanged coverage before and after. The touch-target and Reduce Motion
+fixes now have their own tests (`accessibility_motion_targets.test.tsx`, 7 tests), which
+brings the suite to 286 Jest tests with `npm run typecheck` and `npm run lint` both
+clean. See `docs/testing/coverage-summary.md` for the coverage breakdown.

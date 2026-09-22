@@ -40,8 +40,6 @@ yarn-error.*
 /ios
 /android
 
-# test coverage — regenerate with `npm run test:coverage`.
-# lcov.info itself is committed (mirrors flutter/coverage/lcov.info) as
-# submission evidence; only the browsable HTML report is ignored.
-coverage/*
-!coverage/lcov.info
+# test coverage — regenerate with `npm run test:coverage`. Submission evidence
+# is committed separately under docs/testing/ (see that folder's README note).
+coverage/
