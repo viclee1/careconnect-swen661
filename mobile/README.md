@@ -150,6 +150,15 @@ maestro test maestro/01_sign_in.yaml
 | `05_toggle_accessibility_setting.yaml` | Confirms that changing a preference in Settings takes effect immediately. |
 | `06_accessibility_screen_reader_navigation.yaml` | Navigates the entire app using only screen-reader labels to verify semantics. |
 
+### Results
+
+5 of 6 flows pass reliably on a connected Android emulator, including the
+accessibility-focused flow. `03_send_message.yaml` is intermittently flaky on a cold app
+launch — root-caused to host resource contention (two emulators + two Metro/Expo
+processes running at once), not a code or accessibility defect; see the VPAT's Known
+Limitations for the investigation. The JUnit report from the last run is committed at
+[`docs/testing/maestro-results.xml`](docs/testing/maestro-results.xml).
+
 ### Notify — the signature interaction
 
 Tapping it plays one **non-strobing** pulse across the screen carrying the words

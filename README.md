@@ -682,7 +682,18 @@ flutter analyze
 flutter test --coverage
 ```
 
-217 tests at 98.9% line coverage against a 60% floor. An `osv-scanner` dependency scan plus a manual secrets/network review found no issues — see [`flutter/docs/security-scan.md`](flutter/docs/security-scan.md).
+234 tests at 98.9% line coverage against a 60% floor (75% target) — including the 14-test
+`test/accessibility/accessibility_guideline_test.dart` suite, which runs Flutter's
+built-in `AccessibilityGuideline` API (`androidTapTargetGuideline`,
+`textContrastGuideline`, `labeledTapTargetGuideline`) against every routed screen. An
+`osv-scanner` dependency scan plus a manual secrets/network review found no issues — see [`flutter/docs/security-scan.md`](flutter/docs/security-scan.md).
+
+**Assignment 6 accessibility & E2E evidence:**
+[`flutter/docs/VPAT-WCAG2.1-AA.md`](flutter/docs/VPAT-WCAG2.1-AA.md) (full WCAG 2.1 A/AA
+criterion-by-criterion conformance), 6 on-device
+[`integration_test/critical_flows_test.dart`](flutter/integration_test/critical_flows_test.dart)
+flows, and 6 [Maestro](flutter/maestro/) E2E flows — results in
+[`flutter/docs/testing/maestro-results.xml`](flutter/docs/testing/maestro-results.xml).
 
 ### Link to test coverage report
 
@@ -692,7 +703,7 @@ Raw report: [`flutter/coverage/lcov.info`](flutter/coverage/lcov.info). Render i
 genhtml flutter/coverage/lcov.info -o flutter/coverage/html && open flutter/coverage/html/index.html
 ```
 
-A pre-rendered copy is also checked in at [`flutter/coverage/html/index.html`](flutter/coverage/html/index.html).
+A pre-rendered copy is also checked in at [`flutter/coverage/html/index.html`](flutter/coverage/html/index.html), and a per-file breakdown is in [`flutter/docs/testing/coverage-summary.md`](flutter/docs/testing/coverage-summary.md).
 
 ### Adding a screen
 
@@ -776,14 +787,27 @@ npm run typecheck
 npm run test:coverage
 ```
 
-274 tests at 96.5% line coverage against a 60% floor. An `npm audit` plus a
+286 tests at 97.0% line coverage against a 60% floor (75% target) — including the RNTL
+accessibility-role/label suites (`accessibility_theme.test.tsx`,
+`accessibility_motion_targets.test.tsx`) and the full-app `navigation.test.tsx`
+integration suite. An `npm audit` plus a
 manual secrets/network review found 13 moderate, build-tooling-only
 dependency advisories and no code-level issues — see
 [`mobile/docs/security-scan.md`](mobile/docs/security-scan.md).
 
+**Assignment 6 accessibility & E2E evidence:**
+[`mobile/docs/VPAT-WCAG2.1-AA.md`](mobile/docs/VPAT-WCAG2.1-AA.md) (full WCAG 2.1 A/AA
+criterion-by-criterion conformance) and 6 [Maestro](mobile/maestro/) E2E flows — results
+in [`mobile/docs/testing/maestro-results.xml`](mobile/docs/testing/maestro-results.xml).
+
 ### Link to test coverage report
 
-`mobile/coverage/` is generated locally and gitignored, not checked into the repository. Generate and open it with:
+`mobile/coverage/` itself is generated locally and gitignored, but the evidence is
+committed at [`mobile/docs/testing/coverage-summary.md`](mobile/docs/testing/coverage-summary.md)
+(per-suite breakdown), the raw
+[`mobile/docs/testing/lcov.info`](mobile/docs/testing/lcov.info), and the browsable
+[`mobile/docs/testing/coverage-html/index.html`](mobile/docs/testing/coverage-html/index.html).
+Regenerate locally with:
 
 ```bash
 cd mobile
