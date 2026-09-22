@@ -17,7 +17,7 @@ targeting care recipients who are deaf or hard of hearing.
 > Both clients are built to match the **Week 3 design prototype**. Where the
 > prototype and the original React web client disagreed, the prototype won.
 
-**Status:** 274 tests passing, **96.5 % line coverage**, `eslint` and `tsc`
+**Status:** 286 tests passing, **97.0 % line coverage**, `eslint` and `tsc`
 clean. The framework comparison (Assignment 5 Part 3) is not in this branch.
 
 ---
@@ -293,21 +293,26 @@ line after every `expo prebuild`.)
 ```bash
 npm run lint            # eslint — expected: no output
 npm run typecheck       # tsc --noEmit — expected: no output
-npm test                # 274 tests
+npm test                # 286 tests
 npm run test:coverage   # writes coverage/lcov-report/index.html
 ```
 
 ### Coverage
 
 ```
-Statements   : 96.47 % ( 739/766 )
-Branches     : 88.86 % ( 431/485 )
-Functions    : 93.89 % ( 277/295 )
-Lines        : 96.48 % ( 658/682 )
+Statements   : 96.91 % ( 755/779 )
+Branches     : 88.07 % ( 443/503 )
+Functions    : 94.31 % ( 282/299 )
+Lines        : 96.97 % ( 673/694 )
 ```
 
 Open `coverage/lcov-report/index.html` for the browsable report and screenshot
-the summary for the submission. The assignment floor is 60 %.
+the summary for the submission. The assignment floor is 60 %. The committed
+evidence — per-suite counts, the accessibility tests, files below 100 % and what
+Jest cannot measure — is in
+[`docs/testing/coverage-summary.md`](docs/testing/coverage-summary.md), with the raw
+[`docs/testing/lcov.info`](docs/testing/lcov.info) and the browsable HTML report
+([`docs/testing/coverage-html/index.html`](docs/testing/coverage-html/index.html)) beside it.
 
 `npm audit` plus a manual secrets/network review found 13 moderate,
 build-tooling-only dependency advisories and no code-level issues — see
