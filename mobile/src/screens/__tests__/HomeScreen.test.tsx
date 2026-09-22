@@ -39,11 +39,11 @@ describe('HomeScreen', () => {
     // Check if incoming call UI is visible
     expect(await screen.findByText('Maria')).toBeTruthy();
     expect(screen.getByText('Your daughter')).toBeTruthy();
-    expect(screen.getByText('Decline')).toBeTruthy();
-    expect(screen.getByText('Answer')).toBeTruthy();
+    expect(screen.getByLabelText('Decline')).toBeTruthy();
+    expect(screen.getByLabelText('Answer')).toBeTruthy();
 
     await act(async () => {
-      await fireEvent.press(screen.getByText('Decline'));
+      await fireEvent.press(screen.getByLabelText('Decline'));
     });
     // Simulation should be closed, back to dashboard
     expect(screen.queryByText('Decline')).toBeNull();
@@ -56,7 +56,7 @@ describe('HomeScreen', () => {
       await fireEvent.press(screen.getByText('Simulate incoming call'));
     });
     await act(async () => {
-      await fireEvent.press(screen.getByText('Answer'));
+      await fireEvent.press(screen.getByLabelText('Answer'));
     });
 
     // Check if active call UI is visible
@@ -78,7 +78,7 @@ describe('HomeScreen', () => {
       await fireEvent.press(screen.getByText('Simulate incoming call'));
     });
     await act(async () => {
-      await fireEvent.press(screen.getByText('Answer'));
+      await fireEvent.press(screen.getByLabelText('Answer'));
     });
 
     // CC is enabled by default
@@ -102,19 +102,19 @@ describe('HomeScreen', () => {
       await fireEvent.press(screen.getByText('Simulate incoming call'));
     });
     await act(async () => {
-      await fireEvent.press(screen.getByText('Answer'));
+      await fireEvent.press(screen.getByLabelText('Answer'));
     });
 
     // Check Mute toggle
     await act(async () => {
-      await fireEvent.press(screen.getByText('Mute'));
+      await fireEvent.press(screen.getByLabelText('Mute'));
     });
-    expect(screen.getByText('Mute')).toBeTruthy();
+    expect(screen.getByLabelText('Mute')).toBeTruthy();
 
     // Check Pause toggle
     await act(async () => {
-      await fireEvent.press(screen.getByText('Pause'));
+      await fireEvent.press(screen.getByLabelText('Pause'));
     });
-    expect(screen.getByText('Pause')).toBeTruthy();
+    expect(screen.getByLabelText('Pause')).toBeTruthy();
   });
 });

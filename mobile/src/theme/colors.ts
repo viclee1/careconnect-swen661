@@ -34,6 +34,21 @@ export const colors = {
 
   /** Hairline borders. Decorative only — never the sole carrier of meaning. */
   border: '#C7DCE6',
+
+  /**
+   * Destructive call action (decline / end call). White text/icon on this
+   * fill measures 5.62:1 — the more obvious `#FF4B5C` only reaches 3.27:1
+   * and fails the 4.5:1 normal-text/UI-icon requirement. Shared with the
+   * Flutter client's `AppColors.dangerAction`.
+   */
+  dangerAction: '#C62828',
+
+  /**
+   * Affirmative call action (answer). White text/icon on this fill measures
+   * 5.13:1 — the more obvious `#4BCB66` only reaches 2.09:1. Shared with the
+   * Flutter client's `AppColors.successAction`.
+   */
+  successAction: '#2E7D32',
 } as const;
 
 export type AppColor = (typeof colors)[keyof typeof colors];

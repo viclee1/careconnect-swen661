@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
 import { colors } from '../theme/colors';
 import { layout } from '../theme/layout';
 import { type } from '../theme/typography';
@@ -42,7 +42,18 @@ export function MyDayScreen({ onOpenSettings }: { onOpenSettings?: () => void })
           </View>
         )}
 
-        <View style={styles.progressRow}>
+        <View
+          style={styles.progressRow}
+          accessible
+          accessibilityRole="progressbar"
+          accessibilityLabel="Daily task progress"
+          accessibilityValue={{
+            min: 0,
+            max: totalCount,
+            now: doneCount,
+            text: `${doneCount} of ${totalCount} tasks completed`,
+          }}
+        >
           <View style={styles.progressBarContainer}>
             <View style={[styles.progressBar, { width: `${progress * 100}%` }]} />
           </View>
@@ -64,36 +75,37 @@ export function MyDayScreen({ onOpenSettings }: { onOpenSettings?: () => void })
 }
 
 function TaskCard({ task, onToggle }: { task: DailyTask; onToggle: () => void }) {
+  const status = task.isDone ? 'completed' : 'pending';
   return (
-    <TouchableOpacity
+    <Pressable
+      testID={`task-${task.id}`}
       onPress={onToggle}
-      activeOpacity={0.7}
-      style={[
+      accessibilityRole="checkbox"
+      accessibilityState={{ checked: task.isDone }}
+      accessibilityLabel={`${task.title}. ${task.subtitle} at ${task.time}. Status: ${status}`}
+      accessibilityHint="Double tap to toggle completion status"
+      style={({ pressed }) => [
         styles.taskCard,
         task.isDone && styles.taskCardDone,
-        { opacity: task.isDone ? 0.6 : 1.0 },
+        { opacity: task.isDone ? 0.6 : pressed ? 0.85 : 1.0 },
       ]}
     >
-      <View style={styles.taskIconCircle}>
+      <View style={styles.taskIconCircle} accessibilityElementsHidden>
         <Icon name={task.icon} size={24} color="white" />
       </View>
-      <View style={styles.taskTitles}>
-        <Text
-          style={[
-            styles.taskTitle,
-            task.isDone && styles.taskTitleDone,
-          ]}
-        >
-          {task.title}
-        </Text>
+      <View style={styles.taskTitles} accessibilityElementsHidden>
+        <Text style={[styles.taskTitle, task.isDone && styles.taskTitleDone]}>{task.title}</Text>
         <Text style={styles.taskSubtitle}>
           {task.subtitle} • {task.time}
         </Text>
       </View>
-      <View style={[styles.checkCircle, task.isDone && styles.checkCircleDone]}>
+      <View
+        style={[styles.checkCircle, task.isDone && styles.checkCircleDone]}
+        accessibilityElementsHidden
+      >
         {task.isDone && <Icon name="check" size={20} color="white" />}
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 }
 

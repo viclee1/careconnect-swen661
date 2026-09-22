@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/theme/app_colors.dart';
 import '../../widgets/app_scaffold.dart';
 
 class MemoriesScreen extends StatelessWidget {
@@ -25,31 +26,37 @@ class MemoriesScreen extends StatelessWidget {
         itemCount: memories.length,
         itemBuilder: (context, index) {
           final memory = memories[index];
+          void openDetail() {
+            // Detail view action
+          }
           return Semantics(
             label: 'Memory item: ${memory['title']}, dated ${memory['date']}. Description: ${memory['description']}',
             button: true,
-            child: InkWell(
-              onTap: () {
-                // Detail view action
-              },
-              child: Card(
-                elevation: 4,
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          color: Colors.grey[300],
-                          child: const Center(child: Icon(Icons.image, size: 40, color: Colors.grey)),
+            onTap: openDetail,
+            child: ExcludeSemantics(
+              child: InkWell(
+                onTap: openDetail,
+                child: Card(
+                  elevation: 4,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Container(
+                            color: Colors.grey[300],
+                            child: const Center(child: Icon(Icons.image, size: 40, color: Colors.grey)),
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(memory['title']!, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                      const SizedBox(height: 4),
-                      Text(memory['date']!, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: Colors.grey[600], fontSize: 12)),
-                    ],
+                        const SizedBox(height: 8),
+                        Text(memory['title']!, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                        const SizedBox(height: 4),
+                        // Colors.grey[600] measures 4.07:1 on white and fails
+                        // 4.5:1; the app's own secondaryDark token is 5.11:1.
+                        Text(memory['date']!, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(color: AppColors.secondaryDark, fontSize: 12)),
+                      ],
+                    ),
                   ),
                 ),
               ),

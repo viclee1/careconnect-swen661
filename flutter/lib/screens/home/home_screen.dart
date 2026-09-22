@@ -117,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         Text("Here's your day, Margaret", style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontSize: 28, fontWeight: FontWeight.bold)),
         const SizedBox(height: 12),
         Row(children: [
-          Expanded(child: ClipRRect(borderRadius: const BorderRadius.all(Radius.circular(4)), child: LinearProgressIndicator(value: dailyTasks.progress, backgroundColor: AppColors.secondaryLight, valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryDark), minHeight: 12))),
+          Expanded(child: ClipRRect(borderRadius: const BorderRadius.all(Radius.circular(4)), child: LinearProgressIndicator(value: dailyTasks.progress, backgroundColor: AppColors.secondaryLight, valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryDark), minHeight: 12, semanticsLabel: 'Tasks completed today'))),
           const SizedBox(width: 16),
           Text('${dailyTasks.doneCount} of ${dailyTasks.totalCount} done', style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600, color: AppColors.secondaryDark)),
         ]),
@@ -158,32 +158,59 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   }
 
   Widget _buildIncomingCallOverlay() {
-    return AnimatedBuilder(animation: _flashAnimation, builder: (context, child) {
-      return Container(
-        color: Colors.black.withValues(alpha: 0.8 * _flashAnimation.value),
-        child: SafeArea(child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          const Spacer(),
-          const CircleAvatar(radius: 60, backgroundColor: AppColors.primaryDark, child: Icon(Icons.person, size: 80, color: Colors.white)),
-          const SizedBox(height: 24),
-          const Text('Maria', style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold)),
-          const Text('Your daughter', style: TextStyle(color: Colors.white70, fontSize: 22)),
-          const Spacer(),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            _buildCallButton(icon: Icons.call_end, label: 'Decline', color: Colors.red, onPressed: _declineCall),
-            _buildCallButton(icon: Icons.videocam, label: 'Answer', color: Colors.green, onPressed: _answerCall),
-          ]),
-          const SizedBox(height: 60),
-        ])),
-      );
-    });
+    // The backdrop used to be a black scrim whose opacity pulsed with
+    // _flashAnimation (0.6-1.0), so its effective darkness — and therefore
+    // the "Your daughter" text's contrast against it — depended on both the
+    // animation phase and whatever content happened to be behind it. An
+    // automated textContrastGuideline check caught it dipping to 2.68:1,
+    // under the 3.0:1 floor for this font size. The backdrop is now a fixed,
+    // fully opaque black (10:1+ for every text node here, regardless of
+    // animation phase), and the pulse instead animates a glow behind the
+    // avatar, which carries no text.
+    return Container(
+      color: Colors.black,
+      child: SafeArea(child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        const Spacer(),
+        AnimatedBuilder(
+          animation: _flashAnimation,
+          builder: (context, child) => DecoratedBox(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.successAction.withValues(alpha: 0.5 * _flashAnimation.value),
+                  blurRadius: 24,
+                  spreadRadius: 8,
+                ),
+              ],
+            ),
+            child: child,
+          ),
+          child: const CircleAvatar(radius: 60, backgroundColor: AppColors.primaryDark, child: Icon(Icons.person, size: 80, color: Colors.white)),
+        ),
+        const SizedBox(height: 24),
+        const Text('Maria', style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold)),
+        const Text('Your daughter', style: TextStyle(color: Colors.white70, fontSize: 22)),
+        const Spacer(),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          _buildCallButton(icon: Icons.call_end, label: 'Decline', color: AppColors.dangerAction, onPressed: _declineCall),
+          _buildCallButton(icon: Icons.videocam, label: 'Answer', color: AppColors.successAction, onPressed: _answerCall),
+        ]),
+        const SizedBox(height: 60),
+      ])),
+    );
   }
 
   Widget _buildCallButton({required IconData icon, required String label, required Color color, required VoidCallback onPressed}) {
-    return InkResponse(onTap: onPressed, radius: 80, child: Column(mainAxisSize: MainAxisSize.min, children: [
-      Container(padding: const EdgeInsets.all(24), decoration: BoxDecoration(color: color, shape: BoxShape.circle, boxShadow: [BoxShadow(color: color.withValues(alpha: 0.4), blurRadius: 12, spreadRadius: 2)]), child: Icon(icon, color: Colors.white, size: 40)),
-      const SizedBox(height: 12),
-      Text(label, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
-    ]));
+    return Semantics(
+      button: true,
+      label: '$label the call',
+      child: InkResponse(onTap: onPressed, radius: 80, child: ExcludeSemantics(child: Column(mainAxisSize: MainAxisSize.min, children: [
+        Container(padding: const EdgeInsets.all(24), decoration: BoxDecoration(color: color, shape: BoxShape.circle, boxShadow: [BoxShadow(color: color.withValues(alpha: 0.4), blurRadius: 12, spreadRadius: 2)]), child: Icon(icon, color: Colors.white, size: 40)),
+        const SizedBox(height: 12),
+        Text(label, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
+      ]))),
+    );
   }
 
   Widget _buildActiveCallOverlay() {
@@ -197,7 +224,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               const Text('Maria', style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold)),
               Text('Your daughter · Video call', style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 18)),
             ])),
-            Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4), decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(6)), child: const Text('LIVE', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold))),
+            Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4), decoration: BoxDecoration(color: AppColors.dangerAction, borderRadius: BorderRadius.circular(6)), child: const Text('LIVE', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold))),
           ]),
           const Spacer(),
           Center(child: Stack(alignment: Alignment.bottomRight, children: [
@@ -210,7 +237,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           const SizedBox(height: 24),
           _buildActiveCallControls(),
           const SizedBox(height: 32),
-          SizedBox(width: double.infinity, height: 64, child: FilledButton.icon(onPressed: _endCall, icon: const Icon(Icons.call_end), label: const Text('End call', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)), style: FilledButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radius))))),
+          SizedBox(width: double.infinity, height: 64, child: FilledButton.icon(onPressed: _endCall, icon: const Icon(Icons.call_end), label: const Text('End call', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)), style: FilledButton.styleFrom(backgroundColor: AppColors.dangerAction, foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radius))))),
           const SizedBox(height: 8),
         ]),
       )),
@@ -221,12 +248,22 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     return Column(children: [
       Row(children: [
         const Icon(Icons.volume_up, color: Colors.white, size: 28),
-        Expanded(child: Slider(value: _volume, min: 0, max: 100, activeColor: Colors.white, inactiveColor: Colors.white24, onChanged: (value) => setState(() => _volume = value))),
+        Expanded(
+          child: Semantics(
+            label: 'Call volume',
+            child: Slider(value: _volume, min: 0, max: 100, activeColor: Colors.white, inactiveColor: Colors.white24, onChanged: (value) => setState(() => _volume = value)),
+          ),
+        ),
         SizedBox(width: 40, child: Text('${_volume.toInt()}', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
       ]),
       Row(children: [
         const Text('L', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        Expanded(child: Slider(value: _balance, activeColor: Colors.white, inactiveColor: Colors.white24, onChanged: (value) => setState(() => _balance = value))),
+        Expanded(
+          child: Semantics(
+            label: 'Audio balance, left to right',
+            child: Slider(value: _balance, activeColor: Colors.white, inactiveColor: Colors.white24, onChanged: (value) => setState(() => _balance = value)),
+          ),
+        ),
         const Text('R', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
       ]),
       const SizedBox(height: 16),
@@ -239,7 +276,20 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   }
 
   Widget _buildToggleButton({required IconData icon, required String label, required bool isActive, required VoidCallback onPressed}) {
-    final Color color = isActive ? Colors.white : Colors.white54;
-    return InkWell(onTap: onPressed, borderRadius: BorderRadius.circular(12), child: Padding(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), child: Column(children: [Icon(icon, color: color, size: 36), const SizedBox(height: 4), Text(label, style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 16))])));
+    // white54 measures 3.68:1 on this background and fails 4.5:1; white70
+    // (5.07:1) is the least-dimmed shade that still passes.
+    final Color color = isActive ? Colors.white : Colors.white70;
+    return Semantics(
+      button: true,
+      toggled: isActive,
+      label: '$label, ${isActive ? 'on' : 'off'}',
+      child: InkWell(
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(12),
+        child: ExcludeSemantics(
+          child: Padding(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), child: Column(children: [Icon(icon, color: color, size: 36), const SizedBox(height: 4), Text(label, style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 16))])),
+        ),
+      ),
+    );
   }
 }

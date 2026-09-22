@@ -26,18 +26,28 @@ export function SignUpScreen({
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
           <Icon name="favorite" size={28} color={colors.primaryDark} />
-          <Text style={styles.logoText}>CareConnect</Text>
+          <Text style={styles.logoText} accessibilityRole="header">
+            CareConnect
+          </Text>
         </View>
 
         <View style={styles.hero}>
-          <Text style={styles.headline}>Create your account</Text>
+          <Text style={styles.headline} accessibilityRole="header">
+            Create your account
+          </Text>
           <Text style={styles.subheadline}>Free, private, and takes under two minutes.</Text>
         </View>
 
         <View style={styles.form}>
           <Text style={styles.label}>Your name *</Text>
           <Text style={styles.hint}>This is how CareConnect will greet you.</Text>
-          <TextInput style={styles.input} placeholder="e.g. Alex Johnson" />
+          <TextInput
+            style={styles.input}
+            placeholder="e.g. Alex Johnson"
+            accessible
+            accessibilityLabel="Your name"
+            accessibilityHint="How you would like to be addressed in the app"
+          />
 
           <View style={{ height: 24 }} />
 
@@ -47,26 +57,55 @@ export function SignUpScreen({
             placeholder="e.g. alex@example.com"
             keyboardType="email-address"
             autoCapitalize="none"
+            accessible
+            accessibilityLabel="Email address"
+            accessibilityHint="A valid email address for account notifications"
           />
 
           <View style={{ height: 24 }} />
 
           <Text style={styles.label}>Password *</Text>
           <Text style={styles.hint}>At least 6 characters.</Text>
-          <TextInput style={styles.input} placeholder="Create a password" secureTextEntry />
+          <TextInput
+            style={styles.input}
+            placeholder="Create a password"
+            secureTextEntry
+            accessible
+            accessibilityLabel="Password"
+            accessibilityHint="Must be at least 6 characters long"
+          />
 
           <View style={{ height: 24 }} />
 
           <Text style={styles.label}>Confirm password *</Text>
-          <TextInput style={styles.input} placeholder="Re-enter your password" secureTextEntry />
+          <TextInput
+            style={styles.input}
+            placeholder="Re-enter your password"
+            secureTextEntry
+            accessible
+            accessibilityLabel="Confirm password"
+            accessibilityHint="Must match the password entered above"
+          />
 
           <View style={{ height: 32 }} />
 
-          <AppButton label="Create account" onPress={onSignUp} variant="filled" fullWidth />
+          <AppButton
+            label="Create account"
+            onPress={onSignUp}
+            variant="filled"
+            fullWidth
+            accessibilityHint="Creates your CareConnect account and logs you in"
+          />
 
           <View style={styles.footer}>
             <Text style={styles.footerText}>Already have an account? </Text>
-            <TouchableOpacity onPress={onSignIn}>
+            <TouchableOpacity
+              onPress={onSignIn}
+              hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
+              accessibilityRole="link"
+              accessibilityLabel="Sign in"
+              accessibilityHint="Navigates to the sign in screen"
+            >
               <Text style={styles.linkText}>Sign in</Text>
             </TouchableOpacity>
           </View>

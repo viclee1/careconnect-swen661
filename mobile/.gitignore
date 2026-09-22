@@ -40,5 +40,6 @@ yarn-error.*
 /ios
 /android
 
-# test coverage — regenerate with `npm run test:coverage`
+# test coverage — regenerate with `npm run test:coverage`. Submission evidence
+# is committed separately under docs/testing/ (see that folder's README note).
 coverage/

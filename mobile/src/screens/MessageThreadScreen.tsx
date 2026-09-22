@@ -1,5 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
 import { AlertBanner } from '../components/AlertBanner';
 import { AppButton } from '../components/AppButton';
@@ -128,7 +136,17 @@ export function MessageThreadScreen({
   const threadHasVideo = thread.some((message) => kindOf(message) === 'videoMessage');
 
   return (
-    <View style={styles.screen}>
+    // react-navigation's native-stack renders each screen inside a
+    // react-native-screens Fragment on Android, which does not itself
+    // participate in the Activity's windowSoftInputMode="adjustResize" the
+    // way a bare root view does. Without this, opening the keyboard could
+    // leave the composer laid out below the window's now-shrunk visible
+    // bounds — present in the tree, but unreachable by touch or a screen
+    // reader.
+    <KeyboardAvoidingView
+      style={styles.screen}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
       <AppHeader
         title={contact.name}
         subtitle={contact.relationship}
@@ -242,7 +260,7 @@ export function MessageThreadScreen({
         trigger={flashTrigger}
         message={`Alert sent to ${name}.\nTheir screen flashed and their phone buzzed.`}
       />
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

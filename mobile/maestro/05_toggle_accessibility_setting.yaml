@@ -1,0 +1,14 @@
+appId: edu.umgc.swen661.careconnect
+name: "Critical flow 5 - an accessibility preference takes effect immediately"
+---
+- launchApp:
+    clearState: true
+- assertVisible: "CareConnect"
+- tapOn: "I already have an account"
+- assertVisible: "Sign in to your account."
+- tapOn: "Sign in"
+- assertVisible: "Here's your day, Margaret"
+- tapOn: "Settings"
+- assertVisible: ".*WCAG 2.2 Compliant.*"
+- tapOn: ".*Show captions.*"
+- assertVisible: ".*Check your captions.*"

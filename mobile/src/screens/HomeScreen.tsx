@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
+  AccessibilityInfo,
   StyleSheet,
   Text,
   View,
@@ -35,8 +36,29 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings?: () => void }) 
 
   const { showNotification, dismissNotification, progress, doneCount, totalCount } = useDailyTasks();
 
+  // The avatar glow below is purely decorative — unlike VisualFlash (the
+  // Notify pulse), it carries no information on its own, so a user who has
+  // Reduce Motion turned on gets a static glow instead of a looping one
+  // rather than losing anything essential.
+  const [reduceMotionEnabled, setReduceMotionEnabled] = useState(false);
+
   useEffect(() => {
-    if (isIncomingCall) {
+    let mounted = true;
+    AccessibilityInfo.isReduceMotionEnabled().then((enabled) => {
+      if (mounted) setReduceMotionEnabled(enabled);
+    });
+    const subscription = AccessibilityInfo.addEventListener(
+      'reduceMotionChanged',
+      setReduceMotionEnabled
+    );
+    return () => {
+      mounted = false;
+      subscription.remove();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isIncomingCall && !reduceMotionEnabled) {
       Animated.loop(
         Animated.sequence([
           Animated.timing(flashAnim, {
@@ -53,8 +75,9 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings?: () => void }) 
       ).start();
     } else {
       flashAnim.stopAnimation();
+      flashAnim.setValue(0.6);
     }
-  }, [isIncomingCall, flashAnim]);
+  }, [isIncomingCall, reduceMotionEnabled, flashAnim]);
 
   const simulateCall = () => setIsIncomingCall(true);
   const declineCall = () => setIsIncomingCall(false);
@@ -85,9 +108,22 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings?: () => void }) 
           </View>
         )}
 
-        <Text style={styles.greeting}>{"Here's your day, Margaret"}</Text>
+        <Text style={styles.greeting} accessibilityRole="header">
+          {"Here's your day, Margaret"}
+        </Text>
 
-        <View style={styles.progressRow}>
+        <View
+          style={styles.progressRow}
+          accessible
+          accessibilityRole="progressbar"
+          accessibilityLabel="Daily task progress"
+          accessibilityValue={{
+            min: 0,
+            max: totalCount,
+            now: doneCount,
+            text: `${doneCount} of ${totalCount} tasks completed`,
+          }}
+        >
           <View style={styles.progressBarContainer}>
             <View style={[styles.progressBar, { width: `${progress * 100}%` }]} />
           </View>
@@ -134,52 +170,88 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings?: () => void }) 
         <View style={{ height: 40 }} />
       </ScrollView>
 
-      <Modal visible={isIncomingCall} transparent animationType="none" statusBarTranslucent>
-        <Animated.View
-          style={[
-            styles.incomingOverlay,
-            {
-              // eslint-disable-next-line react-hooks/refs
-              backgroundColor: flashAnim.interpolate({
-                inputRange: [0.6, 1.0],
-                outputRange: ['rgba(0,0,0,0.48)', 'rgba(0,0,0,0.8)'],
-              }),
-            },
-          ]}
-        >
+      <Modal
+        visible={isIncomingCall}
+        transparent
+        animationType="none"
+        statusBarTranslucent
+        accessibilityLabel="Incoming call from Maria"
+        accessibilityViewIsModal
+      >
+        {/*
+          The backdrop used to be this Animated.View's own backgroundColor,
+          interpolating between rgba(0,0,0,0.48) and rgba(0,0,0,0.8) with
+          flashAnim. That made "Your daughter" text's contrast depend on both
+          the animation phase and whatever content happened to be behind the
+          transparent Modal, and it could fail 4.5:1 at the dim end of the
+          range. The backdrop is now a fixed, fully opaque black — 10:1+ for
+          every text node here regardless of animation phase — and the pulse
+          instead animates a glow behind the avatar, which carries no text.
+        */}
+        <View style={styles.incomingOverlay}>
           <SafeAreaView style={styles.incomingContent} edges={['top', 'bottom']}>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <View style={styles.incomingAvatar}>
-                <Icon name="person" size={80} color="white" />
+              <View style={styles.avatarWrapper}>
+                <Animated.View
+                  style={[
+                    styles.incomingAvatarGlow,
+                    {
+                      // eslint-disable-next-line react-hooks/refs
+                      opacity: flashAnim.interpolate({
+                        inputRange: [0.6, 1.0],
+                        outputRange: [0.25, 0.55],
+                      }),
+                    },
+                  ]}
+                />
+                <View style={styles.incomingAvatar} accessibilityElementsHidden>
+                  <Icon name="person" size={80} color="white" />
+                </View>
               </View>
-              <Text style={styles.incomingName}>Maria</Text>
+              <Text style={styles.incomingName} accessibilityRole="header">
+                Maria
+              </Text>
               <Text style={styles.incomingSubtitle}>Your daughter</Text>
             </View>
 
             <View style={styles.incomingActions}>
-              <CallButton icon="call-end" label="Decline" color="#FF4B5C" onPress={declineCall} />
-              <CallButton icon="videocam" label="Answer" color="#4BCB66" onPress={answerCall} />
+              <CallButton
+                icon="call-end"
+                label="Decline"
+                color={colors.dangerAction}
+                onPress={declineCall}
+                accessibilityHint="Declines the incoming call and returns to dashboard"
+              />
+              <CallButton
+                icon="videocam"
+                label="Answer"
+                color={colors.successAction}
+                onPress={answerCall}
+                accessibilityHint="Answers the call with captioned video"
+              />
             </View>
             <View style={{ height: 60 }} />
           </SafeAreaView>
-        </Animated.View>
+        </View>
       </Modal>
 
-      <Modal visible={isActiveCall} animationType="slide">
-        <View style={styles.activeCallContainer}>
+      <Modal visible={isActiveCall} animationType="slide" accessibilityViewIsModal>
+        <View style={styles.activeCallContainer} accessibilityLabel="Active video call with Maria">
           <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.activeCallHeader}>
               <View style={{ flex: 1 }}>
-                <Text style={styles.activeCallTitle}>Maria</Text>
+                <Text style={styles.activeCallTitle} accessibilityRole="header">
+                  Maria
+                </Text>
                 <Text style={styles.activeCallSubtitle}>Your daughter · Video call</Text>
               </View>
-              <View style={styles.liveBadge}>
+              <View style={styles.liveBadge} accessible accessibilityLabel="Live call status">
                 <Text style={styles.liveText}>LIVE</Text>
               </View>
             </View>
 
             <View style={styles.activeCallContent}>
-              <View style={styles.mainAvatarContainer}>
+              <View style={styles.mainAvatarContainer} accessibilityElementsHidden>
                 <View style={styles.mainAvatar}>
                   <Icon name="person" size={140} color="white" />
                 </View>
@@ -190,7 +262,12 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings?: () => void }) 
             </View>
 
             {isCCEnabled && (
-              <View style={styles.ccContainer}>
+              <View
+                style={styles.ccContainer}
+                accessible
+                accessibilityLabel="Live captions"
+                accessibilityLiveRegion="polite"
+              >
                 <Text style={styles.ccText}>
                   {'[CC LIVE] "Hi Mum! Can you hear me? I\'m calling to check in on you."'}
                 </Text>
@@ -199,6 +276,10 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings?: () => void }) 
 
             <View style={styles.activeCallControls}>
               <View style={styles.controlRow}>
+                {/* Icon hides decorative icons from the accessibility tree by
+                    default (see components/Icon.tsx) — accessibilityElementsHidden
+                    isn't a prop it forwards, so passing it here failed typecheck
+                    without changing anything at runtime. */}
                 <Icon name="volume-up" size={28} color="white" />
                 <Slider
                   style={{ flex: 1, height: 40 }}
@@ -209,11 +290,22 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings?: () => void }) 
                   minimumTrackTintColor="white"
                   maximumTrackTintColor="rgba(255,255,255,0.24)"
                   thumbTintColor="white"
+                  accessibilityLabel="Call volume"
+                  accessibilityValue={{
+                    min: 0,
+                    max: 100,
+                    now: volume,
+                    text: `${Math.round(volume)} percent`,
+                  }}
                 />
-                <Text style={styles.controlValue}>{Math.round(volume)}</Text>
+                <Text style={styles.controlValue} accessibilityElementsHidden>
+                  {Math.round(volume)}
+                </Text>
               </View>
               <View style={styles.controlRow}>
-                <Text style={styles.balanceLabel}>L</Text>
+                <Text style={styles.balanceLabel} accessibilityElementsHidden>
+                  L
+                </Text>
                 <Slider
                   style={{ flex: 1, height: 40 }}
                   value={balance}
@@ -221,8 +313,22 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings?: () => void }) 
                   minimumTrackTintColor="white"
                   maximumTrackTintColor="rgba(255,255,255,0.24)"
                   thumbTintColor="white"
+                  accessibilityLabel="Audio balance"
+                  accessibilityValue={{
+                    min: 0,
+                    max: 1,
+                    now: balance,
+                    text:
+                      balance === 0.5
+                        ? 'Centered'
+                        : balance < 0.5
+                          ? 'Leaning left'
+                          : 'Leaning right',
+                  }}
                 />
-                <Text style={styles.balanceLabel}>R</Text>
+                <Text style={styles.balanceLabel} accessibilityElementsHidden>
+                  R
+                </Text>
               </View>
 
               <View style={styles.toggleRow}>
@@ -231,12 +337,18 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings?: () => void }) 
                   label="Mute"
                   isActive={isMuted}
                   onPress={() => setIsMuted(!isMuted)}
+                  accessibilityRole="switch"
+                  accessibilityState={{ checked: isMuted }}
+                  accessibilityHint="Toggles microphone on or off"
                 />
                 <ToggleButton
                   icon={isPaused ? 'play-arrow' : 'pause'}
                   label="Pause"
                   isActive={isPaused}
                   onPress={() => setIsPaused(!isPaused)}
+                  accessibilityRole="switch"
+                  accessibilityState={{ checked: isPaused }}
+                  accessibilityHint="Pauses or resumes the video stream"
                 />
                 <ToggleButton
                   testID="toggle-cc"
@@ -244,6 +356,9 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings?: () => void }) 
                   label="CC"
                   isActive={isCCEnabled}
                   onPress={() => setIsCCEnabled(!isCCEnabled)}
+                  accessibilityRole="switch"
+                  accessibilityState={{ checked: isCCEnabled }}
+                  accessibilityHint="Toggles live captions on or off"
                 />
               </View>
 
@@ -251,10 +366,11 @@ export function HomeScreen({ onOpenSettings }: { onOpenSettings?: () => void }) 
                 <AppButton
                   label="End call"
                   onPress={endCall}
-                  tone="#FF4B5C"
+                  tone={colors.dangerAction}
                   variant="filled"
                   icon="call-end"
                   fullWidth
+                  accessibilityHint="Disconnects the call and returns to dashboard"
                 />
               </View>
             </View>
@@ -298,18 +414,28 @@ function CallButton({
   label,
   color,
   onPress,
+  accessibilityHint,
 }: {
   icon: IconName;
   label: string;
   color: string;
   onPress: () => void;
+  accessibilityHint?: string;
 }) {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.callButtonContainer}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={styles.callButtonContainer}
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      accessibilityHint={accessibilityHint}
+    >
       <View style={[styles.callButtonCircle, { backgroundColor: color }]}>
         <Icon name={icon} size={40} color="white" />
       </View>
-      <Text style={styles.callButtonLabel}>{label}</Text>
+      <Text style={styles.callButtonLabel} accessibilityElementsHidden>
+        {label}
+      </Text>
     </TouchableOpacity>
   );
 }
@@ -320,18 +446,37 @@ function ToggleButton({
   isActive,
   onPress,
   testID,
+  accessibilityRole,
+  accessibilityState,
+  accessibilityHint,
 }: {
   icon: IconName;
   label: string;
   isActive: boolean;
   onPress: () => void;
   testID?: string;
+  accessibilityRole?: 'button' | 'switch';
+  accessibilityState?: any;
+  accessibilityHint?: string;
 }) {
-  const color = isActive ? 'white' : 'rgba(255,255,255,0.54)';
+  // rgba(255,255,255,0.54) measures 3.68:1 on this screen's primaryDark
+  // background and fails 4.5:1; 0.7 alpha (5.07:1) is the least-dimmed shade
+  // that still passes.
+  const color = isActive ? 'white' : 'rgba(255,255,255,0.7)';
   return (
-    <TouchableOpacity onPress={onPress} style={styles.toggleButton} testID={testID}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={styles.toggleButton}
+      testID={testID}
+      accessibilityRole={accessibilityRole ?? 'button'}
+      accessibilityState={accessibilityState}
+      accessibilityLabel={label}
+      accessibilityHint={accessibilityHint}
+    >
       <Icon name={icon} size={36} color={color} />
-      <Text style={[styles.toggleLabel, { color }]}>{label}</Text>
+      <Text style={[styles.toggleLabel, { color }]} accessibilityElementsHidden>
+        {label}
+      </Text>
     </TouchableOpacity>
   );
 }
@@ -470,9 +615,22 @@ const styles = StyleSheet.create({
   incomingOverlay: {
     flex: 1,
     zIndex: 1000,
+    backgroundColor: 'black',
   },
   incomingContent: {
     flex: 1,
+  },
+  avatarWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 24,
+  },
+  incomingAvatarGlow: {
+    position: 'absolute',
+    width: 160,
+    height: 160,
+    borderRadius: 80,
+    backgroundColor: colors.successAction,
   },
   incomingAvatar: {
     width: 120,
@@ -481,7 +639,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primaryDark,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 24,
   },
   incomingName: {
     fontSize: 40,
@@ -537,7 +694,7 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.8)',
   },
   liveBadge: {
-    backgroundColor: '#FF4B5C',
+    backgroundColor: colors.dangerAction,
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 6,

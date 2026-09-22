@@ -1,0 +1,18 @@
+appId: com.example.careconnect_mobile
+name: "Critical flow 2 — bottom navigation reaches every destination"
+---
+- launchApp:
+    clearState: true
+- tapOn: "I already have an account"
+- tapOn: "Sign in"
+- assertVisible: "Here's your day, Margaret"
+- tapOn: "Go to My Day"
+- assertVisible: ".*0 of 7 done.*"
+- tapOn: "Go to Appointments"
+- assertVisible: ".*Dr. Smith.*"
+- tapOn: "Go to Medicines"
+- assertVisible: ".*Aspirin.*"
+- tapOn: "Go to Memories"
+- assertVisible: ".*Family Picnic.*"
+- tapOn: "Go to Contacts"
+- assertVisible: "People who care for you"

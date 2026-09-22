@@ -36,7 +36,7 @@ export function MemoriesScreen({ onOpenSettings }: { onOpenSettings?: () => void
         <ScrollView contentContainerStyle={styles.content}>
           {isLoading ? (
             <View style={styles.loading}>
-              <ActivityIndicator accessibilityLabel="Loading memories" />
+              <ActivityIndicator accessible accessibilityLabel="Loading memories" />
             </View>
           ) : error ? (
             <AlertBanner

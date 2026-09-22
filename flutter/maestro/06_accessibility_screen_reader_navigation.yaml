@@ -1,0 +1,26 @@
+appId: com.example.careconnect_mobile
+name: "Accessibility-focused flow — navigating purely by screen-reader labels"
+# Maestro drives Android through UiAutomator, which resolves every "tapOn"
+# selector against the same accessibility tree TalkBack reads from (a
+# node's text/content-description). A flow that only ever selects elements
+# by the exact sentence a screen reader would announce — never by
+# coordinates or by relying on it merely "looking tappable" — is itself
+# evidence that the label is both present and correctly wired to the action
+# it describes. This mirrors the semantics-only navigation performed in
+# integration_test/critical_flows_test.dart.
+---
+- launchApp:
+    clearState: true
+- tapOn: "I already have an account"
+- tapOn: "Sign in"
+- assertVisible: "Home, current screen"
+- tapOn: "Go to My Day"
+- assertVisible: "My Day, current screen"
+- tapOn: "Go to Appointments"
+- assertVisible: "Appointments, current screen"
+- tapOn: "Go to Medicines"
+- assertVisible: "Medicines, current screen"
+- tapOn: "Go to Memories"
+- assertVisible: "Memories, current screen"
+- tapOn: "Go to Contacts"
+- assertVisible: "Contacts, current screen"

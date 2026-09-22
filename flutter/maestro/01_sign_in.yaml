@@ -1,0 +1,10 @@
+appId: com.example.careconnect_mobile
+name: "Critical flow 1 — Welcome -> Sign in -> Home"
+---
+- launchApp:
+    clearState: true
+- assertVisible: "CareConnect"
+- tapOn: "I already have an account"
+- assertVisible: "Welcome back"
+- tapOn: "Sign in"
+- assertVisible: "Here's your day, Margaret"

@@ -17,7 +17,7 @@ targeting care recipients who are deaf or hard of hearing.
 > Both clients are built to match the **Week 3 design prototype**. Where the
 > prototype and the original React web client disagreed, the prototype won.
 
-**Status:** 274 tests passing, **96.5 % line coverage**, `eslint` and `tsc`
+**Status:** 286 tests passing, **97.0 % line coverage**, `eslint` and `tsc`
 clean. The framework comparison (Assignment 5 Part 3) is not in this branch.
 
 ---
@@ -65,6 +65,99 @@ screen will not let you switch the visible alert banner off.
 | **Memories** | The care recipient's saved memories — title, date and description — laid out one column on a phone and two across from the tablet breakpoint up, matching Contacts' and Appointments' layout rule. |
 
 That's ten functional screens against the assignment's 7–10 target.
+
+### Accessibility Addons (09/20/26)
+
+Key Accessibility Enhancements:
+
+• Semantic Navigation & Roles:
+
+◦ Added accessibilityRole="header" to all major screen headings and section titles (Home, My Day, Appointments, etc.).
+
+◦ Correctly identified buttons and links using accessibilityRole="button" and accessibilityRole="link".
+
+• Form Accessibility (SignIn/SignUp):
+
+◦ Every TextInput now carries an accessibilityLabel and accessibilityHint, ensuring users with screen readers understand exactly what information is required.
+
+• Accessible Progress Indicators:
+
+◦ The task progress bars on the Dashboard and My Day screens now use accessibilityRole="progressbar".
+
+◦ They provide dynamic accessibilityValue updates (e.g., "3 of 7 tasks completed") so the current status is announced in real-time.
+
+• Call Simulation Overlay:
+
+◦ The Incoming Call and Active Call modals are now fully accessible.
+
+◦ Added labels for the "LIVE" status, caller information, and accessible controls for volume and balance sliders.
+
+◦ Live captions (CC) are marked with accessibilityLiveRegion="polite" to ensure they are announced as they appear.
+
+• Task List Items:
+
+◦ The My Day and Medicines items now act as semantic checkboxes (accessibilityRole="checkbox").
+
+◦ The completion state is explicitly carried via accessibilityState={{ checked: ... }} and reflected in the descriptive labels.
+
+• Touch Targets:
+
+◦ `layout.minTouchTarget` (48pt) is used consistently across buttons, the tab bar, and form controls. The three text-only links that weren't covered — "Forgot password?" (Sign In) and the "Create an account"/"Sign in" footer links (Sign In, Sign Up) — now carry `hitSlop` padding their tap target to roughly 48pt without changing their visible size.
+
+• Reduce Motion:
+
+◦ The incoming-call avatar glow checks `AccessibilityInfo.isReduceMotionEnabled()` (and subscribes to `reduceMotionChanged`) and holds at a static opacity instead of looping when the OS Reduce Motion setting is on. The Notify "visual flash" is deliberately exempt — it's the single, brief, non-repeating fade that *is* the visual alert this app exists to provide, not decorative motion.
+
+Full WCAG 2.1 Level A/AA criterion-by-criterion conformance status, remarks, and known
+limitations (including an unverified Maestro/APK build in this environment) are in
+[`docs/VPAT-WCAG2.1-AA.md`](docs/VPAT-WCAG2.1-AA.md).
+
+---
+
+## Maestro E2E Tests
+
+The app includes a suite of [Maestro](https://maestro.mobile.dev/) UI tests for end-to-end verification of critical user flows.
+
+### Prerequisites
+
+Maestro drives the native application directly. Before running tests, you must build and install the app on your Android emulator or iOS simulator:
+
+```bash
+# For Android
+npx expo run:android
+
+```
+### Running the tests
+
+Once the app is installed and visible on your device/emulator:
+
+```bash
+# Run all critical flows
+maestro test maestro/
+
+# Run a specific flow (e.g., Sign In)
+maestro test maestro/01_sign_in.yaml
+```
+
+### Test Cases
+
+| File | Description |
+|:-----|:------------|
+| `01_sign_in.yaml` | Verifies the Welcome -> Sign In -> Home dashboard transition. |
+| `02_bottom_navigation.yaml` | Confirms that every tab in the bottom bar reaches its target screen. |
+| `03_send_message.yaml` | Tests opening a contact conversation and sending a text message. |
+| `04_complete_daily_task.yaml` | Verifies that checking off a task on My Day updates the progress banner. |
+| `05_toggle_accessibility_setting.yaml` | Confirms that changing a preference in Settings takes effect immediately. |
+| `06_accessibility_screen_reader_navigation.yaml` | Navigates the entire app using only screen-reader labels to verify semantics. |
+
+### Results
+
+5 of 6 flows pass reliably on a connected Android emulator, including the
+accessibility-focused flow. `03_send_message.yaml` is intermittently flaky on a cold app
+launch — root-caused to host resource contention (two emulators + two Metro/Expo
+processes running at once), not a code or accessibility defect; see the VPAT's Known
+Limitations for the investigation. The JUnit report from the last run is committed at
+[`docs/testing/maestro-results.xml`](docs/testing/maestro-results.xml).
 
 ### Notify — the signature interaction
 
@@ -173,6 +266,35 @@ installable, and not what the assignment submission asks for.
 `android/` and `ios/` are not committed — Expo generates them. Run
 `npx expo prebuild` if you need the native projects locally.
 
+### Building for Android locally (for Maestro, or a debug APK without EAS)
+
+```bash
+npx expo run:android      # prebuilds android/ and installs a debug build on a
+                           # connected device/emulator — this is what maestro/
+                           # needs a build for
+```
+
+**Use JDK 17 or 21 to run Gradle, not whatever the newest JDK on your machine
+is.** On JDK 25/26, the native Android build fails during
+`react-native-screens:configureCMakeDebug[arm64-v8a]` with a "restricted
+method in java.lang.System has been called" warning right before the
+failure. This was confirmed to be a JDK-25/26-vs-Gradle-9 native-toolchain
+incompatibility, not a defect in `react-native-screens`, Expo's CMake
+integration, or this app: the exact same Gradle/NDK/CMake versions built the
+APK successfully once pointed at JDK 17.
+
+If `java -version` isn't already 17 or 21, either set `JAVA_HOME` to one
+before running the command above, or point Gradle at one directly by adding
+to `android/gradle.properties` after `npx expo prebuild` has generated it:
+
+```properties
+org.gradle.java.home=/path/to/your/jdk-17-or-21
+```
+
+(That file isn't committed, since it's inside the generated `android/`
+directory and the JDK path is machine-specific — you'll need to re-add this
+line after every `expo prebuild`.)
+
 ---
 
 ## Tests
@@ -180,21 +302,26 @@ installable, and not what the assignment submission asks for.
 ```bash
 npm run lint            # eslint — expected: no output
 npm run typecheck       # tsc --noEmit — expected: no output
-npm test                # 274 tests
+npm test                # 286 tests
 npm run test:coverage   # writes coverage/lcov-report/index.html
 ```
 
 ### Coverage
 
 ```
-Statements   : 96.47 % ( 739/766 )
-Branches     : 88.86 % ( 431/485 )
-Functions    : 93.89 % ( 277/295 )
-Lines        : 96.48 % ( 658/682 )
+Statements   : 96.91 % ( 755/779 )
+Branches     : 88.07 % ( 443/503 )
+Functions    : 94.31 % ( 282/299 )
+Lines        : 96.97 % ( 673/694 )
 ```
 
 Open `coverage/lcov-report/index.html` for the browsable report and screenshot
-the summary for the submission. The assignment floor is 60 %.
+the summary for the submission. The assignment floor is 60 %. The committed
+evidence — per-suite counts, the accessibility tests, files below 100 % and what
+Jest cannot measure — is in
+[`docs/testing/coverage-summary.md`](docs/testing/coverage-summary.md), with the raw
+[`docs/testing/lcov.info`](docs/testing/lcov.info) and the browsable HTML report
+([`docs/testing/coverage-html/index.html`](docs/testing/coverage-html/index.html)) beside it.
 
 `npm audit` plus a manual secrets/network review found 13 moderate,
 build-tooling-only dependency advisories and no code-level issues — see
