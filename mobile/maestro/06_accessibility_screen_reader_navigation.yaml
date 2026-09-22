@@ -3,6 +3,7 @@ name: "Accessibility-focused flow - navigating purely by screen-reader labels"
 ---
 - launchApp:
     clearState: true
+- assertVisible: "CareConnect"
 - tapOn: "I already have an account"
 - assertVisible: "Sign in to your account."
 - tapOn: "Sign in"

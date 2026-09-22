@@ -3,6 +3,7 @@ name: "Critical flow 4 - My Day to completing a task updates progress"
 ---
 - launchApp:
     clearState: true
+- assertVisible: "CareConnect"
 - tapOn: "I already have an account"
 - assertVisible: "Sign in to your account."
 - tapOn: "Sign in"

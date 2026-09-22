@@ -3,6 +3,7 @@ name: "Critical flow 3 - Contacts to open a conversation to send a message"
 ---
 - launchApp:
     clearState: true
+- assertVisible: "CareConnect"
 - tapOn: "I already have an account"
 - assertVisible: "Sign in to your account."
 - tapOn: "Sign in"

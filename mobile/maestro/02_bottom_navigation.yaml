@@ -3,6 +3,7 @@ name: "Critical flow 2 - bottom navigation reaches every destination"
 ---
 - launchApp:
     clearState: true
+- assertVisible: "CareConnect"
 - tapOn: "I already have an account"
 - assertVisible: "Sign in to your account."
 - tapOn: "Sign in"
