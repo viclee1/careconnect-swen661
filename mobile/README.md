@@ -109,8 +109,7 @@ Key Accessibility Enhancements:
 ◦ The incoming-call avatar glow checks `AccessibilityInfo.isReduceMotionEnabled()` (and subscribes to `reduceMotionChanged`) and holds at a static opacity instead of looping when the OS Reduce Motion setting is on. The Notify "visual flash" is deliberately exempt — it's the single, brief, non-repeating fade that *is* the visual alert this app exists to provide, not decorative motion.
 
 Full WCAG 2.1 Level A/AA criterion-by-criterion conformance status, remarks, and known
-limitations (including an unverified Maestro/APK build in this environment) are in
-[`docs/VPAT-WCAG2.1-AA.md`](docs/VPAT-WCAG2.1-AA.md).
+limitations are in the team's VPAT, submitted separately as part of this assignment.
 
 ---
 
@@ -155,8 +154,8 @@ maestro test maestro/01_sign_in.yaml
 5 of 6 flows pass reliably on a connected Android emulator, including the
 accessibility-focused flow. `03_send_message.yaml` is intermittently flaky on a cold app
 launch — root-caused to host resource contention (two emulators + two Metro/Expo
-processes running at once), not a code or accessibility defect; see the VPAT's Known
-Limitations for the investigation. The JUnit report from the last run is committed at
+processes running at once), not a code or accessibility defect; see the team's VPAT
+for the investigation. The JUnit report from the last run is committed at
 [`docs/testing/maestro-results.xml`](docs/testing/maestro-results.xml).
 
 ### Notify — the signature interaction

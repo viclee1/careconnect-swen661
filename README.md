@@ -688,12 +688,12 @@ built-in `AccessibilityGuideline` API (`androidTapTargetGuideline`,
 `textContrastGuideline`, `labeledTapTargetGuideline`) against every routed screen. An
 `osv-scanner` dependency scan plus a manual secrets/network review found no issues — see [`flutter/docs/security-scan.md`](flutter/docs/security-scan.md).
 
-**Assignment 6 accessibility & E2E evidence:**
-[`flutter/docs/VPAT-WCAG2.1-AA.md`](flutter/docs/VPAT-WCAG2.1-AA.md) (full WCAG 2.1 A/AA
-criterion-by-criterion conformance), 6 on-device
+**Assignment 6 accessibility & E2E evidence:** 6 on-device
 [`integration_test/critical_flows_test.dart`](flutter/integration_test/critical_flows_test.dart)
 flows, and 6 [Maestro](flutter/maestro/) E2E flows — results in
-[`flutter/docs/testing/maestro-results.xml`](flutter/docs/testing/maestro-results.xml).
+[`flutter/docs/testing/maestro-results.xml`](flutter/docs/testing/maestro-results.xml). The
+full WCAG 2.1 A/AA criterion-by-criterion VPAT is submitted separately as part of this
+assignment.
 
 ### Link to test coverage report
 
@@ -795,10 +795,10 @@ manual secrets/network review found 13 moderate, build-tooling-only
 dependency advisories and no code-level issues — see
 [`mobile/docs/security-scan.md`](mobile/docs/security-scan.md).
 
-**Assignment 6 accessibility & E2E evidence:**
-[`mobile/docs/VPAT-WCAG2.1-AA.md`](mobile/docs/VPAT-WCAG2.1-AA.md) (full WCAG 2.1 A/AA
-criterion-by-criterion conformance) and 6 [Maestro](mobile/maestro/) E2E flows — results
-in [`mobile/docs/testing/maestro-results.xml`](mobile/docs/testing/maestro-results.xml).
+**Assignment 6 accessibility & E2E evidence:** 6 [Maestro](mobile/maestro/) E2E flows —
+results in [`mobile/docs/testing/maestro-results.xml`](mobile/docs/testing/maestro-results.xml).
+The full WCAG 2.1 A/AA criterion-by-criterion VPAT is submitted separately as part of
+this assignment.
 
 ### Link to test coverage report
 
