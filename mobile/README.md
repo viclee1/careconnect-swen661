@@ -300,14 +300,17 @@ npm run test:coverage   # writes coverage/lcov-report/index.html
 ### Coverage
 
 ```
-Statements   : 96.47 % ( 739/766 )
-Branches     : 88.86 % ( 431/485 )
-Functions    : 93.89 % ( 277/295 )
-Lines        : 96.48 % ( 658/682 )
+Statements   : 96.91 % ( 755/779 )
+Branches     : 88.07 % ( 443/503 )
+Functions    : 94.31 % ( 282/299 )
+Lines        : 96.97 % ( 673/694 )
 ```
 
-Open `coverage/lcov-report/index.html` for the browsable report and screenshot
-the summary for the submission. The assignment floor is 60 %.
+`coverage/lcov.info` is committed as submission evidence (mirrors
+`flutter/coverage/lcov.info`); see
+[`docs/testing/coverage-summary.md`](docs/testing/coverage-summary.md) for the per-file
+breakdown. Open `coverage/lcov-report/index.html` locally for the browsable report. The
+assignment floor is 60%.
 
 `npm audit` plus a manual secrets/network review found 13 moderate,
 build-tooling-only dependency advisories and no code-level issues — see
