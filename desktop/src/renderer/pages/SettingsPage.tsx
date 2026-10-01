@@ -21,6 +21,7 @@ import { useNavigation } from '../navigation/NavigationProvider';
 import { useCommand } from '../platform/CommandProvider';
 import { colors } from '../theme/colors';
 import { useSettings } from '../state/SettingsProvider';
+import { useAuth } from '../state/AuthProvider';
 import { SegmentedChoice } from './settings/SegmentedChoice';
 import { SettingsSection } from './settings/SettingsSection';
 import { SettingsSliderRow } from './settings/SettingsSliderRow';
@@ -43,7 +44,7 @@ import { VibrationPatternRow } from './settings/VibrationPatternRow';
 export function SettingsPage() {
   const { settings, update } = useSettings();
   const { navigate, back, canGoBack } = useNavigation();
-  const [signOutNotice, setSignOutNotice] = useState(false);
+  const { signOut } = useAuth();
 
   const compliant = meetsHearingConstraints(settings);
   const captionsOn = settings.captionsEnabled;
@@ -268,19 +269,11 @@ export function SettingsPage() {
                   icon="signOut"
                   variant="danger"
                   fullWidth
-                  onClick={() => setSignOutNotice(true)}
+                  onClick={() => {
+                    signOut();
+                    navigate({ name: 'Splash' });
+                  }}
                 />
-                {signOutNotice ? (
-                  <div style={{ marginTop: '1rem' }}>
-                    <AlertBanner
-                      tone="info"
-                      icon="signOut"
-                      title="Sign out is not ready yet"
-                      message="Signing out arrives with the Welcome, Sign In and Sign Up pages, which are being built on another branch. Nothing has changed."
-                      action={<Button label="OK" onClick={() => setSignOutNotice(false)} />}
-                    />
-                  </div>
-                ) : null}
               </div>
             </SettingsSection>
           </div>

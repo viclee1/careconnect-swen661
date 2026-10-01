@@ -335,14 +335,13 @@ describe('SettingsPage', () => {
     });
   });
 
-  it('explains that sign out is not on this branch instead of failing silently', async () => {
+  it('signs out and returns the user to the splash screen', async () => {
     const { user } = openSettings();
 
     await user.click(await screen.findByRole('button', { name: 'Sign out' }));
 
     expect(
-      await screen.findByRole('heading', { name: /sign out is not ready yet/i }),
+      await screen.findByRole('heading', { level: 1, name: /your daily companion/i }),
     ).toBeInTheDocument();
-    expect(screen.getByText(/Nothing has changed/)).toBeInTheDocument();
   });
 });

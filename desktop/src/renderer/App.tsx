@@ -10,14 +10,21 @@ import { createSettingsRepository, type SettingsRepository } from './data/settin
 import {
   NavigationProvider,
   useNavigation,
+  isPublicRoute,
   type Route,
 } from './navigation/NavigationProvider';
 import { Sidebar } from './navigation/Sidebar';
 import { CommandProvider, useCommand } from './platform/CommandProvider';
 import { ContactsPage } from './pages/ContactsPage';
+import { HomePage } from './pages/HomePage';
 import { MessageThreadPage } from './pages/MessageThreadPage';
+import { MyDayPage } from './pages/MyDayPage';
 import { PlaceholderPage } from './pages/PlaceholderPage';
 import { SettingsPage } from './pages/SettingsPage';
+import { SignInPage } from './pages/SignInPage';
+import { SignUpPage } from './pages/SignUpPage';
+import { SplashPage } from './pages/SplashPage';
+import { AuthProvider } from './state/AuthProvider';
 import { ContactsProvider } from './state/ContactsProvider';
 import { MessagesProvider } from './state/MessagesProvider';
 import { SettingsProvider, useSettings } from './state/SettingsProvider';
@@ -30,11 +37,6 @@ export interface Repositories {
 
 /**
  * The renderer's root.
- *
- * Repositories are injected rather than constructed inside the providers, which
- * is what lets the test suite drive the real pages through a failing store
- * without touching the components — the same arrangement as the React Native
- * client's test harness.
  */
 export function App({
   repositories = {},
@@ -57,27 +59,24 @@ export function App({
   );
 
   return (
-    <ContactsProvider repository={contacts}>
-      <MessagesProvider repository={messages}>
-        <SettingsProvider repository={settings}>
-          <NavigationProvider initialRoute={initialRoute}>
-            <CommandProvider>
-              <Shell />
-            </CommandProvider>
-          </NavigationProvider>
-        </SettingsProvider>
-      </MessagesProvider>
-    </ContactsProvider>
+    <AuthProvider>
+      <ContactsProvider repository={contacts}>
+        <MessagesProvider repository={messages}>
+          <SettingsProvider repository={settings}>
+            <NavigationProvider initialRoute={initialRoute ?? { name: 'Splash' }}>
+              <CommandProvider>
+                <Shell />
+              </CommandProvider>
+            </NavigationProvider>
+          </SettingsProvider>
+        </MessagesProvider>
+      </ContactsProvider>
+    </AuthProvider>
   );
 }
 
 /**
- * The window: a persistent sidebar and one content column.
- *
- * This is the desktop pattern Assignment 7 settled on — navigation always
- * visible on the side rather than at the bottom, with the same workflow
- * underneath as the phone so a user moving between devices does not have to
- * relearn anything.
+ * The window shell layout.
  */
 function Shell() {
   const { route, navigate, back, canGoBack } = useNavigation();
@@ -88,9 +87,6 @@ function Shell() {
     void loadSettings();
   }, [loadSettings]);
 
-  // Navigation commands are registered at the shell, so they work from every
-  // page. A page can still register a more specific handler for the same
-  // command — the conversation does exactly that for Back.
   useCommand('navigate:home', () => navigate({ name: 'Home' }));
   useCommand('navigate:myDay', () => navigate({ name: 'MyDay' }));
   useCommand('navigate:appointments', () => navigate({ name: 'Appointments' }));
@@ -103,13 +99,24 @@ function Shell() {
   });
   useCommand('help:shortcuts', () => setShowShortcuts(true));
 
+  const isPublic = isPublicRoute(route);
+
+  if (isPublic) {
+    return (
+      <div className="shell-public">
+        <a className="skip-link" href="#main-content">
+          Skip to main content
+        </a>
+        <Page route={route} onShowShortcuts={() => setShowShortcuts(true)} />
+        {showShortcuts ? (
+          <ShortcutsDialog onClose={() => setShowShortcuts(false)} />
+        ) : null}
+      </div>
+    );
+  }
+
   return (
     <div className="shell">
-      {/*
-        The first thing Tab reaches. Without it a keyboard user pays for the
-        persistent sidebar on every page, tabbing past eight navigation items
-        before arriving at the content they came for.
-      */}
       <a className="skip-link" href="#main-content">
         Skip to main content
       </a>
@@ -117,21 +124,46 @@ function Shell() {
       <Sidebar onShowShortcuts={() => setShowShortcuts(true)} />
 
       <main className="main" id="main-content" tabIndex={-1}>
-        <Page route={route} />
+        <Page route={route} onShowShortcuts={() => setShowShortcuts(true)} />
       </main>
 
-      {showShortcuts ? <ShortcutsDialog onClose={() => setShowShortcuts(false)} /> : null}
+      {showShortcuts ? (
+        <ShortcutsDialog onClose={() => setShowShortcuts(false)} />
+      ) : null}
     </div>
   );
 }
 
-function Page({ route }: { route: Route }) {
+function Page({
+  route,
+  onShowShortcuts,
+}: {
+  route: Route;
+  onShowShortcuts?: () => void;
+}) {
+  if (route.name === 'Splash') {
+    return <SplashPage onShowShortcuts={onShowShortcuts} />;
+  }
+  if (route.name === 'SignIn') {
+    return <SignInPage onShowShortcuts={onShowShortcuts} />;
+  }
+  if (route.name === 'SignUp') {
+    return <SignUpPage onShowShortcuts={onShowShortcuts} />;
+  }
+  if (route.name === 'Home') {
+    return <HomePage onShowShortcuts={onShowShortcuts} />;
+  }
+  if (route.name === 'MyDay') {
+    return <MyDayPage onShowShortcuts={onShowShortcuts} />;
+  }
   if (route.name === 'MessageThread') {
-    // Keyed by contact so switching conversations remounts rather than
-    // carrying the previous one's draft and scroll position across.
     return <MessageThreadPage key={route.contactId} contactId={route.contactId} />;
   }
-  if (route.name === 'Settings') return <SettingsPage />;
-  if (route.name === 'Contacts') return <ContactsPage />;
+  if (route.name === 'Settings') {
+    return <SettingsPage />;
+  }
+  if (route.name === 'Contacts') {
+    return <ContactsPage />;
+  }
   return <PlaceholderPage destination={route.name} />;
 }

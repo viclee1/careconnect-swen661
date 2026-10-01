@@ -283,7 +283,7 @@ describe('the desktop shell', () => {
 
       await user.keyboard('{Control>}1{/Control}');
 
-      expect(await screen.findByRole('heading', { level: 1, name: 'Home' })).toBeInTheDocument();
+      expect(await screen.findByRole('heading', { level: 1, name: /Home|Here's your day/i })).toBeInTheDocument();
     });
   });
 

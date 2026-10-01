@@ -16,8 +16,9 @@ export function renderApp(
   options: { repositories?: Repositories; initialRoute?: Route } = {},
 ): RenderResult & { user: ReturnType<typeof userEvent.setup> } {
   const user = userEvent.setup();
+  const initialRoute = options.initialRoute ?? { name: 'Contacts' };
   const result = render(
-    <App repositories={options.repositories} initialRoute={options.initialRoute} />,
+    <App repositories={options.repositories} initialRoute={initialRoute} />,
   );
   return { ...result, user };
 }

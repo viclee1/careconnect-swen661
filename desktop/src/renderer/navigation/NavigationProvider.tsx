@@ -12,12 +12,13 @@ import type { AppDestination } from './destinations';
 /**
  * Every page and its parameters in one place.
  *
- * Typed so `navigate` calls are checked at compile time — pass the wrong
- * parameter to a conversation and `tsc` says so rather than the app rendering
- * an empty page on a user's machine.
+ * Typed so `navigate` calls are checked at compile time.
  */
 export type Route =
   | { name: AppDestination }
+  | { name: 'Splash' }
+  | { name: 'SignIn' }
+  | { name: 'SignUp' }
   | { name: 'MessageThread'; contactId: string }
   | { name: 'Settings' };
 
@@ -32,23 +33,13 @@ export interface NavigationValue {
   canGoBack: boolean;
   /** The top-level page the sidebar should mark as current. */
   activeDestination: AppDestination;
+  isPublic: boolean;
 }
 
 const NavigationContext = createContext<NavigationValue | null>(null);
 
 /**
  * The router.
- *
- * Hand-written rather than pulled from `react-router`, for a reason specific to
- * this target: a packaged Electron renderer is loaded over `file://`, where
- * history-based routing needs a hash fallback and the URL is never shown to
- * anyone anyway. A typed route union plus a stack is the whole requirement, and
- * it keeps the shortcut and menu handlers trivially testable.
- *
- * A top-level destination *replaces* the stack rather than pushing onto it, so
- * clicking around the sidebar cannot build up a back history that then takes a
- * dozen presses to unwind — the desktop expectation is that Back returns from
- * a drill-down, not that it replays your whole session.
  */
 export function NavigationProvider({
   initialRoute = { name: 'Contacts' },
@@ -63,7 +54,7 @@ export function NavigationProvider({
     setHistory((current) => {
       const previous = current[current.length - 1];
       if (isSameRoute(previous, next)) return current;
-      return isTopLevel(next) ? [next] : [...current, next];
+      return isTopLevel(next) || isPublicRoute(next) ? [next] : [...current, next];
     });
   }, []);
 
@@ -81,6 +72,7 @@ export function NavigationProvider({
       back,
       canGoBack: history.length > 1,
       activeDestination: destinationOf(history),
+      isPublic: isPublicRoute(route),
     }),
     [route, history, navigate, back],
   );
@@ -107,6 +99,10 @@ export function isTopLevel(route: Route): route is { name: AppDestination } {
   return topLevelNames.includes(route.name);
 }
 
+export function isPublicRoute(route: Route): boolean {
+  return route.name === 'Splash' || route.name === 'SignIn' || route.name === 'SignUp';
+}
+
 function isSameRoute(a: Route | undefined, b: Route): boolean {
   if (!a || a.name !== b.name) return false;
   if (a.name === 'MessageThread' && b.name === 'MessageThread') {
@@ -117,10 +113,6 @@ function isSameRoute(a: Route | undefined, b: Route): boolean {
 
 /**
  * Which sidebar entry to mark as current.
- *
- * A conversation is reached from Contacts, so Contacts stays highlighted while
- * one is open — the sidebar should say where you are in the application, not go
- * blank the moment you drill into something.
  */
 function destinationOf(history: Route[]): AppDestination {
   for (let i = history.length - 1; i >= 0; i -= 1) {

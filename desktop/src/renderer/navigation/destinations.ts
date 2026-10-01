@@ -20,17 +20,13 @@ export interface NavEntry {
   digit: string;
   /**
    * The team member building the page, for the ones not on this branch.
-   *
-   * Victor owns Contacts, Messaging and Accessibility Settings plus the shell,
-   * matching the split on the React Native client. The rest render a
-   * placeholder that says whose work is landing there, rather than a dead tab.
    */
   owner?: string;
 }
 
 export const destinations: NavEntry[] = [
-  { destination: 'Home', icon: 'home', label: 'Home', command: 'navigate:home', digit: '1', owner: 'Justin' },
-  { destination: 'MyDay', icon: 'myDay', label: 'My Day', command: 'navigate:myDay', digit: '2', owner: 'Justin' },
+  { destination: 'Home', icon: 'home', label: 'Home', command: 'navigate:home', digit: '1' },
+  { destination: 'MyDay', icon: 'myDay', label: 'My Day', command: 'navigate:myDay', digit: '2' },
   {
     destination: 'Appointments',
     icon: 'appointments',

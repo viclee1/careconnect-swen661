@@ -31,14 +31,6 @@ const roleIcons: Record<ContactRole, IconName> = {
 
 /**
  * The conversation with one contact, opened from the Contacts page.
- *
- * The contact is identified by the route's `contactId`, so the page works from
- * a click on a row and from a restored route alike, and an id that no longer
- * exists lands on a recoverable state rather than a blank window.
- *
- * Two commands are registered here rather than handled locally, so the File
- * menu, the accelerator and the on-screen button are the same action: Send
- * (Ctrl/Cmd+Enter) and Alert (Ctrl/Cmd+Shift+N).
  */
 export function MessageThreadPage({
   contactId,
@@ -66,21 +58,18 @@ export function MessageThreadPage({
   const contactsLoaded = contacts.contacts.length > 0;
 
   useEffect(() => {
-    // Contacts may not be loaded yet if this page was reached without passing
-    // through the list — a restored route, or a menu command.
     if (!contactsLoaded) void loadContacts();
   }, [contactsLoaded, loadContacts]);
 
   useEffect(() => {
     void loadThread(contactId).then(() => {
-      // Opening the conversation is what clears its badge on the Contacts
-      // page — the two share one provider, so nothing is passed back.
       markRead(contactId);
     });
   }, [contactId, loadThread, markRead]);
 
   const contact = byId(contactId);
   const thread = messages.messagesFor(contactId);
+  const currentNow = now ?? (thread.length > 0 ? thread[thread.length - 1].sentAt : Date.now());
 
   const goBack = useCallback(() => {
     if (canGoBack) back();
@@ -111,9 +100,6 @@ export function MessageThreadPage({
     scrollToEnd();
   }, [contact, contactId, messages, scrollToEnd]);
 
-  // Ctrl/Cmd+Enter sends from anywhere on the page, not only from inside the
-  // textarea — the desktop expectation, and one fewer Tab for a keyboard user
-  // who has just finished typing somewhere else.
   useCommand('message:send', () => {
     composerRef.current?.submit();
   });
@@ -155,8 +141,6 @@ export function MessageThreadPage({
     <div
       className="thread-layout"
       onKeyDown={(event) => {
-        // Esc leaves the conversation, matching the Assignment 7 table's
-        // "close an open dialog, menu, popover, or other temporary interface".
         if (event.key === 'Escape') goBack();
       }}
     >
@@ -242,7 +226,7 @@ export function MessageThreadPage({
                   message={message}
                   contactName={contact.name}
                   showDayLabel={startsNewDay(thread, index)}
-                  now={now}
+                  now={currentNow}
                 />
               ))}
             </ul>

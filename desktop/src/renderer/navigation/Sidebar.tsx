@@ -5,29 +5,20 @@ import { isMacPlatform } from '../platform/bridge';
 import { shortcutLabel } from '../../shared/shortcuts';
 import { destinations } from './destinations';
 import { useNavigation } from './NavigationProvider';
+import { useAuth } from '../state/AuthProvider';
 
 /**
  * The persistent left sidebar — the desktop counterpart of the phone's bottom
- * tab bar, and the pattern Assignment 7 settled on: primary navigation stays
- * visible on the side, and the underlying workflow matches the mobile client so
- * a user moving between devices does not have to relearn the application.
- *
- * Three things mark the current page: a filled background, a border, and bold
- * text — plus `aria-current="page"`, which is what a screen reader announces.
- * None of them is colour on its own.
+ * tab bar.
  */
 export function Sidebar({ onShowShortcuts }: { onShowShortcuts: () => void }) {
   const { activeDestination, route, navigate } = useNavigation();
+  const { user } = useAuth();
   const listRef = useRef<HTMLDivElement>(null);
   const isMac = isMacPlatform();
 
-  /**
-   * Arrow-key movement inside the navigation list, per the Assignment 7
-   * keyboard table. Every item stays in the tab order as well — a landmark's
-   * links are expected to be tabbable, and taking that away to implement a
-   * roving tabindex would trade one convention for another rather than adding
-   * anything.
-   */
+  const userName = user?.name ? user.name.split(' ')[0] : 'Joyce';
+
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
 
@@ -46,11 +37,19 @@ export function Sidebar({ onShowShortcuts }: { onShowShortcuts: () => void }) {
   return (
     <nav className="sidebar on-dark" aria-label="Main">
       <div className="sidebar__brand">
-        <Icon name="logo" size={28} />
-        <span className="sidebar__brand-text">
-          <strong>CareConnect</strong>
-          <span>Margaret Whitfield</span>
-        </span>
+        <div className="sidebar__brand-header">
+          <Icon name="logo" size={28} />
+          <span className="sidebar__brand-title">CareConnect</span>
+        </div>
+
+        <div className="sidebar__recipient-badge">
+          <span>♡ Care Recipient</span>
+        </div>
+
+        <div className="sidebar__greeting">
+          <strong>Good morning, {userName}</strong>
+          <span className="sidebar__date">Thursday 4 June · 5:38 AM</span>
+        </div>
       </div>
 
       <div className="sidebar__nav" ref={listRef} onKeyDown={onKeyDown}>
@@ -80,14 +79,24 @@ export function Sidebar({ onShowShortcuts }: { onShowShortcuts: () => void }) {
         <button
           type="button"
           className="sidebar__item"
+          aria-label="Accessibility"
           aria-current={route.name === 'Settings' ? 'page' : undefined}
           onClick={() => navigate({ name: 'Settings' })}
         >
           <Icon name="settings" size={22} />
-          <span className="sidebar__label">Accessibility</span>
+          <span className="sidebar__label">Settings</span>
           <span className="sidebar__shortcut" aria-hidden="true">
             {shortcutLabel('CmdOrCtrl+,', isMac)}
           </span>
+        </button>
+
+        <button
+          type="button"
+          className="sidebar__item sidebar__item--alerts"
+          onClick={() => navigate({ name: 'Settings' })}
+        >
+          <Icon name="alert" size={22} />
+          <span className="sidebar__label">3 alerts</span>
         </button>
 
         <button type="button" className="sidebar__item" onClick={onShowShortcuts}>
