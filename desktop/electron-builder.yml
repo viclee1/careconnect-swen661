@@ -1,0 +1,39 @@
+appId: com.acuityhealth.careconnect
+productName: CareConnect
+copyright: © 2026 SWEN 661 Team 2 — The Acuity Health Group
+
+directories:
+  output: release
+  buildResources: build
+
+# Only the compiled output ships. The TypeScript sources and the test suite
+# have no business inside an installer.
+files:
+  - dist/**/*
+  - package.json
+
+mac:
+  category: public.app-category.medical
+  target:
+    - dmg
+  # Unsigned local builds: Gatekeeper still quarantines the .dmg, which is
+  # expected for a course submission and documented in the README.
+  identity: null
+
+dmg:
+  title: CareConnect ${version}
+
+win:
+  target:
+    - nsis
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+
+linux:
+  category: Utility
+  target:
+    - AppImage
+    - deb

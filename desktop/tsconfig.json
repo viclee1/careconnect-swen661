@@ -1,0 +1,23 @@
+{
+  // Editor-facing only: it exists so an IDE has one project covering every
+  // file. The three configs below are what the npm scripts actually build and
+  // check against, and each one is narrower than this.
+  //
+  //   tsconfig.renderer.json  the React renderer (bundled by Vite, never emitted)
+  //   tsconfig.main.json      the main and preload processes (emitted as CommonJS)
+  //   tsconfig.jest.json      the test suite, which is the only project with the
+  //                           Jest globals in scope
+  //
+  // Project references are deliberately not used. They require `composite`,
+  // whose build info would then have to be kept in step with a `dist/` this
+  // project deletes and rebuilds — for eight files that compile in under a
+  // second.
+  "extends": "./tsconfig.renderer.json",
+  "include": ["src", "vite.config.ts", "jest.setup.ts"],
+  "exclude": [],
+  "compilerOptions": {
+    "types": ["node", "jest", "@testing-library/jest-dom"],
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
+  }
+}
