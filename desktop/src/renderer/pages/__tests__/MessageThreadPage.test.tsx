@@ -4,7 +4,7 @@ import { createMockContactRepository } from '../../data/contactRepository';
 import { createMockMessageRepository } from '../../data/messageRepository';
 import { createInMemorySettingsRepository } from '../../data/settingsRepository';
 import { defaultSettings } from '../../models/accessibilitySettings';
-import { renderApp, tabbableElements } from '../../test-support/harness';
+import { installBridge, renderApp, tabbableElements } from '../../test-support/harness';
 
 /** The clock the seeded conversations are built around. */
 const now = new Date('2026-09-30T12:00:00').getTime();
@@ -189,6 +189,40 @@ describe('MessageThreadPage', () => {
         await screen.findByText(/You alerted Joyce that you want to talk/),
       ).toBeInTheDocument();
       expect(screen.getByText(/No sound was played/)).toBeInTheDocument();
+    });
+
+    it('posts a silent native notification when running in the desktop shell', async () => {
+      const desktop = installBridge();
+      try {
+        const { user } = openThread('c1');
+
+        await user.click(await screen.findByTestId('notify-button'));
+
+        await waitFor(() =>
+          expect(desktop.notify).toHaveBeenCalledWith({
+            title: 'Alert sent to Joyce',
+            body: 'Their phone flashed and vibrated. No sound was played.',
+          }),
+        );
+      } finally {
+        desktop.uninstall();
+      }
+    });
+
+    it('keeps the written record when the native notification fails', async () => {
+      const desktop = installBridge({ notify: jest.fn().mockRejectedValue(new Error('no service')) });
+      try {
+        const { user } = openThread('c1');
+
+        await user.click(await screen.findByTestId('notify-button'));
+
+        expect(
+          await screen.findByText(/You alerted Joyce that you want to talk/),
+        ).toBeInTheDocument();
+        expect(desktop.notify).toHaveBeenCalledTimes(1);
+      } finally {
+        desktop.uninstall();
+      }
     });
 
     it('fires on the platform shortcut', async () => {

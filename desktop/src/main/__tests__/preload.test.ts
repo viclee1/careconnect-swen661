@@ -42,11 +42,12 @@ describe('preload', () => {
     expect(Object.keys(exposed)).toEqual(['careconnect']);
   });
 
-  it('exposes the four surfaces the renderer is allowed, and nothing else', () => {
+  it('exposes the five surfaces the renderer is allowed, and nothing else', () => {
     // No `ipcRenderer`, no `require`, no Node globals. A channel the renderer
     // can invent is a channel an injected script can invoke.
     expect(Object.keys(bridge).sort()).toEqual([
       'app',
+      'notifications',
       'onMenuCommand',
       'settings',
       'window',
@@ -78,6 +79,14 @@ describe('preload', () => {
     await bridge.settings.save(settings);
 
     expect(invoke).toHaveBeenCalledWith('settings:save', settings);
+  });
+
+  it('sends the notification with a show', async () => {
+    const notification = { title: 'Alert sent to Maria', body: 'A visual flash, no sound.' };
+
+    await bridge.notifications.show(notification);
+
+    expect(invoke).toHaveBeenCalledWith('notification:show', notification);
   });
 
   describe('onMenuCommand', () => {

@@ -127,6 +127,24 @@ describe('buildMenu', () => {
     expect(labels).toContain('Accessibility Statement');
   });
 
+  it('follows Windows conventions: About under Help, no macOS-only zoom role', () => {
+    const windows = buildTemplate(false);
+    const help = windows.find((item) => item.role === 'help')?.submenu as Template;
+    const windowMenu = windows.find((item) => item.role === 'window')?.submenu as Template;
+
+    expect(help.at(-1)?.role).toBe('about');
+    expect(windowMenu.map((item) => item.role)).toEqual(['minimize', 'close']);
+
+    // On macOS About lives in the application menu instead.
+    const macHelp = buildTemplate(true).find((item) => item.role === 'help')?.submenu as Template;
+    expect(macHelp.map((item) => item.role)).not.toContain('about');
+  });
+
+  it('gives every Windows top-level menu an Alt-key mnemonic', () => {
+    const labels = buildTemplate(false).map((item) => item.label ?? '');
+    for (const label of labels) expect(label).toMatch(/^&/);
+  });
+
   it('does not expose developer tools in a packaged build', () => {
     const roles = flatten(buildTemplate(false)).map((item) => item.role);
     expect(roles).not.toContain('toggleDevTools');

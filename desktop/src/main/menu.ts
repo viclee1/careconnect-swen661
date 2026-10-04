@@ -147,7 +147,8 @@ export function buildMenu(
       label: '&Window',
       submenu: isMac
         ? [{ role: 'minimize' }, { role: 'zoom' }, { type: 'separator' }, { role: 'front' }]
-        : [{ role: 'minimize' }, { role: 'zoom' }, { role: 'close' }],
+        : // `zoom` is a macOS-only role; Windows maximizes from the title bar.
+          [{ role: 'minimize' }, { role: 'close' }],
     },
 
     {
@@ -170,6 +171,11 @@ export function buildMenu(
             void shell.openExternal('https://github.com/viclee1/careconnect-swen661');
           },
         },
+        // macOS puts About in the application menu; Windows and Linux put it
+        // last under Help.
+        ...(isMac
+          ? []
+          : ([{ type: 'separator' }, { role: 'about' }] satisfies MenuItemConstructorOptions[])),
       ],
     },
   ];

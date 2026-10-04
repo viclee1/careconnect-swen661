@@ -23,14 +23,26 @@ mac:
 dmg:
   title: CareConnect ${version}
 
+# Windows is the platform this submission targets. x64 covers every desktop the
+# team runs Windows on; the NSIS installer is a standard setup wizard.
 win:
   target:
-    - nsis
+    - target: nsis
+      arch:
+        - x64
+  # Unsigned: SmartScreen shows "Windows protected your PC" on first launch,
+  # which is expected for a course submission and documented in the README.
 
 nsis:
   oneClick: false
   perMachine: false
   allowToChangeInstallationDirectory: true
+  # The Start Menu shortcut carries the appId as its Application User Model ID,
+  # which is what lets Windows show CareConnect's Action Center notifications.
+  createStartMenuShortcut: true
+  createDesktopShortcut: true
+  shortcutName: CareConnect
+  artifactName: CareConnect-Setup-${version}.${ext}
 
 linux:
   category: Utility

@@ -13,6 +13,7 @@ import {
 } from '../models/contact';
 import { kindOf, startsNewDay } from '../models/message';
 import { useNavigation } from '../navigation/NavigationProvider';
+import { bridge } from '../platform/bridge';
 import { useCommand } from '../platform/CommandProvider';
 import { useContacts } from '../state/ContactsProvider';
 import { useMessages } from '../state/MessagesProvider';
@@ -96,7 +97,18 @@ export function MessageThreadPage({
   const handleNotify = useCallback(async () => {
     if (!contact) return;
     setFlashTrigger((current) => current + 1);
-    await messages.sendNotify(contactId, conversationNameOf(contact));
+    const name = conversationNameOf(contact);
+    await messages.sendNotify(contactId, name);
+    // Inside the desktop shell the alert also goes to the OS notification
+    // history — the Windows Action Center — so there is a record of it outside
+    // the app as well. A toast that fails to show changes nothing here: the
+    // flash and the written record in the conversation have already happened.
+    bridge()
+      ?.notifications.show({
+        title: `Alert sent to ${name}`,
+        body: 'Their phone flashed and vibrated. No sound was played.',
+      })
+      .catch(() => undefined);
     scrollToEnd();
   }, [contact, contactId, messages, scrollToEnd]);
 

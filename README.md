@@ -110,7 +110,7 @@ Instructor-assigned hearing-impairment constraints, mapped to WCAG 2.2:
 | Web — responsive application / PWA | React 18 + Vite + TypeScript + Tailwind | repository root (moving to `web/`) | Base app in place |
 | Mobile — Android and iOS | Flutter + Dart | `flutter/` | In progress — see [Flutter mobile client](#flutter-mobile-client) |
 | Mobile — Android and iOS | React Native + Expo | `mobile/` | In progress — see [React Native mobile client](#react-native-mobile-client) |
-| Desktop — macOS, Windows, Linux | Electron + React | `desktop/` | In progress — see [Electron desktop client](#electron-desktop-client) |
+| Desktop — Windows (also builds for macOS, Linux) | Electron + React | `desktop/` | Built for Assignment 8 — Windows installer; Rehman's three pages pending. See [Electron desktop client](#electron-desktop-client) |
 
 ---
 
@@ -301,11 +301,11 @@ careconnect-swen661/
 │   ├── src/**/__tests__/            # 274 tests — models, state, screens, navigation, component behavior
 │   ├── coverage/                    # lcov-report + lcov.info (generated locally, gitignored)
 │   └── README.md                    # points back to this section
-├── desktop/                         # Electron + React — desktop (in progress, see below)
-│   ├── src/main/                    # main process — window, native menu, IPC, persistence
+├── desktop/                         # Electron + React — desktop, Windows target (see below)
+│   ├── src/main/                    # main process — window, native menu, IPC, notifications, persistence
 │   ├── src/shared/                  # imported by both processes — IPC contract, shortcut table
 │   ├── src/renderer/                # the React app — pages, state, models, data, components
-│   ├── src/**/__tests__/            # 288 tests — models, main process, IPC, pages, keyboard
+│   ├── src/**/__tests__/            # 316 tests — models, main process, IPC, pages, keyboard
 │   ├── coverage/                    # lcov-report + lcov.info (generated locally, gitignored)
 │   ├── release/                     # installers (generated locally, gitignored)
 │   └── README.md                    # points back to this section
@@ -441,12 +441,12 @@ cd desktop
 npm install
 npm run dev              # Vite dev server + Electron, hot reload in the renderer
 npm start                # production build, then launch it
-npm run package:mac      # .dmg into release/   (also :win and :linux)
+npm run package:win      # Windows installer (.exe, x64) into release/   (also :mac and :linux)
 ```
 
 `npm install` downloads a ~120 MB Electron runtime the first time. The renderer also runs in a plain browser with `npm run dev:renderer` — every keyboard shortcut is bound in-window as well as in the native menu, and preferences fall back to `localStorage` when the Electron bridge is absent.
 
-Electron builds are most reliable on the OS being targeted. **macOS is the platform this submission targets**; a Windows installer should be produced on Windows or on a `windows-latest` CI runner and that build treated as authoritative.
+**Windows is the platform this submission targets.** `npm run package:win` produces `desktop/release/CareConnect-Setup-1.0.0.exe` from Windows or macOS; installing it is covered under [Packaging](#packaging).
 
 > **This section grows with the project.** Each member owns at least one platform build across the term. When you scaffold a platform, update its subsection here in the same pull request — setup instructions must work on a clean clone, and keeping them accurate is the Documentation Lead's standing responsibility.
 
@@ -464,6 +464,8 @@ These are the scripts currently defined in `package.json`:
 | `npm run lint` | Run ESLint across the project |
 | `npm run typecheck` | TypeScript check, no emit (`tsconfig.app.json`) |
 | `npm run screenshots` | Regenerate the README screenshots via Playwright |
+| `npm test` | Jest + React Testing Library |
+| `npm run test:coverage` | Jest with a coverage report in `coverage/lcov-report/` |
 
 Additional helper scripts in `scripts/` are run directly with Node: `node scripts/gen-icons.mjs`, `node scripts/verify-pwa.mjs`, `node scripts/verify-responsive.mjs`.
 
@@ -565,10 +567,10 @@ Timestamped log of taken/skipped doses and check-ins.
 
 - **Static checks** — ESLint (`npm run lint`) and TypeScript strict mode (`npm run typecheck`). Both must pass before a pull request merges.
 - **Playwright** — installed and used by `npm run screenshots` for automated screen capture, and by the `verify-pwa` / `verify-responsive` helper scripts.
+- **Unit & component tests** — Jest + React Testing Library (`npm test`, `npm run test:coverage`). The web app's suite covers the Appointments, Medications and Memories pages: 256 tests at 60.16% statement coverage. Each client has its own suite — see the [Flutter](#flutter-mobile-client), [React Native](#react-native-mobile-client) and [Electron](#electron-desktop-client) sections.
 
 **Planned**
 
-- **Unit & component tests** — a test runner and React Testing Library are not yet installed. Adding them, wiring an `npm test` script, and reaching the 60–75% coverage target from the course milestones is owned by the QA / Testing Lead. Coverage is read with Coverage Gutters from `lcov` output.
 - **End-to-end** — Playwright specs for core flows (sign in → take medication → caregiver sees adherence).
 
 **Accessibility verification**
@@ -941,7 +943,9 @@ Documentation for the Electron client is organized to match the course's documen
 
 ### Project description
 
-The desktop port of CareConnect, built from the Assignment 7 desktop design system and wireframes and sharing its business logic, palette and fixtures with the React Native client above. It carries Victor Lee's three pages — Contacts, Messaging and Accessibility Settings — plus the application shell: the persistent sidebar, the native menu bar, the keyboard shortcut system and window state management. Justin Zhang's and Rehman Uddin's pages are wired into the sidebar, the menu and the shortcuts, and render a page naming their owner until those branches land.
+The desktop port of CareConnect, built from the Assignment 7 desktop design system and wireframes and sharing its business logic, palette and fixtures with the React Native client above. It carries Victor Lee's three pages — Contacts, Messaging and Accessibility Settings — plus the application shell: the persistent sidebar, the native menu bar, the keyboard shortcut system, window state management and Windows notifications. Justin Zhang's Splash, Sign In, Sign Up, Home and My Day pages are ported. Rehman Uddin's Appointments, Medicines and Memories pages are wired into the sidebar, the menu and the shortcuts, and render a page naming their owner until that branch lands.
+
+**Target platform: Windows** (Windows 10/11, x64), packaged as an NSIS installer. A macOS `.dmg` is also built, for the team member developing on a Mac.
 
 **What is different from mobile, and why**
 
@@ -957,7 +961,7 @@ Assignment 7 settled these; the implementation follows them.
 
 **Process separation and security**
 
-The main process owns the window, the native menu and the two JSON files the app persists; it renders nothing. The renderer owns every pixel and reaches the main process only through a typed context bridge. `contextIsolation` is on, `nodeIntegration` is off, `sandbox` is on, the renderer carries a `script-src 'self'` CSP, and every external link opens in the user's browser rather than navigating the app window. The preload is bundled rather than compiled file-by-file, because a sandboxed preload cannot `require` a relative module — a bug the integration smoke test caught and the README records.
+The main process owns the window, the native menu and the two JSON files the app persists; it renders nothing. The renderer owns every pixel and reaches the main process only through a typed context bridge. `contextIsolation` is on, `nodeIntegration` is off, `sandbox` is on, the renderer carries a `script-src 'self'` CSP, and every external link opens in the user's browser rather than navigating the app window. The one bridge call that reaches the OS — `notifications.show` — takes only a title and body, which the main process re-validates and length-limits. The preload is bundled rather than compiled file-by-file, because a sandboxed preload cannot `require` a relative module — a bug the integration smoke test caught and the README records.
 
 **Keyboard shortcuts**
 
@@ -983,29 +987,39 @@ npm run typecheck        # three TypeScript projects: renderer, main, tests
 npm run test:coverage    # Jest + React Testing Library
 ```
 
-**288 tests across 18 suites, 88.6% statement coverage** — Assignment 8 requires 60%. The report is written to `desktop/coverage/lcov-report/index.html`.
+**316 tests across 25 suites, 86.8% statement coverage** — Assignment 8 requires 60%. The report is written to `desktop/coverage/lcov-report/index.html`.
 
 | Area | What is covered |
 |:-----|:----------------|
 | Models and utilities | 87 tests ported from the React Native client, plus the desktop-only rhythm timeline and contact search |
-| Main process | `jsonStore` 100%, `windowState` 97%, `menu` 81%, `preload` 100% — Electron is mocked so the menu template and the IPC bridge are asserted directly |
-| IPC | The preload's channel routing, the settings round trip in both directions, and the `localStorage` fallback |
+| Main process | `jsonStore` 100%, `windowState` 97%, `menu` 81%, `notifications` 100%, `preload` 100% — Electron is mocked so the menu template, the Windows menu conventions, the notification payload and the IPC bridge are asserted directly |
+| IPC | The preload's channel routing, the settings round trip in both directions, the notification call, and the `localStorage` fallback |
 | Contacts | The roster, previews, waiting badges, search, failure vs. empty states, and that no call button exists |
-| Messaging | Transcripts, caption status, delivery words, sending, the Notify alert and its written record, day grouping |
+| Messaging | Transcripts, caption status, delivery words, sending, the Notify alert, its written record and its native notification, day grouping |
 | Accessibility Settings | The banner that cannot be switched off, the conformance badge, caption preview, sliders, rhythm playback |
 | Keyboard | Every shortcut pressed for real, sidebar arrow keys, the skip link, the reference card's focus trap |
 
-Only `src/main/main.ts` is uncovered: it cannot run outside an Electron process. Each of the pieces it is assembled from is covered separately. In its place, the build was verified end-to-end — the packaged `.app` launches, renders the Contacts page, exposes the context bridge, and writes `window-state.json` on quit.
+Only `src/main/main.ts` is uncovered: it cannot run outside an Electron process. Each of the pieces it is assembled from is covered separately. In its place, the packaged build is run by hand — it launches, exposes the context bridge, and writes `window-state.json` on quit.
 
 ### Packaging
 
 ```bash
-npm run package:mac      # .dmg    ← the platform this submission targets
-npm run package:win      # .exe (NSIS)
+npm run package:win      # .exe (NSIS, x64)  ← the platform this submission targets
+npm run package:mac      # .dmg (host architecture)
 npm run package:linux    # .AppImage and .deb
 ```
 
-Installers land in `desktop/release/`. The macOS build is unsigned, so Gatekeeper quarantines it: right-click the app and choose **Open**, or run `xattr -dr com.apple.quarantine /Applications/CareConnect.app`.
+Installers land in `desktop/release/`: `CareConnect-Setup-1.0.0.exe` for Windows and `CareConnect-1.0.0-arm64.dmg` for Apple-silicon Macs. `package:win` runs on macOS as well as Windows; `--x64` is pinned because `electron-builder` otherwise builds for the host's architecture.
+
+- **Windows.** Run `CareConnect-Setup-1.0.0.exe`. It is unsigned, so SmartScreen shows *Windows protected your PC*: choose **More info**, then **Run anyway**. The wizard lets you pick the install folder and adds Start Menu and desktop shortcuts. Uninstall from *Settings → Apps*.
+- **macOS.** Open the `.dmg` and drag CareConnect to Applications. It is unsigned, so Gatekeeper quarantines it: right-click the app and choose **Open**, or run `xattr -dr com.apple.quarantine /Applications/CareConnect.app`.
+
+**Windows platform features**
+
+- **Native menu bar** in the window, each menu with an <kbd>Alt</kbd> mnemonic, Exit under File and About under Help.
+- **Native notifications.** A Notify alert also posts a silent Action Center toast ("Alert sent to Joyce"); clicking it brings the window back, and it stays in the notification history after it fades. The app sets its Application User Model ID to the installer's `appId`, which Windows requires before showing a toast.
+- **NSIS installer** with a choosable install folder, Start Menu and desktop shortcuts, and an uninstaller registered with Windows.
+- **Single instance.** Launching CareConnect again focuses the open window.
 
 ### Desktop accessibility
 
@@ -1013,26 +1027,27 @@ The governing rule is unchanged — **anything communicated through sound must a
 
 What the desktop adds:
 
+- **No sound-only or timer-only signal.** The Windows notification sent with a Notify alert is an extra copy, never the only one: the written record is already in the conversation, and the toast stays in the Action Center after it fades.
 - **Keyboard-only operation.** Every control is a native element — `<button>`, `<input type="range">`, `<input type="checkbox" role="switch">` — so Tab, Enter, Space, the arrow keys, Home and End come from the platform rather than being faked. A skip link is the first tab stop; the shortcut card traps focus and restores it on close.
 - **Focus indicators.** One ring, defined once, never removed, re-coloured on dark surfaces so it stays visible on the sidebar and page header.
-- **High contrast.** `@media (forced-colors: active)` restates the whole theme against the system's colour pairs and gives a border to everything that was distinguished by a fill alone; `@media (prefers-contrast: more)` covers macOS Increase Contrast.
+- **High contrast.** `@media (forced-colors: active)` — what Windows Contrast Themes switch on — restates the whole theme against the system's colour pairs and gives a border to everything that was distinguished by a fill alone; `@media (prefers-contrast: more)` covers macOS Increase Contrast.
 - **Zoom.** Every length is in `rem` with no `maximum-scale`, so <kbd>Ctrl/Cmd</kbd> + <kbd>+</kbd> scales the layout instead of clipping it. Below 960px the sidebar drops its labels and keeps its icons — the labels remain the accessible names, so a screen-reader user notices no difference.
 - **Reduced motion.** `prefers-reduced-motion` holds the Notify flash as a steady panel rather than pulsing: the same fact, without movement.
 
-Screen readers: tested with VoiceOver on macOS. Nothing is collapsed into an `aria-label` the way the React Native screens do it — every fact is real text in the document, so browse mode walks a conversation a line at a time and <kbd>Cmd</kbd> + <kbd>C</kbd> copies what is on screen.
+Screen readers: tested with VoiceOver on macOS; NVDA is the Windows screen reader to test the installed build with. Nothing is collapsed into an `aria-label` the way the React Native screens do it — every fact is real text in the document, so browse mode walks a conversation a line at a time and <kbd>Cmd</kbd> + <kbd>C</kbd> copies what is on screen.
 
 ### Known issues and limitations
 
 - **Data is in-memory.** Contacts and conversations come from the same Week 3 fixtures as the other clients. Messages sent during a session survive navigating away and back, and are lost on quit. Swapping in a backend is a change to `App.tsx`, where the repositories are constructed.
-- **Home, My Day, Appointments, Medicines and Memories are placeholders.** They are wired into the sidebar, the menu and the shortcuts; the pages themselves arrive from Justin's and Rehman's branches.
-- **Sign out is not wired up.** It belongs with the Welcome/Sign In/Sign Up pages on another branch. The button says so rather than doing nothing.
-- **The macOS build is unsigned and not notarized.** Expected for a course submission; the workaround is above.
+- **Appointments, Medicines and Memories are placeholders.** They are wired into the sidebar, the menu and the shortcuts; the pages themselves arrive from Rehman's branch.
+- **Sign in is not checked against a real account store.** The forms validate their input and any well-formed credentials sign in; sign out returns to the Splash page.
+- **The installers are unsigned** — no Authenticode signature on Windows, no notarization on macOS. Expected for a course submission; the SmartScreen and Gatekeeper workarounds are above.
 - **No system tray icon.** CareConnect has one window and no background work to report, so a tray icon would be a permanently idle menu-bar item.
 - **Vibration is configured, not delivered.** See the design-decision table above.
 
 ### AI usage
 
-Claude (Claude Code) was used to scaffold the Electron main/preload/renderer split, port the shared models and repositories from the React Native client, and draft the test suite. Every design decision recorded above — the sidebar, the search box, the send shortcut, the visual rhythm playback — comes from the Assignment 7 design work and was carried into the implementation deliberately. The bundled-preload fix and the window-state edge cases (a maximized window's restore bounds, a display that is no longer attached) were found by running the app and the tests, not by accepting generated code as correct.
+Claude (Claude Code) was used to scaffold the Electron main/preload/renderer split, add the Windows notification bridge and packaging configuration, port the shared models and repositories from the React Native client, and draft the test suite. Every design decision recorded above — the sidebar, the search box, the send shortcut, the visual rhythm playback — comes from the Assignment 7 design work and was carried into the implementation deliberately. The bundled-preload fix and the window-state edge cases (a maximized window's restore bounds, a display that is no longer attached) were found by running the app and the tests, not by accepting generated code as correct.
 
 ---
 

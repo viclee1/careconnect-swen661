@@ -36,6 +36,7 @@ export const invokeChannels = {
   settingsClear: 'settings:clear',
   windowGetState: 'window:get-state',
   appGetInfo: 'app:get-info',
+  notificationShow: 'notification:show',
 } as const;
 
 /** Channels the main process pushes to the renderer, unprompted. */
@@ -78,6 +79,12 @@ export interface AppInfo {
   platform: NodeJS.Platform;
 }
 
+/** A native OS notification — an Action Center toast on Windows. Always silent. */
+export interface DesktopNotification {
+  title: string;
+  body: string;
+}
+
 export interface WindowStateInfo {
   width: number;
   height: number;
@@ -104,6 +111,10 @@ export interface CareConnectBridge {
   };
   app: {
     getInfo(): Promise<AppInfo>;
+  };
+  notifications: {
+    /** Resolves `false` where the OS has no notification service. */
+    show(notification: DesktopNotification): Promise<boolean>;
   };
   /** Subscribes to menu commands. Returns the unsubscribe function. */
   onMenuCommand(handler: (command: MenuCommand) => void): () => void;

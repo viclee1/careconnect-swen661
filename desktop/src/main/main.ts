@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { invokeChannels, type AppInfo } from '../shared/ipc';
 import { createJsonStore } from './jsonStore';
 import { installMenu } from './menu';
+import { appUserModelId, showNotification } from './notifications';
 import {
   defaultWindowState,
   loadWindowState,
@@ -174,7 +175,21 @@ function registerIpcHandlers(): void {
       platform: process.platform,
     }),
   );
+
+  // Clicking a toast in the Windows Action Center brings the window back.
+  ipcMain.handle(invokeChannels.notificationShow, (_event, notification: unknown) =>
+    showNotification(notification, () => {
+      if (!mainWindow || mainWindow.isDestroyed()) return;
+      if (mainWindow.isMinimized()) mainWindow.restore();
+      mainWindow.show();
+      mainWindow.focus();
+    }),
+  );
 }
+
+// Windows shows no toasts for an app without an Application User Model ID, and
+// groups the taskbar button by it. It must be set before the first window.
+if (process.platform === 'win32') app.setAppUserModelId(appUserModelId);
 
 // One window is the whole application; a second instance focuses the first
 // rather than opening a competing copy of the user's care record.

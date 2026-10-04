@@ -17,8 +17,8 @@ folder.
 | Contacts | Victor | Built |
 | Messaging (conversation) | Victor | Built |
 | Accessibility Settings | Victor | Built |
-| Application shell — sidebar, native menu, shortcuts, window state | Victor | Built |
-| Home, My Day | Justin | Placeholder page, wired into navigation |
+| Application shell — sidebar, native menu, shortcuts, window state, Windows notifications | Victor | Built |
+| Splash, Sign In, Sign Up, Home, My Day | Justin | Built |
 | Appointments, Medicines, Memories | Rehman | Placeholder page, wired into navigation |
 
 The pages that have not been ported yet render a page that names their owner.
@@ -26,6 +26,10 @@ They are wired into the sidebar, the native menu and the keyboard shortcuts now
 rather than later, so navigation is complete and testable, and so a reviewer
 pressing <kbd>Ctrl</kbd> + <kbd>3</kbd> finds an explanation rather than a dead
 tab.
+
+**Target platform: Windows.** The submitted installer is
+`release/CareConnect-Setup-1.0.0.exe` (NSIS, x64). A macOS `.dmg` is also built
+for the team member developing on a Mac.
 
 ---
 
@@ -70,33 +74,62 @@ npm test             # Jest + React Testing Library
 npm run test:coverage
 ```
 
-Current state: **288 tests, 18 suites, 88.6% statement coverage** (Assignment 8
+Current state: **316 tests, 25 suites, 86.8% statement coverage** (Assignment 8
 requires 60%). The HTML report lands in `coverage/lcov-report/index.html`.
 
-The only files not covered are `src/main/main.ts`, which cannot run outside an
+The only file not covered is `src/main/main.ts`, which cannot run outside an
 Electron process — the pieces it is made of (`jsonStore`, `windowState`, `menu`,
-`preload`) are each covered separately, at 100%, 97%, 81% and 100%.
+`notifications`, `preload`) are each covered separately, at 100%, 97%, 81%,
+100% and 100%.
 
 ---
 
 ## Packaging
 
 ```bash
-npm run package        # the host platform
-npm run package:mac    # .dmg
-npm run package:win    # .exe (NSIS)
+npm run package:win    # .exe (NSIS, x64)   ← the platform this submission targets
+npm run package:mac    # .dmg (host architecture)
 npm run package:linux  # .AppImage and .deb
+npm run package        # every target for the host platform
 ```
 
-Installers land in `release/`. **macOS is the platform this submission targets**,
-and `release/CareConnect-1.0.0-arm64.dmg` is the artifact that was built and
-launched for it.
+Installers land in `release/`:
 
-The build is unsigned, so macOS quarantines it on first open. Right-click the
+| File | Platform |
+|:-----|:---------|
+| `CareConnect-Setup-1.0.0.exe` | Windows 10/11, x64 — **the submitted installer** |
+| `CareConnect-1.0.0-arm64.dmg` | macOS, Apple silicon |
+
+`package:win` works from macOS as well as Windows; `--x64` is pinned in the
+script because without it `electron-builder` builds for the host's
+architecture, which on an Apple-silicon Mac is an arm64 installer most Windows
+desktops cannot run.
+
+**Installing on Windows.** Run `CareConnect-Setup-1.0.0.exe`. The installer is
+unsigned, so SmartScreen shows *Windows protected your PC* — choose **More
+info**, then **Run anyway**. The setup wizard lets you choose the install
+folder and creates Start Menu and desktop shortcuts. Uninstall from
+*Settings → Apps*.
+
+**Installing on macOS.** Open the `.dmg` and drag CareConnect to Applications.
+The build is unsigned, so macOS quarantines it on first open: right-click the
 app and choose **Open**, or run
-`xattr -dr com.apple.quarantine /Applications/CareConnect.app`. Electron builds
-are most reliable on the OS being targeted; a Windows installer should be
-produced on Windows or on a `windows-latest` CI runner.
+`xattr -dr com.apple.quarantine /Applications/CareConnect.app`.
+
+### Windows platform features
+
+- **Native menu bar** — File, Edit, View, Go, Window, Help in the window's menu
+  bar, each with an <kbd>Alt</kbd> mnemonic (<kbd>Alt</kbd> + <kbd>F</kbd> opens
+  File), Exit under File and About under Help, as Windows apps lay them out.
+- **Native notifications** — sending a Notify alert posts a silent Action Center
+  toast ("Alert sent to Joyce"). Clicking it restores and focuses the window,
+  and it stays in the notification history after it fades. The app sets its
+  Application User Model ID to the `appId` in `electron-builder.yml`, which is
+  what Windows requires before it shows a toast; a test keeps the two in step.
+- **Installer** — an NSIS setup wizard with a choosable install folder, Start
+  Menu and desktop shortcuts, and an uninstaller registered with Windows.
+- **Single instance** — launching CareConnect again focuses the open window
+  rather than starting a second copy.
 
 ---
 
@@ -110,6 +143,7 @@ desktop/
 │   │   ├── menu.ts          the native File/Edit/View/Go/Window/Help menu
 │   │   ├── preload.ts       the context bridge — bundled, see below
 │   │   ├── windowState.ts   remembering size and position, safely
+│   │   ├── notifications.ts native OS notifications — Windows Action Center
 │   │   └── jsonStore.ts     the small JSON files the app persists
 │   ├── shared/          # imported by BOTH processes
 │   │   ├── ipc.ts           channel names and payload types
@@ -120,7 +154,8 @@ desktop/
 │       ├── state/           React context providers
 │       ├── navigation/      the typed router and the sidebar
 │       ├── platform/        the Electron bridge, commands, key matching
-│       ├── pages/           Contacts, MessageThread, Settings, Placeholder
+│       ├── pages/           Splash, Sign In/Up, Home, My Day, Contacts,
+│       │                    MessageThread, Settings, Placeholder
 │       ├── components/      buttons, banners, the shortcut card
 │       └── index.css        the whole stylesheet, including high-contrast
 └── electron-builder.yml
@@ -133,8 +168,10 @@ application persists. It renders nothing. The renderer owns every pixel and
 reaches the main process only through the typed surface in `preload.ts`.
 
 `contextIsolation` is on, `nodeIntegration` is off and `sandbox` is on. The
-renderer gets four objects on `window.careconnect` and no `ipcRenderer`, so
-there is no channel it can invent and no filesystem it can reach. The renderer's
+renderer gets five objects on `window.careconnect` and no `ipcRenderer`, so
+there is no channel it can invent and no filesystem it can reach. The one that
+reaches the OS — `notifications.show` — takes only a title and body, which the
+main process re-validates and length-limits before passing them on. The renderer's
 `index.html` carries a `script-src 'self'` Content Security Policy, so a message
 body or a contact name can never be executed.
 
@@ -198,8 +235,11 @@ What that means here:
 - **Status is a shape *plus* a word.** Switches print "On"/"Off", the contact
   badge prints "waiting", the current sidebar item is filled, outlined, bold and
   carries `aria-current="page"`.
-- **No toasts.** Nothing disappears on a timer. Confirmations are dismissible
-  in-page banners.
+- **No in-app toasts.** Nothing in the window disappears on a timer.
+  Confirmations are dismissible in-page banners. The Windows notification sent
+  with a Notify alert is an *extra* copy, never the only one: the written record
+  is already in the conversation, and the toast itself stays in the Action
+  Center history after it fades.
 - **The Notify flash is one slow fade, never a strobe** (WCAG 2.2 SC 2.3.1), and
   it carries words.
 - **An error state never reads as an empty state.** "No messages yet" tells a
@@ -214,9 +254,9 @@ Desktop-specific work:
   focus and restores it on close.
 - **Focus indicators.** One ring, defined once, never removed, and re-coloured
   on dark surfaces so it stays visible on the sidebar and the page header.
-- **High contrast.** `@media (forced-colors: active)` restates the whole theme
-  against the system's own colour pairs, and everything that was distinguished
-  by a fill alone gains a border. `@media (prefers-contrast: more)` covers macOS
+- **High contrast.** `@media (forced-colors: active)`, which Windows Contrast
+  Themes switch on, restates the whole theme against the system's own colour
+  pairs, and everything that was distinguished by a fill alone gains a border. `@media (prefers-contrast: more)` covers macOS
   Increase Contrast.
 - **Zoom.** Every length is in `rem` and no `maximum-scale` is set, so
   <kbd>Ctrl/Cmd</kbd> + <kbd>+</kbd> scales the layout instead of clipping it.
@@ -225,7 +265,8 @@ Desktop-specific work:
 - **Reduced motion.** `prefers-reduced-motion` holds the Notify flash as a
   steady panel instead of pulsing — the same fact, without movement.
 
-Screen readers: tested with VoiceOver on macOS. Everything is real text in the
+Screen readers: tested with VoiceOver on macOS; NVDA is the Windows screen
+reader to test the installed build with. Everything is real text in the
 document rather than collapsed into `aria-label`s, so browse mode can walk a
 conversation a line at a time and <kbd>Cmd</kbd> + <kbd>C</kbd> copies what is on
 screen.
@@ -243,8 +284,10 @@ screen.
   during a session survive navigating away and back, and are lost on quit.
   Swapping in a real backend is a change to `App.tsx`, where the repositories are
   constructed.
-- **Sign out is not wired up.** It belongs with the Welcome/Sign In/Sign Up
-  pages, which are on another branch. The button says so rather than doing
-  nothing.
+- **Sign in is not checked against a real account store.** The forms validate
+  their input; any well-formed credentials sign in. Sign out returns to the
+  Splash page.
+- **The installers are unsigned.** Expected for a course submission;
+  SmartScreen and Gatekeeper workarounds are under Packaging.
 - **No system tray icon.** CareConnect has one window and no background work to
   report, so a tray icon would be a permanently idle menu-bar item.

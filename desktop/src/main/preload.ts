@@ -4,6 +4,7 @@ import { eventChannels, invokeChannels, type MenuCommand } from '../shared/ipc';
 import type {
   AppInfo,
   CareConnectBridge,
+  DesktopNotification,
   PersistedSettings,
   StoredSettings,
   WindowStateInfo,
@@ -12,7 +13,7 @@ import type {
 /**
  * The bridge between the two processes.
  *
- * `ipcRenderer` itself is never exposed. The renderer gets these four objects
+ * `ipcRenderer` itself is never exposed. The renderer gets these five objects
  * and nothing else, so there is no channel name it can invent and no way for
  * page content to reach the filesystem — which is the point of running with
  * `contextIsolation: true` and `nodeIntegration: false` in the first place.
@@ -31,6 +32,11 @@ const bridge: CareConnectBridge = {
 
   app: {
     getInfo: (): Promise<AppInfo> => ipcRenderer.invoke(invokeChannels.appGetInfo),
+  },
+
+  notifications: {
+    show: (notification: DesktopNotification): Promise<boolean> =>
+      ipcRenderer.invoke(invokeChannels.notificationShow, notification),
   },
 
   onMenuCommand: (handler: (command: MenuCommand) => void): (() => void) => {

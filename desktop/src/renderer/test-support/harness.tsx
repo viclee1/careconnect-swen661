@@ -54,11 +54,13 @@ export function installBridge(
     load: jest.Mock;
     save: jest.Mock;
     clear: jest.Mock;
+    notify: jest.Mock;
   }> = {},
 ) {
   const load = overrides.load ?? jest.fn().mockResolvedValue({});
   const save = overrides.save ?? jest.fn().mockResolvedValue(undefined);
   const clear = overrides.clear ?? jest.fn().mockResolvedValue(undefined);
+  const notify = overrides.notify ?? jest.fn().mockResolvedValue(true);
 
   let menuHandler: ((command: never) => void) | null = null;
 
@@ -79,6 +81,7 @@ export function installBridge(
         platform: 'darwin',
       }),
     },
+    notifications: { show: notify },
     onMenuCommand: (handler) => {
       menuHandler = handler as (command: never) => void;
       return () => {
@@ -91,6 +94,7 @@ export function installBridge(
     load,
     save,
     clear,
+    notify,
     /** Fires a menu command as the main process would. */
     emitMenuCommand: (command: string) => {
       menuHandler?.(command as never);

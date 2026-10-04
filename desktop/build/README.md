@@ -4,16 +4,9 @@
 `../electron-builder.yml`) for packaging assets that are not part of the
 application bundle itself.
 
-Nothing is required here — the current builds use Electron's default icon, and
-`electron-builder` logs `default Electron icon is used` when it packages. To
-give CareConnect its own icon, drop the files below in and rebuild; no config
-change is needed.
+| File | Used for |
+|:-----|:---------|
+| `icon.png` | 512×512 source icon. `electron-builder` converts it to the Windows `.ico` (with its required 256×256 frame), the macOS `.icns` and the Linux icon at package time, so no per-platform file is kept here. |
 
-| File | Platform | Requirement |
-|:-----|:---------|:------------|
-| `icon.icns` | macOS | 512×512 or larger |
-| `icon.ico` | Windows | must contain a 256×256 frame |
-| `icon.png` | Linux | 512×512 |
-
-The source artwork is the heart-pulse mark in the Assignment 3 design system,
-drawn in `#0F5272` on white.
+The artwork is the heart mark from the web app's PWA icon set
+(`../../public/icons/icon-512.png`), drawn in `#0F5272` on transparent.
