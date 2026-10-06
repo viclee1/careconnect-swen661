@@ -72,6 +72,39 @@ describe('matchesAccelerator', () => {
   it('ignores a bare key press with no modifier', () => {
     expect(matchesAccelerator(event({ key: 'f' }), 'CmdOrCtrl+F', false)).toBe(false);
   });
+
+  it.each(['CommandOrControl', 'Cmd', 'Command', 'Ctrl', 'Control'])(
+    'treats %s as the platform modifier',
+    (modifier) => {
+      expect(matchesAccelerator(event({ key: 'f', ctrlKey: true }), `${modifier}+F`, false)).toBe(
+        true,
+      );
+      expect(matchesAccelerator(event({ key: 'f', metaKey: true }), `${modifier}+F`, true)).toBe(
+        true,
+      );
+    },
+  );
+
+  it('accepts Option as a spelling of Alt', () => {
+    expect(matchesAccelerator(event({ key: 'ArrowLeft', altKey: true }), 'Option+Left', true)).toBe(
+      true,
+    );
+  });
+
+  it('maps Right, Esc and Escape to the keys the browser reports', () => {
+    expect(matchesAccelerator(event({ key: 'ArrowRight', altKey: true }), 'Alt+Right', false)).toBe(
+      true,
+    );
+    for (const name of ['Esc', 'Escape']) {
+      expect(matchesAccelerator(event({ key: 'Escape', ctrlKey: true }), `Ctrl+${name}`, false)).toBe(
+        true,
+      );
+    }
+  });
+
+  it('matches nothing when the accelerator has no key', () => {
+    expect(matchesAccelerator(event({ key: 'Control', ctrlKey: true }), 'Ctrl', false)).toBe(false);
+  });
 });
 
 describe('commandForEvent', () => {

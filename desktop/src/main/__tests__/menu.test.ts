@@ -24,8 +24,13 @@ jest.mock(
   { virtual: true },
 );
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const { buildMenu } = require('../menu') as typeof import('../menu');
+/* eslint-disable @typescript-eslint/no-require-imports */
+const { buildMenu, installMenu } = require('../menu') as typeof import('../menu');
+const electron = require('electron') as {
+  Menu: { setApplicationMenu: jest.Mock };
+  shell: { openExternal: jest.Mock };
+};
+/* eslint-enable @typescript-eslint/no-require-imports */
 
 type Template = MenuItemConstructorOptions[];
 
@@ -148,5 +153,39 @@ describe('buildMenu', () => {
   it('does not expose developer tools in a packaged build', () => {
     const roles = flatten(buildTemplate(false)).map((item) => item.role);
     expect(roles).not.toContain('toggleDevTools');
+  });
+
+  it('opens the accessibility statement and the repository in the browser', () => {
+    const help = buildTemplate(false).find((item) => item.role === 'help')?.submenu as Template;
+    const click = (label: string) =>
+      (help.find((item) => item.label === label)?.click as () => void)();
+
+    click('Accessibility Statement');
+    expect(electron.shell.openExternal).toHaveBeenLastCalledWith(
+      'https://github.com/viclee1/careconnect-swen661/blob/main/ACCESSIBILITY.md',
+    );
+
+    click('Project Repository');
+    expect(electron.shell.openExternal).toHaveBeenLastCalledWith(
+      'https://github.com/viclee1/careconnect-swen661',
+    );
+  });
+
+  it('sends nothing to a window that has already closed', () => {
+    const send = jest.fn();
+    const closed = { isDestroyed: () => true, webContents: { send } } as unknown as BrowserWindow;
+    const template = buildMenu(closed, { isMac: false }) as unknown as Template;
+    const home = flatten(template).find((item) => item.label === 'Home');
+
+    (home?.click as () => void)();
+    expect(send).not.toHaveBeenCalled();
+  });
+});
+
+describe('installMenu', () => {
+  it('installs the built menu as the application menu', () => {
+    const menu = installMenu(fakeWindow);
+    expect(electron.Menu.setApplicationMenu).toHaveBeenCalledWith(menu);
+    expect(topLevelLabels(menu as unknown as Template)).toContain('Help');
   });
 });

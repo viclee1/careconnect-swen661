@@ -305,7 +305,7 @@ careconnect-swen661/
 │   ├── src/main/                    # main process — window, native menu, IPC, notifications, persistence
 │   ├── src/shared/                  # imported by both processes — IPC contract, shortcut table
 │   ├── src/renderer/                # the React app — pages, state, models, data, components
-│   ├── src/**/__tests__/            # 421 tests — models, main process, IPC, pages, keyboard
+│   ├── src/**/__tests__/            # 471 tests — models, main process, IPC, pages, keyboard
 │   ├── coverage/                    # lcov-report + lcov.info (generated locally, gitignored)
 │   ├── release/                     # installers (generated locally, gitignored)
 │   └── README.md                    # points back to this section
@@ -987,12 +987,12 @@ npm run typecheck        # three TypeScript projects: renderer, main, tests
 npm run test:coverage    # Jest + React Testing Library
 ```
 
-**421 tests across 36 suites, 93.8% statement coverage** — Assignment 8 requires 60%. The report is written to `desktop/coverage/lcov-report/index.html`; the submitted screenshot is [`docs/screenshots/desktop/coverage.png`](docs/screenshots/desktop/coverage.png).
+**471 tests across 38 suites, 96.7% statement coverage** — Assignment 8 requires 60%. The report is written to `desktop/coverage/lcov-report/index.html`; the submitted screenshot is [`docs/screenshots/desktop/coverage.png`](docs/screenshots/desktop/coverage.png).
 
 | Area | What is covered |
 |:-----|:----------------|
 | Models and utilities | 87 tests ported from the React Native client, plus the desktop-only rhythm timeline and contact search |
-| Main process | `main` 90% (integration suite below), `jsonStore` 100%, `windowState` 97%, `menu` 81%, `notifications` 100%, `preload` 100% — Electron is mocked so the menu template, the Windows menu conventions, the notification payload and the IPC bridge are asserted directly |
+| Main process | `main` 90% (integration suite below), `jsonStore` 100%, `windowState` 97%, `menu` 100%, `notifications` 100%, `preload` 100% — Electron is mocked so the menu template, the Windows menu conventions, the notification payload and the IPC bridge are asserted directly |
 | IPC (integration) | `main.test.ts` loads `main.ts` and `preload.ts` against one fake Electron and routes `ipcRenderer.invoke` to the registered `ipcMain` handlers, so settings save/load/clear, input rejection, app info, window state and notifications cross the real main ↔ renderer path to disk and back |
 | Window management (integration) | Security `webPreferences`, first-launch size, restoring size/position/maximised, debounced save on resize, save on close, blocked navigation and new windows, single-instance focus, dock `activate` |
 | IPC (unit) | The preload's channel routing, the settings round trip in both directions, the notification call, and the `localStorage` fallback |
@@ -1000,6 +1000,8 @@ npm run test:coverage    # Jest + React Testing Library
 | Messaging | Transcripts, caption status, delivery words, sending, the Notify alert, its written record and its native notification, day grouping |
 | Appointments, Medicines, Memories | Visit cards, loading/error/empty states, the `.ics` calendar export and its date handling; medicine checkboxes and the "2 of 3 taken" status; the memory card grid and its headings; each page's provider |
 | Accessibility Settings | The banner that cannot be switched off, the conformance badge, caption preview, sliders, rhythm playback |
+| Splash, Sign In, Sign Up | Every validation message (missing fields, invalid email, short password, mismatched confirmation), recovering from errors, the error banner, and every navigation button; the auth provider's sign in/up/out and its saved session |
+| Home, My Day and the shared header | The appointment banner (pause/resume, acknowledge), the captioned reminder, the toolbar's Home, Alerts, shortcut and contrast buttons, task toggling by click, Enter and Space, and tasks kept across restarts |
 | Keyboard | Every shortcut pressed for real, sidebar arrow keys, the skip link, the reference card's focus trap |
 
 `src/main/main.ts` is covered by the integration suite, against a fake Electron. The packaged build is also run by hand — it launches, exposes the context bridge, and writes `window-state.json` on quit.

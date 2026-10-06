@@ -68,7 +68,7 @@ npm test             # Jest + React Testing Library
 npm run test:coverage
 ```
 
-Current state: **421 tests, 36 suites, 93.8% statement coverage** (Assignment 8
+Current state: **471 tests, 38 suites, 96.7% statement coverage** (Assignment 8
 requires 60%). The HTML report lands in `coverage/lcov-report/index.html`; a
 screenshot of it is at
 [`docs/screenshots/desktop/coverage.png`](../docs/screenshots/desktop/coverage.png).

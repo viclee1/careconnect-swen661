@@ -42,4 +42,15 @@ describe('SplashPage', () => {
       await screen.findByRole('heading', { level: 1, name: /create your account/i }),
     ).toBeInTheDocument();
   });
+
+  it.each([
+    ['I already have an account', /welcome back/i],
+    ['Sign in', /welcome back/i],
+    ['Sign up', /create your account/i],
+  ])('"%s" opens the right form', async (button, heading) => {
+    const { user } = renderApp({ repositories: repositories(), initialRoute: { name: 'Splash' } });
+    await user.click(await screen.findByRole('button', { name: button }));
+    expect(await screen.findByRole('heading', { level: 1, name: heading })).toBeInTheDocument();
+  });
 });
+

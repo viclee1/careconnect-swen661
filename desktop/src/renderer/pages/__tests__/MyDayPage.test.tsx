@@ -41,3 +41,53 @@ describe('MyDayPage', () => {
     expect(checkInTask).toHaveAttribute('aria-pressed', 'true');
   });
 });
+
+describe('MyDayPage — keyboard and persistence', () => {
+  beforeEach(() => localStorage.clear());
+
+  const openMyDay = async () => {
+    const rendered = renderApp({ repositories: repositories(), initialRoute: { name: 'MyDay' } });
+    await screen.findByRole('heading', { level: 1, name: 'My Day' });
+    return rendered;
+  };
+
+  it.each([['Enter', '{Enter}'], ['Space', ' ']])('toggles a task with %s', async (_key, keys) => {
+    const { user } = await openMyDay();
+    const task = screen.getByRole('button', { name: /morning check-in/i });
+
+    task.focus();
+    await user.keyboard(keys);
+    expect(task).toHaveAttribute('aria-pressed', 'true');
+    await user.keyboard(keys);
+    expect(task).toHaveAttribute('aria-pressed', 'false');
+  });
+
+  it('ignores other keys', async () => {
+    const { user } = await openMyDay();
+    const task = screen.getByRole('button', { name: /morning check-in/i });
+    task.focus();
+    await user.keyboard('a');
+    expect(task).toHaveAttribute('aria-pressed', 'false');
+  });
+
+  it('keeps a completed task completed after the app is reopened', async () => {
+    const first = await openMyDay();
+    await first.user.click(screen.getByRole('button', { name: /morning check-in/i }));
+    first.unmount();
+
+    await openMyDay();
+    expect(screen.getByRole('button', { name: /morning check-in/i })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+  });
+
+  it('falls back to the default list when the saved tasks are unreadable', async () => {
+    localStorage.setItem('careconnect_desktop_myday_tasks', '{not json');
+    await openMyDay();
+    expect(screen.getByRole('button', { name: /morning check-in/i })).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    );
+  });
+});
