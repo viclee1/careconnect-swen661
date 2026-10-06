@@ -101,6 +101,9 @@ Installers land in `release/`:
 | `CareConnect-Setup-1.0.0.exe` | Windows 10/11, x64 — **the submitted installer** |
 | `CareConnect-1.0.0-arm64.dmg` | macOS, Apple silicon |
 
+Both are over GitHub's 100 MB file limit, so they are not committed: download
+them from the [latest release](https://github.com/viclee1/careconnect-swen661/releases/latest).
+
 `package:win` works from macOS as well as Windows; `--x64` is pinned in the
 script because without it `electron-builder` builds for the host's
 architecture, which on an Apple-silicon Mac is an arm64 installer most Windows
