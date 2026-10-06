@@ -1,7 +1,16 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { ShortcutsDialog } from './components/ShortcutsDialog';
+import {
+  createMockAppointmentRepository,
+  type AppointmentRepository,
+} from './data/appointmentRepository';
 import { createMockContactRepository, type ContactRepository } from './data/contactRepository';
+import {
+  createMockMedicineRepository,
+  type MedicineRepository,
+} from './data/medicineRepository';
+import { createMockMemoryRepository, type MemoryRepository } from './data/memoryRepository';
 import {
   createMockMessageRepository,
   type MessageRepository,
@@ -15,8 +24,11 @@ import {
 } from './navigation/NavigationProvider';
 import { Sidebar } from './navigation/Sidebar';
 import { CommandProvider, useCommand } from './platform/CommandProvider';
+import { AppointmentsPage } from './pages/AppointmentsPage';
 import { ContactsPage } from './pages/ContactsPage';
 import { HomePage } from './pages/HomePage';
+import { MedicinesPage } from './pages/MedicinesPage';
+import { MemoriesPage } from './pages/MemoriesPage';
 import { MessageThreadPage } from './pages/MessageThreadPage';
 import { MyDayPage } from './pages/MyDayPage';
 import { PlaceholderPage } from './pages/PlaceholderPage';
@@ -24,8 +36,11 @@ import { SettingsPage } from './pages/SettingsPage';
 import { SignInPage } from './pages/SignInPage';
 import { SignUpPage } from './pages/SignUpPage';
 import { SplashPage } from './pages/SplashPage';
+import { AppointmentsProvider } from './state/AppointmentsProvider';
 import { AuthProvider } from './state/AuthProvider';
 import { ContactsProvider } from './state/ContactsProvider';
+import { MedicinesProvider } from './state/MedicinesProvider';
+import { MemoriesProvider } from './state/MemoriesProvider';
 import { MessagesProvider } from './state/MessagesProvider';
 import { SettingsProvider, useSettings } from './state/SettingsProvider';
 
@@ -33,6 +48,9 @@ export interface Repositories {
   contacts?: ContactRepository;
   messages?: MessageRepository;
   settings?: SettingsRepository;
+  appointments?: AppointmentRepository;
+  medicines?: MedicineRepository;
+  memories?: MemoryRepository;
 }
 
 /**
@@ -57,17 +75,35 @@ export function App({
     () => repositories.settings ?? createSettingsRepository(),
     [repositories.settings],
   );
+  const appointments = useMemo(
+    () => repositories.appointments ?? createMockAppointmentRepository(),
+    [repositories.appointments],
+  );
+  const medicines = useMemo(
+    () => repositories.medicines ?? createMockMedicineRepository(),
+    [repositories.medicines],
+  );
+  const memories = useMemo(
+    () => repositories.memories ?? createMockMemoryRepository(),
+    [repositories.memories],
+  );
 
   return (
     <AuthProvider>
       <ContactsProvider repository={contacts}>
         <MessagesProvider repository={messages}>
           <SettingsProvider repository={settings}>
-            <NavigationProvider initialRoute={initialRoute ?? { name: 'Splash' }}>
-              <CommandProvider>
-                <Shell />
-              </CommandProvider>
-            </NavigationProvider>
+            <AppointmentsProvider repository={appointments}>
+              <MedicinesProvider repository={medicines}>
+                <MemoriesProvider repository={memories}>
+                  <NavigationProvider initialRoute={initialRoute ?? { name: 'Splash' }}>
+                    <CommandProvider>
+                      <Shell />
+                    </CommandProvider>
+                  </NavigationProvider>
+                </MemoriesProvider>
+              </MedicinesProvider>
+            </AppointmentsProvider>
           </SettingsProvider>
         </MessagesProvider>
       </ContactsProvider>
@@ -164,6 +200,15 @@ function Page({
   }
   if (route.name === 'Contacts') {
     return <ContactsPage />;
+  }
+  if (route.name === 'Appointments') {
+    return <AppointmentsPage />;
+  }
+  if (route.name === 'Medicines') {
+    return <MedicinesPage />;
+  }
+  if (route.name === 'Memories') {
+    return <MemoriesPage />;
   }
   return <PlaceholderPage destination={route.name} />;
 }

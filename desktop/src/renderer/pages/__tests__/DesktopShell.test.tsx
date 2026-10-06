@@ -287,27 +287,20 @@ describe('the desktop shell', () => {
     });
   });
 
-  describe('pages owned by other branches', () => {
-    it('says whose work is landing there instead of showing a dead tab', async () => {
+  describe('every destination is a real page', () => {
+    it.each([
+      ['Appointments', 'Upcoming medical visits'],
+      ['Medicines', "Today's medication tracker"],
+      ['Memories', 'Captured moments and milestones'],
+    ])('opens %s from the sidebar', async (label, subtitle) => {
       const { user } = renderApp({ repositories: repositories() });
       await screen.findByTestId('contact-c1');
 
-      await user.click(screen.getByRole('button', { name: 'Appointments' }));
+      await user.click(screen.getByRole('button', { name: label }));
 
-      expect(
-        await screen.findByRole('heading', { name: /appointments is not on this branch yet/i }),
-      ).toBeInTheDocument();
-      expect(screen.getByText('Owner: Rehman')).toBeInTheDocument();
-    });
-
-    it('offers a way back to a page that does exist', async () => {
-      const { user } = renderApp({ repositories: repositories() });
-      await screen.findByTestId('contact-c1');
-
-      await user.click(screen.getByRole('button', { name: 'Memories' }));
-      await user.click(await screen.findByRole('button', { name: 'Go to Contacts' }));
-
-      expect(await screen.findByTestId('contact-c1')).toBeInTheDocument();
+      expect(await screen.findByRole('heading', { level: 1, name: label })).toBeInTheDocument();
+      expect(screen.getByText(subtitle)).toBeInTheDocument();
+      expect(screen.queryByText(/not on this branch yet/i)).not.toBeInTheDocument();
     });
   });
 });
