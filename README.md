@@ -110,7 +110,7 @@ Instructor-assigned hearing-impairment constraints, mapped to WCAG 2.2:
 | Web — responsive application / PWA | React 18 + Vite + TypeScript + Tailwind | repository root (moving to `web/`) | Base app in place |
 | Mobile — Android and iOS | Flutter + Dart | `flutter/` | In progress — see [Flutter mobile client](#flutter-mobile-client) |
 | Mobile — Android and iOS | React Native + Expo | `mobile/` | In progress — see [React Native mobile client](#react-native-mobile-client) |
-| Desktop — Windows (also builds for macOS, Linux) | Electron + React | `desktop/` | Built for Assignment 8 — Windows installer; Rehman's three pages pending. See [Electron desktop client](#electron-desktop-client) |
+| Desktop — Windows (also builds for macOS, Linux) | Electron + React | `desktop/` | Built for Assignment 8 — Windows installer; all eleven pages ported. See [Electron desktop client](#electron-desktop-client) |
 
 ---
 
@@ -305,7 +305,7 @@ careconnect-swen661/
 │   ├── src/main/                    # main process — window, native menu, IPC, notifications, persistence
 │   ├── src/shared/                  # imported by both processes — IPC contract, shortcut table
 │   ├── src/renderer/                # the React app — pages, state, models, data, components
-│   ├── src/**/__tests__/            # 316 tests — models, main process, IPC, pages, keyboard
+│   ├── src/**/__tests__/            # 421 tests — models, main process, IPC, pages, keyboard
 │   ├── coverage/                    # lcov-report + lcov.info (generated locally, gitignored)
 │   ├── release/                     # installers (generated locally, gitignored)
 │   └── README.md                    # points back to this section
@@ -943,7 +943,7 @@ Documentation for the Electron client is organized to match the course's documen
 
 ### Project description
 
-The desktop port of CareConnect, built from the Assignment 7 desktop design system and wireframes and sharing its business logic, palette and fixtures with the React Native client above. It carries Victor Lee's three pages — Contacts, Messaging and Accessibility Settings — plus the application shell: the persistent sidebar, the native menu bar, the keyboard shortcut system, window state management and Windows notifications. Justin Zhang's Splash, Sign In, Sign Up, Home and My Day pages are ported. Rehman Uddin's Appointments, Medicines and Memories pages are wired into the sidebar, the menu and the shortcuts, and render a page naming their owner until that branch lands.
+The desktop port of CareConnect, built from the Assignment 7 desktop design system and wireframes and sharing its business logic, palette and fixtures with the React Native client above. It carries Victor Lee's three pages — Contacts, Messaging and Accessibility Settings — plus the application shell: the persistent sidebar, the native menu bar, the keyboard shortcut system, window state management and Windows notifications. Justin Zhang's Splash, Sign In, Sign Up, Home and My Day pages are ported. Upneet Bir's Appointments, Medicines and Memories pages are ported from the React Native client, and Appointments adds Export to calendar, which saves the visits as an `.ics` file through the native Save dialog.
 
 **Target platform: Windows** (Windows 10/11, x64), packaged as an NSIS installer. A macOS `.dmg` is also built, for the team member developing on a Mac.
 
@@ -987,19 +987,22 @@ npm run typecheck        # three TypeScript projects: renderer, main, tests
 npm run test:coverage    # Jest + React Testing Library
 ```
 
-**316 tests across 25 suites, 86.8% statement coverage** — Assignment 8 requires 60%. The report is written to `desktop/coverage/lcov-report/index.html`.
+**421 tests across 36 suites, 93.8% statement coverage** — Assignment 8 requires 60%. The report is written to `desktop/coverage/lcov-report/index.html`; the submitted screenshot is [`docs/screenshots/desktop/coverage.png`](docs/screenshots/desktop/coverage.png).
 
 | Area | What is covered |
 |:-----|:----------------|
 | Models and utilities | 87 tests ported from the React Native client, plus the desktop-only rhythm timeline and contact search |
-| Main process | `jsonStore` 100%, `windowState` 97%, `menu` 81%, `notifications` 100%, `preload` 100% — Electron is mocked so the menu template, the Windows menu conventions, the notification payload and the IPC bridge are asserted directly |
-| IPC | The preload's channel routing, the settings round trip in both directions, the notification call, and the `localStorage` fallback |
+| Main process | `main` 90% (integration suite below), `jsonStore` 100%, `windowState` 97%, `menu` 81%, `notifications` 100%, `preload` 100% — Electron is mocked so the menu template, the Windows menu conventions, the notification payload and the IPC bridge are asserted directly |
+| IPC (integration) | `main.test.ts` loads `main.ts` and `preload.ts` against one fake Electron and routes `ipcRenderer.invoke` to the registered `ipcMain` handlers, so settings save/load/clear, input rejection, app info, window state and notifications cross the real main ↔ renderer path to disk and back |
+| Window management (integration) | Security `webPreferences`, first-launch size, restoring size/position/maximised, debounced save on resize, save on close, blocked navigation and new windows, single-instance focus, dock `activate` |
+| IPC (unit) | The preload's channel routing, the settings round trip in both directions, the notification call, and the `localStorage` fallback |
 | Contacts | The roster, previews, waiting badges, search, failure vs. empty states, and that no call button exists |
 | Messaging | Transcripts, caption status, delivery words, sending, the Notify alert, its written record and its native notification, day grouping |
+| Appointments, Medicines, Memories | Visit cards, loading/error/empty states, the `.ics` calendar export and its date handling; medicine checkboxes and the "2 of 3 taken" status; the memory card grid and its headings; each page's provider |
 | Accessibility Settings | The banner that cannot be switched off, the conformance badge, caption preview, sliders, rhythm playback |
 | Keyboard | Every shortcut pressed for real, sidebar arrow keys, the skip link, the reference card's focus trap |
 
-Only `src/main/main.ts` is uncovered: it cannot run outside an Electron process. Each of the pieces it is assembled from is covered separately. In its place, the packaged build is run by hand — it launches, exposes the context bridge, and writes `window-state.json` on quit.
+`src/main/main.ts` is covered by the integration suite, against a fake Electron. The packaged build is also run by hand — it launches, exposes the context bridge, and writes `window-state.json` on quit.
 
 ### Packaging
 
@@ -1039,7 +1042,6 @@ Screen readers: tested with VoiceOver on macOS; NVDA is the Windows screen reade
 ### Known issues and limitations
 
 - **Data is in-memory.** Contacts and conversations come from the same Week 3 fixtures as the other clients. Messages sent during a session survive navigating away and back, and are lost on quit. Swapping in a backend is a change to `App.tsx`, where the repositories are constructed.
-- **Appointments, Medicines and Memories are placeholders.** They are wired into the sidebar, the menu and the shortcuts; the pages themselves arrive from Rehman's branch.
 - **Sign in is not checked against a real account store.** The forms validate their input and any well-formed credentials sign in; sign out returns to the Splash page.
 - **The installers are unsigned** — no Authenticode signature on Windows, no notarization on macOS. Expected for a course submission; the SmartScreen and Gatekeeper workarounds are above.
 - **No system tray icon.** CareConnect has one window and no background work to report, so a tray icon would be a permanently idle menu-bar item.

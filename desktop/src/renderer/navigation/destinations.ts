@@ -18,10 +18,6 @@ export interface NavEntry {
   command: Extract<MenuCommand, `navigate:${string}`>;
   /** The digit shown beside the label — "Ctrl + 3". */
   digit: string;
-  /**
-   * The team member building the page, for the ones not on this branch.
-   */
-  owner?: string;
 }
 
 export const destinations: NavEntry[] = [
@@ -33,7 +29,6 @@ export const destinations: NavEntry[] = [
     label: 'Appointments',
     command: 'navigate:appointments',
     digit: '3',
-    owner: 'Rehman',
   },
   {
     destination: 'Medicines',
@@ -41,7 +36,6 @@ export const destinations: NavEntry[] = [
     label: 'Medicines',
     command: 'navigate:medicines',
     digit: '4',
-    owner: 'Rehman',
   },
   {
     destination: 'Memories',
@@ -49,7 +43,6 @@ export const destinations: NavEntry[] = [
     label: 'Memories',
     command: 'navigate:memories',
     digit: '5',
-    owner: 'Rehman',
   },
   {
     destination: 'Contacts',

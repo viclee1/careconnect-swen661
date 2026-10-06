@@ -19,13 +19,7 @@ folder.
 | Accessibility Settings | Victor | Built |
 | Application shell — sidebar, native menu, shortcuts, window state, Windows notifications | Victor | Built |
 | Splash, Sign In, Sign Up, Home, My Day | Justin | Built |
-| Appointments, Medicines, Memories | Rehman | Placeholder page, wired into navigation |
-
-The pages that have not been ported yet render a page that names their owner.
-They are wired into the sidebar, the native menu and the keyboard shortcuts now
-rather than later, so navigation is complete and testable, and so a reviewer
-pressing <kbd>Ctrl</kbd> + <kbd>3</kbd> finds an explanation rather than a dead
-tab.
+| Appointments (with Export to calendar), Medicines, Memories | Upneet | Built |
 
 **Target platform: Windows.** The submitted installer is
 `release/CareConnect-Setup-1.0.0.exe` (NSIS, x64). A macOS `.dmg` is also built
@@ -74,13 +68,20 @@ npm test             # Jest + React Testing Library
 npm run test:coverage
 ```
 
-Current state: **316 tests, 25 suites, 86.8% statement coverage** (Assignment 8
-requires 60%). The HTML report lands in `coverage/lcov-report/index.html`.
+Current state: **421 tests, 36 suites, 93.8% statement coverage** (Assignment 8
+requires 60%). The HTML report lands in `coverage/lcov-report/index.html`; a
+screenshot of it is at
+[`docs/screenshots/desktop/coverage.png`](../docs/screenshots/desktop/coverage.png).
 
-The only file not covered is `src/main/main.ts`, which cannot run outside an
-Electron process — the pieces it is made of (`jsonStore`, `windowState`, `menu`,
-`notifications`, `preload`) are each covered separately, at 100%, 97%, 81%,
-100% and 100%.
+`src/main/__tests__/main.test.ts` is the integration suite. It loads `main.ts`
+and `preload.ts` together against one fake Electron whose `ipcRenderer.invoke`
+is routed to the handlers `ipcMain.handle` registered, so every bridge call
+crosses the real path — preload → channel → main-process handler → JSON file in
+a temp directory → back. The same suite covers window management: the security
+`webPreferences`, the first-launch size, restoring size/position/maximised from
+the last session, the debounced save on resize and the save on close, blocked
+navigation and new windows, single-instance focus, and the macOS dock
+`activate`.
 
 ---
 
@@ -155,7 +156,8 @@ desktop/
 │       ├── navigation/      the typed router and the sidebar
 │       ├── platform/        the Electron bridge, commands, key matching
 │       ├── pages/           Splash, Sign In/Up, Home, My Day, Contacts,
-│       │                    MessageThread, Settings, Placeholder
+│       │                    MessageThread, Settings, Appointments,
+│       │                    Medicines, Memories
 │       ├── components/      buttons, banners, the shortcut card
 │       └── index.css        the whole stylesheet, including high-contrast
 └── electron-builder.yml
@@ -266,7 +268,9 @@ Desktop-specific work:
   steady panel instead of pulsing — the same fact, without movement.
 
 Screen readers: tested with VoiceOver on macOS; NVDA is the Windows screen
-reader to test the installed build with. Everything is real text in the
+reader to test the installed build with. The step-by-step keyboard, NVDA,
+Contrast Themes and demo-video script is
+[`docs/desktop-accessibility-test.md`](../docs/desktop-accessibility-test.md). Everything is real text in the
 document rather than collapsed into `aria-label`s, so browse mode can walk a
 conversation a line at a time and <kbd>Cmd</kbd> + <kbd>C</kbd> copies what is on
 screen.

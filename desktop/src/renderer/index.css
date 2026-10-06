@@ -1297,13 +1297,6 @@ kbd {
   white-space: nowrap;
 }
 
-.placeholder-owner {
-  display: inline-block;
-  margin-top: 0.5rem;
-  font-weight: 600;
-  color: var(--secondary-dark);
-}
-
 /* ── Public Shell & Splash Layout ────────────────────────────────────────── */
 
 .shell-public {

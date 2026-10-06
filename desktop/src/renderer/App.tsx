@@ -31,7 +31,6 @@ import { MedicinesPage } from './pages/MedicinesPage';
 import { MemoriesPage } from './pages/MemoriesPage';
 import { MessageThreadPage } from './pages/MessageThreadPage';
 import { MyDayPage } from './pages/MyDayPage';
-import { PlaceholderPage } from './pages/PlaceholderPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { SignInPage } from './pages/SignInPage';
 import { SignUpPage } from './pages/SignUpPage';
@@ -207,8 +206,5 @@ function Page({
   if (route.name === 'Medicines') {
     return <MedicinesPage />;
   }
-  if (route.name === 'Memories') {
-    return <MemoriesPage />;
-  }
-  return <PlaceholderPage destination={route.name} />;
+  return <MemoriesPage />;
 }
