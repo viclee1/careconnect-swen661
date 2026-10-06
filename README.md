@@ -1016,6 +1016,8 @@ npm run package:linux    # .AppImage and .deb
 
 Installers land in `desktop/release/`: `CareConnect-Setup-1.0.0.exe` for Windows and `CareConnect-1.0.0-arm64.dmg` for Apple-silicon Macs. `package:win` runs on macOS as well as Windows; `--x64` is pinned because `electron-builder` otherwise builds for the host's architecture.
 
+Both installers are over GitHub's 100 MB file limit, so they are not committed: download them from the [latest release](https://github.com/viclee1/careconnect-swen661/releases/latest).
+
 - **Windows.** Run `CareConnect-Setup-1.0.0.exe`. It is unsigned, so SmartScreen shows *Windows protected your PC*: choose **More info**, then **Run anyway**. The wizard lets you pick the install folder and adds Start Menu and desktop shortcuts. Uninstall from *Settings → Apps*.
 - **macOS.** Open the `.dmg` and drag CareConnect to Applications. It is unsigned, so Gatekeeper quarantines it: right-click the app and choose **Open**, or run `xattr -dr com.apple.quarantine /Applications/CareConnect.app`.
 
