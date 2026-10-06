@@ -1,0 +1,51 @@
+appId: com.acuityhealth.careconnect
+productName: CareConnect
+copyright: © 2026 SWEN 661 Team 2 — The Acuity Health Group
+
+directories:
+  output: release
+  buildResources: build
+
+# Only the compiled output ships. The TypeScript sources and the test suite
+# have no business inside an installer.
+files:
+  - dist/**/*
+  - package.json
+
+mac:
+  category: public.app-category.medical
+  target:
+    - dmg
+  # Unsigned local builds: Gatekeeper still quarantines the .dmg, which is
+  # expected for a course submission and documented in the README.
+  identity: null
+
+dmg:
+  title: CareConnect ${version}
+
+# Windows is the platform this submission targets. x64 covers every desktop the
+# team runs Windows on; the NSIS installer is a standard setup wizard.
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  # Unsigned: SmartScreen shows "Windows protected your PC" on first launch,
+  # which is expected for a course submission and documented in the README.
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  # The Start Menu shortcut carries the appId as its Application User Model ID,
+  # which is what lets Windows show CareConnect's Action Center notifications.
+  createStartMenuShortcut: true
+  createDesktopShortcut: true
+  shortcutName: CareConnect
+  artifactName: CareConnect-Setup-${version}.${ext}
+
+linux:
+  category: Utility
+  target:
+    - AppImage
+    - deb

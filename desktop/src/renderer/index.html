@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!--
+      The Content Security Policy for the renderer.
+
+      `script-src 'self'` is the line that matters: it means a message body, a
+      contact name, or anything else that reaches the page as data can never be
+      executed, which is the renderer half of the Electron security checklist.
+      Vite inlines no scripts in the production build, so no hash or nonce is
+      needed. `connect-src 'self'` keeps the page from calling out anywhere —
+      the desktop client's data comes from the main process over IPC.
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'"
+    />
+    <!--
+      No `maximum-scale` and no `user-scalable=no`: zoom is an accessibility
+      feature, and Ctrl/Cmd +/- must keep working up to 200% and beyond.
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CareConnect</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./main.tsx"></script>
+  </body>
+</html>
