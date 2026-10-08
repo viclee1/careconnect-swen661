@@ -1,4 +1,4 @@
-import { act, screen, waitFor, within } from '@testing-library/react';
+import { act, fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 
 import { createMockContactRepository } from '../data/contactRepository';
@@ -180,6 +180,25 @@ describe('fixes from the Assignment 9 audit', () => {
     expect(body).toHaveFocus();
     await user.tab();
     expect(within(dialog).getByRole('button', { name: 'Print' })).toHaveFocus();
+  });
+
+  it('closes the shortcut card from the backdrop on release, not on press', async () => {
+    const { user } = renderApp({ repositories: repositories() });
+    await screen.findByTestId('contact-c1');
+    await user.click(screen.getByRole('button', { name: 'Keyboard shortcuts' }));
+    const dialog = await screen.findByRole('dialog');
+    const backdrop = dialog.parentElement as HTMLElement;
+
+    // Pressing inside the card and releasing on the backdrop keeps it open.
+    fireEvent.mouseDown(dialog);
+    fireEvent.click(backdrop);
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+
+    // Pressing on the backdrop alone does nothing until the button comes up.
+    fireEvent.mouseDown(backdrop);
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    fireEvent.click(backdrop);
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
   it('makes each My Day task a real toggle button that Space and Enter operate', async () => {
