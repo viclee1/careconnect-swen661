@@ -1,0 +1,10 @@
+{
+  "id": "narrow-sign-up",
+  "screen": "Sign Up",
+  "viewport": "900×700",
+  "url": "http://localhost:5273/",
+  "violations": [],
+  "passes": 42,
+  "incomplete": [],
+  "contrastReview": []
+}

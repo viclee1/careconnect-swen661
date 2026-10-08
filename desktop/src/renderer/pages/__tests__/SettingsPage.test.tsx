@@ -285,7 +285,7 @@ describe('SettingsPage', () => {
       await user.click(await screen.findByTestId('switch-vibration'));
 
       expect(screen.getByTestId('pattern-appointment')).toBeDisabled();
-      expect(screen.getByTestId('pattern-appointment')).toHaveAccessibleName(
+      expect(screen.getByTestId('pattern-appointment')).toHaveAccessibleDescription(
         /Turn vibration on to play it/i,
       );
       expect(screen.getByText(/Turn vibration on above to play these/i)).toBeInTheDocument();
@@ -302,7 +302,7 @@ describe('SettingsPage', () => {
         },
       });
 
-      await user.click(await screen.findByRole('button', { name: /^Accessibility/ }));
+      await user.click(await screen.findByRole('button', { name: /^Settings/ }));
       await screen.findByRole('heading', { level: 1, name: /accessibility settings/i });
 
       await user.click(screen.getByRole('button', { name: 'Back' }));
@@ -318,7 +318,7 @@ describe('SettingsPage', () => {
         },
       });
 
-      await user.click(await screen.findByRole('button', { name: /^Accessibility/ }));
+      await user.click(await screen.findByRole('button', { name: /^Settings/ }));
       await screen.findByRole('heading', { level: 1, name: /accessibility settings/i });
 
       screen.getByTestId('switch-escalation').focus();

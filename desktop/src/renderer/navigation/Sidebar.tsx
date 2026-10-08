@@ -79,7 +79,6 @@ export function Sidebar({ onShowShortcuts }: { onShowShortcuts: () => void }) {
         <button
           type="button"
           className="sidebar__item"
-          aria-label="Accessibility"
           aria-current={route.name === 'Settings' ? 'page' : undefined}
           onClick={() => navigate({ name: 'Settings' })}
         >

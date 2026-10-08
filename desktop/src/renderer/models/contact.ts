@@ -131,16 +131,3 @@ export function givenNameOf(contact: Contact): string {
 export function conversationNameOf(contact: Contact): string {
   return givenNameOf(contact) || contact.name;
 }
-
-/**
- * The single sentence assistive technology announces for this contact.
- *
- * It repeats in words everything the card shows visually, including the Primary
- * pill, which is otherwise only a shape.
- */
-export function contactSemanticLabel(contact: Contact): string {
-  let label = `${contact.name}, ${contact.relationship}`;
-  if (contact.isPrimary) label += ', primary contact';
-  if (contact.isEmergency) label += ', urgent care service';
-  return label;
-}

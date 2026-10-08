@@ -77,5 +77,5 @@ export function pulseTimeline(pattern: VibrationPattern): { on: boolean; at: num
 
 /** The sentence a screen reader announces for this row. */
 export function patternSemanticLabel(pattern: VibrationPattern): string {
-  return `${pattern.alertType} alert, ${pattern.rhythmName}. Activate to see the rhythm played back.`;
+  return `Activate to see the ${pattern.rhythmName} rhythm played back.`;
 }

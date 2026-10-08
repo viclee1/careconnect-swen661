@@ -106,7 +106,14 @@ export function ShortcutsDialog({ onClose }: { onClose: () => void }) {
           />
         </div>
 
-        <div className="dialog__body">
+        {/* Focusable so the card scrolls with the arrow keys when it is taller
+            than the window (WCAG 2.1.1). */}
+        <div
+          className="dialog__body"
+          tabIndex={0}
+          role="region"
+          aria-label="Shortcut list"
+        >
           <p>
             These work anywhere in CareConnect. The same commands are in the
             menu bar, so nothing here is the only way to do something.

@@ -1,0 +1,67 @@
+- link "Skip to main content":
+  - /url: "#main-content"
+- navigation "Main":
+  - text: CareConnect ♡ Care Recipient
+  - strong: Good morning, Margaret
+  - text: Thursday 4 June · 5:38 AM
+  - button "Home"
+  - button "My Day"
+  - button "Appointments"
+  - button "Medicines"
+  - button "Memories"
+  - button "Contacts"
+  - button "Settings"
+  - button "3 alerts"
+  - button "Keyboard shortcuts"
+- main:
+  - region "Upcoming appointment notification":
+    - strong: Upcoming appointment
+    - paragraph: Blood pressure check with Dr. Sharma today at 10:30 am — Greenfield Surgery
+    - text: Today at 10:30 am
+    - button "Pause reminder sound": "|| Pause"
+    - button "OK, acknowledge upcoming appointment": OK
+  - toolbar "Desktop application controls":
+    - button "Go back" [disabled]: <
+    - button "Refresh page": ↻
+    - button "Go to Home": 🏠
+    - searchbox "Search CareConnect"
+    - text: CC
+    - button "Toggle contrast mode"
+    - button "View keyboard shortcuts"
+    - button "Alerts"
+  - heading "My Day" [level=1]
+  - paragraph: Everything to do — Thursday 4 June
+  - progressbar "1 of 7 done"
+  - text: 1 of 7 done
+  - list:
+    - listitem:
+      - button "Take Amlodipine 5 mg — 1 tablet with food 8:30 am" [pressed]:
+        - strong: Take Amlodipine
+        - text: 5 mg — 1 tablet with food 8:30 am
+    - listitem:
+      - button "Morning check-in Tap to confirm you're doing well 9:00 am":
+        - strong: Morning check-in
+        - text: Tap to confirm you're doing well 9:00 am
+    - listitem:
+      - button "Blood pressure check Greenfield Surgery — Dr. Sharma 10:30 am":
+        - strong: Blood pressure check
+        - text: Greenfield Surgery — Dr. Sharma 10:30 am
+    - listitem:
+      - button "Take Metformin 500 mg — 1 tablet with lunch 12:00 pm":
+        - strong: Take Metformin
+        - text: 500 mg — 1 tablet with lunch 12:00 pm
+    - listitem:
+      - button "Video call with Maria Your daughter — she will call you 3:00 pm":
+        - strong: Video call with Maria
+        - text: Your daughter — she will call you 3:00 pm
+    - listitem:
+      - button "Take Atorvastatin 20 mg — 1 tablet 8:00 pm":
+        - strong: Take Atorvastatin
+        - text: 20 mg — 1 tablet 8:00 pm
+    - listitem:
+      - button "Bedtime rest Wind down for sleep 9:30 pm":
+        - strong: Bedtime rest
+        - text: Wind down for sleep 9:30 pm
+- contentinfo "Application status":
+  - text: Connected · synced just now Care Recipient · Margaret Whitfield's plan 3 active alerts Zoom 100%
+  - 'button "Keyboard shortcuts: Cmd + Slash"'

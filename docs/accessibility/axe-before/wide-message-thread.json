@@ -1,0 +1,25 @@
+{
+  "id": "wide-message-thread",
+  "screen": "Message thread",
+  "viewport": "1280×860",
+  "url": "http://localhost:5273/",
+  "violations": [
+    {
+      "id": "color-contrast",
+      "impact": "serious",
+      "help": "Elements must meet minimum color contrast ratio thresholds",
+      "tags": [
+        "wcag2aa",
+        "wcag143"
+      ],
+      "nodes": [
+        {
+          "target": ".sidebar__item--alerts > .sidebar__label",
+          "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.98 (foreground color: #f59f00, background color: #0f5272, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+        }
+      ]
+    }
+  ],
+  "passes": 38,
+  "incomplete": []
+}

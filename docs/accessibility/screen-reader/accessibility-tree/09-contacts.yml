@@ -1,0 +1,38 @@
+- link "Skip to main content":
+  - /url: "#main-content"
+- navigation "Main":
+  - text: CareConnect ♡ Care Recipient
+  - strong: Good morning, Margaret
+  - text: Thursday 4 June · 5:38 AM
+  - button "Home"
+  - button "My Day"
+  - button "Appointments"
+  - button "Medicines"
+  - button "Memories"
+  - button "Contacts"
+  - button "Settings"
+  - button "3 alerts"
+  - button "Keyboard shortcuts"
+- main:
+  - heading "Contacts" [level=1]
+  - paragraph: People who care for you
+  - status:
+    - heading "Getting someone's attention" [level=2]
+    - paragraph: Open a conversation and choose Alert to send a silent visual flash and vibration to their phone. No sound needed.
+  - text: Find a contact
+  - searchbox "Find a contact"
+  - status: Showing all 5 contacts.
+  - list:
+    - listitem:
+      - button "Joyce Primary Caregiver · Daughter Good morning Margaret! How are you feeling today? 1 waiting"
+    - listitem:
+      - 'button "Dr. Sharma GP — Greenfield Surgery You: Thank you for typing that out. No questions from me."'
+    - listitem:
+      - button "Maria Daughter Captions available — Hi Mum, the garden is finally done. Wait until you see the roses by the back gate. We will bring more photographs on Sunday. 1 waiting"
+    - listitem:
+      - 'button "James Son You: Taken now, thank you for checking."'
+    - listitem:
+      - button "NHS 111 Medical helpline No messages yet Urgent care service"
+- contentinfo "Application status":
+  - text: Connected · synced just now Care Recipient · Margaret Whitfield's plan 3 active alerts Zoom 100%
+  - 'button "Keyboard shortcuts: Cmd + Slash"'

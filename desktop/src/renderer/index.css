@@ -147,10 +147,29 @@ body {
     grid-template-columns: 4.5rem 1fr;
   }
 
-  .sidebar__label,
-  .sidebar__brand-text,
   .sidebar__shortcut {
     display: none;
+  }
+
+  /* Hidden visually, never from the accessibility tree. The labels are the
+     buttons' accessible names: `display: none` here once left eight sidebar
+     buttons nameless (axe button-name, WCAG 4.1.2). The brand, badge and
+     greeting used to stay visible and were clipped mid-word in the 4.5rem
+     column; a screen reader still reads them. `.sidebar` raises the
+     specificity above the base rules further down. */
+  .sidebar .sidebar__label,
+  .sidebar .sidebar__brand-title,
+  .sidebar .sidebar__recipient-badge,
+  .sidebar .sidebar__greeting {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
   }
 
   .sidebar__item {
@@ -255,6 +274,19 @@ body {
   border-top: 1px solid rgba(255, 255, 255, 0.28);
 }
 
+/* The content column: the page's <main> and, below it, the status bar, which
+   is a top-level contentinfo landmark rather than a child of <main>. */
+.shell__column {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.shell__column > .main {
+  flex: 1;
+}
+
 .main {
   display: flex;
   flex-direction: column;
@@ -281,6 +313,8 @@ body {
 
 .page-header__title {
   margin: 0;
+  /* A long title wraps rather than widening the page at 400% zoom. */
+  overflow-wrap: anywhere;
   font-size: 1.5rem;
   line-height: 1.3;
   font-weight: 700;
@@ -1177,6 +1211,10 @@ body {
   display: flex;
   flex: 1;
   flex-direction: column;
+  /* Lets the text column shrink and wrap at 400% zoom instead of pushing the
+     play icon off the edge (WCAG 1.4.10). */
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .pattern-row__type {
@@ -1671,7 +1709,8 @@ kbd {
 }
 
 .sidebar__item--alerts {
-  color: #f59f00;
+  /* 5.96:1 on the sidebar's --primary-dark (was #f59f00, 3.98:1). */
+  color: #ffd43b;
 }
 
 /* ── Status Bar ──────────────────────────────────────────────────────────── */
@@ -1888,7 +1927,40 @@ kbd {
   background: transparent;
   font: inherit;
   font-size: 0.875rem;
+  /* The ring is drawn on the whole box instead, below. */
   outline: none;
+}
+
+/* The input's own outline is removed so the ring can go round the icon and
+   the field together; without this rule the field had no focus indicator at
+   all (WCAG 2.4.7). */
+.search-box:focus-within {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}
+
+/* Reflow (WCAG 1.4.10): at 400% zoom the window is 320 CSS pixels wide, and
+   these single-line bars wrap onto a second line rather than pushing the page
+   into sideways scrolling. Nothing changes at ordinary sizes. */
+.splash-header,
+.splash-header__actions,
+.status-bar,
+.status-bar__left,
+.status-bar__right,
+.app-toolbar,
+.app-toolbar__right,
+.notification-banner,
+.notification-banner__actions {
+  flex-wrap: wrap;
+}
+
+.app-toolbar__search,
+.search-box__input {
+  min-width: 0;
+}
+
+.app-toolbar__search {
+  flex-basis: 10rem;
 }
 
 .user-avatar {
@@ -1968,7 +2040,8 @@ kbd {
 
 .badge--medication {
   background: #fff9db;
-  color: #f59f00;
+  /* 9.75:1 (was #f59f00, 2.01:1). */
+  color: var(--warning-text);
   border-color: #ffe066;
 }
 
@@ -2175,6 +2248,10 @@ kbd {
 .myday-card {
   display: flex;
   align-items: center;
+  width: 100%;
+  font: inherit;
+  text-align: left;
+  color: inherit;
   gap: 1.25rem;
   padding: 1.25rem 1.5rem;
   background: #ffffff;
@@ -2189,9 +2266,10 @@ kbd {
 }
 
 .myday-card--done {
+  /* No opacity: fading a finished task took its text below 4.5:1. The
+     strike-through and the filled check already say "done". */
   background: #f8fafc;
   border-color: #cbd5e1;
-  opacity: 0.85;
 }
 
 .myday-card__icon {
@@ -2223,6 +2301,7 @@ kbd {
 }
 
 .myday-card__desc {
+  display: block;
   margin: 0.25rem 0 0;
   font-size: 1rem;
   color: var(--secondary-dark);
@@ -2693,6 +2772,23 @@ kbd {
   .bubble {
     border-width: 2px;
   }
+}
+
+/* The same palette, switched on from the toolbar's contrast button for a user
+   whose OS has no Increase Contrast setting turned on. The button used to
+   toggle this class with no rule behind it, so it did nothing. */
+body.high-contrast {
+  --border: #0f5272;
+  --secondary-dark: #0f5272;
+  --focus-ring: 0.25rem solid #0f5272;
+}
+
+body.high-contrast .contact-row,
+body.high-contrast .settings-section__card,
+body.high-contrast .bubble,
+body.high-contrast .myday-card,
+body.high-contrast .search-box {
+  border-width: 2px;
 }
 
 /*

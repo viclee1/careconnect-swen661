@@ -13,6 +13,10 @@ export function TopNotificationHeader({
   const [bannerDismissed, setBannerDismissed] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  // Read from the body so the state survives moving between Home and My Day.
+  const [highContrast, setHighContrast] = useState(() =>
+    document.body.classList.contains('high-contrast'),
+  );
 
   return (
     <div className="top-notification-header">
@@ -42,7 +46,7 @@ export function TopNotificationHeader({
               type="button"
               className="banner-btn banner-btn--primary"
               onClick={() => setBannerDismissed(true)}
-              aria-label="Acknowledge upcoming appointment"
+              aria-label="OK, acknowledge upcoming appointment"
             >
               OK
             </button>
@@ -96,7 +100,10 @@ export function TopNotificationHeader({
             <input
               type="search"
               className="search-box__input"
-              placeholder="Search (Ctrl+F)"
+              // No shortcut is advertised here: Ctrl/Cmd+F is "Find a contact"
+              // and opens the Contacts search, so promising it for this box
+              // was untrue.
+              placeholder="Search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               aria-label="Search CareConnect"
@@ -112,8 +119,10 @@ export function TopNotificationHeader({
             type="button"
             className="toolbar-icon-btn"
             aria-label="Toggle contrast mode"
+            // A toggle has to say whether it is on (WCAG 4.1.2).
+            aria-pressed={highContrast}
             onClick={() => {
-              document.body.classList.toggle('high-contrast');
+              setHighContrast(document.body.classList.toggle('high-contrast'));
             }}
           >
             <Icon name="visibility" size={18} />

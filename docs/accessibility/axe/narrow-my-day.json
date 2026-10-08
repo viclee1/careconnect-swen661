@@ -1,0 +1,60 @@
+{
+  "id": "narrow-my-day",
+  "screen": "My Day",
+  "viewport": "900×700",
+  "url": "http://localhost:5273/",
+  "violations": [],
+  "passes": 42,
+  "incomplete": [
+    {
+      "id": "color-contrast",
+      "help": "Elements must meet minimum color contrast ratio thresholds",
+      "nodes": [
+        {
+          "target": "button[aria-label=\"Refresh page\"]",
+          "reason": "Element content contains only non-text characters"
+        },
+        {
+          "target": ".check-circle--active",
+          "reason": "Element content contains only non-text characters"
+        }
+      ]
+    },
+    {
+      "id": "label-content-name-mismatch",
+      "help": "Elements must have their visible text as part of their accessible name",
+      "nodes": [
+        {
+          "target": "button[aria-label=\"Go back\"]",
+          "reason": ""
+        },
+        {
+          "target": "button[aria-label=\"Refresh page\"]",
+          "reason": ""
+        },
+        {
+          "target": "button[aria-label=\"Go to Home\"]",
+          "reason": ""
+        }
+      ]
+    }
+  ],
+  "contrastReview": [
+    {
+      "selector": "button[aria-label=\"Refresh page\"]",
+      "text": "↻",
+      "ratio": 8.5,
+      "needed": 3,
+      "decorative": true,
+      "pass": true
+    },
+    {
+      "selector": ".check-circle--active",
+      "text": "✓",
+      "ratio": 4.37,
+      "needed": 3,
+      "decorative": true,
+      "pass": true
+    }
+  ]
+}

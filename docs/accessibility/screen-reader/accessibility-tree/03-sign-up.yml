@@ -1,0 +1,26 @@
+- link "Skip to main content":
+  - /url: "#main-content"
+- banner:
+  - button "Go to CareConnect homepage":
+    - strong: CareConnect
+- main:
+  - region "Create account form":
+    - heading "Create your account" [level=1]
+    - paragraph: Free, private, and takes under two minutes.
+    - text: Your name *
+    - textbox "Your name *":
+      - /placeholder: e.g. Dorothy Smith
+    - text: This is how CareConnect will greet you. Email address *
+    - textbox "Email address *":
+      - /placeholder: you@example.com
+    - text: Password *
+    - textbox "Password *"
+    - text: At least 6 characters. Confirm password *
+    - textbox "Confirm password *"
+    - button "Create account"
+    - paragraph:
+      - text: Already have an account?
+      - button "Sign in"
+- contentinfo "Application status":
+  - text: Not signed in Zoom 100%
+  - 'button "Keyboard shortcuts: Cmd + Slash"'

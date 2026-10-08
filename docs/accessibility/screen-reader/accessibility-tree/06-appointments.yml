@@ -1,0 +1,43 @@
+- link "Skip to main content":
+  - /url: "#main-content"
+- navigation "Main":
+  - text: CareConnect ♡ Care Recipient
+  - strong: Good morning, Margaret
+  - text: Thursday 4 June · 5:38 AM
+  - button "Home"
+  - button "My Day"
+  - button "Appointments"
+  - button "Medicines"
+  - button "Memories"
+  - button "Contacts"
+  - button "Settings"
+  - button "3 alerts"
+  - button "Keyboard shortcuts"
+- main:
+  - heading "Appointments" [level=1]
+  - paragraph: Upcoming medical visits
+  - paragraph: 2 upcoming visits
+  - button "Export to calendar"
+  - paragraph: Saves these visits as a calendar file for Outlook, Apple Calendar or Google Calendar. Each visit shows an on-screen reminder an hour before — no sound.
+  - list "Upcoming appointments":
+    - listitem:
+      - article "Dr. Robert Chen":
+        - heading "Dr. Robert Chen" [level=2]
+        - paragraph: Cardiology
+        - paragraph:
+          - time: Sept 18, 2026
+          - text: at
+          - time: 10:00 am
+        - paragraph: Annapolis Medical Center
+    - listitem:
+      - article "Dr. Sarah Jenkins":
+        - heading "Dr. Sarah Jenkins" [level=2]
+        - paragraph: Primary Care
+        - paragraph:
+          - time: Oct 2, 2026
+          - text: at
+          - time: 2:30 pm
+        - paragraph: Acuity Health Clinic
+- contentinfo "Application status":
+  - text: Connected · synced just now Care Recipient · Margaret Whitfield's plan 3 active alerts Zoom 100%
+  - 'button "Keyboard shortcuts: Cmd + Slash"'

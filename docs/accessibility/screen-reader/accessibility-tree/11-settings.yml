@@ -1,0 +1,83 @@
+- link "Skip to main content":
+  - /url: "#main-content"
+- navigation "Main":
+  - text: CareConnect ♡ Care Recipient
+  - strong: Good morning, Margaret
+  - text: Thursday 4 June · 5:38 AM
+  - button "Home"
+  - button "My Day"
+  - button "Appointments"
+  - button "Medicines"
+  - button "Memories"
+  - button "Contacts"
+  - button "Settings"
+  - button "3 alerts"
+  - button "Keyboard shortcuts"
+- main:
+  - button "Back"
+  - heading "Accessibility Settings" [level=1]
+  - paragraph: Adjust how CareConnect alerts and informs you
+  - status:
+    - heading "WCAG 2.2 Compliant" [level=2]
+    - paragraph: Hearing-accessibility requirements met
+  - region "Visual Alerts":
+    - heading "Visual Alerts" [level=2]
+    - paragraph: What appears on screen when CareConnect needs you.
+    - text: Visual alert banners On
+    - paragraph: Always on. Without a banner an alert could reach you by sound alone, which this application will not do.
+    - switch "Visual alert banners" [checked] [disabled]
+    - text: Smart alert escalation On
+    - paragraph: Missed alerts are escalated automatically, so an alert you did not see is passed to your care team.
+    - switch "Smart alert escalation" [checked]
+  - region "Captions":
+    - heading "Captions" [level=2]
+    - paragraph: Text for anything spoken aloud.
+    - text: Show captions On
+    - paragraph: Text for all audio and video content.
+    - switch "Show captions" [checked]
+    - text: Caption size
+    - paragraph: Currently medium.
+    - radiogroup "Caption size":
+      - radio "Small"
+      - radio "Medium" [checked]
+      - radio "Large"
+    - text: Caption text colour
+    - paragraph: Both choices clear WCAG 2.2 AA against the caption panel.
+    - radiogroup "Caption text colour":
+      - radio "White" [checked]
+      - radio "Yellow"
+    - img "Caption preview, medium white text":
+      - paragraph: "[Preview] Reminder: Take your morning medication."
+  - region "Audio":
+    - heading "Audio" [level=2]
+    - paragraph: Sound is never the only way CareConnect tells you something. These controls decide how much of it there is.
+    - text: Alert volume 70%
+    - slider "Alert volume": "0.7"
+    - paragraph: Use the pause button on any alert banner to stop the sound instantly. You can also pause audio during video calls from the in-call controls.
+    - text: Audio balance Centre
+    - slider "Audio balance": "0"
+    - paragraph: Adjust sound between left and right. Useful with hearing aids.
+  - region "Vibration":
+    - heading "Vibration" [level=2]
+    - paragraph: Each alert type has its own rhythm on your phone, so you can tell them apart without looking at it. This computer has no vibration motor, so the rhythms play back here as a visual pulse.
+    - text: Vibration alerts On
+    - paragraph: Vibrate for every notification.
+    - switch "Vibration alerts" [checked]
+    - text: Vibration patterns
+    - paragraph: Choose a rhythm to watch it play.
+    - button "Appointment Long-short-long"
+    - text: Activate to see the Long-short-long rhythm played back.
+    - status
+    - button "Medication Double pulse"
+    - text: Activate to see the Double pulse rhythm played back.
+    - status
+    - button "Missed / Escalated Rapid burst"
+    - text: Activate to see the Rapid burst rhythm played back.
+    - status
+  - region "Account":
+    - heading "Account" [level=2]
+    - paragraph: Margaret Whitfield · Care Recipient
+    - button "Sign out"
+- contentinfo "Application status":
+  - text: Connected · synced just now Care Recipient · Margaret Whitfield's plan 3 active alerts Zoom 100%
+  - 'button "Keyboard shortcuts: Cmd + Slash"'

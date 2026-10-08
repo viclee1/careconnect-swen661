@@ -1,0 +1,486 @@
+{
+  "id": "narrow-settings",
+  "screen": "Accessibility Settings",
+  "viewport": "900×700",
+  "url": "http://localhost:5273/",
+  "violations": [],
+  "passes": 41,
+  "incomplete": [
+    {
+      "id": "color-contrast",
+      "help": "Elements must meet minimum color contrast ratio thresholds",
+      "nodes": [
+        {
+          "target": "#\\:r11\\:",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "section[aria-labelledby=\":rt:\"] > .settings-section__card > .settings-block:nth-child(2) > .settings-block__title",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "section[aria-labelledby=\":rt:\"] > .settings-section__card > .settings-block:nth-child(2) > .settings-block__hint",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "button[data-value=\"small\"]",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "button[data-value=\"large\"]",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": ".settings-block:nth-child(3) > .settings-block__title",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": ".settings-block:nth-child(3) > .settings-block__hint",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "button[data-value=\"yellow\"]",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "#\\:r13\\:",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "section[aria-labelledby=\":r13:\"] > .settings-section__description",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "#\\:r16\\:",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": ".settings-block:nth-child(1) > .settings-row__title-line > .settings-row__state",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": ".settings-block:nth-child(1) > .slider-ends[aria-hidden=\"true\"] > span:nth-child(1)",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": ".settings-block:nth-child(1) > .slider-ends[aria-hidden=\"true\"] > span:nth-child(2)",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "#\\:r17\\:",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "#\\:r1a\\:",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": ".settings-block:nth-child(2) > .settings-row__title-line > .settings-row__state",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": ".settings-block:nth-child(2) > .slider-ends[aria-hidden=\"true\"] > span:nth-child(1)",
+          "reason": "Element content is too short to determine if it is actual text content"
+        },
+        {
+          "target": ".settings-block:nth-child(2) > .slider-ends[aria-hidden=\"true\"] > span:nth-child(2)",
+          "reason": "Element content is too short to determine if it is actual text content"
+        },
+        {
+          "target": "#\\:r1b\\:",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "#\\:r1d\\:",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "section[aria-labelledby=\":r1d:\"] > .settings-section__description",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "#\\:r1g\\:",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "section[aria-labelledby=\":r1d:\"] > .settings-section__card > .settings-row > .settings-row__text > .settings-row__title-line > .settings-row__state",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "#\\:r1h\\:",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "section[aria-labelledby=\":r1d:\"] > .settings-section__card > .settings-block > .settings-block__title",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "section[aria-labelledby=\":r1d:\"] > .settings-section__card > .settings-block > .settings-block__hint",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "button[data-testid=\"pattern-appointment\"] > .pattern-row__text > .pattern-row__type",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "button[data-testid=\"pattern-appointment\"] > .pattern-row__text > .pattern-row__rhythm",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "button[data-testid=\"pattern-appointment\"] > .pattern-row__glyph[aria-hidden=\"true\"]",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "button[data-testid=\"pattern-medication\"] > .pattern-row__text > .pattern-row__type",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "button[data-testid=\"pattern-medication\"] > .pattern-row__text > .pattern-row__rhythm",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "button[data-testid=\"pattern-medication\"] > .pattern-row__glyph[aria-hidden=\"true\"]",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "button[data-testid=\"pattern-missed\"] > .pattern-row__text > .pattern-row__type",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "button[data-testid=\"pattern-missed\"] > .pattern-row__text > .pattern-row__rhythm",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "button[data-testid=\"pattern-missed\"] > .pattern-row__glyph[aria-hidden=\"true\"]",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "#\\:r1p\\:",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "section[aria-labelledby=\":r1p:\"] > .settings-section__description",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": ".btn--danger > span",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        }
+      ]
+    }
+  ],
+  "contrastReview": [
+    {
+      "selector": "#\\:r11\\:",
+      "text": "Text for all audio and video content.",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "section[aria-labelledby=\":rt:\"] > .settings-section__card > .settings-block:nth-child(2) > .settings-block__title",
+      "text": "Caption size",
+      "ratio": 8.5,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "section[aria-labelledby=\":rt:\"] > .settings-section__card > .settings-block:nth-child(2) > .settings-block__hint",
+      "text": "Currently medium.",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "button[data-value=\"small\"]",
+      "text": "Small",
+      "ratio": 8.5,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "button[data-value=\"large\"]",
+      "text": "Large",
+      "ratio": 8.5,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": ".settings-block:nth-child(3) > .settings-block__title",
+      "text": "Caption text colour",
+      "ratio": 8.5,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": ".settings-block:nth-child(3) > .settings-block__hint",
+      "text": "Both choices clear WCAG 2.2 AA against t",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "button[data-value=\"yellow\"]",
+      "text": "Yellow",
+      "ratio": 8.5,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "#\\:r13\\:",
+      "text": "Audio",
+      "ratio": 8.5,
+      "needed": 3,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "section[aria-labelledby=\":r13:\"] > .settings-section__description",
+      "text": "Sound is never the only way CareConnect ",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "#\\:r16\\:",
+      "text": "Alert volume",
+      "ratio": 8.5,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": ".settings-block:nth-child(1) > .settings-row__title-line > .settings-row__state",
+      "text": "70%",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": ".settings-block:nth-child(1) > .slider-ends[aria-hidden=\"true\"] > span:nth-child(1)",
+      "text": "0%",
+      "ratio": 5.61,
+      "needed": 3,
+      "decorative": true,
+      "pass": true
+    },
+    {
+      "selector": ".settings-block:nth-child(1) > .slider-ends[aria-hidden=\"true\"] > span:nth-child(2)",
+      "text": "100%",
+      "ratio": 5.61,
+      "needed": 3,
+      "decorative": true,
+      "pass": true
+    },
+    {
+      "selector": "#\\:r17\\:",
+      "text": "Use the pause button on any alert banner",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "#\\:r1a\\:",
+      "text": "Audio balance",
+      "ratio": 8.5,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": ".settings-block:nth-child(2) > .settings-row__title-line > .settings-row__state",
+      "text": "Centre",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": ".settings-block:nth-child(2) > .slider-ends[aria-hidden=\"true\"] > span:nth-child(1)",
+      "text": "L",
+      "ratio": 5.61,
+      "needed": 3,
+      "decorative": true,
+      "pass": true
+    },
+    {
+      "selector": ".settings-block:nth-child(2) > .slider-ends[aria-hidden=\"true\"] > span:nth-child(2)",
+      "text": "R",
+      "ratio": 5.61,
+      "needed": 3,
+      "decorative": true,
+      "pass": true
+    },
+    {
+      "selector": "#\\:r1b\\:",
+      "text": "Adjust sound between left and right. Use",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "#\\:r1d\\:",
+      "text": "Vibration",
+      "ratio": 8.5,
+      "needed": 3,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "section[aria-labelledby=\":r1d:\"] > .settings-section__description",
+      "text": "Each alert type has its own rhythm on yo",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "#\\:r1g\\:",
+      "text": "Vibration alerts",
+      "ratio": 8.5,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "section[aria-labelledby=\":r1d:\"] > .settings-section__card > .settings-row > .settings-row__text > .settings-row__title-line > .settings-row__state",
+      "text": "On",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "#\\:r1h\\:",
+      "text": "Vibrate for every notification.",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "section[aria-labelledby=\":r1d:\"] > .settings-section__card > .settings-block > .settings-block__title",
+      "text": "Vibration patterns",
+      "ratio": 8.5,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "section[aria-labelledby=\":r1d:\"] > .settings-section__card > .settings-block > .settings-block__hint",
+      "text": "Choose a rhythm to watch it play.",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "button[data-testid=\"pattern-appointment\"] > .pattern-row__text > .pattern-row__type",
+      "text": "Appointment",
+      "ratio": 8.5,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "button[data-testid=\"pattern-appointment\"] > .pattern-row__text > .pattern-row__rhythm",
+      "text": "Long-short-long",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "button[data-testid=\"pattern-appointment\"] > .pattern-row__glyph[aria-hidden=\"true\"]",
+      "text": "—  ·  —",
+      "ratio": 8.5,
+      "needed": 3,
+      "decorative": true,
+      "pass": true
+    },
+    {
+      "selector": "button[data-testid=\"pattern-medication\"] > .pattern-row__text > .pattern-row__type",
+      "text": "Medication",
+      "ratio": 8.5,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "button[data-testid=\"pattern-medication\"] > .pattern-row__text > .pattern-row__rhythm",
+      "text": "Double pulse",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "button[data-testid=\"pattern-medication\"] > .pattern-row__glyph[aria-hidden=\"true\"]",
+      "text": "··   ··",
+      "ratio": 8.5,
+      "needed": 3,
+      "decorative": true,
+      "pass": true
+    },
+    {
+      "selector": "button[data-testid=\"pattern-missed\"] > .pattern-row__text > .pattern-row__type",
+      "text": "Missed / Escalated",
+      "ratio": 8.5,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "button[data-testid=\"pattern-missed\"] > .pattern-row__text > .pattern-row__rhythm",
+      "text": "Rapid burst",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "button[data-testid=\"pattern-missed\"] > .pattern-row__glyph[aria-hidden=\"true\"]",
+      "text": "···· ····",
+      "ratio": 8.5,
+      "needed": 3,
+      "decorative": true,
+      "pass": true
+    },
+    {
+      "selector": "#\\:r1p\\:",
+      "text": "Account",
+      "ratio": 8.5,
+      "needed": 3,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "section[aria-labelledby=\":r1p:\"] > .settings-section__description",
+      "text": "Margaret Whitfield · Care Recipient",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": ".btn--danger > span",
+      "text": "Sign out",
+      "ratio": 9.53,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    }
+  ]
+}

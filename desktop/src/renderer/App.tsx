@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { ShortcutsDialog } from './components/ShortcutsDialog';
+import { StatusBar } from './components/StatusBar';
 import {
   createMockAppointmentRepository,
   type AppointmentRepository,
@@ -158,9 +159,14 @@ function Shell() {
 
       <Sidebar onShowShortcuts={() => setShowShortcuts(true)} />
 
-      <main className="main" id="main-content" tabIndex={-1}>
-        <Page route={route} onShowShortcuts={() => setShowShortcuts(true)} />
-      </main>
+      {/* The status bar sits beside <main>, not inside it, so it is announced
+          as the window's one contentinfo landmark on every signed-in page. */}
+      <div className="shell__column">
+        <main className="main" id="main-content" tabIndex={-1}>
+          <Page route={route} onShowShortcuts={() => setShowShortcuts(true)} />
+        </main>
+        <StatusBar onShowShortcuts={() => setShowShortcuts(true)} />
+      </div>
 
       {showShortcuts ? (
         <ShortcutsDialog onClose={() => setShowShortcuts(false)} />

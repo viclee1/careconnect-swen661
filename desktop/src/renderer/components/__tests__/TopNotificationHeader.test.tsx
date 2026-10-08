@@ -48,7 +48,7 @@ describe('TopNotificationHeader', () => {
 
   it('removes the banner once the appointment is acknowledged', async () => {
     const { user } = await openHome();
-    await user.click(screen.getByRole('button', { name: 'Acknowledge upcoming appointment' }));
+    await user.click(screen.getByRole('button', { name: 'OK, acknowledge upcoming appointment' }));
     expect(appointmentBanner()).not.toBeInTheDocument();
   });
 
@@ -101,10 +101,13 @@ describe('TopNotificationHeader', () => {
     const { user } = await openHome();
     const toggle = screen.getByRole('button', { name: 'Toggle contrast mode' });
 
+    expect(toggle).toHaveAttribute('aria-pressed', 'false');
     await user.click(toggle);
     expect(document.body).toHaveClass('high-contrast');
+    expect(toggle).toHaveAttribute('aria-pressed', 'true');
     await user.click(toggle);
     expect(document.body).not.toHaveClass('high-contrast');
+    expect(toggle).toHaveAttribute('aria-pressed', 'false');
   });
 
   it('accepts a search query', async () => {

@@ -1,0 +1,10 @@
+{
+  "id": "narrow-memories",
+  "screen": "Memories",
+  "viewport": "900×700",
+  "url": "http://localhost:5273/",
+  "violations": [],
+  "passes": 37,
+  "incomplete": [],
+  "contrastReview": []
+}

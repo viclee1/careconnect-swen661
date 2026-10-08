@@ -1,0 +1,173 @@
+✔ wide   Splash                               0 violations (0 nodes), 37 passing rules
+✔ wide   Sign In — validation errors shown    0 violations (0 nodes), 40 passing rules
+✔ wide   Sign Up                              0 violations (0 nodes), 40 passing rules
+✘ wide   Home                                 2 violations (3 nodes), 38 passing rules
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      .sidebar__item--alerts > .sidebar__label
+      .badge--medication
+    moderate landmark-contentinfo-is-top-level: Contentinfo landmark should not be contained in another landmark
+      footer
+✘ wide   My Day                               2 violations (4 nodes), 41 passing rules
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      .sidebar__item--alerts > .sidebar__label
+      .myday-card--done > .myday-card__info > .myday-card__desc
+      .myday-card--done > .myday-card__info > .myday-card__time
+    moderate landmark-contentinfo-is-top-level: Contentinfo landmark should not be contained in another landmark
+      footer
+✘ wide   Appointments                         1 violations (1 nodes), 31 passing rules
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      .sidebar__item--alerts > .sidebar__label
+✘ wide   Appointments — export banner         1 violations (1 nodes), 35 passing rules
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      .sidebar__item--alerts > .sidebar__label
+✘ wide   Medicines                            1 violations (1 nodes), 35 passing rules
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      .sidebar__item--alerts > .sidebar__label
+✘ wide   Memories                             1 violations (1 nodes), 31 passing rules
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      .sidebar__item--alerts > .sidebar__label
+✘ wide   Contacts                             1 violations (1 nodes), 39 passing rules
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      .sidebar__item--alerts > .sidebar__label
+✘ wide   Message thread                       1 violations (1 nodes), 38 passing rules
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      .sidebar__item--alerts > .sidebar__label
+✘ wide   Message thread — Notify sent         1 violations (1 nodes), 39 passing rules
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      .sidebar__item--alerts > .sidebar__label
+✘ wide   Accessibility Settings               1 violations (1 nodes), 39 passing rules
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      .sidebar__item--alerts > .sidebar__label
+✘ wide   Keyboard shortcuts dialog            2 violations (2 nodes), 45 passing rules
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      .sidebar__item--alerts > .sidebar__label
+    serious scrollable-region-focusable: Scrollable region must have keyboard access
+      .dialog__body
+✔ narrow Splash                               0 violations (0 nodes), 37 passing rules
+✔ narrow Sign In — validation errors shown    0 violations (0 nodes), 40 passing rules
+✔ narrow Sign Up                              0 violations (0 nodes), 41 passing rules
+✘ narrow Home                                 3 violations (10 nodes), 38 passing rules
+    critical button-name: Buttons must have discernible text
+      button[aria-current="page"]
+      .sidebar__nav > .sidebar__item:nth-child(2)
+      .sidebar__nav > .sidebar__item:nth-child(3)
+      .sidebar__item:nth-child(4)
+      .sidebar__item:nth-child(5)
+      .sidebar__item:nth-child(6)
+      .sidebar__item--alerts
+      .sidebar__footer > .sidebar__item:nth-child(3)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      .badge--medication
+    moderate landmark-contentinfo-is-top-level: Contentinfo landmark should not be contained in another landmark
+      footer
+✘ narrow My Day                               3 violations (11 nodes), 41 passing rules
+    critical button-name: Buttons must have discernible text
+      .sidebar__nav > .sidebar__item:nth-child(1)
+      button[aria-current="page"]
+      .sidebar__nav > .sidebar__item:nth-child(3)
+      .sidebar__item:nth-child(4)
+      .sidebar__item:nth-child(5)
+      .sidebar__item:nth-child(6)
+      .sidebar__item--alerts
+      .sidebar__footer > .sidebar__item:nth-child(3)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      .myday-card--done > .myday-card__info > .myday-card__desc
+      .myday-card--done > .myday-card__info > .myday-card__time
+    moderate landmark-contentinfo-is-top-level: Contentinfo landmark should not be contained in another landmark
+      footer
+✘ narrow Appointments                         1 violations (8 nodes), 32 passing rules
+    critical button-name: Buttons must have discernible text
+      .sidebar__nav > .sidebar__item:nth-child(1)
+      .sidebar__nav > .sidebar__item:nth-child(2)
+      button[aria-current="page"]
+      .sidebar__item:nth-child(4)
+      .sidebar__item:nth-child(5)
+      .sidebar__item:nth-child(6)
+      .sidebar__item--alerts
+      .sidebar__footer > .sidebar__item:nth-child(3)
+✘ narrow Appointments — export banner         1 violations (8 nodes), 36 passing rules
+    critical button-name: Buttons must have discernible text
+      .sidebar__nav > .sidebar__item:nth-child(1)
+      .sidebar__nav > .sidebar__item:nth-child(2)
+      button[aria-current="page"]
+      .sidebar__item:nth-child(4)
+      .sidebar__item:nth-child(5)
+      .sidebar__item:nth-child(6)
+      .sidebar__item--alerts
+      .sidebar__footer > .sidebar__item:nth-child(3)
+✘ narrow Medicines                            1 violations (8 nodes), 36 passing rules
+    critical button-name: Buttons must have discernible text
+      .sidebar__nav > button:nth-child(1)
+      .sidebar__nav > button:nth-child(2)
+      .sidebar__nav > button:nth-child(3)
+      button[aria-current="page"]
+      button:nth-child(5)
+      button:nth-child(6)
+      .sidebar__item--alerts
+      .sidebar__footer > button:nth-child(3)
+✘ narrow Memories                             1 violations (8 nodes), 32 passing rules
+    critical button-name: Buttons must have discernible text
+      .sidebar__nav > button:nth-child(1)
+      .sidebar__nav > button:nth-child(2)
+      .sidebar__nav > button:nth-child(3)
+      button:nth-child(4)
+      button[aria-current="page"]
+      button:nth-child(6)
+      .sidebar__item--alerts
+      .sidebar__footer > button:nth-child(3)
+✘ narrow Contacts                             1 violations (8 nodes), 39 passing rules
+    critical button-name: Buttons must have discernible text
+      .sidebar__nav > .sidebar__item:nth-child(1)
+      .sidebar__nav > .sidebar__item:nth-child(2)
+      .sidebar__nav > .sidebar__item:nth-child(3)
+      .sidebar__item:nth-child(4)
+      .sidebar__item:nth-child(5)
+      button[aria-current="page"]
+      .sidebar__item--alerts
+      .sidebar__footer > .sidebar__item:nth-child(3)
+✘ narrow Message thread                       1 violations (8 nodes), 39 passing rules
+    critical button-name: Buttons must have discernible text
+      .sidebar__nav > .sidebar__item:nth-child(1)
+      .sidebar__nav > .sidebar__item:nth-child(2)
+      .sidebar__nav > .sidebar__item:nth-child(3)
+      .sidebar__item:nth-child(4)
+      .sidebar__item:nth-child(5)
+      button[aria-current="page"]
+      .sidebar__item--alerts
+      .sidebar__footer > .sidebar__item:nth-child(3)
+✘ narrow Message thread — Notify sent         2 violations (9 nodes), 39 passing rules
+    critical button-name: Buttons must have discernible text
+      .sidebar__nav > .sidebar__item:nth-child(1)
+      .sidebar__nav > .sidebar__item:nth-child(2)
+      .sidebar__nav > .sidebar__item:nth-child(3)
+      .sidebar__item:nth-child(4)
+      .sidebar__item:nth-child(5)
+      button[aria-current="page"]
+      .sidebar__item--alerts
+      .sidebar__footer > .sidebar__item:nth-child(3)
+    serious scrollable-region-focusable: Scrollable region must have keyboard access
+      .thread-scroll
+✘ narrow Accessibility Settings               1 violations (8 nodes), 39 passing rules
+    critical button-name: Buttons must have discernible text
+      .sidebar__nav > .sidebar__item:nth-child(1)
+      .sidebar__nav > .sidebar__item:nth-child(2)
+      .sidebar__nav > .sidebar__item:nth-child(3)
+      .sidebar__item:nth-child(4)
+      .sidebar__item:nth-child(5)
+      .sidebar__nav > .sidebar__item[aria-current="page"]
+      .sidebar__item--alerts
+      .sidebar__footer > .sidebar__item:nth-child(3)
+✘ narrow Keyboard shortcuts dialog            2 violations (9 nodes), 45 passing rules
+    critical button-name: Buttons must have discernible text
+      .sidebar__nav > .sidebar__item:nth-child(1)
+      .sidebar__nav > .sidebar__item:nth-child(2)
+      .sidebar__nav > .sidebar__item:nth-child(3)
+      .sidebar__item:nth-child(4)
+      .sidebar__item:nth-child(5)
+      .sidebar__nav > .sidebar__item[aria-current="page"]
+      .sidebar__item--alerts
+      .sidebar__footer > .sidebar__item:nth-child(3)
+    serious scrollable-region-focusable: Scrollable region must have keyboard access
+      .dialog__body
+
+28 screens, 31 violations. Report: /Users/victorlee/Documents/GitHub/careconnect-swen661/.claude/worktrees/wk9-a11y/docs/accessibility/axe/report.html

@@ -1,0 +1,243 @@
+{
+  "engine": "axe-core 4.14.0",
+  "ruleTags": [
+    "wcag2a",
+    "wcag2aa",
+    "wcag21a",
+    "wcag21aa",
+    "best-practice"
+  ],
+  "date": "2026-10-08T03:10:12.397Z",
+  "screensScanned": 28,
+  "totalViolations": 0,
+  "contrastNeedsReview": {
+    "checked": 157,
+    "failing": 0
+  },
+  "results": [
+    {
+      "id": "wide-splash",
+      "screen": "Splash",
+      "viewport": "1280×860",
+      "violations": 0,
+      "passes": 37,
+      "incomplete": 0
+    },
+    {
+      "id": "wide-sign-in-errors",
+      "screen": "Sign In — validation errors shown",
+      "viewport": "1280×860",
+      "violations": 0,
+      "passes": 41,
+      "incomplete": 0
+    },
+    {
+      "id": "wide-sign-up",
+      "screen": "Sign Up",
+      "viewport": "1280×860",
+      "violations": 0,
+      "passes": 41,
+      "incomplete": 0
+    },
+    {
+      "id": "wide-home",
+      "screen": "Home",
+      "viewport": "1280×860",
+      "violations": 0,
+      "passes": 40,
+      "incomplete": 2
+    },
+    {
+      "id": "wide-my-day",
+      "screen": "My Day",
+      "viewport": "1280×860",
+      "violations": 0,
+      "passes": 42,
+      "incomplete": 2
+    },
+    {
+      "id": "wide-appointments",
+      "screen": "Appointments",
+      "viewport": "1280×860",
+      "violations": 0,
+      "passes": 37,
+      "incomplete": 0
+    },
+    {
+      "id": "wide-appointments-exported",
+      "screen": "Appointments — export banner",
+      "viewport": "1280×860",
+      "violations": 0,
+      "passes": 37,
+      "incomplete": 0
+    },
+    {
+      "id": "wide-medicines",
+      "screen": "Medicines",
+      "viewport": "1280×860",
+      "violations": 0,
+      "passes": 37,
+      "incomplete": 0
+    },
+    {
+      "id": "wide-memories",
+      "screen": "Memories",
+      "viewport": "1280×860",
+      "violations": 0,
+      "passes": 37,
+      "incomplete": 0
+    },
+    {
+      "id": "wide-contacts",
+      "screen": "Contacts",
+      "viewport": "1280×860",
+      "violations": 0,
+      "passes": 41,
+      "incomplete": 0
+    },
+    {
+      "id": "wide-message-thread",
+      "screen": "Message thread",
+      "viewport": "1280×860",
+      "violations": 0,
+      "passes": 41,
+      "incomplete": 0
+    },
+    {
+      "id": "wide-message-notify",
+      "screen": "Message thread — Notify sent",
+      "viewport": "1280×860",
+      "violations": 0,
+      "passes": 42,
+      "incomplete": 0
+    },
+    {
+      "id": "wide-settings",
+      "screen": "Accessibility Settings",
+      "viewport": "1280×860",
+      "violations": 0,
+      "passes": 41,
+      "incomplete": 1
+    },
+    {
+      "id": "wide-shortcuts-dialog",
+      "screen": "Keyboard shortcuts dialog",
+      "viewport": "1280×860",
+      "violations": 0,
+      "passes": 47,
+      "incomplete": 1
+    },
+    {
+      "id": "narrow-splash",
+      "screen": "Splash",
+      "viewport": "900×700",
+      "violations": 0,
+      "passes": 37,
+      "incomplete": 0
+    },
+    {
+      "id": "narrow-sign-in-errors",
+      "screen": "Sign In — validation errors shown",
+      "viewport": "900×700",
+      "violations": 0,
+      "passes": 41,
+      "incomplete": 0
+    },
+    {
+      "id": "narrow-sign-up",
+      "screen": "Sign Up",
+      "viewport": "900×700",
+      "violations": 0,
+      "passes": 42,
+      "incomplete": 0
+    },
+    {
+      "id": "narrow-home",
+      "screen": "Home",
+      "viewport": "900×700",
+      "violations": 0,
+      "passes": 40,
+      "incomplete": 2
+    },
+    {
+      "id": "narrow-my-day",
+      "screen": "My Day",
+      "viewport": "900×700",
+      "violations": 0,
+      "passes": 42,
+      "incomplete": 2
+    },
+    {
+      "id": "narrow-appointments",
+      "screen": "Appointments",
+      "viewport": "900×700",
+      "violations": 0,
+      "passes": 37,
+      "incomplete": 0
+    },
+    {
+      "id": "narrow-appointments-exported",
+      "screen": "Appointments — export banner",
+      "viewport": "900×700",
+      "violations": 0,
+      "passes": 37,
+      "incomplete": 0
+    },
+    {
+      "id": "narrow-medicines",
+      "screen": "Medicines",
+      "viewport": "900×700",
+      "violations": 0,
+      "passes": 37,
+      "incomplete": 0
+    },
+    {
+      "id": "narrow-memories",
+      "screen": "Memories",
+      "viewport": "900×700",
+      "violations": 0,
+      "passes": 37,
+      "incomplete": 0
+    },
+    {
+      "id": "narrow-contacts",
+      "screen": "Contacts",
+      "viewport": "900×700",
+      "violations": 0,
+      "passes": 41,
+      "incomplete": 0
+    },
+    {
+      "id": "narrow-message-thread",
+      "screen": "Message thread",
+      "viewport": "900×700",
+      "violations": 0,
+      "passes": 42,
+      "incomplete": 0
+    },
+    {
+      "id": "narrow-message-notify",
+      "screen": "Message thread — Notify sent",
+      "viewport": "900×700",
+      "violations": 0,
+      "passes": 42,
+      "incomplete": 1
+    },
+    {
+      "id": "narrow-settings",
+      "screen": "Accessibility Settings",
+      "viewport": "900×700",
+      "violations": 0,
+      "passes": 41,
+      "incomplete": 1
+    },
+    {
+      "id": "narrow-shortcuts-dialog",
+      "screen": "Keyboard shortcuts dialog",
+      "viewport": "900×700",
+      "violations": 0,
+      "passes": 47,
+      "incomplete": 1
+    }
+  ]
+}

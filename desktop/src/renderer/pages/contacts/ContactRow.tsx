@@ -1,6 +1,6 @@
 import { Icon } from '../../components/Icon';
 import { StatusBadge } from '../../components/StatusBadge';
-import { contactSemanticLabel, initialsFor, type Contact } from '../../models/contact';
+import { initialsFor, type Contact } from '../../models/contact';
 
 /**
  * One person in the Contacts list, laid out as the Week 3 prototype draws it:
@@ -12,9 +12,11 @@ import { contactSemanticLabel, initialsFor, type Contact } from '../../models/co
  * and a test asserts that none of these rows ever grows one.
  *
  * The row is a `<button>`, so it is reachable by Tab, activated by Enter *and*
- * Space, and announced as a button, all without a line of code. The badge and
- * the chevron are hidden from assistive technology because the button's own
- * accessible name already spells out everything they show.
+ * Space, and announced as a button, all without a line of code. Its accessible
+ * name is built from the words printed on it, in the order they are printed
+ * (WCAG 2.5.3 Label in Name), so a voice-control user can say what they see.
+ * What the screen does not print — that a contact is an urgent care service —
+ * is appended in visually hidden text after it.
  */
 export function ContactRow({
   contact,
@@ -27,19 +29,12 @@ export function ContactRow({
   waiting: number;
   onOpen: () => void;
 }) {
-  let label = contactSemanticLabel(contact);
-  if (waiting > 0) {
-    label += `, ${waiting} message${waiting === 1 ? '' : 's'} waiting`;
-  }
-  label += `. Latest: ${preview}.`;
-
   return (
     <li>
       <button
         type="button"
         data-testid={`contact-${contact.id}`}
         className={`contact-row${contact.isPrimary ? ' contact-row--primary' : ''}`}
-        aria-label={label}
         onClick={onOpen}
       >
         <span
@@ -51,18 +46,27 @@ export function ContactRow({
 
         <span className="contact-row__details">
           <span className="contact-row__name-line">
-            <span className="contact-row__name">{contact.name}</span>
-            {contact.isPrimary ? <StatusBadge icon="primary" label="Primary" /> : null}
-          </span>
-          <span className="contact-row__relationship">{contact.relationship}</span>
+            <span className="contact-row__name">{contact.name}</span>{' '}
+            {contact.isPrimary ? (
+              <StatusBadge icon="primary" label="Primary" announce />
+            ) : null}
+          </span>{' '}
+          <span className="contact-row__relationship">{contact.relationship}</span>{' '}
           <span className="contact-row__preview">{preview}</span>
-        </span>
+        </span>{' '}
 
         {waiting > 0 ? (
-          <span className="contact-row__waiting" aria-hidden="true">
-            <span className="contact-row__waiting-count">{waiting}</span>
+          <span className="contact-row__waiting">
+            <span className="contact-row__waiting-count">{waiting}</span>{' '}
             <span className="contact-row__waiting-word">waiting</span>
           </span>
+        ) : null}
+
+        {contact.isEmergency ? (
+          <>
+            {' '}
+            <span className="visually-hidden">Urgent care service</span>
+          </>
         ) : null}
 
         <Icon name="chevronRight" size={22} />

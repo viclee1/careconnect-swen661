@@ -1,0 +1,30 @@
+{
+  "id": "narrow-message-notify",
+  "screen": "Message thread — Notify sent",
+  "viewport": "900×700",
+  "url": "http://localhost:5273/",
+  "violations": [],
+  "passes": 42,
+  "incomplete": [
+    {
+      "id": "color-contrast",
+      "help": "Elements must meet minimum color contrast ratio thresholds",
+      "nodes": [
+        {
+          "target": "li:nth-child(1) > .day-separator > h2",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        }
+      ]
+    }
+  ],
+  "contrastReview": [
+    {
+      "selector": "li:nth-child(1) > .day-separator > h2",
+      "text": "Yesterday",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    }
+  ]
+}

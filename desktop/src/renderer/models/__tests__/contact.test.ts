@@ -1,6 +1,5 @@
 import {
   contactRoleFrom,
-  contactSemanticLabel,
   conversationNameOf,
   givenNameOf,
   initialsFor,
@@ -83,28 +82,6 @@ describe('channels', () => {
 
   it('supportsVideoRelay is false when no video channel is offered', () => {
     expect(supportsVideoRelay(make({ channels: ['message'] }))).toBe(false);
-  });
-});
-
-describe('contactSemanticLabel', () => {
-  it('announces the relationship and the Primary pill', () => {
-    expect(contactSemanticLabel(make({ isPrimary: true }))).toBe(
-      'Joyce, Caregiver · Daughter, primary contact',
-    );
-  });
-
-  it('marks an urgent-care service', () => {
-    expect(
-      contactSemanticLabel(
-        make({ name: 'NHS 111', relationship: 'Medical helpline', isEmergency: true }),
-      ),
-    ).toBe('NHS 111, Medical helpline, urgent care service');
-  });
-
-  it('omits the parts that do not apply', () => {
-    expect(contactSemanticLabel(make({ name: 'James', relationship: 'Son' }))).toBe(
-      'James, Son',
-    );
   });
 });
 

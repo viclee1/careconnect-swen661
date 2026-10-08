@@ -3,7 +3,6 @@ import { useNavigation } from '../navigation/NavigationProvider';
 import { useAuth } from '../state/AuthProvider';
 import { Icon } from '../components/Icon';
 import { TopNotificationHeader } from '../components/TopNotificationHeader';
-import { StatusBar } from '../components/StatusBar';
 import { MockVideoCall } from '../components/MockVideoCall';
 import { getStoredTasks } from '../data/tasksData';
 
@@ -90,10 +89,11 @@ export function HomePage({ onShowShortcuts }: { onShowShortcuts?: () => void }) 
               >
                 <Icon name="video" size={20} />
                 <span>Video preview — 3:00 pm</span>
-                <div className="home-action-btn__tags">
+                {/* A span, not a div: a button may only hold phrasing content. */}
+                <span className="home-action-btn__tags">
                   <span className="mini-tag">|| Controls</span>
                   <span className="mini-tag">CC</span>
-                </div>
+                </span>
               </button>
 
               <button
@@ -127,9 +127,6 @@ export function HomePage({ onShowShortcuts }: { onShowShortcuts?: () => void }) 
           </section>
         </div>
       </div>
-
-      {/* Status Bar */}
-      <StatusBar onShowShortcuts={onShowShortcuts} />
     </div>
   );
 }

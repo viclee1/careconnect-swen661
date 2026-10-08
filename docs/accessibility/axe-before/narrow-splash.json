@@ -1,0 +1,9 @@
+{
+  "id": "narrow-splash",
+  "screen": "Splash",
+  "viewport": "900×700",
+  "url": "http://localhost:5273/",
+  "violations": [],
+  "passes": 37,
+  "incomplete": []
+}

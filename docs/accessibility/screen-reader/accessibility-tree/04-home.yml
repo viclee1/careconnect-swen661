@@ -1,0 +1,51 @@
+- link "Skip to main content":
+  - /url: "#main-content"
+- navigation "Main":
+  - text: CareConnect ♡ Care Recipient
+  - strong: Good morning, Margaret
+  - text: Thursday 4 June · 5:38 AM
+  - button "Home"
+  - button "My Day"
+  - button "Appointments"
+  - button "Medicines"
+  - button "Memories"
+  - button "Contacts"
+  - button "Settings"
+  - button "3 alerts"
+  - button "Keyboard shortcuts"
+- main:
+  - region "Upcoming appointment notification":
+    - strong: Upcoming appointment
+    - paragraph: Blood pressure check with Dr. Sharma today at 10:30 am — Greenfield Surgery
+    - text: Today at 10:30 am
+    - button "Pause reminder sound": "|| Pause"
+    - button "OK, acknowledge upcoming appointment": OK
+  - region "Captioned reminder notification": "[CC] Upcoming: Video call with Maria at 3:00 PM — your daughter will call you."
+  - toolbar "Desktop application controls":
+    - button "Go back" [disabled]: <
+    - button "Refresh page": ↻
+    - button "Go to Home": 🏠
+    - searchbox "Search CareConnect"
+    - text: CC
+    - button "Toggle contrast mode"
+    - button "View keyboard shortcuts"
+    - button "Alerts"
+  - heading "Here's your day, Margaret" [level=1]
+  - paragraph: 1 of 7 things done today
+  - progressbar "1 of 7 things done today"
+  - text: 1 of 7 done
+  - region "Next thing to do":
+    - text: NEXT THING TO DO Coming up Appointment 3:00 pm
+    - heading "Video call with Maria" [level=2]
+    - paragraph: Your daughter — she will call you
+    - button "Video preview — 3:00 pm || Controls CC"
+    - button "Simulate incoming call"
+  - region "Later today":
+    - heading "Later today" [level=2]
+    - strong: Atorvastatin
+    - paragraph: 20 mg — 1 tablet
+    - text: Medication
+    - time: 8:00 pm
+- contentinfo "Application status":
+  - text: Connected · synced just now Care Recipient · Margaret Whitfield's plan 3 active alerts Zoom 100%
+  - 'button "Keyboard shortcuts: Cmd + Slash"'

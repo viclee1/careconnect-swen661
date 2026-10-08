@@ -28,7 +28,7 @@ describe('ContactsPage', () => {
     const rows = screen.getAllByRole('button', { name: /caregiver|gp|daughter|son|helpline/i });
 
     expect(rows[0]).toHaveAccessibleName(/Joyce/);
-    expect(rows[0]).toHaveAccessibleName(/primary contact/i);
+    expect(rows[0]).toHaveAccessibleName(/Primary/);
     for (const contact of mockContacts) {
       expect(screen.getByTestId(`contact-${contact.id}`)).toBeInTheDocument();
     }
@@ -58,14 +58,13 @@ describe('ContactsPage', () => {
   });
 
   it('shows a preview and a waiting count in the row’s accessible name', async () => {
-    // The badge is a shape; the accessible name is what carries the same fact
-    // to a screen reader, so both have to say it.
+    // The name is the row's printed words in printed order (WCAG 2.5.3), so the
+    // waiting count a sighted user reads is the one a screen reader announces.
     renderApp({ repositories: repositories() });
 
     const joyce = await screen.findByTestId('contact-c1');
-    await waitFor(() =>
-      expect(joyce).toHaveAccessibleName(/1 message waiting/i),
-    );
+    await waitFor(() => expect(joyce).toHaveAccessibleName(/1 waiting/i));
+    expect(joyce).toHaveAccessibleName(/^Joyce Primary Caregiver · Daughter/);
     expect(joyce).toHaveAccessibleName(/How are you feeling today/i);
     expect(within(joyce).getByText('waiting')).toBeInTheDocument();
   });
@@ -113,7 +112,7 @@ describe('ContactsPage', () => {
     const { user } = renderApp({ repositories: repositories() });
 
     await waitFor(() =>
-      expect(screen.getByTestId('contact-c1')).toHaveAccessibleName(/1 message waiting/i),
+      expect(screen.getByTestId('contact-c1')).toHaveAccessibleName(/1 waiting/i),
     );
 
     await user.click(screen.getByTestId('contact-c1'));
@@ -121,7 +120,7 @@ describe('ContactsPage', () => {
     await user.click(screen.getByRole('button', { name: 'Back to contacts' }));
 
     const joyce = await screen.findByTestId('contact-c1');
-    await waitFor(() => expect(joyce).not.toHaveAccessibleName(/message waiting/i));
+    await waitFor(() => expect(joyce).not.toHaveAccessibleName(/waiting/i));
   });
 
   describe('search', () => {

@@ -59,9 +59,9 @@ describe('vibrationPattern', () => {
     });
   });
 
-  it('announces what the row does, not just what it is', () => {
+  it('describes what the row does, beyond the name it shows', () => {
     expect(patternSemanticLabel(vibrationPatterns[1])).toBe(
-      'Medication alert, Double pulse. Activate to see the rhythm played back.',
+      'Activate to see the Double pulse rhythm played back.',
     );
   });
 });
