@@ -305,7 +305,7 @@ careconnect-swen661/
 │   ├── src/main/                    # main process — window, native menu, IPC, notifications, persistence
 │   ├── src/shared/                  # imported by both processes — IPC contract, shortcut table
 │   ├── src/renderer/                # the React app — pages, state, models, data, components
-│   ├── src/**/__tests__/            # 471 tests — models, main process, IPC, pages, keyboard
+│   ├── src/**/__tests__/            # 498 tests — models, main process, IPC, pages, keyboard, a11y
 │   ├── coverage/                    # lcov-report + lcov.info (generated locally, gitignored)
 │   ├── release/                     # installers (generated locally, gitignored)
 │   └── README.md                    # points back to this section
@@ -987,7 +987,7 @@ npm run typecheck        # three TypeScript projects: renderer, main, tests
 npm run test:coverage    # Jest + React Testing Library
 ```
 
-**471 tests across 38 suites, 96.7% statement coverage** — Assignment 8 requires 60%. The report is written to `desktop/coverage/lcov-report/index.html`; the submitted screenshot is [`docs/screenshots/desktop/coverage.png`](docs/screenshots/desktop/coverage.png).
+**498 tests across 39 suites, 96.8% statement coverage** — the assignments require 60%. Assignment 9's accessibility testing report, WCAG 2.1 AA conformance table and desktop VPAT are in [`docs/accessibility/`](docs/accessibility/README.md). The report is written to `desktop/coverage/lcov-report/index.html`; the submitted screenshot is [`docs/screenshots/desktop/coverage.png`](docs/screenshots/desktop/coverage.png).
 
 | Area | What is covered |
 |:-----|:----------------|

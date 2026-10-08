@@ -1,5 +1,9 @@
 # Desktop accessibility test — Assignment 8, Part 3
 
+> **Assignment 9:** the completed checklist, testing report, VPAT and screen-reader
+> notes are in [`accessibility/`](accessibility/README.md). This script is kept as
+> the Assignment 8 record.
+
 A script for the manual half of Part 3: the keyboard-only pass, the NVDA pass,
 Windows Contrast Themes, and the demo video. Run it against the **installed**
 Windows build (`desktop/release/CareConnect-Setup-1.0.0.exe`), not the dev

@@ -46,7 +46,7 @@ No mouse event is sent at any point. Screenshots of the focus indicator are alon
 | Focus visible | Message thread: a focus indicator is drawn at every stop | outline or ring on every stop | Pass |  |
 | Shortcuts | Cmd+Enter in the composer | message sent | Pass | 2 → 3 messages |
 | Shortcuts | Cmd+Shift+N | Notify alert fires with a visual flash | Pass |  |
-| Arrow keys | Conversation history: focus it, Home / ↑ / Page Up | history scrolls without a mouse | Pass | scrollTop 123 → 30 |
+| Arrow keys | Conversation history: focus it, Home / ↑ / Page Up | history scrolls without a mouse | Pass | scrollTop 123 → 32 |
 | Escape | Esc in a conversation | back to Contacts | Pass |  |
 | Space | Space on a settings switch | switch toggles, On/Off text changes | Pass |  |
 | Arrow keys | Slider → / End / Home | value changes each time | Pass | 0.7 → 0.8 → 1 → 0 |

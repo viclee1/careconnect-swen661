@@ -68,8 +68,9 @@ npm test             # Jest + React Testing Library
 npm run test:coverage
 ```
 
-Current state: **471 tests, 38 suites, 96.7% statement coverage** (Assignment 8
-requires 60%). The HTML report lands in `coverage/lcov-report/index.html`; a
+Current state: **498 tests, 39 suites, 96.8% statement coverage** (60% required).
+`src/renderer/__tests__/accessibility.test.tsx` runs jest-axe on every page and
+pins each Assignment 9 accessibility fix. The HTML report lands in `coverage/lcov-report/index.html`; a
 screenshot of it is at
 [`docs/screenshots/desktop/coverage.png`](../docs/screenshots/desktop/coverage.png).
 
@@ -82,6 +83,19 @@ a temp directory → back. The same suite covers window management: the security
 the last session, the debounced save on resize and the save on close, blocked
 navigation and new windows, single-instance focus, and the macOS dock
 `activate`.
+
+### Accessibility audits (Assignment 9)
+
+```bash
+npx playwright install chromium   # once
+npm run dev:renderer              # terminal 1
+npm run a11y:audit                # terminal 2 — axe-core over 14 screens × 2 window sizes
+npm run a11y:keyboard             # keyboard-only checks, reflow, text spacing, a11y trees
+```
+
+Both write to [`../docs/accessibility/`](../docs/accessibility) and exit non-zero on
+any failure. The testing report, conformance table, VPAT and checklist are there
+too — start at [`docs/accessibility/README.md`](../docs/accessibility/README.md).
 
 ---
 
@@ -266,13 +280,16 @@ Desktop-specific work:
 - **Zoom.** Every length is in `rem` and no `maximum-scale` is set, so
   <kbd>Ctrl/Cmd</kbd> + <kbd>+</kbd> scales the layout instead of clipping it.
   Below 960px the sidebar drops its labels and keeps its icons; the labels are
-  still the accessible names, so a screen-reader user notices no difference.
+  visually hidden rather than removed, so they are still the accessible names
+  and a screen-reader user notices no difference. (Before Assignment 9 they were
+  `display: none`, which left the buttons nameless — axe caught it.)
 - **Reduced motion.** `prefers-reduced-motion` holds the Notify flash as a
   steady panel instead of pulsing — the same fact, without movement.
 
-Screen readers: tested with VoiceOver on macOS; NVDA is the Windows screen
-reader to test the installed build with. The step-by-step keyboard, NVDA,
-Contrast Themes and demo-video script is
+Screen readers: VoiceOver on macOS and NVDA on Windows. The Assignment 9
+testing report, WCAG 2.1 AA conformance table, VPAT, completed checklist and
+screen-reader notes are in [`docs/accessibility/`](../docs/accessibility); the
+Assignment 8 script is
 [`docs/desktop-accessibility-test.md`](../docs/desktop-accessibility-test.md). Everything is real text in the
 document rather than collapsed into `aria-label`s, so browse mode can walk a
 conversation a line at a time and <kbd>Cmd</kbd> + <kbd>C</kbd> copies what is on
