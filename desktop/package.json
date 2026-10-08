@@ -26,6 +26,7 @@
     "a11y:audit": "node scripts/a11y-audit.mjs",
     "a11y:keyboard": "node scripts/a11y-keyboard.mjs"
   },
+  "dependencies": {},
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
     "@eslint/js": "^9.9.1",

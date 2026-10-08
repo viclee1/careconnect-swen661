@@ -219,6 +219,38 @@ describe('fixes from the Assignment 9 audit', () => {
     expect(ok).toHaveAccessibleName(/^OK/);
   });
 
+  it('ties each sign-in error to its field and moves focus to the first one', async () => {
+    const { user } = renderApp({ repositories: repositories(), initialRoute: { name: 'SignIn' } });
+    await user.click(await screen.findByRole('button', { name: /^sign in$/i }));
+
+    const email = screen.getByLabelText('Email address');
+    expect(email).toHaveAttribute('aria-invalid', 'true');
+    expect(email).toHaveAccessibleDescription('Please enter your email address.');
+    expect(screen.getByLabelText('Password')).toHaveAccessibleDescription(
+      'Please enter your password.',
+    );
+    await waitFor(() => expect(email).toHaveFocus());
+
+    await user.type(email, 'margaret@example.com');
+    await user.click(screen.getByRole('button', { name: /^sign in$/i }));
+    expect(email).toHaveAttribute('aria-invalid', 'false');
+    await waitFor(() => expect(screen.getByLabelText('Password')).toHaveFocus());
+  });
+
+  it('ties each sign-up error to its field', async () => {
+    const { user } = renderApp({ repositories: repositories(), initialRoute: { name: 'SignUp' } });
+    const heading = await screen.findByRole('heading', { level: 1 });
+    const form = heading.closest('main') as HTMLElement;
+    await user.click(within(form).getAllByRole('button', { name: /create|sign up/i }).pop()!);
+
+    const invalid = form.querySelectorAll('[aria-invalid="true"]');
+    expect(invalid.length).toBeGreaterThan(0);
+    for (const field of Array.from(invalid)) {
+      expect(field).toHaveAccessibleDescription(/\w/);
+    }
+    await waitFor(() => expect(invalid[0]).toHaveFocus());
+  });
+
   it('announces Notify by its printed title and subtitle', async () => {
     renderApp({
       repositories: repositories(),

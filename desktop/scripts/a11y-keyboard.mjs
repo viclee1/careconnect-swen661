@@ -385,6 +385,35 @@ async function run() {
     await page.screenshot({ path: path.join(outDir, `zoom-${zoom.replace('%', '')}.png`) });
   }
 
+  // Text spacing (WCAG 1.4.12): the four overrides from the success
+  // criterion, then look for text that is now cut off.
+  await page.setViewportSize({ width: 1280, height: 860 });
+  await page.addStyleTag({
+    content: `* { line-height: 1.5 !important; letter-spacing: 0.12em !important;
+      word-spacing: 0.16em !important; } p { margin-bottom: 2em !important; }`,
+  });
+  for (const digit of ['1', '2', '3', '4', '5', '6', 'Comma']) {
+    await page.keyboard.press(`${mod}+${digit}`);
+    await page.waitForTimeout(150);
+    const h = await heading(page);
+    const clipped = await page.evaluate(() =>
+      Array.from(document.querySelectorAll('body *'))
+        .filter((el) => {
+          if (el.closest('.visually-hidden, .sidebar__label, [aria-hidden="true"]')) return false;
+          if (!el.childNodes.length || ![...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim())) return false;
+          const style = getComputedStyle(el);
+          if (style.position === 'absolute' && el.clientWidth <= 1) return false;
+          const hides = style.overflow === 'hidden' || style.overflowX === 'hidden' || style.overflowY === 'hidden';
+          // An intentional one-line ellipsis keeps the full text in the name.
+          if (style.textOverflow === 'ellipsis') return false;
+          return hides && (el.scrollHeight > el.clientHeight + 2 || el.scrollWidth > el.clientWidth + 2);
+        })
+        .map((el) => `${el.tagName.toLowerCase()}.${el.className}`),
+    );
+    check('Text spacing', `${h} with WCAG 1.4.12 spacing applied`, 'no text clipped or overlapping', clipped.length === 0, clipped.slice(0, 3).join(', '));
+  }
+  await page.screenshot({ path: path.join(outDir, 'text-spacing.png') });
+
   await browser.close();
 
   // ── Report ───────────────────────────────────────────────────────────────

@@ -50,7 +50,14 @@ export function SignUpPage({ onShowShortcuts }: { onShowShortcuts?: () => void }
     setGlobalError('');
     const next = validate();
     setErrors(next);
-    if (Object.keys(next).length > 0) return;
+    if (Object.keys(next).length > 0) {
+      // Put the user on the first field to fix; its error is its description
+      // (WCAG 3.3.1), so a screen reader reads the problem with the field.
+      const fields: Array<[keyof typeof next, string]> = [['name', 'name-input'], ['email', 'signup-email-input'], ['password', 'signup-password-input'], ['confirmPassword', 'confirm-password-input']];
+      const first = fields.find(([key]) => next[key]);
+      if (first) requestAnimationFrame(() => document.getElementById(first[1])?.focus());
+      return;
+    }
 
     setIsSubmitting(true);
     const result = await signUp(name, email, password);
@@ -113,6 +120,8 @@ export function SignUpPage({ onShowShortcuts }: { onShowShortcuts?: () => void }
               </label>
               <input
                 id="name-input"
+                aria-invalid={Boolean(errors.name)}
+                aria-describedby={errors.name ? 'name-input-error' : undefined}
                 type="text"
                 className="field__input"
                 placeholder="e.g. Dorothy Smith"
@@ -122,7 +131,7 @@ export function SignUpPage({ onShowShortcuts }: { onShowShortcuts?: () => void }
                 required
               />
               <span className="field__hint">This is how CareConnect will greet you.</span>
-              {errors.name && <span className="field__error">{errors.name}</span>}
+              {errors.name && <span className="field__error" id="name-input-error">{errors.name}</span>}
             </div>
 
             <div className="field">
@@ -131,6 +140,8 @@ export function SignUpPage({ onShowShortcuts }: { onShowShortcuts?: () => void }
               </label>
               <input
                 id="signup-email-input"
+                aria-invalid={Boolean(errors.email)}
+                aria-describedby={errors.email ? 'signup-email-input-error' : undefined}
                 type="email"
                 className="field__input"
                 placeholder="you@example.com"
@@ -139,7 +150,7 @@ export function SignUpPage({ onShowShortcuts }: { onShowShortcuts?: () => void }
                 autoComplete="email"
                 required
               />
-              {errors.email && <span className="field__error">{errors.email}</span>}
+              {errors.email && <span className="field__error" id="signup-email-input-error">{errors.email}</span>}
             </div>
 
             <div className="field">
@@ -148,6 +159,8 @@ export function SignUpPage({ onShowShortcuts }: { onShowShortcuts?: () => void }
               </label>
               <input
                 id="signup-password-input"
+                aria-invalid={Boolean(errors.password)}
+                aria-describedby={errors.password ? 'signup-password-input-error' : undefined}
                 type="password"
                 className="field__input"
                 value={password}
@@ -156,7 +169,7 @@ export function SignUpPage({ onShowShortcuts }: { onShowShortcuts?: () => void }
                 required
               />
               <span className="field__hint">At least 6 characters.</span>
-              {errors.password && <span className="field__error">{errors.password}</span>}
+              {errors.password && <span className="field__error" id="signup-password-input-error">{errors.password}</span>}
             </div>
 
             <div className="field">
@@ -165,6 +178,8 @@ export function SignUpPage({ onShowShortcuts }: { onShowShortcuts?: () => void }
               </label>
               <input
                 id="confirm-password-input"
+                aria-invalid={Boolean(errors.confirmPassword)}
+                aria-describedby={errors.confirmPassword ? 'confirm-password-input-error' : undefined}
                 type="password"
                 className="field__input"
                 value={confirmPassword}
@@ -173,7 +188,7 @@ export function SignUpPage({ onShowShortcuts }: { onShowShortcuts?: () => void }
                 required
               />
               {errors.confirmPassword && (
-                <span className="field__error">{errors.confirmPassword}</span>
+                <span className="field__error" id="confirm-password-input-error">{errors.confirmPassword}</span>
               )}
             </div>
 

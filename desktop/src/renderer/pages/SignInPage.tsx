@@ -33,7 +33,14 @@ export function SignInPage({ onShowShortcuts }: { onShowShortcuts?: () => void }
     setGlobalError('');
     const next = validate();
     setErrors(next);
-    if (Object.keys(next).length > 0) return;
+    if (Object.keys(next).length > 0) {
+      // Put the user on the first field to fix; its error is its description
+      // (WCAG 3.3.1), so a screen reader reads the problem with the field.
+      const fields: Array<[keyof typeof next, string]> = [['email', 'email-input'], ['password', 'password-input']];
+      const first = fields.find(([key]) => next[key]);
+      if (first) requestAnimationFrame(() => document.getElementById(first[1])?.focus());
+      return;
+    }
 
     setIsSubmitting(true);
     const result = await signIn(email, password);
@@ -94,6 +101,8 @@ export function SignInPage({ onShowShortcuts }: { onShowShortcuts?: () => void }
               </label>
               <input
                 id="email-input"
+                aria-invalid={Boolean(errors.email)}
+                aria-describedby={errors.email ? 'email-input-error' : undefined}
                 type="email"
                 className="field__input"
                 placeholder="you@example.com"
@@ -102,7 +111,7 @@ export function SignInPage({ onShowShortcuts }: { onShowShortcuts?: () => void }
                 autoComplete="email"
                 required
               />
-              {errors.email && <span className="field__error">{errors.email}</span>}
+              {errors.email && <span className="field__error" id="email-input-error">{errors.email}</span>}
             </div>
 
             <div className="field">
@@ -111,6 +120,8 @@ export function SignInPage({ onShowShortcuts }: { onShowShortcuts?: () => void }
               </label>
               <input
                 id="password-input"
+                aria-invalid={Boolean(errors.password)}
+                aria-describedby={errors.password ? 'password-input-error' : undefined}
                 type="password"
                 className="field__input"
                 value={password}
@@ -118,7 +129,7 @@ export function SignInPage({ onShowShortcuts }: { onShowShortcuts?: () => void }
                 autoComplete="current-password"
                 required
               />
-              {errors.password && <span className="field__error">{errors.password}</span>}
+              {errors.password && <span className="field__error" id="password-input-error">{errors.password}</span>}
 
               <div className="auth-form__forgot">
                 <button
