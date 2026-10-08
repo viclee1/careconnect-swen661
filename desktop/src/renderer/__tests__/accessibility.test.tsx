@@ -95,6 +95,22 @@ describe('axe-core finds no WCAG 2.1 A/AA violations', () => {
 });
 
 describe('fixes from the Assignment 9 audit', () => {
+  it('names the window after the current page, so a screen reader announces it', async () => {
+    const { user } = renderApp({ repositories: repositories() });
+    await screen.findByTestId('contact-c1');
+    expect(document.title).toBe('Contacts — CareConnect');
+
+    await user.click(screen.getByTestId('contact-c1'));
+    await screen.findByRole('heading', { level: 1, name: 'Joyce' });
+    await waitFor(() => expect(document.title).toBe('Conversation with Joyce — CareConnect'));
+
+    const nav = screen.getByRole('navigation', { name: 'Main' });
+    await user.click(within(nav).getByRole('button', { name: 'Medicines' }));
+    expect(document.title).toBe('Medicines — CareConnect');
+    await user.click(within(nav).getByRole('button', { name: /^Settings/ }));
+    expect(document.title).toBe('Accessibility Settings — CareConnect');
+  });
+
   it('keeps one top-level contentinfo landmark, outside <main>', async () => {
     renderApp({ repositories: repositories(), initialRoute: { name: 'Home' } });
     await screen.findByRole('heading', { level: 1, name: /here's your day/i });

@@ -22,6 +22,7 @@ import {
   useNavigation,
   isPublicRoute,
   type Route,
+  type RouteName,
 } from './navigation/NavigationProvider';
 import { Sidebar } from './navigation/Sidebar';
 import { CommandProvider, useCommand } from './platform/CommandProvider';
@@ -38,7 +39,7 @@ import { SignUpPage } from './pages/SignUpPage';
 import { SplashPage } from './pages/SplashPage';
 import { AppointmentsProvider } from './state/AppointmentsProvider';
 import { AuthProvider } from './state/AuthProvider';
-import { ContactsProvider } from './state/ContactsProvider';
+import { ContactsProvider, useContacts } from './state/ContactsProvider';
 import { MedicinesProvider } from './state/MedicinesProvider';
 import { MemoriesProvider } from './state/MemoriesProvider';
 import { MessagesProvider } from './state/MessagesProvider';
@@ -111,13 +112,43 @@ export function App({
   );
 }
 
+/** The page part of the window title, which a screen reader reads on change. */
+const pageTitles: Record<RouteName, string> = {
+  Splash: 'Welcome',
+  SignIn: 'Sign in',
+  SignUp: 'Sign up',
+  Home: 'Home',
+  MyDay: 'My Day',
+  Appointments: 'Appointments',
+  Medicines: 'Medicines',
+  Memories: 'Memories',
+  Contacts: 'Contacts',
+  MessageThread: 'Conversation',
+  Settings: 'Accessibility Settings',
+};
+
+/** "Medicines — CareConnect": which page, then which application (WCAG 2.4.2). */
+export function windowTitleFor(route: Route, contactName?: string): string {
+  const page =
+    route.name === 'MessageThread' && contactName
+      ? `Conversation with ${contactName}`
+      : pageTitles[route.name];
+  return `${page} — CareConnect`;
+}
+
 /**
  * The window shell layout.
  */
 function Shell() {
   const { route, navigate, back, canGoBack } = useNavigation();
   const { load: loadSettings } = useSettings();
+  const { byId } = useContacts();
   const [showShortcuts, setShowShortcuts] = useState(false);
+
+  const contactName = route.name === 'MessageThread' ? byId(route.contactId)?.name : undefined;
+  useEffect(() => {
+    document.title = windowTitleFor(route, contactName);
+  }, [route, contactName]);
 
   useEffect(() => {
     void loadSettings();

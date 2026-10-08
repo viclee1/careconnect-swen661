@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-
 import { AlertBanner } from '../components/AlertBanner';
 import { Button } from '../components/Button';
 import { PageHeader } from '../components/PageHeader';
@@ -55,15 +53,6 @@ export function SettingsPage() {
   };
 
   useCommand('navigate:back', goBack);
-
-  // The page's own title is the first thing a returning screen-reader user
-  // should hear, and a fresh render does not move focus on its own.
-  useEffect(() => {
-    document.title = 'Accessibility Settings — CareConnect';
-    return () => {
-      document.title = 'CareConnect';
-    };
-  }, []);
 
   return (
     <>
