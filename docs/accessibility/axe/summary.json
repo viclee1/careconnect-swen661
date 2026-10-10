@@ -7,13 +7,14 @@
     "wcag21aa",
     "best-practice"
   ],
-  "date": "2026-10-08T03:23:29.126Z",
+  "date": "2026-10-10T01:49:01.999Z",
   "screensScanned": 28,
   "totalViolations": 0,
   "contrastNeedsReview": {
-    "checked": 157,
+    "checked": 149,
     "failing": 0
   },
+  "hoverContrastFailures": 0,
   "results": [
     {
       "id": "wide-splash",

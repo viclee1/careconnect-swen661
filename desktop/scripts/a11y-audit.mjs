@@ -99,6 +99,91 @@ async function tabTo(page, pattern, { max = 60, key = 'Enter' } = {}) {
   throw new Error(`Never reached ${pattern} by Tab`);
 }
 
+/**
+ * Contrast of the text inside one control *while it is hovered*.
+ *
+ * axe only sees the page at rest, so a hover rule that swaps a background and
+ * leaves the text colour alone goes unnoticed — the selected caption-colour
+ * option did exactly that (white on pale blue, 1.09:1) until axe DevTools caught
+ * it with the pointer over it. Translucent fills are blended over whatever is
+ * beneath them, so the measured background is the one actually drawn.
+ */
+function hoveredContrast(control) {
+  const parse = (c) => {
+    const m = c.match(/rgba?\(([^)]+)\)/);
+    if (!m) return null;
+    const [r, g, b, a = 1] = m[1].split(/[ ,/]+/).filter(Boolean).map(Number);
+    return { r, g, b, a };
+  };
+  const lum = ({ r, g, b }) => {
+    const f = (v) => {
+      const s = v / 255;
+      return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+    };
+    return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+  };
+  const backgroundOf = (el) => {
+    const layers = [];
+    for (let node = el; node; node = node.parentElement) {
+      const c = parse(getComputedStyle(node).backgroundColor);
+      if (c && c.a > 0) layers.push(c);
+      if (c && c.a >= 1) break;
+    }
+    let bg = { r: 255, g: 255, b: 255 };
+    for (const layer of layers.reverse()) {
+      bg = {
+        r: layer.r * layer.a + bg.r * (1 - layer.a),
+        g: layer.g * layer.a + bg.g * (1 - layer.a),
+        b: layer.b * layer.a + bg.b * (1 - layer.a),
+      };
+    }
+    return bg;
+  };
+  const failures = [];
+  const nodes = [control, ...control.querySelectorAll('*')];
+  for (const el of nodes) {
+    const ownText = [...el.childNodes].some((n) => n.nodeType === 3 && /[\p{L}\p{N}]/u.test(n.textContent));
+    if (!ownText || el.closest('[aria-hidden="true"], .visually-hidden')) continue;
+    const style = getComputedStyle(el);
+    if (style.visibility === 'hidden' || style.display === 'none' || el.getClientRects().length === 0) continue;
+    if (parseFloat(style.width) <= 1) continue;
+    const fg = parse(style.color);
+    const bg = backgroundOf(el);
+    const [hi, lo] = [lum(fg), lum(bg)].sort((x, y) => y - x);
+    const ratio = (hi + 0.05) / (lo + 0.05);
+    const size = parseFloat(style.fontSize);
+    const large = size >= 24 || (Number(style.fontWeight) >= 700 && size >= 18.66);
+    const needed = large ? 3 : 4.5;
+    if (ratio < needed) {
+      failures.push({ text: el.textContent.trim().slice(0, 40), ratio: Math.round(ratio * 100) / 100, needed });
+    }
+  }
+  return failures;
+}
+
+async function hoverSweep(page) {
+  const controls = await page
+    .locator('button:not([disabled]), a[href], [role="radio"]:not([disabled]), label:has(input[type="checkbox"])')
+    .all();
+  const failures = [];
+  for (const control of controls) {
+    if (!(await control.isVisible())) continue;
+    try {
+      await control.hover({ timeout: 1000 });
+      // Hover styles land on the next frame or two; reading at once sees the
+      // resting colours and misses exactly the bug this sweep exists for.
+      await page.waitForTimeout(80);
+    } catch {
+      continue; // covered by a dialog or off screen
+    }
+    for (const f of await control.evaluate(hoveredContrast)) {
+      failures.push({ control: (await control.textContent())?.trim().slice(0, 50) ?? '', ...f });
+    }
+  }
+  await page.mouse.move(0, 0);
+  return failures;
+}
+
 const screens = [
   { id: 'splash', name: 'Splash', go: async () => {} },
   {
@@ -228,6 +313,10 @@ async function run() {
       for (const r of entry.contrastReview.filter((c) => c.pass === false)) {
         console.log(`    needs-review contrast FAILS ${r.ratio}:1 (needs ${r.needed}) ${r.selector}`);
       }
+      entry.hoverContrast = label === 'wide' ? await hoverSweep(page) : [];
+      for (const f of entry.hoverContrast) {
+        console.log(`    hover contrast FAILS ${f.ratio}:1 (needs ${f.needed}) "${f.text}" in "${f.control}"`);
+      }
       results.push(entry);
       await writeFile(path.join(outDir, `${entry.id}.json`), JSON.stringify(entry, null, 2));
       if (label === 'wide') {
@@ -252,6 +341,7 @@ async function run() {
   const total = results.reduce((sum, r) => sum + r.violations.length, 0);
   const reviewed = results.flatMap((r) => r.contrastReview.map((c) => ({ screen: `${r.screen} (${r.viewport})`, ...c })));
   const reviewFailures = reviewed.filter((c) => c.pass === false).length;
+  const hoverFailures = results.reduce((sum, r) => sum + r.hoverContrast.length, 0);
   const summary = {
     engine: `axe-core ${(await import('axe-core')).default.version}`,
     ruleTags: tags,
@@ -259,6 +349,7 @@ async function run() {
     screensScanned: results.length,
     totalViolations: total,
     contrastNeedsReview: { checked: reviewed.length, failing: reviewFailures },
+    hoverContrastFailures: hoverFailures,
     results: results.map((r) => ({
       id: r.id,
       screen: r.screen,
@@ -279,7 +370,8 @@ async function run() {
 
   console.log(`\n${results.length} screens, ${total} violations. Report: ${reportPath}`);
   console.log(`Needs-review contrast: ${reviewed.length} measured, ${reviewFailures} below threshold.`);
-  process.exitCode = total === 0 && reviewFailures === 0 ? 0 : 1;
+  console.log(`Hover contrast: ${hoverFailures} failure(s) with the pointer over each control.`);
+  process.exitCode = total === 0 && reviewFailures === 0 && hoverFailures === 0 ? 0 : 1;
 }
 
 function escape(text) {
@@ -324,6 +416,7 @@ th{background:#f2f2f2}.num{text-align:right}.fail td{background:#fde8e8}
 <h1>CareConnect desktop — axe accessibility scan</h1>
 <div class="meta">${escape(summary.engine)} · rules: ${summary.ruleTags.join(', ')} · ${escape(summary.date)}</div>
 <div class="big ${summary.totalViolations ? 'bad' : 'ok'}">${summary.totalViolations} violations across ${summary.screensScanned} screen scans</div>
+<p class="meta">Contrast with the pointer over every control (wide window): <b>${summary.hoverContrastFailures} failures</b>. "Needs review" contrast: <b>${summary.contrastNeedsReview.checked} measured, ${summary.contrastNeedsReview.failing} below threshold</b>.</p>
 <table><thead><tr><th>Screen</th><th>Viewport</th><th>Violations</th><th>Passing rules</th><th>Needs review</th></tr></thead>
 <tbody>${rows}</tbody></table>${details}
 <h2>"Needs review" contrast, resolved</h2>

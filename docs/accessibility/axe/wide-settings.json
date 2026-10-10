@@ -2,7 +2,7 @@
   "id": "wide-settings",
   "screen": "Accessibility Settings",
   "viewport": "1280×860",
-  "url": "http://localhost:5273/",
+  "url": "http://localhost:5274/",
   "violations": [],
   "passes": 41,
   "incomplete": [
@@ -422,5 +422,6 @@
       "decorative": false,
       "pass": true
     }
-  ]
+  ],
+  "hoverContrast": []
 }

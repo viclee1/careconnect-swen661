@@ -1149,7 +1149,9 @@ body {
   border-left: 2px solid var(--primary-dark);
 }
 
-.segmented__option:hover:not(:disabled) {
+/* Unselected options only. On the selected one this pale fill replaced the
+   dark one under white text — 1.09:1 while hovered (found by axe DevTools). */
+.segmented__option:hover:not(:disabled):not([aria-checked='true']) {
   background: var(--secondary-light);
 }
 
@@ -1714,8 +1716,9 @@ kbd {
 }
 
 .sidebar__item--alerts {
-  /* 5.96:1 on the sidebar's --primary-dark (was #f59f00, 3.98:1). */
-  color: #ffd43b;
+  /* 7.17:1 on the sidebar's --primary-dark and 5.01:1 under the hover tint
+     (was #f59f00, 3.98:1; then #ffd43b, which fell to 4.17:1 on hover). */
+  color: #ffec99;
 }
 
 /* ── Status Bar ──────────────────────────────────────────────────────────── */

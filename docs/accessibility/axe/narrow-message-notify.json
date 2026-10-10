@@ -2,7 +2,7 @@
   "id": "narrow-message-notify",
   "screen": "Message thread — Notify sent",
   "viewport": "900×700",
-  "url": "http://localhost:5273/",
+  "url": "http://localhost:5274/",
   "violations": [],
   "passes": 42,
   "incomplete": [
@@ -26,5 +26,6 @@
       "decorative": false,
       "pass": true
     }
-  ]
+  ],
+  "hoverContrast": []
 }

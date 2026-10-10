@@ -2,7 +2,7 @@
   "id": "narrow-home",
   "screen": "Home",
   "viewport": "900×700",
-  "url": "http://localhost:5273/",
+  "url": "http://localhost:5274/",
   "violations": [],
   "passes": 40,
   "incomplete": [
@@ -56,5 +56,6 @@
       "decorative": false,
       "pass": true
     }
-  ]
+  ],
+  "hoverContrast": []
 }

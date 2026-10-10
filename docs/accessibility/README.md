@@ -24,9 +24,11 @@ tested against **WCAG 2.1 Level AA**. October 7, 2026.
 |:--|:--|:--|
 | axe-core violations, default rule sets (28 scans) | 31 | **0** |
 | axe-core violations, with the label-in-name rule | 55 | **0** |
-| "Needs review" contrast results measured by hand | — | 157, all pass |
+| "Needs review" contrast results measured by hand | — | 149, all pass |
+| Contrast with the pointer over every control | — | **0 failures** |
+| axe DevTools extension (user-flow scan, 9 Oct) | 21 issues on the pre-fix build | all 21 resolved — see below |
 | Scripted keyboard-only checks | — | **73 / 73 pass** |
-| Distinct accessibility defects fixed | | **15** |
+| Distinct accessibility defects fixed | | **16** |
 | Jest tests | 471 in 38 suites | **498 in 39 suites** |
 | Statement coverage | 96.7% | **96.8%** (60% required) |
 | WCAG 2.1 A (30 criteria) | | 26 Supports, 4 Not Applicable |
@@ -101,9 +103,33 @@ appointment OK button.
 **Needs review.** axe marks contrast "needs review" when it cannot sample the
 background, here because text sits under the status bar or a scroll edge. The
 script measures each of those against the nearest opaque background in its own
-ancestry with the WCAG luminance formula: 157 measurements, lowest 4.37:1 for the
+ancestry with the WCAG luminance formula: 149 measurements, lowest 4.37:1 for the
 decorative ✓ (3:1 required), lowest real text 5.61:1. The table is at the bottom
 of the report screenshot.
+
+**Hover states.** axe sees the page at rest. After the axe DevTools run below
+caught a contrast failure that only exists with the pointer over a control, the
+audit gained a hover sweep: on every screen it hovers each button, link, radio and
+checkbox row, waits for the hover style to land, and measures the text inside it
+(translucent hover fills are blended over what is beneath). 0 failures after the
+fixes; with the old CSS restored it reports the two defects in #16.
+
+**axe DevTools extension.** The team ran the axe DevTools browser extension
+(4.138, axe-core 4.13, WCAG 2.1 AA) as a user flow on 9 October; the export is
+[`axe-devtools/axe-devtools-2026-10-09-old-code.json`](axe-devtools/axe-devtools-2026-10-09-old-code.json).
+That run was against the dev server in the main checkout, which did not yet have
+these fixes, so it found 21 issues:
+
+| Rule | Count | Status |
+|:--|--:|:--|
+| `button-name` — narrow-window sidebar buttons | 17 | Already fixed (#1) |
+| `color-contrast` — Medication badge | 1 | Already fixed (#2) |
+| `scrollable-region-focusable` — conversation history, shortcut card | 2 | Already fixed (#4) |
+| `color-contrast` — selected "Yellow" caption colour, under the pointer | 1 | **New — fixed (#16)** |
+
+The last one was missed by every scan above, because none of them moved the
+pointer. A re-scan with the extension against the fixed build
+(`npm run dev:renderer` from this branch) should report 0.
 
 **In the unit suite.** `src/renderer/__tests__/accessibility.test.tsx` runs jest-axe
 on all 11 pages of the real application shell, the open dialog and the sign-in error
@@ -158,7 +184,7 @@ step, the VoiceOver/NVDA commands, and the 3–5 minute video script.
 | # | Issue | WCAG 2.1 | Found by | Fix |
 |--:|:--|:--|:--|:--|
 | 1 | Below a 960px window the sidebar's eight buttons had **no accessible name**: the labels were `display: none`. The README claimed the opposite. | 4.1.2 | axe `button-name` | Labels are visually hidden instead (clip pattern), so they stay the buttons' names. Brand, badge and greeting, which were clipped mid-word in the narrow column, are hidden the same way. |
-| 2 | **Text contrast**: sidebar "3 alerts" `#f59f00` on `#0f5272` = 3.98:1; Medication badge `#f59f00` on `#fff9db` = 2.01:1; completed My Day tasks faded with `opacity: 0.85`. | 1.4.3 | axe `color-contrast` | `#ffd43b` (5.96:1); `--warning-text` (9.75:1); opacity removed — strike-through and the tick already mark "done". |
+| 2 | **Text contrast**: sidebar "3 alerts" `#f59f00` on `#0f5272` = 3.98:1; Medication badge `#f59f00` on `#fff9db` = 2.01:1; completed My Day tasks faded with `opacity: 0.85`. | 1.4.3 | axe `color-contrast` | `#ffd43b` (5.96:1; later `#ffec99`, 7.17:1, see #16); `--warning-text` (9.75:1); opacity removed — strike-through and the tick already mark "done". |
 | 3 | The status bar `<footer role="contentinfo">` was **inside `<main>`** on Home and My Day, and missing on every other signed-in page. | 1.3.1, 3.2.3 | axe `landmark-contentinfo-is-top-level` | The shell renders the status bar once, beside `<main>`, for every signed-in page. |
 | 4 | The **conversation history** and the **shortcut card** scroll, but could not be focused, so a keyboard user could not scroll them. | 2.1.1 | axe `scrollable-region-focusable` | `tabIndex={0}`, `role="region"` and a name ("Conversation with Joyce", "Shortcut list"); the dialog's focus trap includes the new stop. |
 | 5 | **Label in Name** — the spoken name did not contain the visible text on seven controls: Settings sidebar item (named "Accessibility"), status-bar button ("Press Ctrl/ for shortcuts" read as "Open keyboard shortcuts guide"), Notify, contact rows, vibration-pattern rows, My Day tasks, appointment "OK". Voice-control users could not say what they saw. | 2.5.3 | axe `label-content-name-mismatch` | `aria-label`s removed so each name is built from the visible text, in order; extra facts not printed on screen ("Urgent care service", the pattern's action) appended after it or moved to `aria-describedby`. |
@@ -172,6 +198,7 @@ step, the VoiceOver/NVDA commands, and the 3–5 minute video script.
 | 13 | The shortcut card's **backdrop closed it on mouse-down**, so a press could not be abandoned and a text selection dragged out of the card closed it. | 2.5.2 | Code review | Closes on click, and only when press and release are both on the backdrop. |
 | 14 | A `<div>` inside the Home "Video preview" `<button>` (invalid nesting). | 4.1.1 | Accessibility tree | Changed to `<span>`. |
 | 15 | The status-bar shortcut hint said `Ctrl` on macOS. | 3.3.2 | Accessibility tree | Uses the platform key ("Keyboard shortcuts: Cmd + Slash"). |
+| 16 | **Hover contrast.** Hovering the *selected* option of a segmented choice (caption size, caption colour) replaced its dark fill with the pale hover fill under white text — 1.09:1. Hovering the sidebar's "3 alerts" took its yellow to 4.17:1 over the hover tint. | 1.4.3 | axe DevTools extension; then the new hover sweep | The hover fill applies only to unselected options; the alerts yellow is `#ffec99` (7.17:1 at rest, 5.01:1 hovered). |
 
 Each fix has a regression test in `src/renderer/__tests__/accessibility.test.tsx`
 or the page's own test file, except the CSS-only fixes (2, 9, 11), which are

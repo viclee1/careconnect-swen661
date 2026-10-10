@@ -14,8 +14,9 @@ Build tested: ______________ Tester(s): ______________ Date: ______________
 | A1 | axe scan of every main screen, WCAG 2.1 A + AA | Pass (auto) — 0 violations, 28 scans | [axe/axe-zero-violations.png](axe/axe-zero-violations.png) |
 | A2 | Scans repeated in a narrow (900px) window | Pass (auto) | [axe/report.html](axe/report.html) |
 | A3 | Dialog open, form errors showing, banners showing | Pass (auto) | [axe/](axe) |
-| A4 | "Needs review" contrast items resolved | Pass (auto) — 157 measured, 0 below threshold | [axe/report.html](axe/report.html) |
-| A5 | Same scan in the axe DevTools extension in Chrome (optional cross-check) | Manual | screenshot: __________ |
+| A4 | "Needs review" contrast items resolved | Pass (auto) — 149 measured, 0 below threshold | [axe/report.html](axe/report.html) |
+| A5 | axe DevTools extension scan | Ran 9 Oct on the pre-fix build: 21 issues, 20 already fixed, 1 new (fixed, #16). Re-scan of this branch: __________ | [axe-devtools/](axe-devtools) |
+| A6 | Contrast with the pointer over every control | Pass (auto) — 0 failures | [axe/report.html](axe/report.html) |
 
 ## B. Keyboard only (mouse unplugged)
 

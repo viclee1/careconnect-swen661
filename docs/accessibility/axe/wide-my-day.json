@@ -2,7 +2,7 @@
   "id": "wide-my-day",
   "screen": "My Day",
   "viewport": "1280×860",
-  "url": "http://localhost:5273/",
+  "url": "http://localhost:5274/",
   "violations": [],
   "passes": 42,
   "incomplete": [
@@ -56,5 +56,6 @@
       "decorative": true,
       "pass": true
     }
-  ]
+  ],
+  "hoverContrast": []
 }

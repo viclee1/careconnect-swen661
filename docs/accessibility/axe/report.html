@@ -8,8 +8,9 @@ table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccc;padding:6p
 th{background:#f2f2f2}.num{text-align:right}.fail td{background:#fde8e8}
 </style></head><body>
 <h1>CareConnect desktop — axe accessibility scan</h1>
-<div class="meta">axe-core 4.14.0 · rules: wcag2a, wcag2aa, wcag21a, wcag21aa, best-practice · 2026-10-08T03:23:29.126Z</div>
+<div class="meta">axe-core 4.14.0 · rules: wcag2a, wcag2aa, wcag21a, wcag21aa, best-practice · 2026-10-10T01:49:01.999Z</div>
 <div class="big ok">0 violations across 28 screen scans</div>
+<p class="meta">Contrast with the pointer over every control (wide window): <b>0 failures</b>. "Needs review" contrast: <b>149 measured, 0 below threshold</b>.</p>
 <table><thead><tr><th>Screen</th><th>Viewport</th><th>Violations</th><th>Passing rules</th><th>Needs review</th></tr></thead>
 <tbody><tr class="pass">
         <td>Splash</td><td>1280×860</td>
@@ -97,7 +98,7 @@ th{background:#f2f2f2}.num{text-align:right}.fail td{background:#fde8e8}
         <td class="num">0</td><td class="num">47</td>
         <td class="num">1</td></tr></tbody></table>
 <h2>"Needs review" contrast, resolved</h2>
-<p class="meta">axe could not sample the background behind these (text under the status bar or a scroll edge, or a symbol with no letters), so each was measured against the nearest opaque background in its own ancestry. 157 measurements, 0 below threshold; unique elements below, lowest ratio first.</p>
+<p class="meta">axe could not sample the background behind these (text under the status bar or a scroll edge, or a symbol with no letters), so each was measured against the nearest opaque background in its own ancestry. 149 measurements, 0 below threshold; unique elements below, lowest ratio first.</p>
 <table><thead><tr><th>Element</th><th>Text</th><th>Ratio</th><th>Required</th><th>Result</th></tr></thead><tbody><tr class="pass"><td><code>.check-circle--active</code></td><td>✓</td>
         <td class="num">4.37:1</td><td class="num">3:1 (non-text)</td><td>Pass</td></tr><tr class="pass"><td><code>.settings-block:nth-child(3) &gt; .settings-block__hint</code></td><td>Both choices clear WCAG 2.2 AA against t</td>
         <td class="num">5.61:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>section[aria-labelledby=&quot;:r13:&quot;] &gt; .settings-section__description</code></td><td>Sound is never the only way CareConnect </td>
@@ -117,9 +118,16 @@ th{background:#f2f2f2}.num{text-align:right}.fail td{background:#fde8e8}
         <td class="num">5.61:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>button[data-testid=&quot;pattern-medication&quot;] &gt; .pattern-row__text &gt; .pattern-row__rhythm</code></td><td>Double pulse</td>
         <td class="num">5.61:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>button[data-testid=&quot;pattern-missed&quot;] &gt; .pattern-row__text &gt; .pattern-row__rhythm</code></td><td>Rapid burst</td>
         <td class="num">5.61:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>section[aria-labelledby=&quot;:r1p:&quot;] &gt; .settings-section__description</code></td><td>Margaret Whitfield · Care Recipient</td>
-        <td class="num">5.61:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>li:nth-child(1) &gt; .day-separator &gt; h2</code></td><td>Yesterday</td>
+        <td class="num">5.61:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>section[aria-labelledby=&quot;:rj:&quot;] &gt; .settings-section__description</code></td><td>What appears on screen when CareConnect </td>
+        <td class="num">5.61:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>section[aria-labelledby=&quot;:rj:&quot;] &gt; .settings-section__card &gt; .settings-row:nth-child(1) &gt; .settings-row__text &gt; .settings-row__title-line &gt; .settings-row__state</code></td><td>On</td>
+        <td class="num">5.61:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>#\:rn\:</code></td><td>Always on. Without a banner an alert cou</td>
+        <td class="num">5.61:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>.settings-row:nth-child(2) &gt; .settings-row__text &gt; .settings-row__title-line &gt; .settings-row__state</code></td><td>On</td>
+        <td class="num">5.61:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>#\:rr\:</code></td><td>Missed alerts are escalated automaticall</td>
+        <td class="num">5.61:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>section[aria-labelledby=&quot;:rt:&quot;] &gt; .settings-section__description</code></td><td>Text for anything spoken aloud.</td>
+        <td class="num">5.61:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>section[aria-labelledby=&quot;:rt:&quot;] &gt; .settings-section__card &gt; .settings-row &gt; .settings-row__text &gt; .settings-row__title-line &gt; .settings-row__state</code></td><td>On</td>
         <td class="num">5.61:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>#\:r11\:</code></td><td>Text for all audio and video content.</td>
         <td class="num">5.61:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>section[aria-labelledby=&quot;:rt:&quot;] &gt; .settings-section__card &gt; .settings-block:nth-child(2) &gt; .settings-block__hint</code></td><td>Currently medium.</td>
+        <td class="num">5.61:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>li:nth-child(1) &gt; .day-separator &gt; h2</code></td><td>Yesterday</td>
         <td class="num">5.61:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>button[aria-label=&quot;Refresh page&quot;]</code></td><td>↻</td>
         <td class="num">8.5:1</td><td class="num">3:1 (non-text)</td><td>Pass</td></tr><tr class="pass"><td><code>.settings-block:nth-child(3) &gt; .settings-block__title</code></td><td>Caption text colour</td>
         <td class="num">8.5:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>button[data-value=&quot;yellow&quot;]</code></td><td>Yellow</td>
@@ -136,13 +144,17 @@ th{background:#f2f2f2}.num{text-align:right}.fail td{background:#fde8e8}
         <td class="num">8.5:1</td><td class="num">3:1 (non-text)</td><td>Pass</td></tr><tr class="pass"><td><code>button[data-testid=&quot;pattern-missed&quot;] &gt; .pattern-row__text &gt; .pattern-row__type</code></td><td>Missed / Escalated</td>
         <td class="num">8.5:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>button[data-testid=&quot;pattern-missed&quot;] &gt; .pattern-row__glyph[aria-hidden=&quot;true&quot;]</code></td><td>···· ····</td>
         <td class="num">8.5:1</td><td class="num">3:1 (non-text)</td><td>Pass</td></tr><tr class="pass"><td><code>#\:r1p\:</code></td><td>Account</td>
-        <td class="num">8.5:1</td><td class="num">3:1</td><td>Pass</td></tr><tr class="pass"><td><code>table:nth-child(3) &gt; tbody &gt; tr:nth-child(2) &gt; td:nth-child(2)</code></td><td>Send message</td>
-        <td class="num">8.5:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>table:nth-child(3) &gt; tbody &gt; tr:nth-child(2) &gt; td:nth-child(3)</code></td><td>Send what you have typed, from anywhere </td>
-        <td class="num">8.5:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>.home-later-section__title</code></td><td>Later today</td>
-        <td class="num">8.5:1</td><td class="num">3:1</td><td>Pass</td></tr><tr class="pass"><td><code>section[aria-labelledby=&quot;:rt:&quot;] &gt; .settings-section__card &gt; .settings-block:nth-child(2) &gt; .settings-block__title</code></td><td>Caption size</td>
+        <td class="num">8.5:1</td><td class="num">3:1</td><td>Pass</td></tr><tr class="pass"><td><code>#\:rj\:</code></td><td>Visual Alerts</td>
+        <td class="num">8.5:1</td><td class="num">3:1</td><td>Pass</td></tr><tr class="pass"><td><code>#\:rq\:</code></td><td>Smart alert escalation</td>
+        <td class="num">8.5:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>#\:rt\:</code></td><td>Captions</td>
+        <td class="num">8.5:1</td><td class="num">3:1</td><td>Pass</td></tr><tr class="pass"><td><code>#\:r10\:</code></td><td>Show captions</td>
+        <td class="num">8.5:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>section[aria-labelledby=&quot;:rt:&quot;] &gt; .settings-section__card &gt; .settings-block:nth-child(2) &gt; .settings-block__title</code></td><td>Caption size</td>
         <td class="num">8.5:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>button[data-value=&quot;small&quot;]</code></td><td>Small</td>
         <td class="num">8.5:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>button[data-value=&quot;large&quot;]</code></td><td>Large</td>
-        <td class="num">8.5:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>table:nth-child(3) &gt; caption</code></td><td>Doing things</td>
+        <td class="num">8.5:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>table:nth-child(3) &gt; tbody &gt; tr:nth-child(2) &gt; td:nth-child(2)</code></td><td>Send message</td>
+        <td class="num">8.5:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>table:nth-child(3) &gt; tbody &gt; tr:nth-child(2) &gt; td:nth-child(3)</code></td><td>Send what you have typed, from anywhere </td>
+        <td class="num">8.5:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>.home-later-section__title</code></td><td>Later today</td>
+        <td class="num">8.5:1</td><td class="num">3:1</td><td>Pass</td></tr><tr class="pass"><td><code>table:nth-child(3) &gt; caption</code></td><td>Doing things</td>
         <td class="num">8.5:1</td><td class="num">4.5:1</td><td>Pass</td></tr><tr class="pass"><td><code>.btn--danger &gt; span</code></td><td>Sign out</td>
         <td class="num">9.53:1</td><td class="num">4.5:1</td><td>Pass</td></tr></tbody></table>
 </body></html>

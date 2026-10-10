@@ -2,9 +2,10 @@
   "id": "wide-splash",
   "screen": "Splash",
   "viewport": "1280×860",
-  "url": "http://localhost:5273/",
+  "url": "http://localhost:5274/",
   "violations": [],
   "passes": 37,
   "incomplete": [],
-  "contrastReview": []
+  "contrastReview": [],
+  "hoverContrast": []
 }

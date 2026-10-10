@@ -2,7 +2,7 @@
   "id": "narrow-shortcuts-dialog",
   "screen": "Keyboard shortcuts dialog",
   "viewport": "900×700",
-  "url": "http://localhost:5273/",
+  "url": "http://localhost:5274/",
   "violations": [],
   "passes": 47,
   "incomplete": [
@@ -494,5 +494,6 @@
       "decorative": false,
       "pass": true
     }
-  ]
+  ],
+  "hoverContrast": []
 }

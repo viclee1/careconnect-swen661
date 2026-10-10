@@ -2,7 +2,7 @@
   "id": "narrow-my-day",
   "screen": "My Day",
   "viewport": "900×700",
-  "url": "http://localhost:5273/",
+  "url": "http://localhost:5274/",
   "violations": [],
   "passes": 42,
   "incomplete": [
@@ -56,5 +56,6 @@
       "decorative": true,
       "pass": true
     }
-  ]
+  ],
+  "hoverContrast": []
 }
