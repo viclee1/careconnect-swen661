@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 
 import { Icon } from '../../components/Icon';
 import {
@@ -59,44 +59,51 @@ export function VibrationPatternRow({
     );
   };
 
+  // The name is the words on the row (WCAG 2.5.3 Label in Name), so a
+  // voice-control user can say what they see. What activating it does is the
+  // description, kept outside the button so it is not folded into the name.
+  const hintId = useId();
+
   return (
-    <button
-      type="button"
-      data-testid={`pattern-${pattern.id}`}
-      className="pattern-row"
-      disabled={!enabled}
-      aria-label={
-        enabled
-          ? patternSemanticLabel(pattern)
-          : `${pattern.alertType} alert, ${pattern.rhythmName}. Turn vibration on to play it.`
-      }
-      onClick={play}
-    >
-      <span className="pattern-row__text">
-        <span className="pattern-row__type">{pattern.alertType}</span>
-        <span className="pattern-row__rhythm">{pattern.rhythmName}</span>
+    <>
+      <button
+        type="button"
+        data-testid={`pattern-${pattern.id}`}
+        className="pattern-row"
+        disabled={!enabled}
+        aria-describedby={hintId}
+        onClick={play}
+      >
+        <span className="pattern-row__text">
+          <span className="pattern-row__type">{pattern.alertType}</span>{' '}
+          <span className="pattern-row__rhythm">{pattern.rhythmName}</span>
+        </span>
+
+        <span className="pattern-row__glyph" aria-hidden="true">
+          {pattern.glyph}
+        </span>
+
+        {/* The lamp is the visual stand-in for the buzz. It is hidden from
+            assistive technology: a light blinking nine times in two seconds is
+            not something to narrate, and the row's own name already says what
+            the rhythm is. */}
+        <span
+          data-testid={`pattern-lamp-${pattern.id}`}
+          className={`pattern-row__lamp${lampOn ? ' pattern-row__lamp--on' : ''}`}
+          aria-hidden="true"
+        />
+
+        <Icon name="play" size={26} />
+      </button>
+
+      <span className="visually-hidden" id={hintId}>
+        {enabled ? patternSemanticLabel(pattern) : 'Turn vibration on to play it.'}
       </span>
-
-      <span className="pattern-row__glyph" aria-hidden="true">
-        {pattern.glyph}
-      </span>
-
-      {/* The lamp is the visual stand-in for the buzz. It is hidden from
-          assistive technology: a light blinking nine times in two seconds is
-          not something to narrate, and the row's own name already says what
-          the rhythm is. */}
-      <span
-        data-testid={`pattern-lamp-${pattern.id}`}
-        className={`pattern-row__lamp${lampOn ? ' pattern-row__lamp--on' : ''}`}
-        aria-hidden="true"
-      />
-
-      <Icon name="play" size={26} />
 
       {/* Announced once, rather than on every pulse. */}
       <span className="visually-hidden" role="status">
         {playing ? `Playing the ${pattern.rhythmName} rhythm.` : ''}
       </span>
-    </button>
+    </>
   );
 }

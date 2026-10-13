@@ -1,0 +1,9 @@
+{
+  "id": "wide-sign-up",
+  "screen": "Sign Up",
+  "viewport": "1280×860",
+  "url": "http://localhost:5273/",
+  "violations": [],
+  "passes": 40,
+  "incomplete": []
+}

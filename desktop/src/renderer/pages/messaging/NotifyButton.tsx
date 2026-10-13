@@ -30,12 +30,13 @@ export function NotifyButton({
       type="button"
       data-testid="notify-button"
       className="notify"
-      aria-label={`Alert ${contactName} you want to talk. ${subtitle}.`}
       onClick={onActivate}
     >
       <Icon name="notify" size={28} />
       <span className="notify__text">
-        <span className="notify__title">Alert {contactName} you want to talk</span>
+        {/* No aria-label: the name is the printed title and subtitle, so what
+            is announced is what is on screen (WCAG 2.5.3). */}
+        <span className="notify__title">Alert {contactName} you want to talk</span>{' '}
         <span className="notify__subtitle">{subtitle}</span>
       </span>
       <kbd className="notify__keys" aria-hidden="true">

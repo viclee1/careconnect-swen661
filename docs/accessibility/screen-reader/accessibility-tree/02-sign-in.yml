@@ -1,0 +1,22 @@
+- link "Skip to main content":
+  - /url: "#main-content"
+- banner:
+  - button "Go to CareConnect homepage":
+    - strong: CareConnect
+- main:
+  - region "Sign in form":
+    - heading "Welcome back" [level=1]
+    - paragraph: Sign in to your account.
+    - text: Email address
+    - textbox "Email address":
+      - /placeholder: you@example.com
+    - text: Password
+    - textbox "Password"
+    - button "Forgot password?"
+    - button "Sign in"
+    - paragraph:
+      - text: New here?
+      - button "Create an account"
+- contentinfo "Application status":
+  - text: Not signed in Zoom 100%
+  - 'button "Keyboard shortcuts: Cmd + Slash"'

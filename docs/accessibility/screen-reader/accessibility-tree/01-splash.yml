@@ -1,0 +1,28 @@
+- link "Skip to main content":
+  - /url: "#main-content"
+- banner:
+  - strong: CareConnect
+  - navigation "Account actions":
+    - button "Sign in"
+    - button "Sign up"
+- main:
+  - text: Fully accessible — no sound required
+  - heading "Your daily companion for calm, confident care." [level=1]
+  - paragraph: For people who need a little help remembering, and the people who care for them.
+  - button "Get started — it's free →"
+  - button "I already have an account"
+  - region "Hearing accessibility features":
+    - heading "Built for hearing accessibility" [level=2]
+    - list:
+      - listitem:
+        - strong: Visual alerts
+        - paragraph: Flashing banners for every notification — no sound needed
+      - listitem:
+        - strong: Captions everywhere
+        - paragraph: Adjustable text for all audio & video content
+      - listitem:
+        - strong: Screen flash & desktop alerts
+        - paragraph: The screen flashes and a banner pops for every reminder — no sound
+- contentinfo "Application status":
+  - text: Not signed in Zoom 100%
+  - 'button "Keyboard shortcuts: Cmd + Slash"'

@@ -1,0 +1,9 @@
+{
+  "id": "narrow-sign-in-errors",
+  "screen": "Sign In — validation errors shown",
+  "viewport": "900×700",
+  "url": "http://localhost:5273/",
+  "violations": [],
+  "passes": 40,
+  "incomplete": []
+}

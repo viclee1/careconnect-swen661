@@ -1,4 +1,4 @@
-import { useState, useId } from 'react';
+import { useEffect, useRef, useState, useId } from 'react';
 import { useNavigation } from '../navigation/NavigationProvider';
 import { useAuth } from '../state/AuthProvider';
 import { Icon } from '../components/Icon';
@@ -12,6 +12,18 @@ export function SignInPage({ onShowShortcuts }: { onShowShortcuts?: () => void }
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  // The field to focus once the errors have rendered. An effect rather than a
+  // timer, so nothing is left pending if the page goes away first.
+  const focusAfterRender = useRef<string | null>(null);
+  const fieldOrder: Array<[keyof typeof errors, string]> = [
+    ['email', 'email-input'],
+    ['password', 'password-input'],
+  ];
+  useEffect(() => {
+    if (!focusAfterRender.current) return;
+    document.getElementById(focusAfterRender.current)?.focus();
+    focusAfterRender.current = null;
+  }, [errors]);
   const [globalError, setGlobalError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -33,7 +45,13 @@ export function SignInPage({ onShowShortcuts }: { onShowShortcuts?: () => void }
     setGlobalError('');
     const next = validate();
     setErrors(next);
-    if (Object.keys(next).length > 0) return;
+    if (Object.keys(next).length > 0) {
+      // Put the user on the first field to fix; its error is its description
+      // (WCAG 3.3.1), so a screen reader reads the problem with the field.
+      const first = fieldOrder.find(([key]) => next[key]);
+      focusAfterRender.current = first ? first[1] : null;
+      return;
+    }
 
     setIsSubmitting(true);
     const result = await signIn(email, password);
@@ -94,6 +112,8 @@ export function SignInPage({ onShowShortcuts }: { onShowShortcuts?: () => void }
               </label>
               <input
                 id="email-input"
+                aria-invalid={Boolean(errors.email)}
+                aria-describedby={errors.email ? 'email-input-error' : undefined}
                 type="email"
                 className="field__input"
                 placeholder="you@example.com"
@@ -102,7 +122,7 @@ export function SignInPage({ onShowShortcuts }: { onShowShortcuts?: () => void }
                 autoComplete="email"
                 required
               />
-              {errors.email && <span className="field__error">{errors.email}</span>}
+              {errors.email && <span className="field__error" id="email-input-error">{errors.email}</span>}
             </div>
 
             <div className="field">
@@ -111,6 +131,8 @@ export function SignInPage({ onShowShortcuts }: { onShowShortcuts?: () => void }
               </label>
               <input
                 id="password-input"
+                aria-invalid={Boolean(errors.password)}
+                aria-describedby={errors.password ? 'password-input-error' : undefined}
                 type="password"
                 className="field__input"
                 value={password}
@@ -118,7 +140,7 @@ export function SignInPage({ onShowShortcuts }: { onShowShortcuts?: () => void }
                 autoComplete="current-password"
                 required
               />
-              {errors.password && <span className="field__error">{errors.password}</span>}
+              {errors.password && <span className="field__error" id="password-input-error">{errors.password}</span>}
 
               <div className="auth-form__forgot">
                 <button

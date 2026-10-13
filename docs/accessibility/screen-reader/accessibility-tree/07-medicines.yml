@@ -1,0 +1,31 @@
+- link "Skip to main content":
+  - /url: "#main-content"
+- navigation "Main":
+  - text: CareConnect ♡ Care Recipient
+  - strong: Good morning, Margaret
+  - text: Thursday 4 June · 5:38 AM
+  - button "Home"
+  - button "My Day"
+  - button "Appointments"
+  - button "Medicines"
+  - button "Memories"
+  - button "Contacts"
+  - button "Settings"
+  - button "3 alerts"
+  - button "Keyboard shortcuts"
+- main:
+  - heading "Medicines" [level=1]
+  - paragraph: Today's medication tracker
+  - status: 1 of 3 taken
+  - group "Mark each medicine as taken":
+    - text: Mark each medicine as taken
+    - checkbox "Amlodipine 5 mg — 1 tablet with food · 8:30 am" [checked]
+    - text: Amlodipine 5 mg — 1 tablet with food · 8:30 am
+    - checkbox "Metformin 500 mg — 1 tablet with lunch · 12:30 pm"
+    - text: Metformin 500 mg — 1 tablet with lunch · 12:30 pm
+    - checkbox "Atorvastatin 20 mg — 1 tablet · 5:00 pm"
+    - text: Atorvastatin 20 mg — 1 tablet · 5:00 pm
+  - paragraph: Press Tab to move between medicines and Space to mark one taken or not taken.
+- contentinfo "Application status":
+  - text: Connected · synced just now Care Recipient · Margaret Whitfield's plan 3 active alerts Zoom 100%
+  - 'button "Keyboard shortcuts: Cmd + Slash"'

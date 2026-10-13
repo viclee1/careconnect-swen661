@@ -1,7 +1,12 @@
+import { isMacPlatform } from '../platform/bridge';
 import { useAuth } from '../state/AuthProvider';
+import { shortcutLabel } from '../../shared/shortcuts';
 
 export function StatusBar({ onShowShortcuts }: { onShowShortcuts?: () => void }) {
   const { user, isSignedIn } = useAuth();
+  // The visible text is the accessible name (WCAG 2.5.3), and it names this
+  // platform's key — Cmd on a Mac — rather than always Ctrl.
+  const hint = `Keyboard shortcuts: ${shortcutLabel('CmdOrCtrl+/', isMacPlatform())}`;
 
   return (
     <footer className="status-bar" role="contentinfo" aria-label="Application status">
@@ -36,12 +41,11 @@ export function StatusBar({ onShowShortcuts }: { onShowShortcuts?: () => void })
             type="button"
             className="status-bar__shortcut-btn"
             onClick={onShowShortcuts}
-            aria-label="Open keyboard shortcuts guide"
           >
-            Press Ctrl/ for shortcuts
+            {hint}
           </button>
         ) : (
-          <span className="status-bar__item">Press Ctrl/ for shortcuts</span>
+          <span className="status-bar__item">{hint}</span>
         )}
       </div>
     </footer>

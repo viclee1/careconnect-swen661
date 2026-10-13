@@ -1,0 +1,190 @@
+- link "Skip to main content":
+  - /url: "#main-content"
+- navigation "Main":
+  - text: CareConnect ♡ Care Recipient
+  - strong: Good morning, Margaret
+  - text: Thursday 4 June · 5:38 AM
+  - button "Home"
+  - button "My Day"
+  - button "Appointments"
+  - button "Medicines"
+  - button "Memories"
+  - button "Contacts"
+  - button "Settings"
+  - button "3 alerts"
+  - button "Keyboard shortcuts"
+- main:
+  - region "Upcoming appointment notification":
+    - strong: Upcoming appointment
+    - paragraph: Blood pressure check with Dr. Sharma today at 10:30 am — Greenfield Surgery
+    - text: Today at 10:30 am
+    - button "Pause reminder sound": "|| Pause"
+    - button "OK, acknowledge upcoming appointment": OK
+  - toolbar "Desktop application controls":
+    - button "Go back" [disabled]: <
+    - button "Refresh page": ↻
+    - button "Go to Home": 🏠
+    - searchbox "Search CareConnect"
+    - text: CC
+    - button "Toggle contrast mode"
+    - button "View keyboard shortcuts"
+    - button "Alerts"
+  - heading "My Day" [level=1]
+  - paragraph: Everything to do — Thursday 4 June
+  - progressbar "1 of 7 done"
+  - text: 1 of 7 done
+  - list:
+    - listitem:
+      - button "Take Amlodipine 5 mg — 1 tablet with food 8:30 am" [pressed]:
+        - strong: Take Amlodipine
+        - text: 5 mg — 1 tablet with food 8:30 am
+    - listitem:
+      - button "Morning check-in Tap to confirm you're doing well 9:00 am":
+        - strong: Morning check-in
+        - text: Tap to confirm you're doing well 9:00 am
+    - listitem:
+      - button "Blood pressure check Greenfield Surgery — Dr. Sharma 10:30 am":
+        - strong: Blood pressure check
+        - text: Greenfield Surgery — Dr. Sharma 10:30 am
+    - listitem:
+      - button "Take Metformin 500 mg — 1 tablet with lunch 12:00 pm":
+        - strong: Take Metformin
+        - text: 500 mg — 1 tablet with lunch 12:00 pm
+    - listitem:
+      - button "Video call with Maria Your daughter — she will call you 3:00 pm":
+        - strong: Video call with Maria
+        - text: Your daughter — she will call you 3:00 pm
+    - listitem:
+      - button "Take Atorvastatin 20 mg — 1 tablet 8:00 pm":
+        - strong: Take Atorvastatin
+        - text: 20 mg — 1 tablet 8:00 pm
+    - listitem:
+      - button "Bedtime rest Wind down for sleep 9:30 pm":
+        - strong: Bedtime rest
+        - text: Wind down for sleep 9:30 pm
+- contentinfo "Application status":
+  - text: Connected · synced just now Care Recipient · Margaret Whitfield's plan 3 active alerts Zoom 100%
+  - 'button "Keyboard shortcuts: Cmd + Slash"'
+- dialog "Keyboard shortcuts":
+  - heading "Keyboard shortcuts" [level=1]
+  - button "Print"
+  - button "Close"
+  - region "Shortcut list":
+    - paragraph: These work anywhere in CareConnect. The same commands are in the menu bar, so nothing here is the only way to do something.
+    - table "Getting around":
+      - caption: Getting around
+      - rowgroup:
+        - row "Keys Action What it does":
+          - columnheader "Keys"
+          - columnheader "Action"
+          - columnheader "What it does"
+      - rowgroup:
+        - row "Cmd + 1 Home Open Home.":
+          - cell "Cmd + 1"
+          - cell "Home"
+          - cell "Open Home."
+        - row "Cmd + 2 My Day Open My Day.":
+          - cell "Cmd + 2"
+          - cell "My Day"
+          - cell "Open My Day."
+        - row "Cmd + 3 Appointments Open Appointments.":
+          - cell "Cmd + 3"
+          - cell "Appointments"
+          - cell "Open Appointments."
+        - row "Cmd + 4 Medicines Open Medicines.":
+          - cell "Cmd + 4"
+          - cell "Medicines"
+          - cell "Open Medicines."
+        - row "Cmd + 5 Memories Open Memories.":
+          - cell "Cmd + 5"
+          - cell "Memories"
+          - cell "Open Memories."
+        - row "Cmd + 6 Contacts Open Contacts.":
+          - cell "Cmd + 6"
+          - cell "Contacts"
+          - cell "Open Contacts."
+        - row "Cmd + Comma Accessibility Settings Open Accessibility Settings.":
+          - cell "Cmd + Comma"
+          - cell "Accessibility Settings"
+          - cell "Open Accessibility Settings."
+        - row "Cmd + [ Back Go back to the page you came from. Esc does the same thing.":
+          - cell "Cmd + ["
+          - cell "Back"
+          - cell "Go back to the page you came from. Esc does the same thing."
+    - table "Doing things":
+      - caption: Doing things
+      - rowgroup:
+        - row "Keys Action What it does":
+          - columnheader "Keys"
+          - columnheader "Action"
+          - columnheader "What it does"
+      - rowgroup:
+        - row "Cmd + F Find a contact Jump to the Contacts search box and filter the list as you type.":
+          - cell "Cmd + F"
+          - cell "Find a contact"
+          - cell "Jump to the Contacts search box and filter the list as you type."
+        - row "Cmd + Enter Send message Send what you have typed, from anywhere in a conversation.":
+          - cell "Cmd + Enter"
+          - cell "Send message"
+          - cell "Send what you have typed, from anywhere in a conversation."
+        - row "Cmd + Shift + N Alert this contact Send a silent visual flash and vibration to the person you are messaging. Nothing rings.":
+          - cell "Cmd + Shift + N"
+          - cell "Alert this contact"
+          - cell "Send a silent visual flash and vibration to the person you are messaging. Nothing rings."
+        - row "Cmd + Slash Keyboard shortcuts Show this reference card.":
+          - cell "Cmd + Slash"
+          - cell "Keyboard shortcuts"
+          - cell "Show this reference card."
+    - table "Editing text":
+      - caption: Editing text
+      - rowgroup:
+        - row "Keys Action What it does":
+          - columnheader "Keys"
+          - columnheader "Action"
+          - columnheader "What it does"
+      - rowgroup:
+        - row "Cmd + C Copy Copy the selection.":
+          - cell "Cmd + C"
+          - cell "Copy"
+          - cell "Copy the selection."
+        - row "Cmd + X Cut Cut the selection.":
+          - cell "Cmd + X"
+          - cell "Cut"
+          - cell "Cut the selection."
+        - row "Cmd + V Paste Paste the clipboard.":
+          - cell "Cmd + V"
+          - cell "Paste"
+          - cell "Paste the clipboard."
+        - row "Cmd + Z Undo Undo the last edit.":
+          - cell "Cmd + Z"
+          - cell "Undo"
+          - cell "Undo the last edit."
+        - row "Cmd + A Select all Select everything in the current field.":
+          - cell "Cmd + A"
+          - cell "Select all"
+          - cell "Select everything in the current field."
+    - table "Moving around with the keyboard":
+      - caption: Moving around with the keyboard
+      - rowgroup:
+        - row "Keys What it does":
+          - columnheader "Keys"
+          - columnheader "What it does"
+      - rowgroup:
+        - row "Tab Move to the next button, link or field.":
+          - cell "Tab"
+          - cell "Move to the next button, link or field."
+        - row "Shift + Tab Move to the previous one.":
+          - cell "Shift + Tab"
+          - cell "Move to the previous one."
+        - row "↑ ↓ ← → Move within a group — the sidebar, a set of choices, or a slider.":
+          - cell "↑ ↓ ← →"
+          - cell "Move within a group — the sidebar, a set of choices, or a slider."
+        - row "Enter Activate whatever is focused.":
+          - cell "Enter"
+          - cell "Activate whatever is focused."
+        - row "Space Activate a button, or switch a setting on and off.":
+          - cell "Space"
+          - cell "Activate a button, or switch a setting on and off."
+        - row "Esc Close this card, leave a conversation, or clear a search box.":
+          - cell "Esc"
+          - cell "Close this card, leave a conversation, or clear a search box."

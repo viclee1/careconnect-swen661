@@ -27,6 +27,8 @@ import { Icon } from './Icon';
 export function ShortcutsDialog({ onClose }: { onClose: () => void }) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  // Set when a press starts on the backdrop itself, not inside the card.
+  const pressedOnBackdrop = useRef(false);
   const isMac = isMacPlatform();
 
   // Focus moves into the dialog on open and returns to whatever opened it on
@@ -74,8 +76,16 @@ export function ShortcutsDialog({ onClose }: { onClose: () => void }) {
   return (
     <div
       className="dialog-backdrop"
+      // Closes on the click (button up), and only when the press began on the
+      // backdrop too, so a press can be abandoned by moving off before release
+      // and a text selection dragged out of the card never closes it
+      // (WCAG 2.5.2 Pointer Cancellation).
       onMouseDown={(event) => {
-        if (event.target === event.currentTarget) onClose();
+        pressedOnBackdrop.current = event.target === event.currentTarget;
+      }}
+      onClick={(event) => {
+        if (pressedOnBackdrop.current && event.target === event.currentTarget) onClose();
+        pressedOnBackdrop.current = false;
       }}
     >
       <div
@@ -106,7 +116,14 @@ export function ShortcutsDialog({ onClose }: { onClose: () => void }) {
           />
         </div>
 
-        <div className="dialog__body">
+        {/* Focusable so the card scrolls with the arrow keys when it is taller
+            than the window (WCAG 2.1.1). */}
+        <div
+          className="dialog__body"
+          tabIndex={0}
+          role="region"
+          aria-label="Shortcut list"
+        >
           <p>
             These work anywhere in CareConnect. The same commands are in the
             menu bar, so nothing here is the only way to do something.

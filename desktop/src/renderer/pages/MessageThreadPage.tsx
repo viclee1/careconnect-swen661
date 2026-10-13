@@ -182,7 +182,15 @@ export function MessageThreadPage({
         <span>{contact.relationship}</span>
       </div>
 
-      <div className="thread-scroll" ref={scrollRef}>
+      {/* Focusable so a keyboard user can scroll the history with the arrow
+          keys and Page Up/Down without a mouse wheel (WCAG 2.1.1). */}
+      <div
+        className="thread-scroll"
+        ref={scrollRef}
+        tabIndex={0}
+        role="region"
+        aria-label={`Conversation with ${name}`}
+      >
         <div className="readable stack">
           {callRequested ? (
             <AlertBanner

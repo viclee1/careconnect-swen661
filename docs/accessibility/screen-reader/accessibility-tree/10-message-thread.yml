@@ -1,0 +1,43 @@
+- link "Skip to main content":
+  - /url: "#main-content"
+- navigation "Main":
+  - text: CareConnect ♡ Care Recipient
+  - strong: Good morning, Margaret
+  - text: Thursday 4 June · 5:38 AM
+  - button "Home"
+  - button "My Day"
+  - button "Appointments"
+  - button "Medicines"
+  - button "Memories"
+  - button "Contacts"
+  - button "Settings"
+  - button "3 alerts"
+  - button "Keyboard shortcuts"
+- main:
+  - button "Back to contacts"
+  - heading "Joyce" [level=1]
+  - paragraph: Caregiver · Daughter
+  - button "Call Joyce now with live captions": Call Joyce
+  - text: Caregiver · Daughter
+  - region "Conversation with Joyce":
+    - list "Conversation with Joyce":
+      - listitem:
+        - heading "Yesterday" [level=2]
+        - text: You
+        - paragraph: Goodnight Joyce. See you in the morning.
+        - text: 7:40 pm Read
+      - listitem:
+        - heading "Today" [level=2]
+        - text: Joyce
+        - paragraph: Good morning Margaret! How are you feeling today?
+        - text: 8:02 am
+  - button "Alert Joyce you want to talk Sends a visual flash and vibration — no sound"
+  - text: Message Joyce
+  - textbox "Message Joyce":
+    - /placeholder: Message Joyce…
+  - button "Send. Type a message first.": Send
+  - status: 500 characters left
+  - text: Press Cmd + Enter to send. Enter starts a new line.
+- contentinfo "Application status":
+  - text: Connected · synced just now Care Recipient · Margaret Whitfield's plan 3 active alerts Zoom 100%
+  - 'button "Keyboard shortcuts: Cmd + Slash"'

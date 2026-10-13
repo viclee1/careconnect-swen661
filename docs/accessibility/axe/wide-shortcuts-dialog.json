@@ -1,0 +1,355 @@
+{
+  "id": "wide-shortcuts-dialog",
+  "screen": "Keyboard shortcuts dialog",
+  "viewport": "1280×860",
+  "url": "http://localhost:5274/",
+  "violations": [],
+  "passes": 47,
+  "incomplete": [
+    {
+      "id": "color-contrast",
+      "help": "Elements must meet minimum color contrast ratio thresholds",
+      "nodes": [
+        {
+          "target": "#\\:rj\\:",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "section[aria-labelledby=\":rj:\"] > .settings-section__description",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "section[aria-labelledby=\":rj:\"] > .settings-section__card > .settings-row:nth-child(1) > .settings-row__text > .settings-row__title-line > .settings-row__state",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "#\\:rn\\:",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "#\\:rq\\:",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": ".settings-row:nth-child(2) > .settings-row__text > .settings-row__title-line > .settings-row__state",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "#\\:rr\\:",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "#\\:rt\\:",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "section[aria-labelledby=\":rt:\"] > .settings-section__description",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "#\\:r10\\:",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "section[aria-labelledby=\":rt:\"] > .settings-section__card > .settings-row > .settings-row__text > .settings-row__title-line > .settings-row__state",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "#\\:r11\\:",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "section[aria-labelledby=\":rt:\"] > .settings-section__card > .settings-block:nth-child(2) > .settings-block__title",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "section[aria-labelledby=\":rt:\"] > .settings-section__card > .settings-block:nth-child(2) > .settings-block__hint",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "button[data-value=\"small\"]",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "button[data-value=\"large\"]",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": ".settings-block:nth-child(3) > .settings-block__title",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": ".settings-block:nth-child(3) > .settings-block__hint",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "button[data-value=\"yellow\"]",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "#\\:r13\\:",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "section[aria-labelledby=\":r13:\"] > .settings-section__description",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "#\\:r16\\:",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": ".settings-block:nth-child(1) > .settings-row__title-line > .settings-row__state",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": ".settings-block:nth-child(1) > .slider-ends[aria-hidden=\"true\"] > span:nth-child(1)",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": ".settings-block:nth-child(1) > .slider-ends[aria-hidden=\"true\"] > span:nth-child(2)",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "#\\:r17\\:",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "table:nth-child(3) > tbody > tr:nth-child(2) > td:nth-child(2)",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "target": "table:nth-child(3) > tbody > tr:nth-child(2) > td:nth-child(3)",
+          "reason": "Element's background color could not be determined because it's partially obscured by another element"
+        }
+      ]
+    }
+  ],
+  "contrastReview": [
+    {
+      "selector": "#\\:rj\\:",
+      "text": "Visual Alerts",
+      "ratio": 8.5,
+      "needed": 3,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "section[aria-labelledby=\":rj:\"] > .settings-section__description",
+      "text": "What appears on screen when CareConnect ",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "section[aria-labelledby=\":rj:\"] > .settings-section__card > .settings-row:nth-child(1) > .settings-row__text > .settings-row__title-line > .settings-row__state",
+      "text": "On",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "#\\:rn\\:",
+      "text": "Always on. Without a banner an alert cou",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "#\\:rq\\:",
+      "text": "Smart alert escalation",
+      "ratio": 8.5,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": ".settings-row:nth-child(2) > .settings-row__text > .settings-row__title-line > .settings-row__state",
+      "text": "On",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "#\\:rr\\:",
+      "text": "Missed alerts are escalated automaticall",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "#\\:rt\\:",
+      "text": "Captions",
+      "ratio": 8.5,
+      "needed": 3,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "section[aria-labelledby=\":rt:\"] > .settings-section__description",
+      "text": "Text for anything spoken aloud.",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "#\\:r10\\:",
+      "text": "Show captions",
+      "ratio": 8.5,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "section[aria-labelledby=\":rt:\"] > .settings-section__card > .settings-row > .settings-row__text > .settings-row__title-line > .settings-row__state",
+      "text": "On",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "#\\:r11\\:",
+      "text": "Text for all audio and video content.",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "section[aria-labelledby=\":rt:\"] > .settings-section__card > .settings-block:nth-child(2) > .settings-block__title",
+      "text": "Caption size",
+      "ratio": 8.5,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "section[aria-labelledby=\":rt:\"] > .settings-section__card > .settings-block:nth-child(2) > .settings-block__hint",
+      "text": "Currently medium.",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "button[data-value=\"small\"]",
+      "text": "Small",
+      "ratio": 8.5,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "button[data-value=\"large\"]",
+      "text": "Large",
+      "ratio": 8.5,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": ".settings-block:nth-child(3) > .settings-block__title",
+      "text": "Caption text colour",
+      "ratio": 8.5,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": ".settings-block:nth-child(3) > .settings-block__hint",
+      "text": "Both choices clear WCAG 2.2 AA against t",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "button[data-value=\"yellow\"]",
+      "text": "Yellow",
+      "ratio": 8.5,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "#\\:r13\\:",
+      "text": "Audio",
+      "ratio": 8.5,
+      "needed": 3,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "section[aria-labelledby=\":r13:\"] > .settings-section__description",
+      "text": "Sound is never the only way CareConnect ",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "#\\:r16\\:",
+      "text": "Alert volume",
+      "ratio": 8.5,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": ".settings-block:nth-child(1) > .settings-row__title-line > .settings-row__state",
+      "text": "70%",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": ".settings-block:nth-child(1) > .slider-ends[aria-hidden=\"true\"] > span:nth-child(1)",
+      "text": "0%",
+      "ratio": 5.61,
+      "needed": 3,
+      "decorative": true,
+      "pass": true
+    },
+    {
+      "selector": ".settings-block:nth-child(1) > .slider-ends[aria-hidden=\"true\"] > span:nth-child(2)",
+      "text": "100%",
+      "ratio": 5.61,
+      "needed": 3,
+      "decorative": true,
+      "pass": true
+    },
+    {
+      "selector": "#\\:r17\\:",
+      "text": "Use the pause button on any alert banner",
+      "ratio": 5.61,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "table:nth-child(3) > tbody > tr:nth-child(2) > td:nth-child(2)",
+      "text": "Send message",
+      "ratio": 8.5,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    },
+    {
+      "selector": "table:nth-child(3) > tbody > tr:nth-child(2) > td:nth-child(3)",
+      "text": "Send what you have typed, from anywhere ",
+      "ratio": 8.5,
+      "needed": 4.5,
+      "decorative": false,
+      "pass": true
+    }
+  ],
+  "hoverContrast": []
+}

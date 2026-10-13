@@ -1,0 +1,47 @@
+{
+  "id": "wide-shortcuts-dialog",
+  "screen": "Keyboard shortcuts dialog",
+  "viewport": "1280×860",
+  "url": "http://localhost:5273/",
+  "violations": [
+    {
+      "id": "color-contrast",
+      "impact": "serious",
+      "help": "Elements must meet minimum color contrast ratio thresholds",
+      "tags": [
+        "wcag2aa",
+        "wcag143"
+      ],
+      "nodes": [
+        {
+          "target": ".sidebar__item--alerts > .sidebar__label",
+          "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.98 (foreground color: #f59f00, background color: #0f5272, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+        }
+      ]
+    },
+    {
+      "id": "scrollable-region-focusable",
+      "impact": "serious",
+      "help": "Scrollable region must have keyboard access",
+      "tags": [
+        "wcag2a",
+        "wcag211",
+        "wcag213"
+      ],
+      "nodes": [
+        {
+          "target": ".dialog__body",
+          "summary": "Fix any of the following:\n  Element should have focusable content\n  Element should be focusable"
+        }
+      ]
+    }
+  ],
+  "passes": 45,
+  "incomplete": [
+    {
+      "id": "color-contrast",
+      "help": "Elements must meet minimum color contrast ratio thresholds",
+      "nodes": 35
+    }
+  ]
+}

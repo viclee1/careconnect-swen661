@@ -1,0 +1,34 @@
+- link "Skip to main content":
+  - /url: "#main-content"
+- navigation "Main":
+  - text: CareConnect ♡ Care Recipient
+  - strong: Good morning, Margaret
+  - text: Thursday 4 June · 5:38 AM
+  - button "Home"
+  - button "My Day"
+  - button "Appointments"
+  - button "Medicines"
+  - button "Memories"
+  - button "Contacts"
+  - button "Settings"
+  - button "3 alerts"
+  - button "Keyboard shortcuts"
+- main:
+  - heading "Memories" [level=1]
+  - paragraph: Captured moments and milestones
+  - list "Saved memories":
+    - listitem:
+      - article "Family Picnic at Quiet Waters":
+        - heading "Family Picnic at Quiet Waters" [level=2]
+        - paragraph:
+          - time: August 2026
+        - paragraph: Enjoyed a sunny afternoon walk and lunch by the water with Idris.
+    - listitem:
+      - article "First Day of School":
+        - heading "First Day of School" [level=2]
+        - paragraph:
+          - time: September 2026
+        - paragraph: Took pictures before heading out for the morning drop-off.
+- contentinfo "Application status":
+  - text: Connected · synced just now Care Recipient · Margaret Whitfield's plan 3 active alerts Zoom 100%
+  - 'button "Keyboard shortcuts: Cmd + Slash"'

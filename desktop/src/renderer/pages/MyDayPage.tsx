@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Icon } from '../components/Icon';
 import { TopNotificationHeader } from '../components/TopNotificationHeader';
-import { StatusBar } from '../components/StatusBar';
 import { getStoredTasks, saveStoredTasks, type TaskItem } from '../data/tasksData';
 
 export function MyDayPage({ onShowShortcuts }: { onShowShortcuts?: () => void }) {
@@ -58,31 +57,27 @@ export function MyDayPage({ onShowShortcuts }: { onShowShortcuts?: () => void })
           <ul className="myday-list" role="list">
             {tasks.map((task) => (
               <li key={task.id}>
-                <div
+                {/* A native toggle button: Tab, Enter and Space for free, and
+                    aria-pressed announces done or not done. The name is the
+                    card's own words (WCAG 2.5.3) rather than an aria-label
+                    that said something else. */}
+                <button
+                  type="button"
                   className={`myday-card ${task.done ? 'myday-card--done' : ''}`}
                   onClick={() => toggleTask(task.id)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      toggleTask(task.id);
-                    }
-                  }}
                   aria-pressed={task.done}
-                  aria-label={`${task.title}, ${task.time}. ${task.done ? 'Completed' : 'Not completed'}. Click to toggle.`}
                 >
-                  <div className="myday-card__icon" aria-hidden="true">
+                  <span className="myday-card__icon" aria-hidden="true">
                     <Icon name={task.icon} size={22} />
-                  </div>
+                  </span>
 
-                  <div className="myday-card__info">
-                    <strong className="myday-card__title">{task.title}</strong>
-                    <p className="myday-card__desc">{task.description}</p>
+                  <span className="myday-card__info">
+                    <strong className="myday-card__title">{task.title}</strong>{' '}
+                    <span className="myday-card__desc">{task.description}</span>{' '}
                     <span className="myday-card__time">{task.time}</span>
-                  </div>
+                  </span>
 
-                  <div className="myday-card__check">
+                  <span className="myday-card__check">
                     {task.done ? (
                       <span className="check-circle check-circle--active" aria-hidden="true">
                         ✓
@@ -90,16 +85,13 @@ export function MyDayPage({ onShowShortcuts }: { onShowShortcuts?: () => void })
                     ) : (
                       <span className="check-circle" aria-hidden="true" />
                     )}
-                  </div>
-                </div>
+                  </span>
+                </button>
               </li>
             ))}
           </ul>
         </div>
       </div>
-
-      {/* Status Bar */}
-      <StatusBar onShowShortcuts={onShowShortcuts} />
     </div>
   );
 }

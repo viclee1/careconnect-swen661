@@ -162,7 +162,7 @@ describe('MessageThreadPage', () => {
       openThread('c1');
 
       const button = await screen.findByTestId('notify-button');
-      expect(button).toHaveAccessibleName(/Alert Joyce you want to talk/);
+      expect(button).toHaveAccessibleName(/^Alert Joyce you want to talk/);
       expect(button).toHaveAccessibleName(/visual flash and vibration — no sound/i);
     });
 
