@@ -14,10 +14,10 @@ claim.
 
 | Evidence | Where |
 |:--|:--|
-| Automated audit — 0 violations, 42/42 keyboard & structure checks | [`audit/axe-results.png`](audit/axe-results.png), [`audit/report.html`](audit/report.html) |
+| Automated audit — 0 violations, 44/44 keyboard & structure checks | [`audit/axe-results.png`](audit/axe-results.png), [`audit/report.html`](audit/report.html) |
 | Audit before the fixes — 71 violations, 5 failed checks | [`audit-before/`](audit-before) |
 | Landmarks, heading outline, links and fields of every page, at every breakpoint | [`structure.md`](structure.md) |
-| Accessibility tests (40) | [`src/accessibility.test.tsx`](../../../src/accessibility.test.tsx) |
+| Accessibility tests (54) | [`src/accessibility.test.tsx`](../../../src/accessibility.test.tsx) |
 | Earlier project-wide notes (WCAG map, memory-loss design) | [`ACCESSIBILITY.md`](../../../ACCESSIBILITY.md) |
 
 ---
@@ -44,7 +44,7 @@ accessible-name rules with it, in every browser and screen reader.
 | Element | Used for | Where |
 |:--|:--|:--|
 | `<header>` | The page banner: logo, role indicator, Switch role / Sign out, and on app pages the orientation bar (date, live time, greeting, current screen, Call my caregiver) | `Layout.tsx`, `Landing.tsx`, `SignIn.tsx`, `SignUp.tsx`, `RoleChooser.tsx` |
-| `<nav>` | Groups of site navigation links only — never a toolbar of actions | App: patient bottom bar / caregiver sidebar (`Layout.tsx`). Landing: Sign in / Sign up (`Landing.tsx`) |
+| `<nav>` | Groups of site navigation links only — never a toolbar of actions | App: sidebar (tablet/desktop), care recipient's bottom tab bar or caregiver's Menu panel (mobile) — `src/components/navigation/`. Landing: Sign in / Sign up (`Landing.tsx`) |
 | `<main id="main-content" tabindex="-1">` | The one primary content area per page; the skip link's and route-change focus target | Every shell |
 | `<footer>` | Site-wide footer: copyright and a "View contacts" help link | `Landing.tsx` (all widths); `Layout.tsx` (desktop only — see §1.3) |
 | `<section aria-label/aria-labelledby>` | A titled part of a page; becomes a named *region* | `Card.tsx` (every card), Today, Appointments date groups, Memories (Pinned / More), dashboard Alerts |
@@ -79,8 +79,10 @@ page). Screen readers announce the role, and users choose by it.
 
 The navigation comes **after** `<main>` in the source on purpose: a keyboard or
 screen-reader user reaches the page's content first and the menu second. CSS
-places it visually (bottom bar for the care recipient; left sidebar for the
-caregiver on desktop via `lg:order-1`) without changing that order.
+places it visually (the sidebar on the left from 768px via `order-1`; the bottom
+tab bar fixed to the bottom of the screen on mobile) without changing that order.
+Only one navigation exists at a time for assistive technology: the others are
+`display:none` at that width, which removes them from the accessibility tree.
 
 ### 1.3 How the structure adapts across breakpoints
 
@@ -91,8 +93,8 @@ same structure on a desktop.
 | | Mobile 320–767px | Tablet 768–1023px | Desktop 1024px+ |
 |:--|:--|:--|:--|
 | Header | Below 640px Switch role and Sign out are icon-only (named by `aria-label`); date, time and greeting stack | Role pill appears; controls show their text; orientation bar in one row | Same as tablet, wider |
-| Patient navigation | Fixed bottom bar, 6 links, icon + label | Fixed bottom bar | Fixed bottom bar |
-| Caregiver navigation | Horizontal scrolling strip under the header | Horizontal strip | Left sidebar with "Switch to care recipient" |
+| Care recipient navigation | Fixed bottom tab bar, 6 links, icon + label (kept instead of a hamburger — nothing to remember) | Collapsible sidebar: a labelled rail; "Expand menu" (`aria-expanded`) widens it | Full sidebar |
+| Caregiver navigation | **Menu** button (hamburger, `aria-expanded`, `aria-controls`) opens the navigation under the header | Collapsible sidebar | Full sidebar |
 | Main content | Single column | Single column; short form fields side by side (Manage appointments) | Two-column layouts on Today and Caregiver notes |
 | Footer (`contentinfo`) | Hidden — the bottom bar occupies that edge; "Contacts" is in the nav | Hidden | Shown |
 
@@ -387,7 +389,8 @@ The implementation plan the team follows when building or changing a component.
 |:--|:--|:--|:--|:--|
 | Skip link | `<a href="#main-content">` | Tab (first), Enter | Text "Skip to main content" | Off-screen until focused |
 | App header (`Layout`) | `<header role="banner">`, `<time>` | Tab through controls | Icon-only controls have `aria-label`s that start with any visible text | Sticky |
-| Main navigation | `<nav aria-label="Main navigation">` → `<ul role="list">` → `NavLink` | Tab, Enter | `aria-current="page"` on the current link | After `<main>` in source |
+| Main navigation (`SideNav`, `BottomNav`) | `<nav aria-label="Main navigation">` → `<ul role="list">` → `NavLink` | Tab, Enter | `aria-current="page"` on the current link | After `<main>` in source; one per width |
+| Sidebar toggle (tablet) | `<button aria-expanded aria-controls="sidebar-links">` "Expand menu" / "Collapse menu" | Enter, Space | State in `aria-expanded`; the visible text changes with it | Collapsed rail keeps every label visible |
 | Route change | `<main tabindex="-1">` | — | Focus moves to main; title updates | Not on first load |
 | Button (`Button.tsx`) | `<button>` | Enter, Space | Visible text; `aria-label` only when icon-only | `danger` variant always opens `ConfirmDialog` |
 | Confirm dialog | `role="dialog" aria-modal="true"` | Focus in, Tab trapped, Esc, return focus | `aria-labelledby`, `aria-describedby` | §5.3 |
@@ -405,7 +408,7 @@ The implementation plan the team follows when building or changing a component.
 | Tooltips (planned, Part 1 design system) | Trigger `<button aria-describedby>` + `role="tooltip"` | Show on focus and hover; Esc hides | Never holds essential information | WCAG 1.4.13 |
 | Tabs (planned) | `role="tablist/tab/tabpanel"` | Arrows move, Home/End, Tab into panel | `aria-selected`, `aria-controls` | Use links instead if each tab is a page |
 | Dropdown menu (planned) | `<button aria-expanded aria-haspopup="menu">` + `role="menu"` | Enter/Space/↓ opens, arrows, Esc returns focus | | Prefer a native `<select>` for choosing a value |
-| Hamburger menu (planned, mobile web) | `<button aria-expanded aria-controls>` "Menu" + the same `<nav>` | Enter/Space toggles, Esc closes and returns focus | Name "Menu"; `aria-expanded` | Not a modal unless it covers the page; if it does, trap focus as §5.3 |
+| Hamburger menu (`MobileMenu`, caregiver, below 768px) | `<button aria-expanded aria-controls="mobile-menu">` "Menu" + `<nav aria-label="Main navigation">` panel | Enter/Space toggles; next Tab enters the panel; Esc closes and returns focus to Menu; closes on navigation | Name "Menu"; `aria-expanded` | A disclosure in the page flow, not a modal: it pushes content down, so nothing behind it needs trapping |
 
 ---
 
@@ -414,17 +417,18 @@ The implementation plan the team follows when building or changing a component.
 **Automated audit** — `npm run a11y:web` (`scripts/web-a11y-audit.mjs`): axe-core
 4.14 with the WCAG 2.0/2.1 A and AA rule sets, best practices and the
 label-in-name rule, in Chromium, over 15 routes and 3 interactive states (sign-in
-errors, the assistant open, the confirm dialog open) at 375px, 820px and 1280px
-(54 scans), plus 42 keyboard and structure checks.
+errors, the assistant open, the confirm dialog open) at 375px, 820px and 1280px,
+plus the caregiver's mobile menu open and the tablet sidebar expanded (56 scans),
+and 44 keyboard and structure checks.
 
 | | Before | After |
 |:--|--:|--:|
-| axe violations (54 scans) | **71** | **0** |
+| axe violations (54 scans before, 56 after) | **71** | **0** |
 | — colour contrast (elements) | 153 | 0 |
 | — label in name (elements) | 75 | 0 |
 | — heading order (elements) | 3 | 0 |
-| Keyboard & structure checks | 36 / 41 | **42 / 42** |
-| Accessibility tests | 0 | **40** (296 in the suite, all passing) |
+| Keyboard & structure checks | 36 / 41 | **44 / 44** |
+| Accessibility tests | 0 | **54** (310 in the suite, all passing) |
 
 **Defects found and fixed**
 
@@ -454,7 +458,7 @@ errors, the assistant open, the confirm dialog open) at 375px, 820px and 1280px
 | Done toggles (My Day, Medicines) change their label with the state ("Mark Breakfast as done" ↔ "…as not done") **and** set `aria-pressed`, so a screen reader hears "Mark Breakfast as not done, toggle button, pressed" — two state signals that read as contradictory | Keep `aria-pressed` and give the button a fixed name ("Breakfast done"), as the WAI-ARIA toggle-button pattern advises |
 | The app footer (`contentinfo`) is hidden below 1024px | Acceptable for now (its one link, Contacts, is in the nav); revisit with the Part 1 responsive designs |
 | No manual screen-reader pass on the web app yet | VoiceOver (Safari, macOS and iOS) and NVDA (Chrome/Firefox, Windows) through the main flows before the next submission |
-| Tooltips, tabs, dropdowns and the mobile hamburger menu are designed (Part 1) but not built | Build to the patterns in §7, with a test each |
+| Tooltips, tabs and dropdowns are in the Part 1 design system but not built | Build to the patterns in §7, with a test each |
 
 ---
 

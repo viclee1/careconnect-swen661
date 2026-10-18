@@ -75,7 +75,7 @@ function StatusSummaryCard({
 
   return (
     <Card heading="Margaret's status today" headingLevel={2}>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(11rem,1fr))]">
 
         {/* Medication adherence */}
         <div

@@ -120,6 +120,7 @@ h1  Welcome, Margaret!
 | banner | `<header role="banner">` | — | M T D |
 | main | `<main>` | Main content | M T D |
 | navigation | `<nav>` | Main navigation | M T D |
+| navigation | `<nav>` | Main navigation | M T D |
 | contentinfo | `<footer role="contentinfo">` | — | D |
 
 Named regions inside main: “Next thing to do”, “Later today”, “Walk in the garden”, “Lunch”, “Rest time”, “Evening medications”, “Quick actions”
@@ -149,6 +150,7 @@ h1  Here's your day, Margaret
 | banner | `<header role="banner">` | — | M T D |
 | main | `<main>` | Main content | M T D |
 | navigation | `<nav>` | Main navigation | M T D |
+| navigation | `<nav>` | Main navigation | M T D |
 | contentinfo | `<footer role="contentinfo">` | — | D |
 
 Named regions inside main: “Day progress”, “Today's schedule”, “Category legend”
@@ -173,6 +175,7 @@ h1  My Day
 |:--|:--|:--|:--|
 | banner | `<header role="banner">` | — | M T D |
 | main | `<main>` | Main content | M T D |
+| navigation | `<nav>` | Main navigation | M T D |
 | navigation | `<nav>` | Main navigation | M T D |
 | contentinfo | `<footer role="contentinfo">` | — | D |
 
@@ -208,6 +211,7 @@ h1  My Appointments
 | banner | `<header role="banner">` | — | M T D |
 | main | `<main>` | Main content | M T D |
 | navigation | `<nav>` | Main navigation | M T D |
+| navigation | `<nav>` | Main navigation | M T D |
 | contentinfo | `<footer role="contentinfo">` | — | D |
 
 Named regions inside main: “Medication list”
@@ -233,6 +237,7 @@ h1  Medicines
 |:--|:--|:--|:--|
 | banner | `<header role="banner">` | — | M T D |
 | main | `<main>` | Main content | M T D |
+| navigation | `<nav>` | Main navigation | M T D |
 | navigation | `<nav>` | Main navigation | M T D |
 | contentinfo | `<footer role="contentinfo">` | — | D |
 
@@ -265,6 +270,7 @@ h1  Memories
 | banner | `<header role="banner">` | — | M T D |
 | main | `<main>` | Main content | M T D |
 | navigation | `<nav>` | Main navigation | M T D |
+| navigation | `<nav>` | Main navigation | M T D |
 | contentinfo | `<footer role="contentinfo">` | — | D |
 
 Named regions inside main: “Emergency contacts”, “Other contacts”
@@ -289,7 +295,7 @@ h1  Contacts
 |:--|:--|:--|:--|
 | banner | `<header role="banner">` | — | M T D |
 | main | `<main>` | Main content | M T D |
-| navigation | `<nav>` | Main navigation | M T D |
+| navigation | `<nav>` | Main navigation | T D |
 | contentinfo | `<footer role="contentinfo">` | — | D |
 
 Named regions inside main: “Margaret's status today”, “Alerts”, “Recent activity”, “Quick links”
@@ -299,14 +305,14 @@ Named regions inside main: “Margaret's status today”, “Alerts”, “Recen
 ```
 h1  Dashboard
   h2  Margaret's status today
-  h2  Alerts5
+  h2  Alerts4
   h2  Recent activity
   h2  Quick links
 ```
 
-**Links (13):** “Skip to main content” · “CareConnect” (named “CareConnect — go to home”) · “View all” · “Manage medications2/4 taken today” · “Manage appointments3 in the next 24 h” · “Caregiver notesDaily observations log” · “Full activity logNo events yet today” · “Dashboard” · “Medications” · “Appointments” · “Activity” · “Notes” · “View contacts”
+**Links (13):** “Skip to main content” · “CareConnect” (named “CareConnect — go to home”) · “View all activity” · “Manage medications2/4 taken today” · “Manage appointments3 in the next 24 h” · “Caregiver notesDaily observations log” · “Full activity logNo events yet today” · “Dashboard” · “Medications” · “Appointments” · “Activity” · “Notes” · “View contacts”
 
-**Live regions:** aria-live/polite “Viewing Margaret's care plan” · region/polite “Alerts5Atorvastatin — overdue20 mg — 1 tablet was due at 8:0”
+**Live regions:** aria-live/polite “Viewing Margaret's care plan” · region/polite “Alerts4Vitamin D3 — overdue1000 IU — 1 capsule was due at 8:”
 
 ---
 
@@ -318,7 +324,7 @@ h1  Dashboard
 |:--|:--|:--|:--|
 | banner | `<header role="banner">` | — | M T D |
 | main | `<main>` | Main content | M T D |
-| navigation | `<nav>` | Main navigation | M T D |
+| navigation | `<nav>` | Main navigation | T D |
 | contentinfo | `<footer role="contentinfo">` | — | D |
 
 Named regions inside main: “Current medications”, “Amlodipine”, “Atorvastatin”, “Sertraline”, “Vitamin D3”
@@ -348,7 +354,7 @@ h1  Manage medications
 |:--|:--|:--|:--|
 | banner | `<header role="banner">` | — | M T D |
 | main | `<main>` | Main content | M T D |
-| navigation | `<nav>` | Main navigation | M T D |
+| navigation | `<nav>` | Main navigation | T D |
 | contentinfo | `<footer role="contentinfo">` | — | D |
 
 Named regions inside main: “All appointments”, “Blood pressure check — Dr. Sharma”, “Heart checkup — Dr. Lee”, “Blood test — fasting needed”, “Memory clinic follow-up — Dr. Patel”, “GP telephone review — Dr. Sharma”, “Physiotherapy — shoulder exercises”, “Eye test — routine annual check”, “Annual health review — Dr. Sharma”
@@ -382,7 +388,7 @@ h1  Manage appointments
 |:--|:--|:--|:--|
 | banner | `<header role="banner">` | — | M T D |
 | main | `<main>` | Main content | M T D |
-| navigation | `<nav>` | Main navigation | M T D |
+| navigation | `<nav>` | Main navigation | T D |
 | contentinfo | `<footer role="contentinfo">` | — | D |
 
 Named regions inside main: none
@@ -407,16 +413,16 @@ h1  Activity log
 |:--|:--|:--|:--|
 | banner | `<header role="banner">` | — | M T D |
 | main | `<main>` | Main content | M T D |
-| navigation | `<nav>` | Main navigation | M T D |
+| navigation | `<nav>` | Main navigation | T D |
 | contentinfo | `<footer role="contentinfo">` | — | D |
 
-Named regions inside main: “Notes for Sunday 18 October”, “Notes for Wednesday 3 June”, “Notes for Tuesday 2 June”
+Named regions inside main: “Notes for Today”, “Notes for Wednesday 3 June”, “Notes for Tuesday 2 June”
 
 **Heading outline (desktop)**
 
 ```
 h1  Caregiver Notes
-  h2  Sunday 18 October
+  h2  Today
   h2  Wednesday 3 June
   h2  Tuesday 2 June
 ```

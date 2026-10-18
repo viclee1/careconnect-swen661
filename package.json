@@ -13,7 +13,8 @@
     "test": "jest",
     "test:coverage": "jest --coverage",
     "a11y:web": "node scripts/web-a11y-audit.mjs",
-    "a11y:structure": "node scripts/web-a11y-structure.mjs"
+    "a11y:structure": "node scripts/web-a11y-structure.mjs",
+    "screenshots:responsive": "node scripts/web-responsive-screenshots.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.57.4",

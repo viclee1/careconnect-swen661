@@ -211,6 +211,8 @@ The base application is designed and verified against 21 WCAG 2.1 A/AA success c
 
 Assignment 10's web accessibility documentation — semantic HTML, landmarks, skip links, forms, keyboard and focus management, screen-reader patterns, and the audit that brought the web app from 71 axe violations to 0 at mobile, tablet and desktop widths — is in [`docs/web/accessibility/`](docs/web/accessibility/README.md) (also as Word and PDF). Run it with `npm run a11y:web`.
 
+The Assignment 10 early React implementation — responsive navigation (hamburger on mobile, collapsible sidebar on tablet, full sidebar on desktop), the layout grid, screenshots of every screen at all three breakpoints, completed work, differences to resolve with the Figma design and remaining tasks — is written up in [`docs/web/implementation/`](docs/web/implementation/README.md).
+
 On top of that baseline, this project adds the five hearing-impairment constraints above, measured against **WCAG 2.2 Level AA**. Accessibility is a merge gate, not a final pass — the QA / Testing Lead can block a merge on a failing check.
 
 ---
