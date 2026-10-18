@@ -209,6 +209,8 @@ CareConnect lowers the daily cognitive load for people who need help remembering
 
 The base application is designed and verified against 21 WCAG 2.1 A/AA success criteria, with full conformance mapping in [`ACCESSIBILITY.md`](ACCESSIBILITY.md). Highlights: 4.5:1 text contrast, full keyboard operability, visible focus indicators, semantic landmarks, ARIA live regions (`role="status"` / `role="alert"`), 44×44px minimum targets, 320px reflow with no horizontal scroll, and `prefers-reduced-motion` support.
 
+Assignment 10's web accessibility documentation — semantic HTML, landmarks, skip links, forms, keyboard and focus management, screen-reader patterns, and the audit that brought the web app from 71 axe violations to 0 at mobile, tablet and desktop widths — is in [`docs/web/accessibility/`](docs/web/accessibility/README.md) (also as Word and PDF). Run it with `npm run a11y:web`.
+
 On top of that baseline, this project adds the five hearing-impairment constraints above, measured against **WCAG 2.2 Level AA**. Accessibility is a merge gate, not a final pass — the QA / Testing Lead can block a merge on a failing check.
 
 ---
