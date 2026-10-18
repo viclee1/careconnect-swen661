@@ -211,6 +211,19 @@ async function run() {
         await pg.close();
       }
 
+      // In-app navigation moves focus to <main>.
+      {
+        const pg = await open(context, '/app', 'patient');
+        await pg.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Medicines' }).focus();
+        await pg.keyboard.press('Enter');
+        await pg.getByRole('heading', { level: 1, name: /medicines/i }).waitFor();
+        await pg.waitForTimeout(150);
+        const id = await pg.evaluate(() => document.activeElement?.id);
+        const title = await pg.title();
+        check('Navigating with the keyboard moves focus to <main> and updates the title', id === 'main-content' && /^Medicines/.test(title), `focus #${id}, title "${title}"`);
+        await pg.close();
+      }
+
       // Skip link on every shell.
       for (const [p, role, name] of [['/', null, 'Landing'], ['/signin', null, 'Sign in'], ['/app', 'patient', 'Patient app'], ['/app', 'caregiver', 'Caregiver app']]) {
         const pg = await open(context, p, role);

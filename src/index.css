@@ -57,6 +57,13 @@
     outline: none;
   }
 
+  /* <main tabindex="-1"> receives focus from the skip link and after each
+     in-app navigation. It is a landmark, not a control, so it is not ringed;
+     the next Tab lands on a real control, which is. */
+  main[tabindex='-1']:focus {
+    outline: none;
+  }
+
   /* ── Typography Baseline ─────────────────────────────────────────────── */
   h1, h2, h3, h4, h5, h6 {
     @apply font-semibold text-neutral-800;

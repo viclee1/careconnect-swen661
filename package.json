@@ -12,7 +12,8 @@
     "screenshots": "tsx scripts/screenshots.ts",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "a11y:web": "node scripts/web-a11y-audit.mjs"
+    "a11y:web": "node scripts/web-a11y-audit.mjs",
+    "a11y:structure": "node scripts/web-a11y-structure.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.57.4",

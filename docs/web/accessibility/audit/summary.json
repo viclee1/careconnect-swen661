@@ -7,11 +7,11 @@
     "wcag21aa",
     "best-practice"
   ],
-  "date": "2026-10-18T00:16:33.658Z",
+  "date": "2026-10-18T00:21:47.873Z",
   "scans": 54,
   "violations": 0,
   "checks": {
-    "total": 41,
+    "total": 42,
     "failed": 0
   },
   "results": [
@@ -504,6 +504,11 @@
       "name": "/app/manage-appointments: focus is not moved on page load",
       "pass": true,
       "note": "focused: body"
+    },
+    {
+      "name": "Navigating with the keyboard moves focus to <main> and updates the title",
+      "pass": true,
+      "note": "focus #main-content, title \"Medicines — CareConnect\""
     },
     {
       "name": "Landing: first Tab is \"Skip to main content\", Enter moves focus to <main>",

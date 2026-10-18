@@ -1,5 +1,5 @@
 import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import { useRef, useState } from 'react';
+import { StrictMode, useRef, useState } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { axe, toHaveNoViolations } from 'jest-axe';
 
@@ -45,7 +45,13 @@ const user = { id: 'u1', name: 'Margaret Whitfield', email: 'margaret@example.co
 function renderAt(path: string, role: 'patient' | 'caregiver' | null) {
   if (role) localStorage.setItem('careconnect_session', JSON.stringify({ user, role }));
   window.history.pushState({}, '', path);
-  return render(<App />);
+  // StrictMode, as in main.tsx: it runs mount effects twice, which is how a
+  // "focus on first render" bug once slipped past these tests.
+  return render(
+    <StrictMode>
+      <App />
+    </StrictMode>,
+  );
 }
 
 const routes: Array<[string, string, 'patient' | 'caregiver' | null]> = [
@@ -108,6 +114,18 @@ describe('page structure', () => {
     renderAt('/', null);
     expect(await screen.findByRole('navigation', { name: 'Account navigation' })).toBeInTheDocument();
     localStorage.clear();
+  });
+
+  it('moves focus to <main> after an in-app navigation, but not on first load', async () => {
+    renderAt('/app', 'patient');
+    await screen.findByRole('heading', { level: 1 });
+    expect(screen.getByRole('main')).not.toHaveFocus();
+
+    const nav = screen.getByRole('navigation', { name: 'Main navigation' });
+    fireEvent.click(within(nav).getByRole('link', { name: 'Medicines' }));
+    await screen.findByRole('heading', { level: 1, name: /medicines/i });
+    await waitFor(() => expect(screen.getByRole('main')).toHaveFocus());
+    expect(document.title).toBe('Medicines — CareConnect');
   });
 
   it('marks the current page in the app navigation with aria-current', async () => {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
   Home,
@@ -139,6 +139,19 @@ export default function Layout({
   const isPatient = view === 'patient';
   const screenTitle = useScreenTitle(isPatient);
   useDocumentTitle(screenTitle);
+
+  // After an in-app navigation, move focus to <main> so a screen reader
+  // announces the new page and Tab continues from its content, not from the
+  // nav link that was pressed. Not on first load: focus starts at the top of
+  // the document there, so the skip link stays the first Tab stop.
+  // Compared with the previous path rather than a "first render" flag, which
+  // React's StrictMode defeats by running mount effects twice.
+  const previousPath = useRef(location.pathname);
+  useEffect(() => {
+    if (previousPath.current === location.pathname) return;
+    previousPath.current = location.pathname;
+    document.getElementById('main-content')?.focus();
+  }, [location.pathname]);
   const nav = isPatient ? patientNav : caregiverNav;
 
   const dateStr = formatOrientationDate(now);
