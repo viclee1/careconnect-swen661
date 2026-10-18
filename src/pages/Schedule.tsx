@@ -84,7 +84,7 @@ export default function Schedule() {
             <li key={item.id}>
               <article
                 className={`card card-hover flex items-start gap-4 p-4 transition-opacity duration-200 ${
-                  item.done ? 'opacity-60' : ''
+                  item.done ? 'bg-neutral-50' : ''
                 }`}
                 aria-label={`${formatTime(item.time)}: ${item.label}${item.done ? ' — done' : ''}`}
               >
@@ -101,7 +101,7 @@ export default function Schedule() {
                   <div className="flex items-center gap-2 flex-wrap">
                     <p
                       className={`font-semibold text-base leading-tight ${
-                        item.done ? 'line-through text-neutral-400' : 'text-neutral-800'
+                        item.done ? 'line-through text-neutral-500' : 'text-neutral-800'
                       }`}
                     >
                       {item.label}
@@ -125,7 +125,7 @@ export default function Schedule() {
                   {item.done ? (
                     <CheckCircle2 className="w-7 h-7 text-success-600" aria-hidden="true" />
                   ) : (
-                    <Circle className="w-7 h-7 text-neutral-300" aria-hidden="true" />
+                    <Circle className="w-7 h-7 text-neutral-500" aria-hidden="true" />
                   )}
                 </button>
               </article>
@@ -161,7 +161,7 @@ export default function Schedule() {
         </div>
       </section>
 
-      <div className="flex items-center gap-2 text-sm text-neutral-400">
+      <div className="flex items-center gap-2 text-sm text-neutral-500">
         <Clock className="w-4 h-4" aria-hidden="true" />
         <span>Tap the circle to mark a task done</span>
       </div>

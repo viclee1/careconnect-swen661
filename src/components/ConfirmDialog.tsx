@@ -91,11 +91,14 @@ export default function ConfirmDialog({
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [open, onCancel]);
 
-  // Return focus to trigger on close
+  // Return focus to trigger on close. Only after the dialog has actually been
+  // open: running on first render focused every page's Delete button on load.
+  const wasOpen = useRef(false);
   useEffect(() => {
-    if (!open) {
+    if (!open && wasOpen.current) {
       triggerRef.current?.focus();
     }
+    wasOpen.current = open;
   }, [open, triggerRef]);
 
   // Block body scroll while open

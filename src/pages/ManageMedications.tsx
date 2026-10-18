@@ -395,7 +395,7 @@ export default function ManageMedications() {
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-3xl font-bold text-neutral-800 leading-tight flex items-center gap-3">
-            <Pill className="w-8 h-8 text-warm-600" aria-hidden="true" />
+            <Pill className="w-8 h-8 text-warm-700" aria-hidden="true" />
             Manage medications
           </h1>
           <p className="mt-1 text-lg text-neutral-500">
@@ -408,7 +408,6 @@ export default function ManageMedications() {
             ref={addButtonRef}
             onClick={() => setMode('add')}
             className="inline-flex items-center gap-2 font-bold rounded-xl px-5 py-3 min-h-[2.75rem] text-base bg-calm-600 text-white border-2 border-calm-600 hover:bg-calm-700 transition-colors"
-            aria-label="Add new medication"
           >
             <PlusCircle className="w-5 h-5" aria-hidden="true" />
             Add medication
@@ -442,7 +441,7 @@ export default function ManageMedications() {
                 className="inline-flex w-16 h-16 rounded-full bg-warm-100 items-center justify-center mx-auto"
                 aria-hidden="true"
               >
-                <Pill className="w-8 h-8 text-warm-600" />
+                <Pill className="w-8 h-8 text-warm-700" />
               </span>
               <p className="text-xl font-bold text-neutral-800">No medications added yet</p>
               <p className="text-neutral-500">

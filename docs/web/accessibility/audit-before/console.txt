@@ -1,0 +1,349 @@
+✘ mobile  Landing                    1 violations (2 nodes)
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .border-white  <a class="inline-flex items-center justify-center gap-2 font-bold rounded-lg px-7 py-4 min-h-[3rem] text-lg bg-white text-calm-700 border-2 border-white hover:b
+      .bg-transparent  <a class="inline-flex items-ce..." aria-label="Sign in to CareConne..." href="/signin" data-discover="true">
+✔ mobile  Sign in                    0 violations (0 nodes)
+✘ mobile  Sign up                    1 violations (1 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      .text-xs  <p class="text-center text-xs text-neutral-400 leading-relaxed">CareConnect never gives medical advice and never shares your information with third parties.</p>
+✘ mobile  Role chooser               1 violations (2 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      .space-y-2 > .text-sm.text-neutral-400  <p class="text-sm text-neutral-400">Your choice is remembered. You can switch at any time from inside the app.</p>
+      .max-w-xl > .text-sm.text-neutral-400  <p class="text-center text-sm text-neutral-400">This does not affect what information is stored — only which view you see first.</p>
+✘ mobile  Today (patient home)       2 violations (2 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      .uppercase  <p class="text-sm font-bold text-neutral-400 uppercase tracking-widest">Next thing to do</p>
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .py-3  <a href="tel:07700900456" class="inline-flex items-ce..." aria-label="Call your caregiver:...">
+✘ mobile  My Day                     2 violations (13 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      time[datetime="07:30"]  <time datetime="07:30" class="text-calm-700 font-semibold tabular-nums text-sm w-14 flex-shrink-0 pt-0.5">7:30 am</time>
+      li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .flex-wrap.gap-2 > .line-through.text-neutral-400.leading-tight  <p class="font-semibold text-base leading-tight line-through text-neutral-400">Wake up &amp; stretch</p>
+      .opacity-60 > .flex-1.min-w-0 > .flex-wrap.gap-2 > .bg-success-100.text-success-700.badge  <span class="badge text-xs bg-success-100 text-success-700">Activity</span>
+      time[datetime="08:00"]  <time datetime="08:00" class="text-calm-700 font-semibold tabular-nums text-sm w-14 flex-shrink-0 pt-0.5">8:00 am</time>
+      article[aria-label="8:00 am: Breakfast — done"] > .flex-1.min-w-0 > .flex-wrap.gap-2 > .line-through.text-neutral-400.leading-tight  <p class="font-semibold text-base leading-tight line-through text-neutral-400">Breakfast</p>
+      article[aria-label="8:00 am: Breakfast — done"] > .flex-1.min-w-0 > .flex-wrap.gap-2 > .bg-warm-100.text-warm-700.badge  <span class="badge text-xs bg-warm-100 text-warm-700">Meal</span>
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .rounded-xl  <a href="tel:07700900456" class="inline-flex items-ce..." aria-label="Call your caregiver:...">
+✘ mobile  Appointments               3 violations (17 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      section[aria-labelledby="group-today"] > ul > li:nth-child(1) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm  <p class="text-sm text-neutral-400 mt-0.5 font-medium">Clinic visit</p>
+      section[aria-label="Heart checkup — Dr. Lee"] > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm  <p class="text-sm text-neutral-400 mt-0.5 font-medium">Hospital visit</p>
+      section[aria-label="Blood test — fasting needed"] > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm  <p class="text-sm text-neutral-400 mt-0.5 font-medium">Clinic visit</p>
+      section[aria-labelledby="group-week"] > ul > li:nth-child(2) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm  <p class="text-sm text-neutral-400 mt-0.5 font-medium">Clinic visit</p>
+      section[aria-labelledby="group-week"] > ul > li:nth-child(3) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm  <p class="text-sm text-neutral-400 mt-0.5 font-medium">Telephone — no travel needed</p>
+      section[aria-labelledby="group-coming"] > ul > li:nth-child(1) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm  <p class="text-sm text-neutral-400 mt-0.5 font-medium">Clinic visit</p>
+    moderate heading-order: Heading levels should only increase by one
+      section[aria-labelledby="group-today"] > ul > li:nth-child(1) > .border-neutral-300.shadow-card.p-6 > .mb-4.gap-4.justify-between > h3  <h3 class="font-semibold text-neutral-800 leading-tight">Blood pressure check — Dr. Sharma</h3>
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .px-6  <a href="tel:07700900456" class="inline-flex items-ce..." aria-label="Call your caregiver:...">
+      section[aria-label="Blood test — fasting needed"] > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\:bg-calm-100.hover\:border-calm-400.bg-calm-50  <button class="inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover
+      section[aria-labelledby="group-week"] > ul > li:nth-child(2) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\:bg-calm-100.hover\:border-calm-400.bg-calm-50  <button class="inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover
+      section[aria-labelledby="group-week"] > ul > li:nth-child(3) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\:bg-calm-100.hover\:border-calm-400.bg-calm-50  <button class="inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover
+      section[aria-labelledby="group-coming"] > ul > li:nth-child(1) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\:bg-calm-100.hover\:border-calm-400.bg-calm-50  <button class="inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover
+      section[aria-labelledby="group-coming"] > ul > li:nth-child(2) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\:bg-calm-100.hover\:border-calm-400.bg-calm-50  <button class="inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover
+✘ mobile  Medicines                  2 violations (10 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .line-through.text-neutral-400.text-lg  <p class="font-bold text-lg leading-tight line-through text-neutral-400">Amlodipine</p>
+      li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .mt-0\.5.text-neutral-600.text-sm  <p class="text-neutral-600 text-sm mt-0.5">5 mg — 1 tablet</p>
+      li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .flex-wrap.mt-2.gap-2 > .badge.badge-calm.text-xs  <span class="badge badge-calm text-xs">8:30 am</span>
+      li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .italic.mt-2.text-neutral-500  <p class="text-sm text-neutral-500 mt-2 italic">Take with food.</p>
+      li:nth-child(3) > .opacity-60 > .flex-1.min-w-0 > .line-through.text-neutral-400.text-lg  <p class="font-bold text-lg leading-tight line-through text-neutral-400">Sertraline</p>
+      li:nth-child(3) > .opacity-60 > .flex-1.min-w-0 > .mt-0\.5.text-neutral-600.text-sm  <p class="text-neutral-600 text-sm mt-0.5">50 mg — 1 tablet</p>
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .rounded-xl  <a href="tel:07700900456" class="inline-flex items-ce..." aria-label="Call your caregiver:...">
+✘ mobile  Memories                   1 violations (1 nodes)
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .rounded-xl  <a href="tel:07700900456" class="inline-flex items-ce..." aria-label="Call your caregiver:...">
+✘ mobile  Contacts                   1 violations (1 nodes)
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .rounded-xl  <a href="tel:07700900456" class="inline-flex items-ce..." aria-label="Call your caregiver:...">
+✘ mobile  Caregiver dashboard        2 violations (6 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      .mt-1.text-neutral-400.text-sm  <p class="text-sm text-neutral-400 mt-1">Activity appears here when Margaret takes medications or checks in.</p>
+      .pb-2  <p class="text-xs text-neutral-400 text-center pb-2">Data refreshes when you return to this tab. Last seen adherence reflects Margaret's most recent actions.</p
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      a[aria-label="Manage medications"]  <a class="flex items-center gap-4 bg-white rounded-xl border-2 border-neutral-300 shadow-card px-5 py-4 no-underline group hover:border-calm-400 hover:shadow-ca
+      a[aria-label="Manage appointments"]  <a class="flex items-center gap-4 bg-white rounded-xl border-2 border-neutral-300 shadow-card px-5 py-4 no-underline group hover:border-calm-400 hover:shadow-ca
+      a[aria-label="View caregiver notes"]  <a class="flex items-center gap-4 bg-white rounded-xl border-2 border-neutral-300 shadow-card px-5 py-4 no-underline group hover:border-calm-400 hover:shadow-ca
+      a[aria-label="View full activity log"]  <a class="flex items-center gap-4 bg-white rounded-xl border-2 border-neutral-300 shadow-card px-5 py-4 no-underline group hover:border-calm-400 hover:shadow-ca
+✘ mobile  Manage medications         1 violations (1 nodes)
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .hover\:bg-calm-700  <button class="inline-flex items-center gap-2 font-bold rounded-xl px-5 py-3 min-h-[2.75rem] text-base bg-calm-600 text-white border-2 border-calm-600 hover:bg-
+✘ mobile  Manage appointments        2 violations (8 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      li:nth-child(1) > .border-calm-300.border-neutral-300.shadow-card > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400  <span class="text-neutral-400"> — 12 Greenfield Road, Westfield</span>
+      section[aria-label="Heart checkup — Dr. Lee"] > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400  <span class="text-neutral-400"> — 45 Hospital Way, Westfield</span>
+      section[aria-label="Blood test — fasting needed"] > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400  <span class="text-neutral-400"> — 12 Greenfield Road, Westfield</span>
+      li:nth-child(4) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400  <span class="text-neutral-400"> — 8 Meadow Lane, Westfield</span>
+      li:nth-child(6) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400  <span class="text-neutral-400"> — 3 Riverside Walk, Westfield</span>
+      li:nth-child(7) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400  <span class="text-neutral-400"> — 22 High Street, Westfield</span>
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .hover\:bg-calm-700  <button class="inline-flex items-center gap-2 font-bold rounded-xl px-5 py-3 min-h-[2.75rem] text-base bg-calm-600 text-white border-2 border-calm-600 hover:bg-
+✔ mobile  Activity log               0 violations (0 nodes)
+✔ mobile  Caregiver notes            0 violations (0 nodes)
+✔ mobile  Sign in — errors showing   0 violations (0 nodes)
+✘ mobile  Landing — assistant open   1 violations (2 nodes)
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .border-white  <a class="inline-flex items-center justify-center gap-2 font-bold rounded-lg px-7 py-4 min-h-[3rem] text-lg bg-white text-calm-700 border-2 border-white hover:b
+      .bg-transparent  <a class="inline-flex items-ce..." aria-label="Sign in to CareConne..." href="/signin" data-discover="true">
+✘ mobile  Manage medications — confirm dialog 1 violations (1 nodes)
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .hover\:bg-calm-700  <button class="inline-flex items-center gap-2 font-bold rounded-xl px-5 py-3 min-h-[2.75rem] text-base bg-calm-600 text-white border-2 border-calm-600 hover:bg-
+✘ tablet  Landing                    1 violations (2 nodes)
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .border-white  <a class="inline-flex items-center justify-center gap-2 font-bold rounded-lg px-7 py-4 min-h-[3rem] text-lg bg-white text-calm-700 border-2 border-white hover:b
+      .bg-transparent  <a class="inline-flex items-ce..." aria-label="Sign in to CareConne..." href="/signin" data-discover="true">
+✔ tablet  Sign in                    0 violations (0 nodes)
+✘ tablet  Sign up                    1 violations (1 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      .text-xs  <p class="text-center text-xs text-neutral-400 leading-relaxed">CareConnect never gives medical advice and never shares your information with third parties.</p>
+✘ tablet  Role chooser               1 violations (2 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      .space-y-2 > .text-sm.text-neutral-400  <p class="text-sm text-neutral-400">Your choice is remembered. You can switch at any time from inside the app.</p>
+      .max-w-xl > .text-sm.text-neutral-400  <p class="text-center text-sm text-neutral-400">This does not affect what information is stored — only which view you see first.</p>
+✘ tablet  Today (patient home)       2 violations (2 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      .uppercase  <p class="text-sm font-bold text-neutral-400 uppercase tracking-widest">Next thing to do</p>
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .py-3  <a href="tel:07700900456" class="inline-flex items-ce..." aria-label="Call your caregiver:...">
+✘ tablet  My Day                     2 violations (13 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      time[datetime="07:30"]  <time datetime="07:30" class="text-calm-700 font-semibold tabular-nums text-sm w-14 flex-shrink-0 pt-0.5">7:30 am</time>
+      li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .flex-wrap.gap-2 > .line-through.text-neutral-400.leading-tight  <p class="font-semibold text-base leading-tight line-through text-neutral-400">Wake up &amp; stretch</p>
+      .opacity-60 > .flex-1.min-w-0 > .flex-wrap.gap-2 > .bg-success-100.text-success-700.badge  <span class="badge text-xs bg-success-100 text-success-700">Activity</span>
+      time[datetime="08:00"]  <time datetime="08:00" class="text-calm-700 font-semibold tabular-nums text-sm w-14 flex-shrink-0 pt-0.5">8:00 am</time>
+      article[aria-label="8:00 am: Breakfast — done"] > .flex-1.min-w-0 > .flex-wrap.gap-2 > .line-through.text-neutral-400.leading-tight  <p class="font-semibold text-base leading-tight line-through text-neutral-400">Breakfast</p>
+      article[aria-label="8:00 am: Breakfast — done"] > .flex-1.min-w-0 > .flex-wrap.gap-2 > .bg-warm-100.text-warm-700.badge  <span class="badge text-xs bg-warm-100 text-warm-700">Meal</span>
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .rounded-xl  <a href="tel:07700900456" class="inline-flex items-ce..." aria-label="Call your caregiver:...">
+✘ tablet  Appointments               3 violations (17 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      section[aria-labelledby="group-today"] > ul > li:nth-child(1) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm  <p class="text-sm text-neutral-400 mt-0.5 font-medium">Clinic visit</p>
+      section[aria-label="Heart checkup — Dr. Lee"] > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm  <p class="text-sm text-neutral-400 mt-0.5 font-medium">Hospital visit</p>
+      section[aria-label="Blood test — fasting needed"] > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm  <p class="text-sm text-neutral-400 mt-0.5 font-medium">Clinic visit</p>
+      section[aria-labelledby="group-week"] > ul > li:nth-child(2) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm  <p class="text-sm text-neutral-400 mt-0.5 font-medium">Clinic visit</p>
+      section[aria-labelledby="group-week"] > ul > li:nth-child(3) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm  <p class="text-sm text-neutral-400 mt-0.5 font-medium">Telephone — no travel needed</p>
+      section[aria-labelledby="group-coming"] > ul > li:nth-child(1) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm  <p class="text-sm text-neutral-400 mt-0.5 font-medium">Clinic visit</p>
+    moderate heading-order: Heading levels should only increase by one
+      section[aria-labelledby="group-today"] > ul > li:nth-child(1) > .border-neutral-300.shadow-card.p-6 > .mb-4.gap-4.justify-between > h3  <h3 class="font-semibold text-neutral-800 leading-tight">Blood pressure check — Dr. Sharma</h3>
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .px-6  <a href="tel:07700900456" class="inline-flex items-ce..." aria-label="Call your caregiver:...">
+      section[aria-label="Blood test — fasting needed"] > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\:bg-calm-100.hover\:border-calm-400.bg-calm-50  <button class="inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover
+      section[aria-labelledby="group-week"] > ul > li:nth-child(2) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\:bg-calm-100.hover\:border-calm-400.bg-calm-50  <button class="inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover
+      section[aria-labelledby="group-week"] > ul > li:nth-child(3) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\:bg-calm-100.hover\:border-calm-400.bg-calm-50  <button class="inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover
+      section[aria-labelledby="group-coming"] > ul > li:nth-child(1) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\:bg-calm-100.hover\:border-calm-400.bg-calm-50  <button class="inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover
+      section[aria-labelledby="group-coming"] > ul > li:nth-child(2) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\:bg-calm-100.hover\:border-calm-400.bg-calm-50  <button class="inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover
+✘ tablet  Medicines                  2 violations (10 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .line-through.text-neutral-400.text-lg  <p class="font-bold text-lg leading-tight line-through text-neutral-400">Amlodipine</p>
+      li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .mt-0\.5.text-neutral-600.text-sm  <p class="text-neutral-600 text-sm mt-0.5">5 mg — 1 tablet</p>
+      li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .flex-wrap.mt-2.gap-2 > .badge.badge-calm.text-xs  <span class="badge badge-calm text-xs">8:30 am</span>
+      li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .italic.mt-2.text-neutral-500  <p class="text-sm text-neutral-500 mt-2 italic">Take with food.</p>
+      li:nth-child(3) > .opacity-60 > .flex-1.min-w-0 > .line-through.text-neutral-400.text-lg  <p class="font-bold text-lg leading-tight line-through text-neutral-400">Sertraline</p>
+      li:nth-child(3) > .opacity-60 > .flex-1.min-w-0 > .mt-0\.5.text-neutral-600.text-sm  <p class="text-neutral-600 text-sm mt-0.5">50 mg — 1 tablet</p>
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .rounded-xl  <a href="tel:07700900456" class="inline-flex items-ce..." aria-label="Call your caregiver:...">
+✘ tablet  Memories                   1 violations (1 nodes)
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .rounded-xl  <a href="tel:07700900456" class="inline-flex items-ce..." aria-label="Call your caregiver:...">
+✘ tablet  Contacts                   1 violations (1 nodes)
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .rounded-xl  <a href="tel:07700900456" class="inline-flex items-ce..." aria-label="Call your caregiver:...">
+✘ tablet  Caregiver dashboard        2 violations (6 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      .mt-1.text-neutral-400.text-sm  <p class="text-sm text-neutral-400 mt-1">Activity appears here when Margaret takes medications or checks in.</p>
+      .pb-2  <p class="text-xs text-neutral-400 text-center pb-2">Data refreshes when you return to this tab. Last seen adherence reflects Margaret's most recent actions.</p
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      a[aria-label="Manage medications"]  <a class="flex items-center gap-4 bg-white rounded-xl border-2 border-neutral-300 shadow-card px-5 py-4 no-underline group hover:border-calm-400 hover:shadow-ca
+      a[aria-label="Manage appointments"]  <a class="flex items-center gap-4 bg-white rounded-xl border-2 border-neutral-300 shadow-card px-5 py-4 no-underline group hover:border-calm-400 hover:shadow-ca
+      a[aria-label="View caregiver notes"]  <a class="flex items-center gap-4 bg-white rounded-xl border-2 border-neutral-300 shadow-card px-5 py-4 no-underline group hover:border-calm-400 hover:shadow-ca
+      a[aria-label="View full activity log"]  <a class="flex items-center gap-4 bg-white rounded-xl border-2 border-neutral-300 shadow-card px-5 py-4 no-underline group hover:border-calm-400 hover:shadow-ca
+✘ tablet  Manage medications         1 violations (1 nodes)
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .hover\:bg-calm-700  <button class="inline-flex items-center gap-2 font-bold rounded-xl px-5 py-3 min-h-[2.75rem] text-base bg-calm-600 text-white border-2 border-calm-600 hover:bg-
+✘ tablet  Manage appointments        2 violations (8 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      li:nth-child(1) > .border-calm-300.border-neutral-300.shadow-card > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400  <span class="text-neutral-400"> — 12 Greenfield Road, Westfield</span>
+      section[aria-label="Heart checkup — Dr. Lee"] > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400  <span class="text-neutral-400"> — 45 Hospital Way, Westfield</span>
+      section[aria-label="Blood test — fasting needed"] > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400  <span class="text-neutral-400"> — 12 Greenfield Road, Westfield</span>
+      li:nth-child(4) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400  <span class="text-neutral-400"> — 8 Meadow Lane, Westfield</span>
+      li:nth-child(6) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400  <span class="text-neutral-400"> — 3 Riverside Walk, Westfield</span>
+      li:nth-child(7) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400  <span class="text-neutral-400"> — 22 High Street, Westfield</span>
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .hover\:bg-calm-700  <button class="inline-flex items-center gap-2 font-bold rounded-xl px-5 py-3 min-h-[2.75rem] text-base bg-calm-600 text-white border-2 border-calm-600 hover:bg-
+✔ tablet  Activity log               0 violations (0 nodes)
+✔ tablet  Caregiver notes            0 violations (0 nodes)
+✔ tablet  Sign in — errors showing   0 violations (0 nodes)
+✘ tablet  Landing — assistant open   1 violations (2 nodes)
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .border-white  <a class="inline-flex items-center justify-center gap-2 font-bold rounded-lg px-7 py-4 min-h-[3rem] text-lg bg-white text-calm-700 border-2 border-white hover:b
+      .bg-transparent  <a class="inline-flex items-ce..." aria-label="Sign in to CareConne..." href="/signin" data-discover="true">
+✘ tablet  Manage medications — confirm dialog 1 violations (1 nodes)
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .hover\:bg-calm-700  <button class="inline-flex items-center gap-2 font-bold rounded-xl px-5 py-3 min-h-[2.75rem] text-base bg-calm-600 text-white border-2 border-calm-600 hover:bg-
+✘ desktop Landing                    1 violations (2 nodes)
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .border-white  <a class="inline-flex items-center justify-center gap-2 font-bold rounded-lg px-7 py-4 min-h-[3rem] text-lg bg-white text-calm-700 border-2 border-white hover:b
+      .bg-transparent  <a class="inline-flex items-ce..." aria-label="Sign in to CareConne..." href="/signin" data-discover="true">
+✔ Landing: one <main>, one top-level banner, one <h1> — main=1 banner=1 h1=1
+✔ desktop Sign in                    0 violations (0 nodes)
+✔ Sign in: one <main>, one top-level banner, one <h1> — main=1 banner=1 h1=1
+✘ desktop Sign up                    1 violations (1 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      .text-xs  <p class="text-center text-xs text-neutral-400 leading-relaxed">CareConnect never gives medical advice and never shares your information with third parties.</p>
+✔ Sign up: one <main>, one top-level banner, one <h1> — main=1 banner=1 h1=1
+✘ desktop Role chooser               1 violations (2 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      .space-y-2 > .text-sm.text-neutral-400  <p class="text-sm text-neutral-400">Your choice is remembered. You can switch at any time from inside the app.</p>
+      .max-w-xl > .text-sm.text-neutral-400  <p class="text-center text-sm text-neutral-400">This does not affect what information is stored — only which view you see first.</p>
+✔ Role chooser: one <main>, one top-level banner, one <h1> — main=1 banner=1 h1=1
+✘ desktop Today (patient home)       2 violations (4 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      .uppercase  <p class="text-sm font-bold text-neutral-400 uppercase tracking-widest">Next thing to do</p>
+      .max-w-none > p:nth-child(1)  <p>CareConnect © 2026 — Compassionate care, every day.</p>
+      .max-w-none > p:nth-child(2)  <p>Need help? <a href="/app/contacts" class="text-calm-600 font-medium">View contacts</a></p>
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .py-3  <a href="tel:07700900456" class="inline-flex items-ce..." aria-label="Call your caregiver:...">
+✔ Today (patient home): one <main>, one top-level banner, one <h1> — main=1 banner=1 h1=1
+✘ desktop My Day                     2 violations (15 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      time[datetime="07:30"]  <time datetime="07:30" class="text-calm-700 font-semibold tabular-nums text-sm w-14 flex-shrink-0 pt-0.5">7:30 am</time>
+      li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .flex-wrap.gap-2 > .line-through.text-neutral-400.leading-tight  <p class="font-semibold text-base leading-tight line-through text-neutral-400">Wake up &amp; stretch</p>
+      .opacity-60 > .flex-1.min-w-0 > .flex-wrap.gap-2 > .bg-success-100.text-success-700.badge  <span class="badge text-xs bg-success-100 text-success-700">Activity</span>
+      time[datetime="08:00"]  <time datetime="08:00" class="text-calm-700 font-semibold tabular-nums text-sm w-14 flex-shrink-0 pt-0.5">8:00 am</time>
+      article[aria-label="8:00 am: Breakfast — done"] > .flex-1.min-w-0 > .flex-wrap.gap-2 > .line-through.text-neutral-400.leading-tight  <p class="font-semibold text-base leading-tight line-through text-neutral-400">Breakfast</p>
+      article[aria-label="8:00 am: Breakfast — done"] > .flex-1.min-w-0 > .flex-wrap.gap-2 > .bg-warm-100.text-warm-700.badge  <span class="badge text-xs bg-warm-100 text-warm-700">Meal</span>
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .rounded-xl  <a href="tel:07700900456" class="inline-flex items-ce..." aria-label="Call your caregiver:...">
+✔ My Day: one <main>, one top-level banner, one <h1> — main=1 banner=1 h1=1
+✘ desktop Appointments               3 violations (19 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      section[aria-labelledby="group-today"] > ul > li:nth-child(1) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm  <p class="text-sm text-neutral-400 mt-0.5 font-medium">Clinic visit</p>
+      section[aria-label="Heart checkup — Dr. Lee"] > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm  <p class="text-sm text-neutral-400 mt-0.5 font-medium">Hospital visit</p>
+      section[aria-label="Blood test — fasting needed"] > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm  <p class="text-sm text-neutral-400 mt-0.5 font-medium">Clinic visit</p>
+      section[aria-labelledby="group-week"] > ul > li:nth-child(2) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm  <p class="text-sm text-neutral-400 mt-0.5 font-medium">Clinic visit</p>
+      section[aria-labelledby="group-week"] > ul > li:nth-child(3) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm  <p class="text-sm text-neutral-400 mt-0.5 font-medium">Telephone — no travel needed</p>
+      section[aria-labelledby="group-coming"] > ul > li:nth-child(1) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm  <p class="text-sm text-neutral-400 mt-0.5 font-medium">Clinic visit</p>
+    moderate heading-order: Heading levels should only increase by one
+      section[aria-labelledby="group-today"] > ul > li:nth-child(1) > .border-neutral-300.shadow-card.p-6 > .mb-4.gap-4.justify-between > h3  <h3 class="font-semibold text-neutral-800 leading-tight">Blood pressure check — Dr. Sharma</h3>
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .px-6  <a href="tel:07700900456" class="inline-flex items-ce..." aria-label="Call your caregiver:...">
+      section[aria-label="Blood test — fasting needed"] > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\:bg-calm-100.hover\:border-calm-400.bg-calm-50  <button class="inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover
+      section[aria-labelledby="group-week"] > ul > li:nth-child(2) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\:bg-calm-100.hover\:border-calm-400.bg-calm-50  <button class="inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover
+      section[aria-labelledby="group-week"] > ul > li:nth-child(3) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\:bg-calm-100.hover\:border-calm-400.bg-calm-50  <button class="inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover
+      section[aria-labelledby="group-coming"] > ul > li:nth-child(1) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\:bg-calm-100.hover\:border-calm-400.bg-calm-50  <button class="inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover
+      section[aria-labelledby="group-coming"] > ul > li:nth-child(2) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\:bg-calm-100.hover\:border-calm-400.bg-calm-50  <button class="inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover
+✔ Appointments: one <main>, one top-level banner, one <h1> — main=1 banner=1 h1=1
+✘ desktop Medicines                  2 violations (12 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .line-through.text-neutral-400.text-lg  <p class="font-bold text-lg leading-tight line-through text-neutral-400">Amlodipine</p>
+      li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .mt-0\.5.text-neutral-600.text-sm  <p class="text-neutral-600 text-sm mt-0.5">5 mg — 1 tablet</p>
+      li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .flex-wrap.mt-2.gap-2 > .badge.badge-calm.text-xs  <span class="badge badge-calm text-xs">8:30 am</span>
+      li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .italic.mt-2.text-neutral-500  <p class="text-sm text-neutral-500 mt-2 italic">Take with food.</p>
+      li:nth-child(3) > .opacity-60 > .flex-1.min-w-0 > .line-through.text-neutral-400.text-lg  <p class="font-bold text-lg leading-tight line-through text-neutral-400">Sertraline</p>
+      li:nth-child(3) > .opacity-60 > .flex-1.min-w-0 > .mt-0\.5.text-neutral-600.text-sm  <p class="text-neutral-600 text-sm mt-0.5">50 mg — 1 tablet</p>
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .rounded-xl  <a href="tel:07700900456" class="inline-flex items-ce..." aria-label="Call your caregiver:...">
+✔ Medicines: one <main>, one top-level banner, one <h1> — main=1 banner=1 h1=1
+✘ desktop Memories                   2 violations (3 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      .max-w-none > p:nth-child(1)  <p>CareConnect © 2026 — Compassionate care, every day.</p>
+      .max-w-none > p:nth-child(2)  <p>Need help? <a href="/app/contacts" class="text-calm-600 font-medium">View contacts</a></p>
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .rounded-xl  <a href="tel:07700900456" class="inline-flex items-ce..." aria-label="Call your caregiver:...">
+✔ Memories: one <main>, one top-level banner, one <h1> — main=1 banner=1 h1=1
+✘ desktop Contacts                   2 violations (3 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      p:nth-child(1)  <p>CareConnect © 2026 — Compassionate care, every day.</p>
+      .max-w-none > p:nth-child(2)  <p>Need help? <a href="/app/contacts" class="text-calm-600 font-medium">View contacts</a></p>
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .rounded-xl  <a href="tel:07700900456" class="inline-flex items-ce..." aria-label="Call your caregiver:...">
+✔ Contacts: one <main>, one top-level banner, one <h1> — main=1 banner=1 h1=1
+✘ desktop Caregiver dashboard        2 violations (9 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      .mt-1.text-neutral-400.text-sm  <p class="text-sm text-neutral-400 mt-1">Activity appears here when Margaret takes medications or checks in.</p>
+      .pb-2  <p class="text-xs text-neutral-400 text-center pb-2">Data refreshes when you return to this tab. Last seen adherence reflects Margaret's most recent actions.</p
+      .max-w-none > p:nth-child(1)  <p>CareConnect © 2026 — Compassionate care, every day.</p>
+      .max-w-none > p:nth-child(2)  <p>Need help? <a href="/app/contacts" class="text-calm-600 font-medium">View contacts</a></p>
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      a[aria-label="Manage medications"]  <a class="flex items-center gap-4 bg-white rounded-xl border-2 border-neutral-300 shadow-card px-5 py-4 no-underline group hover:border-calm-400 hover:shadow-ca
+      a[aria-label="Manage appointments"]  <a class="flex items-center gap-4 bg-white rounded-xl border-2 border-neutral-300 shadow-card px-5 py-4 no-underline group hover:border-calm-400 hover:shadow-ca
+      a[aria-label="View caregiver notes"]  <a class="flex items-center gap-4 bg-white rounded-xl border-2 border-neutral-300 shadow-card px-5 py-4 no-underline group hover:border-calm-400 hover:shadow-ca
+      a[aria-label="View full activity log"]  <a class="flex items-center gap-4 bg-white rounded-xl border-2 border-neutral-300 shadow-card px-5 py-4 no-underline group hover:border-calm-400 hover:shadow-ca
+      .w-full[aria-label="Switch to care recipient role"]  <button class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-500 hover:text-calm-600 hover:bg-calm-50 transition-colo
+✔ Caregiver dashboard: one <main>, one top-level banner, one <h1> — main=1 banner=1 h1=1
+✘ desktop Manage medications         2 violations (4 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      p:nth-child(1)  <p>CareConnect © 2026 — Compassionate care, every day.</p>
+      .max-w-none > p:nth-child(2)  <p>Need help? <a href="/app/contacts" class="text-calm-600 font-medium">View contacts</a></p>
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .hover\:bg-calm-700  <button class="inline-flex items-center gap-2 font-bold rounded-xl px-5 py-3 min-h-[2.75rem] text-base bg-calm-600 text-white border-2 border-calm-600 hover:bg-
+      .w-full.hover\:text-calm-600[aria-label="Switch to care recipient role"]  <button class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-500 hover:text-calm-600 hover:bg-calm-50 transition-colo
+✔ Manage medications: one <main>, one top-level banner, one <h1> — main=1 banner=1 h1=1
+✘ desktop Manage appointments        2 violations (11 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      li:nth-child(1) > .border-calm-300.border-neutral-300.shadow-card > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400  <span class="text-neutral-400"> — 12 Greenfield Road, Westfield</span>
+      section[aria-label="Heart checkup — Dr. Lee"] > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400  <span class="text-neutral-400"> — 45 Hospital Way, Westfield</span>
+      section[aria-label="Blood test — fasting needed"] > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400  <span class="text-neutral-400"> — 12 Greenfield Road, Westfield</span>
+      li:nth-child(4) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400  <span class="text-neutral-400"> — 8 Meadow Lane, Westfield</span>
+      li:nth-child(6) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400  <span class="text-neutral-400"> — 3 Riverside Walk, Westfield</span>
+      li:nth-child(7) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400  <span class="text-neutral-400"> — 22 High Street, Westfield</span>
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .hover\:bg-calm-700  <button class="inline-flex items-center gap-2 font-bold rounded-xl px-5 py-3 min-h-[2.75rem] text-base bg-calm-600 text-white border-2 border-calm-600 hover:bg-
+      .w-full.hover\:text-calm-600[aria-label="Switch to care recipient role"]  <button class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-500 hover:text-calm-600 hover:bg-calm-50 transition-colo
+✔ Manage appointments: one <main>, one top-level banner, one <h1> — main=1 banner=1 h1=1
+✘ desktop Activity log               2 violations (3 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      p:nth-child(1)  <p>CareConnect © 2026 — Compassionate care, every day.</p>
+      .max-w-none > p:nth-child(2)  <p>Need help? <a href="/app/contacts" class="text-calm-600 font-medium">View contacts</a></p>
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .w-full[aria-label="Switch to care recipient role"]  <button class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-500 hover:text-calm-600 hover:bg-calm-50 transition-colo
+✔ Activity log: one <main>, one top-level banner, one <h1> — main=1 banner=1 h1=1
+✘ desktop Caregiver notes            2 violations (3 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      p:nth-child(1)  <p>CareConnect © 2026 — Compassionate care, every day.</p>
+      .max-w-none > p:nth-child(2)  <p>Need help? <a href="/app/contacts" class="text-calm-600 font-medium">View contacts</a></p>
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .w-full[aria-label="Switch to care recipient role"]  <button class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-500 hover:text-calm-600 hover:bg-calm-50 transition-colo
+✔ Caregiver notes: one <main>, one top-level banner, one <h1> — main=1 banner=1 h1=1
+✘ Each page has its own document title — 1 distinct titles for 15 pages
+✔ desktop Sign in — errors showing   0 violations (0 nodes)
+✔ Sign in: invalid fields are marked and described by their error — 2 invalid field(s)
+✘ desktop Landing — assistant open   1 violations (2 nodes)
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .border-white  <a class="inline-flex items-center justify-center gap-2 font-bold rounded-lg px-7 py-4 min-h-[3rem] text-lg bg-white text-calm-700 border-2 border-white hover:b
+      .bg-transparent  <a class="inline-flex items-ce..." aria-label="Sign in to CareConne..." href="/signin" data-discover="true">
+✔ Assistant: aria-expanded set; Escape closes it and returns focus to the launcher
+✘ desktop Manage medications — confirm dialog 2 violations (4 nodes)
+    serious color-contrast: Elements must meet minimum color contrast ratio thresholds
+      p:nth-child(1)  <p>CareConnect © 2026 — Compassionate care, every day.</p>
+      .max-w-none > p:nth-child(2)  <p>Need help? <a href="/app/contacts" class="text-calm-600 font-medium">View contacts</a></p>
+    serious label-content-name-mismatch: Elements must have their visible text as part of their accessible name
+      .hover\:bg-calm-700  <button class="inline-flex items-center gap-2 font-bold rounded-xl px-5 py-3 min-h-[2.75rem] text-base bg-calm-600 text-white border-2 border-calm-600 hover:bg-
+      .w-full.hover\:text-calm-600[aria-label="Switch to care recipient role"]  <button class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-500 hover:text-calm-600 hover:bg-calm-50 transition-colo
+✔ Dialog: Tab and Shift+Tab stay inside
+✔ Dialog: Escape closes it and focus returns to the Delete button — Delete Amlodipine
+✘ /app/manage-medications: focus is not moved on page load — focused: button "Delete Vitamin D3"
+✘ /app/manage-appointments: focus is not moved on page load — focused: button "Delete: Annual health review — Dr. Sharma"
+✘ Landing: first Tab is "Skip to main content", Enter moves focus to <main> — first="Skip to main contentCareConnectSign inSign upCareConnectYour daily companion for calm, confident care.For people who need a little help remembering, and the people who care for them.Get started — it's freeI already have an accountHow CareConnect helpsDesigned to be calm, clear, and reassuring — not clinical.Stay on top of medicationsA clear daily checklist shows every medicine and the right time to take it — no guessing, no missed doses.Never miss an appointmentYour full day is laid out simply: meals, rest, activities, and appointments — all in one calm, easy-to-read view.Stay connected to your caregiverCaregivers can leave notes, check progress, and view the same schedule — so everyone stays in the loop.Made for two kinds of peopleFor care recipientsLarge text, simple steps, and a warm, supportive tone. CareConnect never overwhelms — it just shows you what's next.Today's schedule at a glanceMedication remindersMemory cards for people and placesOne-tap contact for your carerFor caregiversStay in the loop without being in the room. Log notes, check what's been done, and keep the care team aligned.Real-time schedule viewMedication trackingShift notes and priority flagsEmergency contact listReady to get started?Set up takes under two minutes — no credit card, no medical records.Create a free accountSign inYour information is private and never sharedCareConnect never gives medical adviceFree to useCareConnect© 2026 CareConnect. For informational use only. CareConnect does not provide medical advice, diagnosis, or treatment." → #
+✘ Sign in: first Tab is "Skip to main content", Enter moves focus to <main> — first="CareConnect" → #
+✔ Patient app: first Tab is "Skip to main content", Enter moves focus to <main> — first="Skip to main content" → #main-content
+✔ Caregiver app: first Tab is "Skip to main content", Enter moves focus to <main> — first="Skip to main content" → #main-content
+✔ Landing: no horizontal scroll at 320px
+✔ Sign in: no horizontal scroll at 320px
+✔ Sign up: no horizontal scroll at 320px
+✔ Role chooser: no horizontal scroll at 320px
+✔ Today (patient home): no horizontal scroll at 320px
+✔ My Day: no horizontal scroll at 320px
+✔ Appointments: no horizontal scroll at 320px
+✔ Medicines: no horizontal scroll at 320px
+✔ Memories: no horizontal scroll at 320px
+✔ Contacts: no horizontal scroll at 320px
+✔ Caregiver dashboard: no horizontal scroll at 320px
+✔ Manage medications: no horizontal scroll at 320px
+✔ Manage appointments: no horizontal scroll at 320px
+✔ Activity log: no horizontal scroll at 320px
+✔ Caregiver notes: no horizontal scroll at 320px
+
+54 scans, 71 violations; 36/41 checks passed.

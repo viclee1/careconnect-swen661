@@ -80,7 +80,7 @@ export default function Home({ view }: HomeProps) {
           <StatCard
             label="Medicines left"
             value={pendingMeds.toString()}
-            icon={<Pill className="w-5 h-5 text-warm-600" aria-hidden="true" />}
+            icon={<Pill className="w-5 h-5 text-warm-700" aria-hidden="true" />}
             accent={pendingMeds > 0 ? 'text-warm-700' : 'text-success-700'}
           />
           <StatCard
@@ -111,7 +111,7 @@ export default function Home({ view }: HomeProps) {
         </div>
         {upcomingItems.length === 0 ? (
           <div className="card text-center text-neutral-500 py-10">
-            <CheckCircle2 className="w-10 h-10 text-success-500 mx-auto mb-3" aria-hidden="true" />
+            <CheckCircle2 className="w-10 h-10 text-success-600 mx-auto mb-3" aria-hidden="true" />
             <p className="font-medium text-neutral-700">All done for today!</p>
             <p className="text-sm mt-1">What a great day.</p>
           </div>

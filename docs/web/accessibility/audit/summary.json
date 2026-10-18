@@ -1,0 +1,604 @@
+{
+  "engine": "axe-core 4.14.0",
+  "tags": [
+    "wcag2a",
+    "wcag2aa",
+    "wcag21a",
+    "wcag21aa",
+    "best-practice"
+  ],
+  "date": "2026-10-18T00:16:33.658Z",
+  "scans": 54,
+  "violations": 0,
+  "checks": {
+    "total": 41,
+    "failed": 0
+  },
+  "results": [
+    {
+      "id": "mobile-landing",
+      "page": "Landing",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 39
+    },
+    {
+      "id": "mobile-signin",
+      "page": "Sign in",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 40
+    },
+    {
+      "id": "mobile-signup",
+      "page": "Sign up",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 40
+    },
+    {
+      "id": "mobile-role",
+      "page": "Role chooser",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 34
+    },
+    {
+      "id": "mobile-today",
+      "page": "Today (patient home)",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 37
+    },
+    {
+      "id": "mobile-schedule",
+      "page": "My Day",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 37
+    },
+    {
+      "id": "mobile-appointments",
+      "page": "Appointments",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 37
+    },
+    {
+      "id": "mobile-medications",
+      "page": "Medicines",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 36
+    },
+    {
+      "id": "mobile-memories",
+      "page": "Memories",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 39
+    },
+    {
+      "id": "mobile-contacts",
+      "page": "Contacts",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 36
+    },
+    {
+      "id": "mobile-dashboard",
+      "page": "Caregiver dashboard",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 38
+    },
+    {
+      "id": "mobile-manage-meds",
+      "page": "Manage medications",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 38
+    },
+    {
+      "id": "mobile-manage-appts",
+      "page": "Manage appointments",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 38
+    },
+    {
+      "id": "mobile-activity",
+      "page": "Activity log",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 38
+    },
+    {
+      "id": "mobile-notes",
+      "page": "Caregiver notes",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 36
+    },
+    {
+      "id": "mobile-signin-errors",
+      "page": "Sign in — errors showing",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 40
+    },
+    {
+      "id": "mobile-chatbot",
+      "page": "Landing — assistant open",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 44
+    },
+    {
+      "id": "mobile-dialog",
+      "page": "Manage medications — confirm dialog",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 40
+    },
+    {
+      "id": "tablet-landing",
+      "page": "Landing",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 39
+    },
+    {
+      "id": "tablet-signin",
+      "page": "Sign in",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 40
+    },
+    {
+      "id": "tablet-signup",
+      "page": "Sign up",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 40
+    },
+    {
+      "id": "tablet-role",
+      "page": "Role chooser",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 34
+    },
+    {
+      "id": "tablet-today",
+      "page": "Today (patient home)",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 37
+    },
+    {
+      "id": "tablet-schedule",
+      "page": "My Day",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 37
+    },
+    {
+      "id": "tablet-appointments",
+      "page": "Appointments",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 37
+    },
+    {
+      "id": "tablet-medications",
+      "page": "Medicines",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 36
+    },
+    {
+      "id": "tablet-memories",
+      "page": "Memories",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 39
+    },
+    {
+      "id": "tablet-contacts",
+      "page": "Contacts",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 36
+    },
+    {
+      "id": "tablet-dashboard",
+      "page": "Caregiver dashboard",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 37
+    },
+    {
+      "id": "tablet-manage-meds",
+      "page": "Manage medications",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 37
+    },
+    {
+      "id": "tablet-manage-appts",
+      "page": "Manage appointments",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 37
+    },
+    {
+      "id": "tablet-activity",
+      "page": "Activity log",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 37
+    },
+    {
+      "id": "tablet-notes",
+      "page": "Caregiver notes",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 35
+    },
+    {
+      "id": "tablet-signin-errors",
+      "page": "Sign in — errors showing",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 40
+    },
+    {
+      "id": "tablet-chatbot",
+      "page": "Landing — assistant open",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 44
+    },
+    {
+      "id": "tablet-dialog",
+      "page": "Manage medications — confirm dialog",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 39
+    },
+    {
+      "id": "desktop-landing",
+      "page": "Landing",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 39
+    },
+    {
+      "id": "desktop-signin",
+      "page": "Sign in",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 40
+    },
+    {
+      "id": "desktop-signup",
+      "page": "Sign up",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 40
+    },
+    {
+      "id": "desktop-role",
+      "page": "Role chooser",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 34
+    },
+    {
+      "id": "desktop-today",
+      "page": "Today (patient home)",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 39
+    },
+    {
+      "id": "desktop-schedule",
+      "page": "My Day",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 39
+    },
+    {
+      "id": "desktop-appointments",
+      "page": "Appointments",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 39
+    },
+    {
+      "id": "desktop-medications",
+      "page": "Medicines",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 38
+    },
+    {
+      "id": "desktop-memories",
+      "page": "Memories",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 41
+    },
+    {
+      "id": "desktop-contacts",
+      "page": "Contacts",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 38
+    },
+    {
+      "id": "desktop-dashboard",
+      "page": "Caregiver dashboard",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 39
+    },
+    {
+      "id": "desktop-manage-meds",
+      "page": "Manage medications",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 39
+    },
+    {
+      "id": "desktop-manage-appts",
+      "page": "Manage appointments",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 39
+    },
+    {
+      "id": "desktop-activity",
+      "page": "Activity log",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 39
+    },
+    {
+      "id": "desktop-notes",
+      "page": "Caregiver notes",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 37
+    },
+    {
+      "id": "desktop-signin-errors",
+      "page": "Sign in — errors showing",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 40
+    },
+    {
+      "id": "desktop-chatbot",
+      "page": "Landing — assistant open",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 44
+    },
+    {
+      "id": "desktop-dialog",
+      "page": "Manage medications — confirm dialog",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 41
+    }
+  ],
+  "checkResults": [
+    {
+      "name": "Landing: one <main>, one top-level banner, one <h1>",
+      "pass": true,
+      "note": "main=1 banner=1 h1=1"
+    },
+    {
+      "name": "Sign in: one <main>, one top-level banner, one <h1>",
+      "pass": true,
+      "note": "main=1 banner=1 h1=1"
+    },
+    {
+      "name": "Sign up: one <main>, one top-level banner, one <h1>",
+      "pass": true,
+      "note": "main=1 banner=1 h1=1"
+    },
+    {
+      "name": "Role chooser: one <main>, one top-level banner, one <h1>",
+      "pass": true,
+      "note": "main=1 banner=1 h1=1"
+    },
+    {
+      "name": "Today (patient home): one <main>, one top-level banner, one <h1>",
+      "pass": true,
+      "note": "main=1 banner=1 h1=1"
+    },
+    {
+      "name": "My Day: one <main>, one top-level banner, one <h1>",
+      "pass": true,
+      "note": "main=1 banner=1 h1=1"
+    },
+    {
+      "name": "Appointments: one <main>, one top-level banner, one <h1>",
+      "pass": true,
+      "note": "main=1 banner=1 h1=1"
+    },
+    {
+      "name": "Medicines: one <main>, one top-level banner, one <h1>",
+      "pass": true,
+      "note": "main=1 banner=1 h1=1"
+    },
+    {
+      "name": "Memories: one <main>, one top-level banner, one <h1>",
+      "pass": true,
+      "note": "main=1 banner=1 h1=1"
+    },
+    {
+      "name": "Contacts: one <main>, one top-level banner, one <h1>",
+      "pass": true,
+      "note": "main=1 banner=1 h1=1"
+    },
+    {
+      "name": "Caregiver dashboard: one <main>, one top-level banner, one <h1>",
+      "pass": true,
+      "note": "main=1 banner=1 h1=1"
+    },
+    {
+      "name": "Manage medications: one <main>, one top-level banner, one <h1>",
+      "pass": true,
+      "note": "main=1 banner=1 h1=1"
+    },
+    {
+      "name": "Manage appointments: one <main>, one top-level banner, one <h1>",
+      "pass": true,
+      "note": "main=1 banner=1 h1=1"
+    },
+    {
+      "name": "Activity log: one <main>, one top-level banner, one <h1>",
+      "pass": true,
+      "note": "main=1 banner=1 h1=1"
+    },
+    {
+      "name": "Caregiver notes: one <main>, one top-level banner, one <h1>",
+      "pass": true,
+      "note": "main=1 banner=1 h1=1"
+    },
+    {
+      "name": "Each page has its own document title",
+      "pass": true,
+      "note": "15 distinct titles for 15 pages"
+    },
+    {
+      "name": "Sign in: invalid fields are marked and described by their error",
+      "pass": true,
+      "note": "2 invalid field(s)"
+    },
+    {
+      "name": "Assistant: aria-expanded set; Escape closes it and returns focus to the launcher",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Dialog: Tab and Shift+Tab stay inside",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Dialog: Escape closes it and focus returns to the Delete button",
+      "pass": true,
+      "note": "Delete Amlodipine"
+    },
+    {
+      "name": "/app/manage-medications: focus is not moved on page load",
+      "pass": true,
+      "note": "focused: body"
+    },
+    {
+      "name": "/app/manage-appointments: focus is not moved on page load",
+      "pass": true,
+      "note": "focused: body"
+    },
+    {
+      "name": "Landing: first Tab is \"Skip to main content\", Enter moves focus to <main>",
+      "pass": true,
+      "note": "first=\"Skip to main content\" → #main-content"
+    },
+    {
+      "name": "Sign in: first Tab is \"Skip to main content\", Enter moves focus to <main>",
+      "pass": true,
+      "note": "first=\"Skip to main content\" → #main-content"
+    },
+    {
+      "name": "Patient app: first Tab is \"Skip to main content\", Enter moves focus to <main>",
+      "pass": true,
+      "note": "first=\"Skip to main content\" → #main-content"
+    },
+    {
+      "name": "Caregiver app: first Tab is \"Skip to main content\", Enter moves focus to <main>",
+      "pass": true,
+      "note": "first=\"Skip to main content\" → #main-content"
+    },
+    {
+      "name": "Landing: no horizontal scroll at 320px",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Sign in: no horizontal scroll at 320px",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Sign up: no horizontal scroll at 320px",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Role chooser: no horizontal scroll at 320px",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Today (patient home): no horizontal scroll at 320px",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "My Day: no horizontal scroll at 320px",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Appointments: no horizontal scroll at 320px",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Medicines: no horizontal scroll at 320px",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Memories: no horizontal scroll at 320px",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Contacts: no horizontal scroll at 320px",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Caregiver dashboard: no horizontal scroll at 320px",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Manage medications: no horizontal scroll at 320px",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Manage appointments: no horizontal scroll at 320px",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Activity log: no horizontal scroll at 320px",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Caregiver notes: no horizontal scroll at 320px",
+      "pass": true,
+      "note": ""
+    }
+  ]
+}

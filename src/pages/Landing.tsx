@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { Card } from '../components';
 import ChatBot from '../components/ChatBot';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 
 // ── Feature card data ──────────────────────────────────────────────────────────
 
@@ -40,6 +41,7 @@ const features = [
 // ── Component ──────────────────────────────────────────────────────────────────
 
 export default function Landing() {
+  useDocumentTitle(null);
   return (
     <>
       {/* ── Skip link — first focusable element ───────────────────────────── */}
@@ -124,7 +126,6 @@ export default function Landing() {
                   <Link
                     to="/signup"
                     className="inline-flex items-center justify-center gap-2 font-bold rounded-lg px-7 py-4 min-h-[3rem] text-lg bg-white text-calm-700 border-2 border-white hover:bg-calm-50 transition-colors no-underline"
-                    aria-label="Sign up for CareConnect"
                   >
                     Get started — it's free
                     <ArrowRight className="w-5 h-5" aria-hidden="true" />
@@ -132,7 +133,6 @@ export default function Landing() {
                   <Link
                     to="/signin"
                     className="inline-flex items-center justify-center gap-2 font-semibold rounded-lg px-7 py-4 min-h-[3rem] text-lg bg-transparent text-white border-2 border-white/60 hover:border-white hover:bg-white/10 transition-colors no-underline"
-                    aria-label="Sign in to CareConnect"
                   >
                     I already have an account
                   </Link>
@@ -276,7 +276,7 @@ export default function Landing() {
                   CareConnect never gives medical advice
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Heart className="w-4 h-4 text-calm-500 flex-shrink-0" aria-hidden="true" />
+                  <Heart className="w-4 h-4 text-calm-600 flex-shrink-0" aria-hidden="true" />
                   Free to use
                 </span>
               </div>
@@ -301,7 +301,7 @@ export default function Landing() {
                 </span>
                 <span className="font-semibold text-white">CareConnect</span>
               </div>
-              <p className="text-sm text-neutral-400 text-center">
+              <p className="text-sm text-neutral-300 text-center">
                 &copy; {new Date().getFullYear()} CareConnect. For informational use only.
                 CareConnect does not provide medical advice, diagnosis, or treatment.
               </p>

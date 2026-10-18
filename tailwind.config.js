@@ -23,7 +23,9 @@ export default {
       },
 
       // ── Color System ──────────────────────────────────────────────────────────
-      // All text/bg pairs verified ≥4.5:1 WCAG AA; interactive elements ≥3:1
+      // Ratios below are measured against white (Assignment 10 audit). Text uses
+      // shades marked 4.5:1 or more; the lighter shades are for borders, fills
+      // and icons only. The web axe audit (npm run a11y:web) enforces this.
       colors: {
         // Neutral ramp — backbone grays
         neutral: {
@@ -31,11 +33,11 @@ export default {
           100: '#eef0f4',   // surface / card
           200: '#dde1e8',   // dividers / borders
           300: '#c4cad5',   // muted borders
-          400: '#8f9aaa',   // placeholder / disabled
-          500: '#60697a',   // secondary text (4.8:1 on white)
-          600: '#46505f',   // body text (7.2:1 on white)
-          700: '#303845',   // strong body (9.8:1 on white)
-          800: '#1e2631',   // headings (14.1:1 on white)
+          400: '#8f9aaa',   // borders / disabled only — 2.85:1, never for text
+          500: '#60697a',   // secondary text (5.53:1 on white)
+          600: '#46505f',   // body text (8.16:1 on white)
+          700: '#303845',   // strong body (11.82:1 on white)
+          800: '#1e2631',   // headings (15.25:1 on white)
           900: '#111720',   // near-black
         },
         // Calm blue-teal — primary brand / interactive
@@ -45,9 +47,9 @@ export default {
           200: '#a3d4e9',
           300: '#61b3d4',
           400: '#2e93bb',
-          500: '#1b7a9f',   // 4.6:1 on white — min AA large text interactive
-          600: '#146488',   // 6.2:1 on white — AA for all text ✓
-          700: '#0f5070',   // 8.5:1 on white ✓
+          500: '#1b7a9f',   // 4.85:1 on white — min AA large text interactive
+          600: '#146488',   // 6.55:1 on white — AA for all text ✓
+          700: '#0f5070',   // 8.74:1 on white ✓
           800: '#0b3d56',
           900: '#062738',
         },
@@ -58,8 +60,8 @@ export default {
           200: '#fbdc8b',
           300: '#f8c346',
           400: '#f0a90e',
-          500: '#c98c09',   // 4.6:1 on white ✓
-          600: '#a67207',   // 6.5:1 on white ✓
+          500: '#c98c09',   // 2.90:1 on white — not for text
+          600: '#a67207',   // 4.17:1 on white — large text / icons only
           700: '#7d5505',
           800: '#573b04',
           900: '#362402',
@@ -71,8 +73,8 @@ export default {
           200: '#ffaab0',
           300: '#f87280',
           400: '#ef4056',
-          500: '#cc2039',   // 5.1:1 on white ✓
-          600: '#a81830',   // 7.2:1 on white ✓
+          500: '#cc2039',   // 5.48:1 on white ✓
+          600: '#a81830',   // 7.40:1 on white ✓
           700: '#7e1124',
           800: '#560b19',
           900: '#2e0610',
@@ -84,8 +86,8 @@ export default {
           200: '#9de3c9',
           300: '#5ccca8',
           400: '#26b084',
-          500: '#0e9268',   // 4.6:1 on white ✓
-          600: '#0a7854',   // 6.7:1 on white ✓
+          500: '#0e9268',   // 3.94:1 on white — large text / icons only
+          600: '#0a7854',   // 5.49:1 on white ✓
           700: '#075c3f',
           800: '#04402c',
           900: '#02241a',
@@ -97,8 +99,8 @@ export default {
           200: '#fde58a',
           300: '#fccf47',
           400: '#f8b500',
-          500: '#c78f00',   // 5.0:1 on white ✓
-          600: '#a07200',   // 7.2:1 on white ✓
+          500: '#c78f00',   // 2.85:1 on white — not for text
+          600: '#a07200',   // 4.28:1 on white — large text / icons only
           700: '#7a5600',
           800: '#503800',
           900: '#2e2000',

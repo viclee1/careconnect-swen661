@@ -1,0 +1,380 @@
+[
+  {
+    "id": "mobile-landing",
+    "page": "Landing",
+    "breakpoint": "mobile 375px",
+    "violations": [],
+    "passes": 39
+  },
+  {
+    "id": "mobile-signin",
+    "page": "Sign in",
+    "breakpoint": "mobile 375px",
+    "violations": [],
+    "passes": 40
+  },
+  {
+    "id": "mobile-signup",
+    "page": "Sign up",
+    "breakpoint": "mobile 375px",
+    "violations": [],
+    "passes": 40
+  },
+  {
+    "id": "mobile-role",
+    "page": "Role chooser",
+    "breakpoint": "mobile 375px",
+    "violations": [],
+    "passes": 34
+  },
+  {
+    "id": "mobile-today",
+    "page": "Today (patient home)",
+    "breakpoint": "mobile 375px",
+    "violations": [],
+    "passes": 37
+  },
+  {
+    "id": "mobile-schedule",
+    "page": "My Day",
+    "breakpoint": "mobile 375px",
+    "violations": [],
+    "passes": 37
+  },
+  {
+    "id": "mobile-appointments",
+    "page": "Appointments",
+    "breakpoint": "mobile 375px",
+    "violations": [],
+    "passes": 37
+  },
+  {
+    "id": "mobile-medications",
+    "page": "Medicines",
+    "breakpoint": "mobile 375px",
+    "violations": [],
+    "passes": 36
+  },
+  {
+    "id": "mobile-memories",
+    "page": "Memories",
+    "breakpoint": "mobile 375px",
+    "violations": [],
+    "passes": 39
+  },
+  {
+    "id": "mobile-contacts",
+    "page": "Contacts",
+    "breakpoint": "mobile 375px",
+    "violations": [],
+    "passes": 36
+  },
+  {
+    "id": "mobile-dashboard",
+    "page": "Caregiver dashboard",
+    "breakpoint": "mobile 375px",
+    "violations": [],
+    "passes": 38
+  },
+  {
+    "id": "mobile-manage-meds",
+    "page": "Manage medications",
+    "breakpoint": "mobile 375px",
+    "violations": [],
+    "passes": 38
+  },
+  {
+    "id": "mobile-manage-appts",
+    "page": "Manage appointments",
+    "breakpoint": "mobile 375px",
+    "violations": [],
+    "passes": 38
+  },
+  {
+    "id": "mobile-activity",
+    "page": "Activity log",
+    "breakpoint": "mobile 375px",
+    "violations": [],
+    "passes": 38
+  },
+  {
+    "id": "mobile-notes",
+    "page": "Caregiver notes",
+    "breakpoint": "mobile 375px",
+    "violations": [],
+    "passes": 36
+  },
+  {
+    "id": "mobile-signin-errors",
+    "page": "Sign in — errors showing",
+    "breakpoint": "mobile 375px",
+    "violations": [],
+    "passes": 40
+  },
+  {
+    "id": "mobile-chatbot",
+    "page": "Landing — assistant open",
+    "breakpoint": "mobile 375px",
+    "violations": [],
+    "passes": 44
+  },
+  {
+    "id": "mobile-dialog",
+    "page": "Manage medications — confirm dialog",
+    "breakpoint": "mobile 375px",
+    "violations": [],
+    "passes": 40
+  },
+  {
+    "id": "tablet-landing",
+    "page": "Landing",
+    "breakpoint": "tablet 820px",
+    "violations": [],
+    "passes": 39
+  },
+  {
+    "id": "tablet-signin",
+    "page": "Sign in",
+    "breakpoint": "tablet 820px",
+    "violations": [],
+    "passes": 40
+  },
+  {
+    "id": "tablet-signup",
+    "page": "Sign up",
+    "breakpoint": "tablet 820px",
+    "violations": [],
+    "passes": 40
+  },
+  {
+    "id": "tablet-role",
+    "page": "Role chooser",
+    "breakpoint": "tablet 820px",
+    "violations": [],
+    "passes": 34
+  },
+  {
+    "id": "tablet-today",
+    "page": "Today (patient home)",
+    "breakpoint": "tablet 820px",
+    "violations": [],
+    "passes": 37
+  },
+  {
+    "id": "tablet-schedule",
+    "page": "My Day",
+    "breakpoint": "tablet 820px",
+    "violations": [],
+    "passes": 37
+  },
+  {
+    "id": "tablet-appointments",
+    "page": "Appointments",
+    "breakpoint": "tablet 820px",
+    "violations": [],
+    "passes": 37
+  },
+  {
+    "id": "tablet-medications",
+    "page": "Medicines",
+    "breakpoint": "tablet 820px",
+    "violations": [],
+    "passes": 36
+  },
+  {
+    "id": "tablet-memories",
+    "page": "Memories",
+    "breakpoint": "tablet 820px",
+    "violations": [],
+    "passes": 39
+  },
+  {
+    "id": "tablet-contacts",
+    "page": "Contacts",
+    "breakpoint": "tablet 820px",
+    "violations": [],
+    "passes": 36
+  },
+  {
+    "id": "tablet-dashboard",
+    "page": "Caregiver dashboard",
+    "breakpoint": "tablet 820px",
+    "violations": [],
+    "passes": 37
+  },
+  {
+    "id": "tablet-manage-meds",
+    "page": "Manage medications",
+    "breakpoint": "tablet 820px",
+    "violations": [],
+    "passes": 37
+  },
+  {
+    "id": "tablet-manage-appts",
+    "page": "Manage appointments",
+    "breakpoint": "tablet 820px",
+    "violations": [],
+    "passes": 37
+  },
+  {
+    "id": "tablet-activity",
+    "page": "Activity log",
+    "breakpoint": "tablet 820px",
+    "violations": [],
+    "passes": 37
+  },
+  {
+    "id": "tablet-notes",
+    "page": "Caregiver notes",
+    "breakpoint": "tablet 820px",
+    "violations": [],
+    "passes": 35
+  },
+  {
+    "id": "tablet-signin-errors",
+    "page": "Sign in — errors showing",
+    "breakpoint": "tablet 820px",
+    "violations": [],
+    "passes": 40
+  },
+  {
+    "id": "tablet-chatbot",
+    "page": "Landing — assistant open",
+    "breakpoint": "tablet 820px",
+    "violations": [],
+    "passes": 44
+  },
+  {
+    "id": "tablet-dialog",
+    "page": "Manage medications — confirm dialog",
+    "breakpoint": "tablet 820px",
+    "violations": [],
+    "passes": 39
+  },
+  {
+    "id": "desktop-landing",
+    "page": "Landing",
+    "breakpoint": "desktop 1280px",
+    "violations": [],
+    "passes": 39
+  },
+  {
+    "id": "desktop-signin",
+    "page": "Sign in",
+    "breakpoint": "desktop 1280px",
+    "violations": [],
+    "passes": 40
+  },
+  {
+    "id": "desktop-signup",
+    "page": "Sign up",
+    "breakpoint": "desktop 1280px",
+    "violations": [],
+    "passes": 40
+  },
+  {
+    "id": "desktop-role",
+    "page": "Role chooser",
+    "breakpoint": "desktop 1280px",
+    "violations": [],
+    "passes": 34
+  },
+  {
+    "id": "desktop-today",
+    "page": "Today (patient home)",
+    "breakpoint": "desktop 1280px",
+    "violations": [],
+    "passes": 39
+  },
+  {
+    "id": "desktop-schedule",
+    "page": "My Day",
+    "breakpoint": "desktop 1280px",
+    "violations": [],
+    "passes": 39
+  },
+  {
+    "id": "desktop-appointments",
+    "page": "Appointments",
+    "breakpoint": "desktop 1280px",
+    "violations": [],
+    "passes": 39
+  },
+  {
+    "id": "desktop-medications",
+    "page": "Medicines",
+    "breakpoint": "desktop 1280px",
+    "violations": [],
+    "passes": 38
+  },
+  {
+    "id": "desktop-memories",
+    "page": "Memories",
+    "breakpoint": "desktop 1280px",
+    "violations": [],
+    "passes": 41
+  },
+  {
+    "id": "desktop-contacts",
+    "page": "Contacts",
+    "breakpoint": "desktop 1280px",
+    "violations": [],
+    "passes": 38
+  },
+  {
+    "id": "desktop-dashboard",
+    "page": "Caregiver dashboard",
+    "breakpoint": "desktop 1280px",
+    "violations": [],
+    "passes": 39
+  },
+  {
+    "id": "desktop-manage-meds",
+    "page": "Manage medications",
+    "breakpoint": "desktop 1280px",
+    "violations": [],
+    "passes": 39
+  },
+  {
+    "id": "desktop-manage-appts",
+    "page": "Manage appointments",
+    "breakpoint": "desktop 1280px",
+    "violations": [],
+    "passes": 39
+  },
+  {
+    "id": "desktop-activity",
+    "page": "Activity log",
+    "breakpoint": "desktop 1280px",
+    "violations": [],
+    "passes": 39
+  },
+  {
+    "id": "desktop-notes",
+    "page": "Caregiver notes",
+    "breakpoint": "desktop 1280px",
+    "violations": [],
+    "passes": 37
+  },
+  {
+    "id": "desktop-signin-errors",
+    "page": "Sign in — errors showing",
+    "breakpoint": "desktop 1280px",
+    "violations": [],
+    "passes": 40
+  },
+  {
+    "id": "desktop-chatbot",
+    "page": "Landing — assistant open",
+    "breakpoint": "desktop 1280px",
+    "violations": [],
+    "passes": 44
+  },
+  {
+    "id": "desktop-dialog",
+    "page": "Manage medications — confirm dialog",
+    "breakpoint": "desktop 1280px",
+    "violations": [],
+    "passes": 41
+  }
+]
