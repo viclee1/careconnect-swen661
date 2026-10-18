@@ -286,7 +286,7 @@ function ApptForm({
       >
         {/* Title */}
         <Field
-          label="Appointment title (required)"
+          label="Appointment title"
           required
           placeholder="e.g. Blood pressure check — Dr. Sharma"
           hint="Use plain language Margaret will recognise."
@@ -298,7 +298,7 @@ function ApptForm({
         {/* Date + Time row */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <Field
-            label="Date (required)"
+            label="Date"
             required
             type="date"
             min={todayStr()}
@@ -307,7 +307,7 @@ function ApptForm({
             error={errors.date}
           />
           <Field
-            label="Time (required)"
+            label="Time"
             required
             type="time"
             value={form.time}
@@ -324,7 +324,7 @@ function ApptForm({
 
           {/* Location type select */}
           <SelectField
-            label="Location type (required)"
+            label="Location type"
             id={locTypeId}
             value={form.locationType}
             onChange={(v) =>
@@ -346,7 +346,7 @@ function ApptForm({
 
           {/* Location name */}
           <Field
-            label="Location name (required)"
+            label="Location name"
             required
             placeholder={
               form.locationType === 'telephone'

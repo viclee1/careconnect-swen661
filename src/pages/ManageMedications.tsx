@@ -190,7 +190,7 @@ function MedForm({
       >
         {/* Name */}
         <Field
-          label="Medication name (required)"
+          label="Medication name"
           required
           placeholder="e.g. Amlodipine"
           value={form.name}
@@ -201,7 +201,7 @@ function MedForm({
 
         {/* Dosage */}
         <Field
-          label="Dose (required)"
+          label="Dose"
           required
           placeholder="e.g. 5 mg — 1 tablet"
           hint="Include strength, form, and quantity."
@@ -216,9 +216,9 @@ function MedForm({
             id={timesLegendId}
             className="block text-base font-semibold text-neutral-700"
           >
-            Schedule times (required)
+            Schedule times
             <span className="ml-1 text-alert-600" aria-hidden="true">*</span>
-            <span className="sr-only"> — at least one time is required</span>
+            <span className="sr-only"> (required — at least one time)</span>
           </legend>
 
           <div className="space-y-2">

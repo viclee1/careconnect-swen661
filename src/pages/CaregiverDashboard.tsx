@@ -411,6 +411,9 @@ export default function CaregiverDashboard() {
               className="text-sm font-semibold text-calm-600 no-underline hover:underline flex items-center gap-1"
             >
               View all
+              {/* Named "View all activity" for screen readers listing links
+                  out of context; still starts with the visible words. */}
+              <span className="sr-only"> activity</span>
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </Link>
           </div>
