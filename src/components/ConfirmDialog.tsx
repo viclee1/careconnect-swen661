@@ -179,7 +179,7 @@ export default function ConfirmDialog({
         <hr className="border-neutral-200" />
 
         {/* Action row */}
-        <div className="flex flex-col-reverse sm:flex-row gap-3 justify-end">
+        <div className="flex flex-col-reverse md:flex-row gap-3 justify-end">
           <button
             onClick={onCancel}
             className="inline-flex items-center justify-center gap-2 font-semibold rounded-lg px-5 py-3 min-h-[2.75rem] min-w-[2.75rem] cursor-pointer bg-white text-neutral-700 border-2 border-neutral-300 hover:bg-neutral-50 hover:border-neutral-400 transition-colors"

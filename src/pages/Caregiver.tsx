@@ -57,7 +57,7 @@ export default function Caregiver() {
   const grouped = groupByDate(notes);
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
+    <div className="space-y-6 page-container">
       {/* ── Page header ─────────────────────────────────────────────────── */}
       <div className="flex items-start justify-between gap-4">
         <div>

@@ -199,6 +199,33 @@ async function run() {
     }
     await page.close();
 
+    // Responsive navigation states.
+    if (bp.id === 'mobile') {
+      page = await open(context, '/app', 'caregiver');
+      const menu = page.getByRole('button', { name: 'Menu' });
+      await menu.focus();
+      await page.keyboard.press('Enter');
+      await page.locator('#mobile-menu').waitFor();
+      await scan(page, 'mobile-menu', 'Caregiver — mobile menu open', bp);
+      await page.keyboard.press('Tab');
+      const firstLink = await page.evaluate(() => Boolean(document.activeElement?.closest('#mobile-menu')));
+      await page.keyboard.press('Escape');
+      const back = await page.evaluate(() => document.activeElement?.textContent?.trim());
+      const closed = (await page.locator('#mobile-menu').count()) === 0;
+      check('Mobile menu: Tab goes into the menu, Escape closes it and focus returns to Menu', firstLink && closed && back === 'Menu', `back on "${back}"`);
+      await page.close();
+    }
+    if (bp.id === 'tablet') {
+      page = await open(context, '/app', 'caregiver');
+      const toggle = page.getByRole('button', { name: 'Expand menu' });
+      await toggle.focus();
+      await page.keyboard.press('Enter');
+      await page.getByRole('button', { name: 'Collapse menu' }).waitFor();
+      await scan(page, 'sidebar-expanded', 'Caregiver — tablet sidebar expanded', bp);
+      check('Tablet sidebar: Enter on "Expand menu" expands it (aria-expanded true)', (await page.getByRole('button', { name: 'Collapse menu' }).getAttribute('aria-expanded')) === 'true');
+      await page.close();
+    }
+
     if (bp.id === 'desktop') {
       // Focus on load: nothing should be focused before the user acts.
       for (const [p, role] of [['/app/manage-medications', 'caregiver'], ['/app/manage-appointments', 'caregiver']]) {

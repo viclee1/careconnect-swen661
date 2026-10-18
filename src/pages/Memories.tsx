@@ -35,7 +35,7 @@ export default function Memories() {
   const rest = filtered.filter((c) => !c.pinned);
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
+    <div className="space-y-6 page-container">
       {/* ── Page header ─────────────────────────────────────────────────── */}
       <div>
         <h1 className="text-2xl font-bold text-neutral-800">Memories</h1>
@@ -69,7 +69,7 @@ export default function Memories() {
             <Pin className="w-4 h-4" aria-hidden="true" />
             Pinned
           </h2>
-          <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 lg:items-stretch">
+          <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-stretch">
             {pinned.map((card) => (
               <MemoryCardItem
                 key={card.id}
@@ -90,7 +90,7 @@ export default function Memories() {
               More memories
             </h2>
           )}
-          <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 lg:items-stretch">
+          <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-stretch">
             {rest.map((card) => (
               <MemoryCardItem
                 key={card.id}

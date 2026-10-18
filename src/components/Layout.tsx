@@ -1,50 +1,22 @@
 import { useState, useEffect, useRef } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
-  Home,
-  Calendar,
-  CalendarDays,
-  Pill,
-  BookOpen,
-  Phone,
-  ShieldCheck,
   Heart,
   LogOut,
   ArrowLeftRight,
   PhoneCall,
-  LayoutDashboard,
-  Activity,
+  ShieldCheck,
+  Menu,
+  X,
 } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext';
 import { useApp } from '../context/AppContext';
 import type { AppView } from '../types';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
-
-// ── Nav definitions ────────────────────────────────────────────────────────────
-
-interface NavItem {
-  to: string;
-  label: string;
-  Icon: LucideIcon;
-}
-
-const patientNav: NavItem[] = [
-  { to: '/app',               label: 'Home',         Icon: Home },
-  { to: '/app/schedule',     label: 'My Day',       Icon: Calendar },
-  { to: '/app/appointments', label: 'Appointments', Icon: CalendarDays },
-  { to: '/app/medications',  label: 'Medicines',    Icon: Pill },
-  { to: '/app/memories',     label: 'Memories',     Icon: BookOpen },
-  { to: '/app/contacts',     label: 'Contacts',     Icon: Phone },
-];
-
-const caregiverNav: NavItem[] = [
-  { to: '/app',                      label: 'Dashboard',    Icon: LayoutDashboard },
-  { to: '/app/manage-medications',   label: 'Medications',  Icon: Pill },
-  { to: '/app/manage-appointments',  label: 'Appointments', Icon: CalendarDays },
-  { to: '/app/activity',             label: 'Activity',     Icon: Activity },
-  { to: '/app/caregiver',            label: 'Notes',        Icon: ShieldCheck },
-];
+import BottomNav from './navigation/BottomNav';
+import MobileMenu from './navigation/MobileMenu';
+import SideNav from './navigation/SideNav';
 
 // ── Screen title lookup ────────────────────────────────────────────────────────
 
@@ -152,7 +124,13 @@ export default function Layout({
     previousPath.current = location.pathname;
     document.getElementById('main-content')?.focus();
   }, [location.pathname]);
-  const nav = isPatient ? patientNav : caregiverNav;
+
+  // Caregiver's mobile menu (hamburger). Closed on every route change.
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname, view]);
 
   const dateStr = formatOrientationDate(now);
   const timeStr = formatOrientationTime(now);
@@ -183,9 +161,9 @@ export default function Layout({
         >
           {/* ── Utility strip (app controls, secondary) ───────────────── */}
           <div className="border-b border-neutral-100 px-4 md:px-6 lg:px-8 py-2 flex items-center justify-between gap-3">
-            {/* Logo */}
-            <a
-              href="/app"
+            {/* Logo — a router link, so going home does not reload the app */}
+            <Link
+              to="/app"
               className="flex items-center gap-2 no-underline flex-shrink-0"
               aria-label="CareConnect — go to home"
             >
@@ -195,10 +173,10 @@ export default function Layout({
               >
                 <Heart className="w-4 h-4 text-white" strokeWidth={2.5} />
               </span>
-              <span className="text-base font-bold text-neutral-800 hidden sm:inline leading-none">
+              <span className="text-base font-bold text-neutral-800 hidden md:inline leading-none">
                 Care<span className="text-calm-600">Connect</span>
               </span>
-            </a>
+            </Link>
 
             {/* Role indicator pill */}
             <span
@@ -229,7 +207,7 @@ export default function Layout({
                 }
               >
                 <ArrowLeftRight className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
-                <span className="hidden sm:inline">Switch role</span>
+                <span className="hidden md:inline">Switch role</span>
               </button>
 
               <button
@@ -238,8 +216,29 @@ export default function Layout({
                 aria-label="Sign out of CareConnect"
               >
                 <LogOut className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
-                <span className="hidden sm:inline">Sign out</span>
+                <span className="hidden md:inline">Sign out</span>
               </button>
+              {/* Caregiver hamburger — mobile only (the patient keeps the
+                  always-visible bottom bar; see BottomNav). Last in the
+                  header, so the next Tab after it is the menu's first link:
+                  the panel follows the header in the source. */}
+              {!isPatient && (
+                <button
+                  ref={menuButtonRef}
+                  type="button"
+                  onClick={() => setMenuOpen((o) => !o)}
+                  aria-expanded={menuOpen}
+                  aria-controls="mobile-menu"
+                  className="md:hidden inline-flex items-center gap-2 font-semibold rounded-lg px-3 py-2 min-h-[2.75rem] text-sm text-neutral-700 border-2 border-neutral-300 hover:bg-neutral-100"
+                >
+                  {menuOpen ? (
+                    <X className="w-5 h-5" aria-hidden="true" />
+                  ) : (
+                    <Menu className="w-5 h-5" aria-hidden="true" />
+                  )}
+                  Menu
+                </button>
+              )}
             </div>
           </div>
 
@@ -257,10 +256,8 @@ export default function Layout({
                 >
                   {dateStr}
                 </time>
-                <span
-                  className="text-2xl md:text-3xl font-bold text-calm-600 tabular-nums leading-tight"
-                  aria-label={`Current time: ${timeStr}`}
-                >
+                <span className="text-2xl md:text-3xl font-bold text-calm-600 tabular-nums leading-tight">
+                  <span className="sr-only">Current time: </span>
                   {timeStr}
                 </span>
               </div>
@@ -269,10 +266,8 @@ export default function Layout({
               <p className="text-lg text-neutral-600 leading-snug flex items-center gap-2 flex-wrap">
                 <span>{greeting}</span>
                 <span aria-hidden="true" className="text-neutral-300">·</span>
-                <span
-                  className="font-semibold text-neutral-800"
-                  aria-label={`Current screen: ${screenTitle}`}
-                >
+                <span className="font-semibold text-neutral-800">
+                  <span className="sr-only">Current screen: </span>
                   {screenTitle}
                 </span>
               </p>
@@ -303,33 +298,35 @@ export default function Layout({
           </div>
         </header>
 
-        {/* ══════════════════════════════════════════════════════════════════
-            BODY — layout differs by role
-            Patient:   single column, bottom nav fixed at bottom (DOM last)
-            Caregiver: flex row; main (DOM first → tab #3), sidebar nav (DOM
-                       second → tab #4), visually left via CSS order
-        ══════════════════════════════════════════════════════════════════ */}
-        <div
-          className={`flex-1 flex ${
-            isPatient
-              ? 'flex-col'
-              : 'flex-col lg:flex-row'
-          }`}
-        >
+        {/* Caregiver mobile menu — straight after the header, so the next Tab
+            after the Menu button is the first link. */}
+        {!isPatient && (
+          <MobileMenu
+            open={menuOpen}
+            onClose={() => setMenuOpen(false)}
+            buttonRef={menuButtonRef}
+            onSwitchRole={onSwitchRole}
+          />
+        )}
 
-          {/* ── MAIN CONTENT — tab stop #3 ───────────────────────────── */}
+        {/* ══════════════════════════════════════════════════════════════════
+            BODY — the same at every breakpoint in the source:
+              <main> first, then the sidebar <nav>, so focus reaches the
+              content before the menu. CSS `order` puts the sidebar on the
+              left from 768px. Below 768px the sidebar is display:none and
+              the bottom bar (patient) or Menu panel (caregiver) takes over.
+        ══════════════════════════════════════════════════════════════════ */}
+        <div className="flex-1 flex flex-col md:flex-row">
           <main
             id="main-content"
             tabIndex={-1}
             aria-label="Main content"
             className={[
-              'flex-1 min-w-0',
+              'flex-1 min-w-0 order-2',
               'px-4 md:px-6 lg:px-8 py-6',
               'page-enter',
-              // Caregiver desktop: main is visually on the right
-              !isPatient ? 'lg:order-2' : '',
-              // Patient: extra bottom padding so content clears fixed bottom nav
-              isPatient ? 'pb-28 lg:pb-6' : '',
+              // Patient on mobile: clear the fixed bottom bar.
+              isPatient ? 'pb-28 md:pb-6' : '',
             ]
               .filter(Boolean)
               .join(' ')}
@@ -337,110 +334,10 @@ export default function Layout({
             {children}
           </main>
 
-          {/* ── CAREGIVER SIDEBAR — tab stop #4, visually left via order-1 ── */}
-          {!isPatient && (
-            <nav
-              aria-label="Main navigation"
-              className={[
-                // Desktop: fixed-width sidebar, visually left
-                'lg:order-1 lg:flex-shrink-0 lg:w-56',
-                'lg:border-r-2 lg:border-neutral-200 lg:bg-white',
-                'lg:sticky lg:top-[var(--header-h,9rem)]',
-                // Mobile: horizontal strip below header, above main
-                'order-first',          // mobile: above main
-                'flex lg:flex-col',
-                'bg-white border-b-2 lg:border-b-0 border-neutral-200',
-                'overflow-x-auto lg:overflow-x-visible',
-                'px-2 lg:px-3 py-2 lg:py-4',
-                'gap-1',
-              ]
-                .join(' ')}
-            >
-              {/* Caregiver nav items */}
-              <ul
-                className="flex lg:flex-col gap-1 list-none p-0 m-0 min-w-max lg:min-w-0 w-full"
-                role="list"
-              >
-                {nav.map(({ to, label, Icon }) => (
-                  <li key={to} className="flex-shrink-0 lg:flex-shrink lg:w-full">
-                    <NavLink
-                      to={to}
-                      end={to === '/app'}
-                      aria-current={location.pathname === to ? 'page' : undefined}
-                      className={({ isActive }) =>
-                        [
-                          'flex items-center gap-2.5 px-3 py-2.5 rounded-lg',
-                          'text-sm lg:text-base font-medium no-underline',
-                          'min-h-[2.75rem] min-w-[2.75rem]',
-                          'transition-colors duration-150 whitespace-nowrap',
-                          isActive
-                            ? 'bg-calm-100 text-calm-700 font-semibold'
-                            : 'text-neutral-500 hover:text-calm-600 hover:bg-calm-50',
-                        ].join(' ')
-                      }
-                    >
-                      <Icon className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
-                      {label}
-                    </NavLink>
-                  </li>
-                ))}
-              </ul>
-
-              {/* Switch role inside sidebar — supplemental shortcut */}
-              <div className="hidden lg:block mt-auto pt-4 border-t border-neutral-200">
-                <button
-                  onClick={onSwitchRole}
-                  className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-500 hover:text-calm-600 hover:bg-calm-50 transition-colors min-h-[2.75rem]"
-                >
-                  <Heart className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
-                  Switch to care recipient
-                </button>
-              </div>
-            </nav>
-          )}
+          <SideNav view={view} onSwitchRole={onSwitchRole} />
         </div>
 
-        {/* ── PATIENT BOTTOM NAV — tab stop #4, fixed at bottom ─────────── */}
-        {isPatient && (
-          <nav
-            aria-label="Main navigation"
-            className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-neutral-200 z-40 pb-[env(safe-area-inset-bottom)]"
-          >
-            <ul
-              className="flex items-stretch justify-around list-none p-0 m-0"
-              role="list"
-            >
-              {nav.map(({ to, label, Icon }) => (
-                // min-w-0 lets each tab shrink below its label width, so long
-                // labels truncate instead of forcing horizontal page scroll.
-                <li key={to} className="flex-1 min-w-0">
-                  <NavLink
-                    to={to}
-                    end={to === '/app'}
-                    aria-current={location.pathname === to ? 'page' : undefined}
-                    className={({ isActive }) =>
-                      [
-                        'flex flex-col items-center justify-center gap-1',
-                        'w-full min-w-0 py-2.5 px-1',
-                        'min-h-[3.5rem]',
-                        'text-xs font-medium no-underline',
-                        'transition-colors duration-150',
-                        isActive
-                          ? 'text-calm-700 bg-calm-50'
-                          : 'text-neutral-500 hover:text-calm-600',
-                      ].join(' ')
-                    }
-                  >
-                    <Icon className="w-6 h-6 flex-shrink-0" aria-hidden="true" />
-                    <span className="leading-none w-full max-w-full text-center truncate">
-                      {label}
-                    </span>
-                  </NavLink>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        )}
+        {isPatient && <BottomNav />}
 
         {/* ── Footer ───────────────────────────────────────────────────── */}
         <footer

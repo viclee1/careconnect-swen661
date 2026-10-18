@@ -17,7 +17,7 @@ export default function Contacts() {
   const others = contacts.filter((c) => !c.isEmergency);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 page-container">
       {/* ── Page header ─────────────────────────────────────────────────── */}
       <div>
         <h1 className="text-2xl font-bold text-neutral-800">Contacts</h1>
@@ -30,7 +30,7 @@ export default function Contacts() {
           <AlertTriangle className="w-4 h-4 text-alert-600" aria-hidden="true" />
           Emergency contacts
         </h2>
-        <ul className="space-y-3 list-none p-0 m-0" role="list">
+        <ul className="card-grid" role="list">
           {emergency.map((c) => (
             <li key={c.id}>
               <ContactCard contact={c} highlight />
@@ -45,7 +45,7 @@ export default function Contacts() {
           <User className="w-4 h-4" aria-hidden="true" />
           Other contacts
         </h2>
-        <ul className="space-y-3 list-none p-0 m-0" role="list">
+        <ul className="card-grid" role="list">
           {others.map((c) => (
             <li key={c.id}>
               <ContactCard contact={c} />

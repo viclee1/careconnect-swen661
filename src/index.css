@@ -105,6 +105,30 @@
 
 /* ── Component Layer ─────────────────────────────────────────────────────── */
 @layer components {
+  /* ── Responsive layout primitives (web design system grid) ────────────── */
+  /* Page column: a readable width on mobile, the full content width on
+     tablet, capped on desktop so lines and cards stay scannable. */
+  .page-container {
+    @apply mx-auto w-full max-w-3xl md:max-w-none lg:max-w-6xl;
+  }
+
+  /* Card list: 1 column on mobile (<768px), 2 from tablet up. Desktop gains
+     width rather than a third column: at CareConnect's 18px base size a third
+     column beside the sidebar wraps titles a word per line. Short cards
+     (Memories) use a 3-column grid on desktop instead.
+     Used on <ul role="list">, so list semantics are kept. */
+  .card-grid {
+    @apply grid grid-cols-1 gap-4 md:grid-cols-2 lg:gap-6 list-none p-0 m-0;
+  }
+
+  .card-grid > li {
+    @apply flex flex-col;
+  }
+
+  .card-grid > li > * {
+    @apply flex-1;
+  }
+
   /* ── Skip Link ────────────────────────────────────────────────────────── */
   .skip-link {
     @apply absolute left-4 top-4 z-50 px-4 py-2 rounded font-semibold;

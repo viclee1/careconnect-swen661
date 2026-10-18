@@ -122,7 +122,7 @@ export default function Landing() {
                 </p>
 
                 {/* Primary CTAs */}
-                <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex flex-col md:flex-row gap-4">
                   <Link
                     to="/signup"
                     className="inline-flex items-center justify-center gap-2 font-bold rounded-lg px-7 py-4 min-h-[3rem] text-lg bg-white text-calm-700 border-2 border-white hover:bg-calm-50 transition-colors no-underline"
@@ -249,7 +249,7 @@ export default function Landing() {
               <p className="text-neutral-500 text-lg mb-8 max-w-md mx-auto">
                 Set up takes under two minutes — no credit card, no medical records.
               </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <div className="flex flex-col md:flex-row items-center justify-center gap-4">
                 <Link
                   to="/signup"
                   className="inline-flex items-center justify-center gap-2 font-bold rounded-lg px-8 py-4 min-h-[3rem] text-lg bg-calm-600 text-white border-2 border-calm-600 hover:bg-calm-700 transition-colors no-underline"
@@ -266,7 +266,7 @@ export default function Landing() {
               </div>
 
               {/* Trust / reassurance */}
-              <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-x-8 gap-y-3 text-sm text-neutral-500">
+              <div className="mt-10 flex flex-col md:flex-row items-center justify-center gap-x-8 gap-y-3 text-sm text-neutral-500">
                 <span className="flex items-center gap-1.5">
                   <ShieldCheck className="w-4 h-4 text-success-600 flex-shrink-0" aria-hidden="true" />
                   Your information is private and never shared

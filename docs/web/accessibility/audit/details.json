@@ -39,7 +39,7 @@
     "page": "My Day",
     "breakpoint": "mobile 375px",
     "violations": [],
-    "passes": 37
+    "passes": 38
   },
   {
     "id": "mobile-appointments",
@@ -53,7 +53,7 @@
     "page": "Medicines",
     "breakpoint": "mobile 375px",
     "violations": [],
-    "passes": 36
+    "passes": 37
   },
   {
     "id": "mobile-memories",
@@ -67,35 +67,35 @@
     "page": "Contacts",
     "breakpoint": "mobile 375px",
     "violations": [],
-    "passes": 36
+    "passes": 37
   },
   {
     "id": "mobile-dashboard",
     "page": "Caregiver dashboard",
     "breakpoint": "mobile 375px",
     "violations": [],
-    "passes": 38
+    "passes": 37
   },
   {
     "id": "mobile-manage-meds",
     "page": "Manage medications",
     "breakpoint": "mobile 375px",
     "violations": [],
-    "passes": 38
+    "passes": 37
   },
   {
     "id": "mobile-manage-appts",
     "page": "Manage appointments",
     "breakpoint": "mobile 375px",
     "violations": [],
-    "passes": 38
+    "passes": 37
   },
   {
     "id": "mobile-activity",
     "page": "Activity log",
     "breakpoint": "mobile 375px",
     "violations": [],
-    "passes": 38
+    "passes": 37
   },
   {
     "id": "mobile-notes",
@@ -123,7 +123,14 @@
     "page": "Manage medications — confirm dialog",
     "breakpoint": "mobile 375px",
     "violations": [],
-    "passes": 40
+    "passes": 39
+  },
+  {
+    "id": "mobile-mobile-menu",
+    "page": "Caregiver — mobile menu open",
+    "breakpoint": "mobile 375px",
+    "violations": [],
+    "passes": 37
   },
   {
     "id": "tablet-landing",
@@ -165,7 +172,7 @@
     "page": "My Day",
     "breakpoint": "tablet 820px",
     "violations": [],
-    "passes": 37
+    "passes": 38
   },
   {
     "id": "tablet-appointments",
@@ -179,7 +186,7 @@
     "page": "Medicines",
     "breakpoint": "tablet 820px",
     "violations": [],
-    "passes": 36
+    "passes": 37
   },
   {
     "id": "tablet-memories",
@@ -193,14 +200,14 @@
     "page": "Contacts",
     "breakpoint": "tablet 820px",
     "violations": [],
-    "passes": 36
+    "passes": 37
   },
   {
     "id": "tablet-dashboard",
     "page": "Caregiver dashboard",
     "breakpoint": "tablet 820px",
     "violations": [],
-    "passes": 37
+    "passes": 38
   },
   {
     "id": "tablet-manage-meds",
@@ -221,14 +228,14 @@
     "page": "Activity log",
     "breakpoint": "tablet 820px",
     "violations": [],
-    "passes": 37
+    "passes": 38
   },
   {
     "id": "tablet-notes",
     "page": "Caregiver notes",
     "breakpoint": "tablet 820px",
     "violations": [],
-    "passes": 35
+    "passes": 37
   },
   {
     "id": "tablet-signin-errors",
@@ -250,6 +257,13 @@
     "breakpoint": "tablet 820px",
     "violations": [],
     "passes": 39
+  },
+  {
+    "id": "tablet-sidebar-expanded",
+    "page": "Caregiver — tablet sidebar expanded",
+    "breakpoint": "tablet 820px",
+    "violations": [],
+    "passes": 38
   },
   {
     "id": "desktop-landing",
@@ -291,7 +305,7 @@
     "page": "My Day",
     "breakpoint": "desktop 1280px",
     "violations": [],
-    "passes": 39
+    "passes": 40
   },
   {
     "id": "desktop-appointments",
@@ -305,7 +319,7 @@
     "page": "Medicines",
     "breakpoint": "desktop 1280px",
     "violations": [],
-    "passes": 38
+    "passes": 39
   },
   {
     "id": "desktop-memories",
@@ -319,14 +333,14 @@
     "page": "Contacts",
     "breakpoint": "desktop 1280px",
     "violations": [],
-    "passes": 38
+    "passes": 39
   },
   {
     "id": "desktop-dashboard",
     "page": "Caregiver dashboard",
     "breakpoint": "desktop 1280px",
     "violations": [],
-    "passes": 39
+    "passes": 40
   },
   {
     "id": "desktop-manage-meds",
@@ -347,14 +361,14 @@
     "page": "Activity log",
     "breakpoint": "desktop 1280px",
     "violations": [],
-    "passes": 39
+    "passes": 40
   },
   {
     "id": "desktop-notes",
     "page": "Caregiver notes",
     "breakpoint": "desktop 1280px",
     "violations": [],
-    "passes": 37
+    "passes": 39
   },
   {
     "id": "desktop-signin-errors",

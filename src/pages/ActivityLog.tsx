@@ -139,7 +139,7 @@ export default function ActivityLog() {
   const grouped = groupByDay(log);
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto">
+    <div className="space-y-8 page-container">
 
       {/* ── Page heading ──────────────────────────────────────────────────── */}
       <div className="flex items-start justify-between gap-4 flex-wrap">

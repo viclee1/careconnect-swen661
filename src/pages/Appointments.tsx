@@ -299,7 +299,7 @@ export default function Appointments() {
   const todayLabel = formatFullDate(today);
 
   return (
-    <div className="space-y-8 max-w-3xl mx-auto">
+    <div className="space-y-8 page-container">
 
       {/* ── Page heading ──────────────────────────────────────────────── */}
       <div>
@@ -320,7 +320,7 @@ export default function Appointments() {
             sub={todayLabel}
             highlight
           />
-          <ul className="space-y-4 list-none p-0 m-0" role="list">
+          <ul className="card-grid" role="list">
             {todayAppts.map((appt) => (
               <li key={appt.id}>
                 <AppointmentCard
@@ -339,7 +339,7 @@ export default function Appointments() {
       {thisWeekAppts.length > 0 && (
         <section aria-labelledby="group-week" className="space-y-4">
           <GroupDivider id="group-week" label="Later this week" />
-          <ul className="space-y-4 list-none p-0 m-0" role="list">
+          <ul className="card-grid" role="list">
             {thisWeekAppts.map((appt) => (
               <li key={appt.id}>
                 <AppointmentCard
@@ -358,7 +358,7 @@ export default function Appointments() {
       {comingUpAppts.length > 0 && (
         <section aria-labelledby="group-coming" className="space-y-4">
           <GroupDivider id="group-coming" label="Coming up" />
-          <ul className="space-y-4 list-none p-0 m-0" role="list">
+          <ul className="card-grid" role="list">
             {comingUpAppts.map((appt) => (
               <li key={appt.id}>
                 <AppointmentCard

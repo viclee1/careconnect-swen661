@@ -72,7 +72,7 @@ export default function Medications() {
   const pendingCount = meds.length - takenCount;
 
   return (
-    <div className="space-y-6 max-w-3xl mx-auto">
+    <div className="space-y-6 page-container">
       {/* ── Page header ─────────────────────────────────────────────────── */}
       <div>
         <h1 className="text-2xl font-bold text-neutral-800">Medicines</h1>
@@ -107,7 +107,7 @@ export default function Medications() {
       {/* ── Medication cards ─────────────────────────────────────────────── */}
       <section aria-label="Medication list">
         <h2 className="sr-only">Medication list</h2>
-        <ul className="space-y-4 list-none p-0 m-0" role="list">
+        <ul className="card-grid" role="list">
           {meds.map((med) => {
             const taken = med.taken[TODAY] ?? false;
             return (

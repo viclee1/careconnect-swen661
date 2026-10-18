@@ -28,9 +28,28 @@ beforeAll(() => {
   Element.prototype.scrollIntoView = jest.fn();
 });
 
+// jsdom loads no Tailwind CSS, so both breakpoint variants of the navigation
+// would be "visible" at once. These rules reproduce the one Tailwind utility
+// that matters for each width, so the tests see what a browser at that width
+// exposes to assistive technology (display:none leaves the tree).
+const TABLET_UP = '.hidden { display: none } .md\\:flex { display: flex } .md\\:hidden { display: none }';
+const MOBILE = '.hidden { display: none } .md\\:hidden { }';
+let viewportStyle: HTMLStyleElement;
+
+function simulate(css: string) {
+  viewportStyle.textContent = css;
+}
+
 beforeEach(() => {
   localStorage.clear();
   document.title = '';
+  viewportStyle = document.createElement('style');
+  document.head.appendChild(viewportStyle);
+  simulate(TABLET_UP);
+});
+
+afterEach(() => {
+  viewportStyle.remove();
 });
 
 const axeOptions = {
@@ -242,6 +261,82 @@ describe('assistant panel', () => {
 
     fireEvent.keyDown(document, { key: 'Escape' });
     await waitFor(() => expect(screen.getByRole('button', { name: /open assistant/i })).toHaveFocus());
+  });
+});
+
+describe('responsive navigation', () => {
+  it('tablet and desktop: one sidebar navigation for each role', async () => {
+    for (const role of ['patient', 'caregiver'] as const) {
+      localStorage.clear();
+      const { unmount } = renderAt('/app', role);
+      await screen.findByRole('heading', { level: 1 });
+      expect(screen.getAllByRole('navigation', { name: 'Main navigation' })).toHaveLength(1);
+      unmount();
+    }
+  });
+
+  it('tablet: the sidebar collapses and expands, says which, and remembers it', async () => {
+    renderAt('/app', 'caregiver');
+    const nav = await screen.findByRole('navigation', { name: 'Main navigation' });
+    const toggle = within(nav).getByRole('button', { name: 'Expand menu' });
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    // Collapsed is not icon-only: every label is still printed.
+    expect(within(nav).getByRole('link', { name: 'Medications' })).toHaveTextContent('Medications');
+
+    fireEvent.click(toggle);
+    expect(within(nav).getByRole('button', { name: 'Collapse menu' })).toHaveAttribute('aria-expanded', 'true');
+    expect(localStorage.getItem('careconnect_sidebar_collapsed')).toBe('false');
+  });
+
+  it('mobile, care recipient: the bottom tab bar, with every destination visible', async () => {
+    simulate(MOBILE);
+    renderAt('/app', 'patient');
+    await screen.findByRole('heading', { level: 1 });
+    const navs = screen.getAllByRole('navigation', { name: 'Main navigation' });
+    expect(navs).toHaveLength(1);
+    expect(within(navs[0]).getAllByRole('link')).toHaveLength(6);
+    expect(screen.queryByRole('button', { name: 'Menu' })).not.toBeInTheDocument();
+  });
+
+  it('mobile, caregiver: a Menu button opens the navigation, Escape closes it and returns focus', async () => {
+    simulate(MOBILE);
+    renderAt('/app', 'caregiver');
+    await screen.findByRole('heading', { level: 1 });
+    expect(screen.queryByRole('navigation', { name: 'Main navigation' })).not.toBeInTheDocument();
+
+    const menu = screen.getByRole('button', { name: 'Menu' });
+    expect(menu).toHaveAttribute('aria-expanded', 'false');
+    expect(menu).toHaveAttribute('aria-controls', 'mobile-menu');
+    fireEvent.click(menu);
+    expect(menu).toHaveAttribute('aria-expanded', 'true');
+    const panel = screen.getByRole('navigation', { name: 'Main navigation' });
+    expect(within(panel).getAllByRole('link')).toHaveLength(5);
+
+    within(panel).getAllByRole('link')[1].focus();
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(screen.queryByRole('navigation', { name: 'Main navigation' })).not.toBeInTheDocument();
+    expect(menu).toHaveFocus();
+  });
+
+  it('mobile, caregiver: choosing a page closes the menu', async () => {
+    simulate(MOBILE);
+    renderAt('/app', 'caregiver');
+    await screen.findByRole('heading', { level: 1 });
+    fireEvent.click(screen.getByRole('button', { name: 'Menu' }));
+    fireEvent.click(within(screen.getByRole('navigation', { name: 'Main navigation' })).getByRole('link', { name: 'Activity' }));
+    await screen.findByRole('heading', { level: 1, name: /activity/i });
+    expect(screen.queryByRole('navigation', { name: 'Main navigation' })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Menu' })).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it.each(routes)('mobile: axe finds no violations on %s', async (_label, path, role) => {
+    simulate(MOBILE);
+    const { container } = renderAt(path, role);
+    await screen.findAllByRole('heading', { level: 1 });
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+    expect(await axe(container, axeOptions)).toHaveNoViolations();
   });
 });
 
