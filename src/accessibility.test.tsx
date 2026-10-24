@@ -81,6 +81,9 @@ const routes: Array<[string, string, 'patient' | 'caregiver' | null]> = [
   ['My Day', '/app/schedule', 'patient'],
   ['Appointments', '/app/appointments', 'patient'],
   ['Medicines', '/app/medications', 'patient'],
+  ['Contacts', '/app/contacts', 'patient'],
+  ['Conversation', '/app/contacts/c2', 'patient'],
+  ['Accessibility Settings', '/app/settings', 'patient'],
   ['Caregiver dashboard', '/app', 'caregiver'],
   ['Manage medications', '/app/manage-medications', 'caregiver'],
 ];

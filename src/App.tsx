@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './auth/AuthContext';
 import { getSession } from './auth/mockAuth';
 import { AppProvider } from './context/AppContext';
+import { MessagesProvider } from './context/MessagesContext';
+import { SettingsProvider } from './context/SettingsContext';
 import { ProtectedRoute, RoleRoute, AuthRoute } from './components/ProtectedRoute';
 import Layout from './components/Layout';
 
@@ -18,7 +20,6 @@ import Schedule     from './pages/Schedule';
 import Appointments from './pages/Appointments';
 import Medications  from './pages/Medications';
 import Memories     from './pages/Memories';
-import Contacts     from './pages/Contacts';
 import Caregiver    from './pages/Caregiver';
 import CaregiverDashboard    from './pages/CaregiverDashboard';
 import ActivityLog           from './pages/ActivityLog';
@@ -26,6 +27,16 @@ import ManageMedications     from './pages/ManageMedications';
 import ManageAppointments    from './pages/ManageAppointments';
 
 import type { AppView } from './types';
+
+// Contacts, conversations and settings are split into their own chunks and
+// fetched on first visit, so the Today screen loads without them.
+const Contacts              = lazy(() => import('./pages/Contacts'));
+const MessageThread         = lazy(() => import('./pages/MessageThread'));
+const AccessibilitySettings = lazy(() => import('./pages/AccessibilitySettings'));
+
+function PageLoading() {
+  return <p role="status" className="text-neutral-600">Loading…</p>;
+}
 
 // ── Inner app shell ────────────────────────────────────────────────────────────
 
@@ -53,20 +64,24 @@ function AppShell() {
   return (
     <ProtectedRoute>
       <Layout view={view} onSwitchRole={handleSwitchRole} onSignOut={signOut}>
-        <Routes>
-          {/* Patient sees the calm "Today" screen; caregiver sees the dashboard */}
-          <Route index                        element={view === 'patient' ? <Today /> : <CaregiverDashboard />} />
-          <Route path="schedule"              element={<Schedule />} />
-          <Route path="appointments"          element={<Appointments />} />
-          <Route path="medications"           element={<Medications />} />
-          <Route path="memories"              element={<Memories />} />
-          <Route path="contacts"              element={<Contacts />} />
-          <Route path="caregiver"             element={<Caregiver />} />
-          <Route path="activity"              element={<ActivityLog />} />
-          <Route path="manage-medications"    element={<ManageMedications />} />
-          <Route path="manage-appointments"   element={<ManageAppointments />} />
-          <Route path="*"                     element={<Navigate to="/app" replace />} />
-        </Routes>
+        <Suspense fallback={<PageLoading />}>
+          <Routes>
+            {/* Patient sees the calm "Today" screen; caregiver sees the dashboard */}
+            <Route index                        element={view === 'patient' ? <Today /> : <CaregiverDashboard />} />
+            <Route path="schedule"              element={<Schedule />} />
+            <Route path="appointments"          element={<Appointments />} />
+            <Route path="medications"           element={<Medications />} />
+            <Route path="memories"              element={<Memories />} />
+            <Route path="contacts"              element={<Contacts />} />
+            <Route path="contacts/:contactId"   element={<MessageThread />} />
+            <Route path="settings"              element={<AccessibilitySettings />} />
+            <Route path="caregiver"             element={<Caregiver />} />
+            <Route path="activity"              element={<ActivityLog />} />
+            <Route path="manage-medications"    element={<ManageMedications />} />
+            <Route path="manage-appointments"   element={<ManageAppointments />} />
+            <Route path="*"                     element={<Navigate to="/app" replace />} />
+          </Routes>
+        </Suspense>
       </Layout>
     </ProtectedRoute>
   );
@@ -109,7 +124,11 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <AppProvider>
-          <AppRoutes />
+          <SettingsProvider>
+            <MessagesProvider>
+              <AppRoutes />
+            </MessagesProvider>
+          </SettingsProvider>
         </AppProvider>
       </AuthProvider>
     </BrowserRouter>

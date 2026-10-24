@@ -37,21 +37,6 @@ export interface MemoryCard {
   pinned: boolean;
 }
 
-// ── Contacts ─────────────────────────────────────────────────────────────
-
-export type ContactRole = 'caregiver' | 'family' | 'doctor' | 'emergency';
-
-export interface Contact {
-  id: string;
-  name: string;
-  role: ContactRole;
-  phone: string;
-  avatarInitials: string;
-  avatarColour: string; // Tailwind bg class
-  notes?: string;
-  isEmergency: boolean;
-}
-
 // ── Caregiver notes ───────────────────────────────────────────────────────
 
 export interface CaregiverNote {

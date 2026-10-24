@@ -1,118 +1,127 @@
-import { Phone, AlertTriangle, User, Stethoscope, ShieldAlert, Users, type LucideIcon } from 'lucide-react';
-import { contacts } from '../data/mockData';
-import type { Contact, ContactRole } from '../types';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
+import { Search } from 'lucide-react';
 
-const roleConfig: Record<
-  ContactRole,
-  { label: string; Icon: LucideIcon }
-> = {
-  caregiver: { label: 'Carer',     Icon: ShieldAlert },
-  family:    { label: 'Family',    Icon: Users },
-  doctor:    { label: 'Doctor',    Icon: Stethoscope },
-  emergency: { label: 'Emergency', Icon: AlertTriangle },
-};
+import Banner from '../components/Banner';
+import ContactRow from '../components/contacts/ContactRow';
+import { useMessages } from '../context/messages';
+import { filterContacts, searchResultSummary } from '../utils/search';
 
+/**
+ * The Contacts screen: one list, primary contact first, each row opening a
+ * written conversation.
+ *
+ * There is no call button anywhere on this page. A voice call is the one
+ * channel a deaf or hard-of-hearing user cannot rely on, so every row leads to
+ * text, and the banner at the top points at the Alert action that replaces
+ * "give me a ring" with a silent flash on the other person's screen.
+ *
+ * The search box filters by name, relationship or role. "/" focuses it from
+ * anywhere on the page — the web convention for a page's search — and Escape
+ * clears it.
+ */
 export default function Contacts() {
-  const emergency = contacts.filter((c) => c.isEmergency);
-  const others = contacts.filter((c) => !c.isEmergency);
+  const { contacts, previewFor, waitingFor } = useMessages();
+  const [query, setQuery] = useState('');
+  const searchRef = useRef<HTMLInputElement>(null);
+  const searchId = useId();
+  const hintId = useId();
+
+  const visible = useMemo(() => filterContacts(contacts, query), [contacts, query]);
+
+  useEffect(() => {
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key !== '/' || event.ctrlKey || event.metaKey || event.altKey) return;
+      const target = event.target as HTMLElement | null;
+      // Never steal a "/" the user is typing into a field.
+      if (target?.closest('input, textarea, select, [contenteditable="true"]')) return;
+      event.preventDefault();
+      searchRef.current?.focus();
+    }
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, []);
 
   return (
     <div className="space-y-6 page-container">
-      {/* ── Page header ─────────────────────────────────────────────────── */}
       <div>
         <h1 className="text-2xl font-bold text-neutral-800">Contacts</h1>
-        <p className="text-neutral-500 mt-1">People who are here to help you</p>
+        <p className="text-neutral-600 mt-1">People who care for you</p>
       </div>
 
-      {/* ── Emergency contacts ──────────────────────────────────────────── */}
-      <section aria-label="Emergency contacts">
-        <h2 className="text-base font-semibold text-neutral-500 uppercase tracking-wide mb-3 flex items-center gap-2">
-          <AlertTriangle className="w-4 h-4 text-alert-600" aria-hidden="true" />
-          Emergency contacts
-        </h2>
-        <ul className="card-grid" role="list">
-          {emergency.map((c) => (
-            <li key={c.id}>
-              <ContactCard contact={c} highlight />
-            </li>
-          ))}
-        </ul>
-      </section>
+      <Banner variant="info" title="Getting someone's attention">
+        Open a conversation and choose <strong>Alert</strong> to send a silent visual flash
+        and vibration to their phone. No sound needed.
+      </Banner>
 
-      {/* ── Other contacts ───────────────────────────────────────────────── */}
-      <section aria-label="Other contacts">
-        <h2 className="text-base font-semibold text-neutral-500 uppercase tracking-wide mb-3 flex items-center gap-2">
-          <User className="w-4 h-4" aria-hidden="true" />
-          Other contacts
-        </h2>
-        <ul className="card-grid" role="list">
-          {others.map((c) => (
-            <li key={c.id}>
-              <ContactCard contact={c} />
-            </li>
-          ))}
-        </ul>
-      </section>
-    </div>
-  );
-}
-
-function ContactCard({ contact, highlight }: { contact: Contact; highlight?: boolean }) {
-  const { label: roleLabel, Icon: RoleIcon } = roleConfig[contact.role];
-
-  return (
-    <article
-      className={`card card-hover flex items-center gap-4 p-4 ${
-        highlight ? 'border-alert-200 bg-alert-50' : ''
-      }`}
-      aria-label={`${contact.name}, ${roleLabel}`}
-    >
-      {/* Avatar */}
-      <div
-        className={`w-12 h-12 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-white text-base ${contact.avatarColour}`}
-        aria-hidden="true"
-      >
-        {contact.avatarInitials}
-      </div>
-
-      {/* Info */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="font-bold text-neutral-800 text-base leading-tight">
-            {contact.name}
-          </span>
-          <span
-            className={`badge text-xs ${
-              contact.role === 'emergency'
-                ? 'badge-alert'
-                : contact.role === 'caregiver'
-                ? 'badge-calm'
-                : contact.role === 'doctor'
-                ? 'badge-warning'
-                : 'badge-neutral'
-            }`}
-          >
-            <RoleIcon className="w-3 h-3" aria-hidden="true" />
-            {roleLabel}
-          </span>
+      <div className="max-w-xl">
+        <label htmlFor={searchId} className="block text-base font-semibold text-neutral-800 mb-1">
+          Find a contact
+        </label>
+        <div className="relative">
+          <Search
+            className="w-5 h-5 text-neutral-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
+            aria-hidden="true"
+          />
+          <input
+            ref={searchRef}
+            id={searchId}
+            type="search"
+            value={query}
+            placeholder="Name, relationship or role"
+            aria-describedby={hintId}
+            onChange={(event) => setQuery(event.target.value)}
+            onKeyDown={(event) => {
+              // Escape clears the box rather than leaving the list filtered
+              // and the reason for it off screen.
+              if (event.key === 'Escape' && query.length > 0) {
+                event.preventDefault();
+                setQuery('');
+              }
+            }}
+            className="block w-full rounded-lg border-2 border-neutral-400 bg-white pl-11 pr-4 py-3 text-base text-neutral-800 placeholder:text-neutral-500 hover:border-neutral-500 focus:border-calm-600 focus:outline-none"
+          />
         </div>
-        {contact.notes && (
-          <p className="text-sm text-neutral-500 mt-0.5 leading-snug">{contact.notes}</p>
-        )}
+        <p id={hintId} className="text-sm text-neutral-600 mt-1">
+          Press <kbd className="font-mono font-semibold">/</kbd> to jump here, Escape to clear.
+        </p>
       </div>
 
-      {/* Call button */}
-      <a
-        href={`tel:${contact.phone.replace(/\s/g, '')}`}
-        className={`flex-shrink-0 flex items-center gap-2 btn text-sm px-4 py-2 min-h-0 h-11 no-underline ${
-          contact.role === 'emergency' ? 'btn-primary bg-alert-600 border-alert-600 hover:bg-alert-700 hover:border-alert-700' : 'btn-secondary'
-        }`}
-        aria-label={`Call ${contact.name} on ${contact.phone}`}
-      >
-        <Phone className="w-4 h-4" aria-hidden="true" />
-        <span className="hidden md:inline">{contact.phone}</span>
-        <span className="md:hidden">Call</span>
-      </a>
-    </article>
+      {/* The only visible evidence that a search worked is rows disappearing,
+          which a screen-reader user does not see. */}
+      <p role="status" className="text-sm font-medium text-neutral-600">
+        {searchResultSummary(visible.length, query)}
+      </p>
+
+      {visible.length === 0 ? (
+        <div className="card p-6 text-center space-y-3">
+          <p className="text-lg font-semibold text-neutral-800">No contacts match your search</p>
+          <p className="text-neutral-600">
+            Nothing in your list matches “{query.trim()}”. Clear the search box to see everyone
+            again.
+          </p>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => {
+              setQuery('');
+              searchRef.current?.focus();
+            }}
+          >
+            Clear search
+          </button>
+        </div>
+      ) : (
+        <ul className="card-grid" role="list" aria-label="Your contacts">
+          {visible.map((contact) => (
+            <ContactRow
+              key={contact.id}
+              contact={contact}
+              preview={previewFor(contact.id)}
+              waiting={waitingFor(contact.id)}
+            />
+          ))}
+        </ul>
+      )}
+    </div>
   );
 }

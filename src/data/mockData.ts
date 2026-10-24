@@ -2,7 +2,6 @@ import type {
   ScheduleItem,
   Medication,
   MemoryCard,
-  Contact,
   CaregiverNote,
 } from '../types';
 
@@ -114,61 +113,6 @@ export const memoryCards: MemoryCard[] = [
     imageUrl: 'https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?auto=compress&cs=tinysrgb&w=600',
     category: 'place',
     pinned: false,
-  },
-];
-
-// ── Contacts ────────────────────────────────────────────────────────────────
-
-export const contacts: Contact[] = [
-  {
-    id: 'c1',
-    name: 'Maria Thompson',
-    role: 'family',
-    phone: '07700 900 123',
-    avatarInitials: 'MT',
-    avatarColour: 'bg-calm-500',
-    notes: 'Your daughter. Calls every Tuesday and Sunday.',
-    isEmergency: true,
-  },
-  {
-    id: 'c2',
-    name: 'Joyce Adeyemi',
-    role: 'caregiver',
-    phone: '07700 900 456',
-    avatarInitials: 'JA',
-    avatarColour: 'bg-success-600',
-    notes: 'Your daytime carer. Visits Monday to Friday, 9am–1pm.',
-    isEmergency: true,
-  },
-  {
-    id: 'c3',
-    name: 'Dr. Priya Sharma',
-    role: 'doctor',
-    phone: '01234 567 890',
-    avatarInitials: 'PS',
-    avatarColour: 'bg-warm-600',
-    notes: 'Your GP at the Greenfield Surgery. Call for appointments.',
-    isEmergency: false,
-  },
-  {
-    id: 'c4',
-    name: 'Tom Thompson',
-    role: 'family',
-    phone: '07700 900 789',
-    avatarInitials: 'TT',
-    avatarColour: 'bg-calm-700',
-    notes: "Maria's husband. Can help in emergencies.",
-    isEmergency: false,
-  },
-  {
-    id: 'c5',
-    name: 'Emergency Services',
-    role: 'emergency',
-    phone: '999',
-    avatarInitials: '!',
-    avatarColour: 'bg-alert-600',
-    notes: 'Call 999 for police, fire, or ambulance.',
-    isEmergency: true,
   },
 ];
 

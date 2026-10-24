@@ -7,6 +7,7 @@ import {
   ArrowLeftRight,
   PhoneCall,
   ShieldCheck,
+  Settings,
   Menu,
   X,
 } from 'lucide-react';
@@ -27,6 +28,7 @@ const SCREEN_TITLES: Record<string, string> = {
   '/app/medications':         'Medicines',
   '/app/memories':            'Memories',
   '/app/contacts':            'Contacts',
+  '/app/settings':            'Accessibility Settings',
   '/app/caregiver':           'Caregiver Notes',
   '/app/activity':            'Activity Log',
   '/app/manage-medications':  'Manage Medications',
@@ -37,6 +39,7 @@ function useScreenTitle(isPatient: boolean): string {
   const { pathname } = useLocation();
   // The caregiver's /app is the dashboard, not the patient's Home.
   if (pathname === '/app' && !isPatient) return 'Dashboard';
+  if (pathname.startsWith('/app/contacts/')) return 'Conversation';
   return SCREEN_TITLES[pathname] ?? 'CareConnect';
 }
 
@@ -155,9 +158,12 @@ export default function Layout({
             Tab order stop #2 — contains logo, switch-role, sign-out,
             date/time, greeting, screen title, and call button.
         ══════════════════════════════════════════════════════════════════ */}
+        {/* Sticky from 768px only. At phone width the orientation bar is
+            over half the screen tall, and pinned it would cover the control
+            that has focus (WCAG 2.4.11) — e.g. a conversation's Send button. */}
         <header
           role="banner"
-          className="bg-white border-b-2 border-neutral-200 shadow-sm sticky top-0 z-40"
+          className="bg-white border-b-2 border-neutral-200 shadow-sm md:sticky md:top-0 z-40"
         >
           {/* ── Utility strip (app controls, secondary) ───────────────── */}
           <div className="border-b border-neutral-100 px-4 md:px-6 lg:px-8 py-2 flex items-center justify-between gap-3">
@@ -209,6 +215,18 @@ export default function Layout({
                 <ArrowLeftRight className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
                 <span className="hidden md:inline">Switch role</span>
               </button>
+
+              {/* Settings — patient only. On mobile the bottom bar has no room
+                  for a seventh tab, so this is where the page is reached. */}
+              {isPatient && (
+                <Link
+                  to="/app/settings"
+                  className="md:hidden inline-flex items-center justify-center gap-2 font-semibold rounded-lg px-3 py-2 min-h-[2.75rem] min-w-[2.75rem] text-sm text-neutral-700 border-2 border-neutral-300 hover:bg-neutral-100 no-underline"
+                >
+                  <Settings className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
+                  Settings
+                </Link>
+              )}
 
               <button
                 onClick={onSignOut}

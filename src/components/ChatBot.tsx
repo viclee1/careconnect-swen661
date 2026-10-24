@@ -57,7 +57,7 @@ function getScriptedResponse(message: string): string {
 
   // Features / what does it do
   if (/\b(feature|schedule|reminder|memory|contact|medication|appointment)\b/.test(msg)) {
-    return "CareConnect has five main areas: My Day (your full daily schedule), Medicines (a medication checklist), Memories (cards about people, places, and events), Contacts (emergency and family contacts), and Caregiver Notes (a private log for carers). Everything is designed to be calm and simple.";
+    return "CareConnect has five main areas: My Day (your full daily schedule), Medicines (a medication checklist), Memories (cards about people, places, and events), Contacts (written conversations with your carers, family and doctor), and Caregiver Notes (a private log for carers). Everything is designed to be calm and simple.";
   }
 
   // Cost / free

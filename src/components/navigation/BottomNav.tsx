@@ -18,7 +18,7 @@ export default function BottomNav() {
       className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t-2 border-neutral-200 z-40 pb-[env(safe-area-inset-bottom)]"
     >
       <ul className="flex items-stretch justify-around list-none p-0 m-0" role="list">
-        {navItems.patient.map(({ to, label, Icon }) => (
+        {navItems.patient.filter((item) => item.inBottomBar !== false).map(({ to, label, Icon }) => (
           // min-w-0 lets each tab shrink below its label width, so long labels
           // truncate instead of forcing horizontal page scroll.
           <li key={to} className="flex-1 min-w-0">

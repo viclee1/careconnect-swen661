@@ -14,7 +14,9 @@
     "test:coverage": "jest --coverage",
     "a11y:web": "node scripts/web-a11y-audit.mjs",
     "a11y:structure": "node scripts/web-a11y-structure.mjs",
-    "screenshots:responsive": "node scripts/web-responsive-screenshots.mjs"
+    "screenshots:responsive": "node scripts/web-responsive-screenshots.mjs",
+    "test:e2e": "playwright test",
+    "test:e2e:report": "playwright show-report"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.57.4",
@@ -27,8 +29,10 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
     "@eslint/js": "^9.9.1",
+    "@playwright/test": "^1.60.0",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.8",
     "@types/jest": "^30.0.0",
     "@types/jest-axe": "^3.5.9",
     "@types/react": "^18.3.5",

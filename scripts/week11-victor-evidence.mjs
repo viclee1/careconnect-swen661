@@ -1,0 +1,168 @@
+/**
+ * Screenshots for Victor's Week 11 write-up (Contacts, Messaging,
+ * Accessibility Settings): each screen at 375 / 768 / 1440px, and the
+ * keyboard-focus states described in the accessibility section.
+ *
+ *   npm run dev -- --port 5180                 # terminal 1
+ *   node scripts/week11-victor-evidence.mjs    # terminal 2
+ *
+ * Writes docs/web/week11/victor/screenshots/.
+ */
+import { mkdir } from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { chromium } from 'playwright';
+
+const here = path.dirname(fileURLToPath(import.meta.url));
+const out = path.resolve(here, '../docs/web/week11/victor/screenshots');
+const base = (process.env.WEB_URL ?? 'http://localhost:5180').replace(/\/$/, '');
+const user = { id: 'u', name: 'Margaret Whitfield', email: 'margaret@example.com' };
+
+const widths = [
+  ['mobile', 375, 812],
+  ['tablet', 768, 1024],
+  ['desktop', 1440, 900],
+];
+
+const screens = [
+  ['01-contacts', '/app/contacts'],
+  ['02-conversation', '/app/contacts/c3'],
+  ['03-settings', '/app/settings'],
+];
+
+const browser = await chromium.launch();
+
+async function open(width, height, p) {
+  const ctx = await browser.newContext({ viewport: { width, height }, reducedMotion: 'reduce' });
+  const page = await ctx.newPage();
+  await page.goto(`${base}/`);
+  await page.evaluate((s) => {
+    localStorage.clear();
+    localStorage.setItem('careconnect_session', s);
+  }, JSON.stringify({ user, role: 'patient' }));
+  await page.goto(`${base}${p}`);
+  await page.locator('h1').first().waitFor();
+  await page.waitForTimeout(300);
+  return { ctx, page };
+}
+
+async function shot(page, name, opts = {}) {
+  await page.waitForTimeout(150); // let the last key press repaint
+  await page.screenshot({ path: path.join(out, `${name}.png`), ...opts });
+}
+
+for (const [bp, w, h] of widths) await mkdir(path.join(out, bp), { recursive: true });
+await mkdir(path.join(out, 'keyboard'), { recursive: true });
+await mkdir(path.join(out, 'features'), { recursive: true });
+
+// ── Each screen at each breakpoint ───────────────────────────────────────────
+// Tablet and desktop: the full page. Mobile: the top and the bottom of the
+// page as a phone shows them, because a full-page capture would paint the
+// fixed bottom tab bar halfway down the image.
+for (const [id, p] of screens) {
+  for (const [bp, w, h] of widths) {
+    const { ctx, page } = await open(w, h, p);
+    if (bp === 'mobile') {
+      await shot(page, `${bp}/${id}-top`);
+      await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+      await shot(page, `${bp}/${id}-bottom`);
+    } else {
+      await shot(page, `${bp}/${id}`, { fullPage: true });
+    }
+    await ctx.close();
+  }
+  console.log('✔', id);
+}
+
+// ── Navigation: where Settings lives at each width ───────────────────────────
+for (const [bp, w, h] of widths) {
+  const { ctx, page } = await open(w, h, '/app/contacts');
+  await shot(page, `${bp}/04-navigation`);
+  await ctx.close();
+}
+
+// ── Feature states (desktop) ─────────────────────────────────────────────────
+{
+  const { ctx, page } = await open(1440, 900, '/app/contacts');
+  await page.getByRole('searchbox', { name: 'Find a contact' }).fill('daughter');
+  await shot(page, 'features/contacts-search');
+  await page.getByRole('searchbox', { name: 'Find a contact' }).fill('zzz');
+  await shot(page, 'features/contacts-no-match');
+
+  await page.goto(`${base}/app/contacts/c2`);
+  await page.locator('h1').first().waitFor();
+  await shot(page, 'features/voicemail-transcript');
+
+  await page.goto(`${base}/app/contacts/c1`);
+  await page.locator('h1').first().waitFor();
+  await page.getByTestId('composer-send').click();
+  await shot(page, 'features/composer-validation');
+
+  await page.getByRole('textbox', { name: 'Message Joyce' }).fill('See you at ten');
+  await page.getByTestId('composer-send').click();
+  await page.getByRole('button', { name: /Alert Joyce you want to talk/ }).click();
+  await page.getByTestId('visual-flash').waitFor();
+  await shot(page, 'features/alert-flash');
+  await page.getByTestId('visual-flash').waitFor({ state: 'detached' });
+
+  await ctx.setOffline(true);
+  await page.getByRole('textbox', { name: 'Message Joyce' }).fill('Written with no connection');
+  await page.getByTestId('composer-send').click();
+  await shot(page, 'features/offline-queued');
+  await ctx.setOffline(false);
+  await page.getByText('You are offline').waitFor({ state: 'detached' });
+  await shot(page, 'features/offline-sent');
+
+  await page.goto(`${base}/app/settings`);
+  await page.locator('h1').first().waitFor();
+  await page.getByRole('switch', { name: 'Show captions' }).click();
+  await shot(page, 'features/settings-captions-off');
+  await page.goto(`${base}/app/contacts/c3`);
+  await page.locator('h1').first().waitFor();
+  await shot(page, 'features/conversation-captions-warning');
+  await ctx.close();
+}
+
+// ── Keyboard focus states (desktop, real key presses) ────────────────────────
+{
+  const { ctx, page } = await open(1440, 900, '/app/contacts');
+  await page.keyboard.press('/');
+  await page.keyboard.type('jo');
+  await shot(page, 'keyboard/01-slash-focuses-search');
+  await page.keyboard.press('Escape');
+  await page.keyboard.press('Tab'); // from the search box to the first contact
+  await shot(page, 'keyboard/02-contact-row-focus');
+  await page.keyboard.press('Enter');
+  await page.locator('h1', { hasText: 'Joyce' }).waitFor();
+
+  await page.getByRole('region', { name: 'Conversation with Joyce' }).focus();
+  await page.keyboard.press('Tab');
+  await shot(page, 'keyboard/03-alert-button-focus');
+  await page.keyboard.press('Tab');
+  await page.keyboard.type('Typed with the keyboard');
+  await shot(page, 'keyboard/04-composer-focus');
+  await page.keyboard.press('Control+Enter');
+  await shot(page, 'keyboard/05-ctrl-enter-sent');
+
+  await page.goto(`${base}/app/settings`);
+  await page.locator('h1').first().waitFor();
+  await page.getByRole('switch', { name: 'Smart alert escalation' }).focus();
+  await page.keyboard.press('Shift+Tab');
+  await page.keyboard.press('Tab');
+  await shot(page, 'keyboard/06-switch-focus');
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('ArrowRight');
+  await shot(page, 'keyboard/07-radio-arrow-keys');
+  await page.getByRole('button', { name: 'Reset to defaults' }).focus();
+  await page.keyboard.press('Enter');
+  await page.getByRole('dialog').waitFor();
+  await shot(page, 'keyboard/08-reset-dialog');
+  await page.keyboard.press('Escape');
+  await shot(page, 'keyboard/09-dialog-escape-returns-focus');
+  await ctx.close();
+}
+
+await browser.close();
+console.log('done');

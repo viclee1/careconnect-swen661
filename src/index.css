@@ -237,4 +237,30 @@
     from { opacity: 0; transform: translateY(6px); }
     to   { opacity: 1; transform: translateY(0); }
   }
+
+  /* Alert sent: one slow fade in and out — never a strobe (WCAG 2.3.1). */
+  .visual-flash {
+    animation: visualFlash 1600ms ease-in-out forwards;
+  }
+
+  /* Reduced motion: a steady panel for the same time, not a fade. The global
+     rule shortens every animation to ~0ms, which would jump straight to the
+     last frame (invisible) and hide the words. */
+  @media (prefers-reduced-motion: reduce) {
+    .visual-flash {
+      animation: none !important;
+    }
+  }
+
+  @keyframes visualFlash {
+    0%   { opacity: 0; }
+    20%  { opacity: 1; }
+    75%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  /* Vibration-pattern lamp: the visual stand-in for a buzz. */
+  .pattern-lamp {
+    transition: background-color 60ms linear, box-shadow 60ms linear;
+  }
 }
