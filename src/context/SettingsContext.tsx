@@ -35,9 +35,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     [setSettings],
   );
 
-  const reset = useCallback(() => setSettings(defaultSettings), [setSettings]);
-
-  const value = useMemo(() => ({ settings, update, reset }), [settings, update, reset]);
+  const value = useMemo(() => ({ settings, update }), [settings, update]);
 
   return <SettingsContext.Provider value={value}>{children}</SettingsContext.Provider>;
 }

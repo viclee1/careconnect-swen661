@@ -344,10 +344,12 @@ describe('responsive navigation', () => {
 });
 
 describe('label in name (WCAG 2.5.3)', () => {
-  it('names the call button by its visible words', async () => {
+  it('names the caregiver link by its visible words, and it opens a conversation, not a call', async () => {
     renderAt('/app', 'patient');
-    const call = await screen.findByRole('link', { name: /^Call my caregiver/ });
-    expect(call).toHaveTextContent('Call my caregiver');
+    const link = await screen.findByRole('link', { name: /^Message my caregiver/ });
+    expect(link).toHaveTextContent('Message my caregiver');
+    expect(link).toHaveAttribute('href', '/app/contacts/c1');
+    expect(document.querySelector('a[href^="tel:"]')).toBeNull();
   });
 
   it('names the role switch by its visible words', async () => {

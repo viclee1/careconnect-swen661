@@ -62,9 +62,15 @@ export default function ContactRow({
           <span className="text-sm text-neutral-500 truncate">{preview}</span>
         </span>{' '}
 
+        {/* The count in a circle with the word beneath it, as the mobile app
+            draws it: narrow enough that the name and preview keep their room
+            at 375px, and never a number without its word. */}
         {waiting > 0 && (
-          <span className="flex-shrink-0 inline-flex items-center gap-1 rounded-pill bg-warm-100 text-warm-800 px-3 py-1 text-sm font-semibold">
-            <span>{waiting}</span> <span>waiting</span>
+          <span className="flex-shrink-0 flex flex-col items-center gap-0.5 text-warm-800">
+            <span className="w-8 h-8 rounded-full bg-warm-100 border-2 border-warm-300 flex items-center justify-center text-sm font-bold">
+              {waiting}
+            </span>{' '}
+            <span className="text-xs font-semibold">waiting</span>
           </span>
         )}
 

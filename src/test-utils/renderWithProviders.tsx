@@ -2,6 +2,7 @@ import { render } from '@testing-library/react';
 import type { ReactElement } from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
+import { AuthProvider } from '../auth/AuthContext';
 import { MessagesProvider } from '../context/MessagesContext';
 import { SettingsProvider } from '../context/SettingsContext';
 
@@ -19,18 +20,20 @@ const standIns: Array<[string, string]> = [
 export function renderWithProviders(ui: ReactElement, { path = '/', route = '*' } = {}) {
   return render(
     <MemoryRouter initialEntries={[path]}>
-      <SettingsProvider>
-        <MessagesProvider>
-          <Routes>
-            <Route path={route} element={ui} />
-            {standIns
-              .filter(([standInPath]) => standInPath !== route)
-              .map(([standInPath, heading]) => (
-                <Route key={standInPath} path={standInPath} element={<h1>{heading}</h1>} />
-              ))}
-          </Routes>
-        </MessagesProvider>
-      </SettingsProvider>
+      <AuthProvider>
+        <SettingsProvider>
+          <MessagesProvider>
+            <Routes>
+              <Route path={route} element={ui} />
+              {standIns
+                .filter(([standInPath]) => standInPath !== route)
+                .map(([standInPath, heading]) => (
+                  <Route key={standInPath} path={standInPath} element={<h1>{heading}</h1>} />
+                ))}
+            </Routes>
+          </MessagesProvider>
+        </SettingsProvider>
+      </AuthProvider>
     </MemoryRouter>,
   );
 }

@@ -150,7 +150,7 @@ export default function ConfirmDialog({
         </button>
 
         {/* Icon + heading */}
-        <div className="flex items-start gap-4 pr-8">
+        <div className="flex items-start gap-4 pr-12">
           <span
             className="flex-shrink-0 w-11 h-11 rounded-full bg-alert-100 flex items-center justify-center"
             aria-hidden="true"

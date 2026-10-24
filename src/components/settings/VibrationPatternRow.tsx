@@ -57,21 +57,26 @@ export default function VibrationPatternRow({
   }
 
   return (
-    <div className="p-4">
+    <div className="px-2 py-3 sm:p-4">
       <button
         type="button"
         data-testid={`pattern-${pattern.id}`}
         disabled={!enabled}
         aria-describedby={hintId}
         onClick={play}
-        className="w-full flex items-center gap-4 text-left rounded-lg border-2 border-neutral-300 bg-white hover:bg-calm-50 px-4 py-3 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-white"
+        className="w-full flex items-center gap-3 sm:gap-4 text-left rounded-lg border-2 border-neutral-300 bg-white hover:bg-calm-50 px-4 py-3 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-white"
       >
         <span className="flex-1 min-w-0 flex flex-col">
           <span className="font-semibold text-neutral-800">{pattern.alertType}</span>{' '}
           <span className="text-sm text-neutral-600">{pattern.rhythmName}</span>
+          {/* Phones: the rhythm's shape sits under its name, so the three
+              never compete for one narrow line. */}
+          <span className="sm:hidden font-mono text-lg text-neutral-700 whitespace-pre" aria-hidden="true">
+            {pattern.glyph}
+          </span>
         </span>
 
-        <span className="font-mono text-lg text-neutral-700 whitespace-pre" aria-hidden="true">
+        <span className="hidden sm:inline font-mono text-lg text-neutral-700 whitespace-pre" aria-hidden="true">
           {pattern.glyph}
         </span>
 

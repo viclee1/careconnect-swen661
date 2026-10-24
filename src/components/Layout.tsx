@@ -5,7 +5,7 @@ import {
   Heart,
   LogOut,
   ArrowLeftRight,
-  PhoneCall,
+  MessageCircle,
   ShieldCheck,
   Settings,
   Menu,
@@ -93,10 +93,13 @@ interface LayoutProps {
   onSignOut: () => void;
 }
 
-// ── Caregiver contact for the "Call" button ────────────────────────────────────
-// In mock data Joyce Adeyemi is the caregiver carer contact.
-const CAREGIVER_PHONE = '07700900456';
-const CAREGIVER_DISPLAY = 'Joyce — 07700 900 456';
+// ── Primary caregiver, reached from the header ─────────────────────────────────
+// Joyce is the primary contact in the shared contact list (c1). The header
+// opens a written conversation with her rather than dialling: a voice call is
+// the one channel CareConnect's users cannot rely on, and the desktop and
+// mobile apps have no voice-call button anywhere.
+const CAREGIVER_THREAD = '/app/contacts/c1';
+const CAREGIVER_NAME = 'Joyce';
 
 // ── Component ──────────────────────────────────────────────────────────────────
 
@@ -301,17 +304,17 @@ export default function Layout({
               )}
             </div>
 
-            {/* Call my caregiver — patient screens only */}
+            {/* Message my caregiver — patient screens only */}
             {isPatient && (
-              <a
-                href={`tel:${CAREGIVER_PHONE}`}
+              <Link
+                to={CAREGIVER_THREAD}
                 className="inline-flex items-center justify-center gap-3 font-bold rounded-xl px-6 py-3 min-h-[3rem] text-base bg-success-600 text-white border-2 border-success-600 hover:bg-success-700 hover:border-success-700 transition-colors no-underline flex-shrink-0 self-start md:self-center"
-                // Starts with the visible words (WCAG 2.5.3), then adds who and the number.
-                aria-label={`Call my caregiver, ${CAREGIVER_DISPLAY}`}
+                // Starts with the visible words (WCAG 2.5.3), then says who.
+                aria-label={`Message my caregiver, ${CAREGIVER_NAME}`}
               >
-                <PhoneCall className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
-                Call my caregiver
-              </a>
+                <MessageCircle className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
+                Message my caregiver
+              </Link>
             )}
           </div>
         </header>
@@ -366,9 +369,9 @@ export default function Layout({
             <p>CareConnect &copy; {new Date().getFullYear()} — Compassionate care, every day.</p>
             <p>
               Need help?{' '}
-              <a href="/app/contacts" className="text-calm-600 font-medium">
+              <Link to="/app/contacts" className="text-calm-600 font-medium">
                 View contacts
-              </a>
+              </Link>
             </p>
           </div>
         </footer>

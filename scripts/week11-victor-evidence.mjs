@@ -155,10 +155,10 @@ for (const [bp, w, h] of widths) {
   await page.keyboard.press('Tab');
   await page.keyboard.press('ArrowRight');
   await shot(page, 'keyboard/07-radio-arrow-keys');
-  await page.getByRole('button', { name: 'Reset to defaults' }).focus();
+  await page.getByRole('main').getByRole('button', { name: 'Sign out', exact: true }).focus();
   await page.keyboard.press('Enter');
   await page.getByRole('dialog').waitFor();
-  await shot(page, 'keyboard/08-reset-dialog');
+  await shot(page, 'keyboard/08-sign-out-dialog');
   await page.keyboard.press('Escape');
   await shot(page, 'keyboard/09-dialog-escape-returns-focus');
   await ctx.close();

@@ -116,6 +116,31 @@ describe('MessageThread', () => {
     expect(screen.getByText(/You alerted Joyce that you want to talk/)).toBeInTheDocument();
   });
 
+  it('buzzes the sender\'s own phone to confirm an alert, unless vibration is off', async () => {
+    const user = userEvent.setup();
+    const vibrate = jest.fn();
+    Object.defineProperty(navigator, 'vibrate', { configurable: true, value: vibrate });
+    try {
+      const { unmount } = renderThread('c1');
+      await user.click(screen.getByRole('button', { name: /Alert Joyce you want to talk/ }));
+      expect(vibrate).toHaveBeenCalledWith(200);
+      unmount();
+
+      vibrate.mockClear();
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify({ vibrationEnabled: false }));
+      renderThread('c1');
+      await user.click(screen.getByRole('button', { name: /Alert Joyce you want to talk/ }));
+      expect(vibrate).not.toHaveBeenCalled();
+    } finally {
+      delete (navigator as { vibrate?: unknown }).vibrate;
+    }
+  });
+
+  it('shows the relationship beside the name, in words', () => {
+    renderThread('c2');
+    expect(screen.getByText('GP — Greenfield Surgery')).toBeInTheDocument();
+  });
+
   it('says when vibration is off in the Alert button wording', () => {
     localStorage.setItem(SETTINGS_KEY, JSON.stringify({ vibrationEnabled: false }));
     renderThread('c1');
@@ -125,7 +150,7 @@ describe('MessageThread', () => {
   it('requests a captioned video call and lets the banner be dismissed', async () => {
     const user = userEvent.setup();
     renderThread('c1');
-    await user.click(screen.getByRole('button', { name: 'Call Joyce with live captions' }));
+    await user.click(screen.getByRole('button', { name: 'Call Joyce now with live captions' }));
     expect(screen.getByText('Captioned video call requested')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Dismiss this message' }));
     expect(screen.queryByText('Captioned video call requested')).not.toBeInTheDocument();
@@ -140,7 +165,7 @@ describe('MessageThread', () => {
     localStorage.setItem(SETTINGS_KEY, JSON.stringify({ captionsEnabled: false }));
     renderThread('c3');
     expect(screen.getByText('Captions are turned off')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Open accessibility settings' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Open settings' })).toHaveAttribute(
       'href',
       '/app/settings',
     );

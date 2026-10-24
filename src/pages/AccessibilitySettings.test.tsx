@@ -1,4 +1,4 @@
-import { act, fireEvent, screen } from '@testing-library/react';
+import { act, fireEvent, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import AccessibilitySettings from './AccessibilitySettings';
@@ -18,14 +18,14 @@ beforeEach(() => localStorage.clear());
 describe('AccessibilitySettings', () => {
   it('groups the preferences under labelled sections', () => {
     renderSettings();
-    for (const name of ['Visual alerts', 'Captions', 'Audio', 'Vibration']) {
+    for (const name of ['Visual Alerts', 'Captions', 'Audio', 'Vibration', 'Account']) {
       expect(screen.getByRole('region', { name })).toBeInTheDocument();
     }
   });
 
   it('starts compliant, with every switch named and on', () => {
     renderSettings();
-    expect(screen.getByText('WCAG 2.2 compliant')).toBeInTheDocument();
+    expect(screen.getByText('WCAG 2.2 Compliant')).toBeInTheDocument();
     for (const name of ['Visual alert banners', 'Smart alert escalation', 'Show captions', 'Vibration alerts']) {
       expect(screen.getByRole('switch', { name })).toBeChecked();
     }
@@ -86,13 +86,13 @@ describe('AccessibilitySettings', () => {
   it('prints slider values in words and announces them', () => {
     renderSettings();
     const volume = screen.getByRole('slider', { name: 'Alert volume' });
-    expect(volume).toHaveAttribute('aria-valuetext', '70 per cent');
+    expect(volume).toHaveAttribute('aria-valuetext', 'Alert volume 70 per cent');
     fireEvent.change(volume, { target: { value: '0.3' } });
     expect(screen.getByText('30%')).toBeInTheDocument();
 
     const balance = screen.getByRole('slider', { name: 'Audio balance' });
     fireEvent.change(balance, { target: { value: '-0.5' } });
-    expect(balance).toHaveAttribute('aria-valuetext', '50% left');
+    expect(balance).toHaveAttribute('aria-valuetext', 'Audio balance 50% left');
     expect(stored()).toMatchObject({ alertVolume: 0.3, audioBalance: -0.5 });
   });
 
@@ -126,25 +126,33 @@ describe('AccessibilitySettings', () => {
     }
   });
 
-  it('resets to defaults only after confirming in a dialog', async () => {
+  it('shows the account and signs out only after confirming in a dialog', async () => {
     const user = userEvent.setup();
+    localStorage.setItem(
+      'careconnect_session',
+      JSON.stringify({ user: { id: 'u1', name: 'Margaret Whitfield', email: 'm@example.com' }, role: 'patient' }),
+    );
     renderSettings();
-    await user.click(screen.getByRole('switch', { name: 'Show captions' }));
-    await user.click(screen.getByRole('button', { name: 'Reset to defaults' }));
+    expect(screen.getByText('Margaret Whitfield · Care Recipient')).toBeInTheDocument();
 
-    const dialog = screen.getByRole('dialog', { name: 'Reset accessibility settings?' });
-    expect(dialog).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: 'Reset settings' }));
+    const signOut = screen.getByRole('button', { name: 'Sign out' });
+    await user.click(signOut);
+    expect(screen.getByRole('dialog', { name: 'Sign out of CareConnect?' })).toBeInTheDocument();
+    await user.keyboard('{Escape}');
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(localStorage.getItem('careconnect_session')).not.toBeNull();
 
-    expect(screen.getByRole('switch', { name: 'Show captions' })).toBeChecked();
-    expect(screen.getByText('WCAG 2.2 compliant')).toBeInTheDocument();
+    await user.click(signOut);
+    const dialog = screen.getByRole('dialog', { name: 'Sign out of CareConnect?' });
+    await user.click(within(dialog).getByRole('button', { name: 'Sign out' }));
+    expect(localStorage.getItem('careconnect_session')).toBeNull();
   });
 
   it('restores saved preferences and repairs a corrupt store', () => {
     localStorage.setItem(SETTINGS_KEY, JSON.stringify({ captionsEnabled: false, alertVolume: 9 }));
     const { unmount } = renderSettings();
     expect(screen.getByRole('switch', { name: 'Show captions' })).not.toBeChecked();
-    expect(screen.getByRole('slider', { name: 'Alert volume' })).toHaveAttribute('aria-valuetext', '100 per cent');
+    expect(screen.getByRole('slider', { name: 'Alert volume' })).toHaveAttribute('aria-valuetext', 'Alert volume 100 per cent');
     unmount();
 
     localStorage.setItem(SETTINGS_KEY, '{not json');

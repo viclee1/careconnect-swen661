@@ -25,13 +25,6 @@ describe('SettingsProvider', () => {
     expect(JSON.parse(localStorage.getItem(SETTINGS_KEY) ?? '{}').alertVolume).toBe(1);
   });
 
-  it('resets to the defaults', () => {
-    const { result } = renderHook(() => useSettings(), { wrapper });
-    act(() => result.current.update({ captionsEnabled: false }));
-    act(() => result.current.reset());
-    expect(result.current.settings).toEqual(defaultSettings);
-  });
-
   it('treats a stored non-object as the defaults', () => {
     localStorage.setItem(SETTINGS_KEY, '42');
     const { result } = renderHook(() => useSettings(), { wrapper });

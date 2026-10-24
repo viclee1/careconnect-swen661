@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Settings, Video, WifiOff } from 'lucide-react';
+import { ArrowLeft, HeartHandshake, LifeBuoy, Settings, Stethoscope, Users, Video, WifiOff, type LucideIcon } from 'lucide-react';
 
 import Banner from '../components/Banner';
 import MessageBubble from '../components/messaging/MessageBubble';
@@ -9,8 +9,20 @@ import NotifyButton from '../components/messaging/NotifyButton';
 import VisualFlash from '../components/messaging/VisualFlash';
 import { useMessages } from '../context/messages';
 import { useSettings } from '../context/settings';
-import { conversationNameOf, initialsFor, supportsVideoRelay } from '../models/contact';
+import { conversationNameOf, initialsFor, supportsVideoRelay, type ContactRole } from '../models/contact';
 import { kindOf, startsNewDay } from '../models/message';
+
+// The same role icons the desktop and mobile conversation headers use. Always
+// beside the relationship in words, never on their own.
+const roleIcons: Record<ContactRole, LucideIcon> = {
+  careTeam: HeartHandshake,
+  family: Users,
+  doctor: Stethoscope,
+  helpline: LifeBuoy,
+};
+
+/** A short buzz on this phone confirming the Alert went, as the mobile app does. */
+const CONFIRM_BUZZ_MS = 200;
 
 /**
  * The written conversation with one contact, opened from Contacts.
@@ -83,8 +95,14 @@ export default function MessageThread() {
   const threadHasVideo = thread.some((message) => kindOf(message) === 'videoMessage');
   const now = Date.now();
 
+  const RoleIcon = roleIcons[contact.role];
+
   function handleNotify() {
     setFlashTrigger((n) => n + 1);
+    // Confirmation on the sender's own phone, where the browser supports it.
+    if (settings.vibrationEnabled && typeof navigator.vibrate === 'function') {
+      navigator.vibrate(CONFIRM_BUZZ_MS);
+    }
     sendNotify(contactId, name);
   }
 
@@ -103,17 +121,20 @@ export default function MessageThread() {
         </span>
         <div className="flex-1 min-w-[10rem]">
           <h1 className="text-2xl font-bold text-neutral-800">{contact.name}</h1>
-          <p className="text-neutral-600">{contact.relationship}</p>
+          <p className="flex items-center gap-1.5 text-neutral-600">
+            <RoleIcon className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
+            {contact.relationship}
+          </p>
         </div>
         {supportsVideoRelay(contact) && (
           <button
             type="button"
             className="btn btn-secondary w-full sm:w-auto"
             onClick={() => setCallRequested(true)}
-            aria-label={`Call ${name} with live captions`}
+            aria-label={`Call ${name} now with live captions`}
           >
             <Video className="w-5 h-5" aria-hidden="true" />
-            Call {name}
+            Call {name} now
           </button>
         )}
       </div>
@@ -148,7 +169,7 @@ export default function MessageThread() {
           appear on screen.{' '}
           <Link to="/app/settings" className="inline-flex items-center gap-1 font-semibold">
             <Settings className="w-4 h-4" aria-hidden="true" />
-            Open accessibility settings
+            Open settings
           </Link>
         </Banner>
       )}

@@ -30,7 +30,7 @@ test.describe('Accessibility settings', () => {
     await volume.focus();
     await page.keyboard.press('ArrowLeft');
     await page.keyboard.press('ArrowLeft');
-    await expect(volume).toHaveAttribute('aria-valuetext', '50 per cent');
+    await expect(volume).toHaveAttribute('aria-valuetext', 'Alert volume 50 per cent');
 
     // :focus-visible after a programmatic focus differs in WebKit, so the
     // visible ring is checked in the other engines.
@@ -44,18 +44,22 @@ test.describe('Accessibility settings', () => {
 
     await page.reload();
     await expect(page.getByRole('radio', { name: 'Large' })).toBeChecked();
-    await expect(page.getByRole('slider', { name: 'Alert volume' })).toHaveAttribute('aria-valuetext', '50 per cent');
+    await expect(page.getByRole('slider', { name: 'Alert volume' })).toHaveAttribute('aria-valuetext', 'Alert volume 50 per cent');
   });
 
-  test('reset asks for confirmation in a dialog that Escape closes and returns focus', async ({ page }) => {
+  test('sign out asks for confirmation in a dialog that Escape closes and returns focus', async ({ page }) => {
     await signInAsPatient(page, '/app/settings');
-    const reset = page.getByRole('button', { name: 'Reset to defaults' });
-    await reset.click();
-    const dialog = page.getByRole('dialog', { name: 'Reset accessibility settings?' });
+    const signOut = page.getByRole('main').getByRole('button', { name: 'Sign out', exact: true });
+    await signOut.click();
+    const dialog = page.getByRole('dialog', { name: 'Sign out of CareConnect?' });
     await expect(dialog).toBeVisible();
     await page.keyboard.press('Escape');
     await expect(dialog).toBeHidden();
-    await expect(reset).toBeFocused();
+    await expect(signOut).toBeFocused();
+
+    await signOut.click();
+    await dialog.getByRole('button', { name: 'Sign out' }).click();
+    await expect(page).toHaveURL(/\/$/);
   });
 
   test('captions switched off warn inside a conversation with a video message', async ({ page }) => {
@@ -63,7 +67,7 @@ test.describe('Accessibility settings', () => {
     await page.getByRole('switch', { name: 'Show captions' }).click();
     await page.goto('/app/contacts/c3');
     await expect(page.getByText('Captions are turned off')).toBeVisible();
-    await page.getByRole('link', { name: 'Open accessibility settings' }).click();
+    await page.getByRole('link', { name: 'Open settings' }).click();
     await expect(page.getByRole('heading', { level: 1, name: 'Accessibility Settings' })).toBeVisible();
   });
 });

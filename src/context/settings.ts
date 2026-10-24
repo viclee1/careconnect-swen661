@@ -6,8 +6,6 @@ export interface SettingsContextValue {
   settings: AccessibilitySettings;
   /** Applies a partial change. The visual banner can never be switched off. */
   update: (change: Partial<AccessibilitySettings>) => void;
-  /** Back to the out-of-the-box configuration. */
-  reset: () => void;
 }
 
 export const SettingsContext = createContext<SettingsContextValue | null>(null);

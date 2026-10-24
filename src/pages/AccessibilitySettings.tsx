@@ -1,4 +1,4 @@
-import { Captions, Eye, RotateCcw, Vibrate, Volume2 } from 'lucide-react';
+import { Captions, Eye, LogOut, User, Vibrate, Volume2 } from 'lucide-react';
 
 import Banner from '../components/Banner';
 import Button from '../components/Button';
@@ -7,6 +7,7 @@ import SettingsSection from '../components/settings/SettingsSection';
 import SettingsSliderRow from '../components/settings/SettingsSliderRow';
 import SettingsSwitchRow from '../components/settings/SettingsSwitchRow';
 import VibrationPatternRow from '../components/settings/VibrationPatternRow';
+import { useAuth } from '../auth/AuthContext';
 import { useSettings } from '../context/settings';
 import {
   balanceLabel,
@@ -34,9 +35,14 @@ const CAPTION_PANEL = '#0F5272';
  * alert that reaches them by sound alone: the visual banner is fixed on, and
  * only the layers on top of it can change. Preferences are saved in this
  * browser and work offline.
+ *
+ * The sections, their order and their wording are the ones the desktop,
+ * React Native and Flutter clients share, so the page reads the same on
+ * every device.
  */
 export default function AccessibilitySettings() {
-  const { settings, update, reset } = useSettings();
+  const { settings, update } = useSettings();
+  const { user, signOut } = useAuth();
   const compliant = meetsHearingConstraints(settings);
   const captionsOn = settings.captionsEnabled;
   const sizeLabel = captionSizes[settings.captionSize].label.toLowerCase();
@@ -52,14 +58,14 @@ export default function AccessibilitySettings() {
       {/* Live rather than decorative: switching captions off flips it. */}
       <Banner
         variant={compliant ? 'success' : 'warning'}
-        title={compliant ? 'WCAG 2.2 compliant' : 'Check your captions'}
+        title={compliant ? 'WCAG 2.2 Compliant' : 'Check your captions'}
       >
         {conformanceMessage(settings)}
       </Banner>
 
       <SettingsSection
         Icon={Eye}
-        title="Visual alerts"
+        title="Visual Alerts"
         description="What appears on screen when CareConnect needs you."
       >
         <SettingsSwitchRow
@@ -69,12 +75,12 @@ export default function AccessibilitySettings() {
           value={settings.visualAlertBanners}
           onValueChange={() => undefined}
           locked
-          lockedReason="Always on. Without a banner an alert could reach you by sound alone, which CareConnect will not do."
+          lockedReason="Always on. Without a banner an alert could reach you by sound alone, which this application will not do."
         />
         <SettingsSwitchRow
           testId="switch-escalation"
           title="Smart alert escalation"
-          description="Alerts you miss are passed to your care team automatically."
+          description="Missed alerts are escalated automatically, so an alert you did not see is passed to your care team."
           value={settings.smartEscalation}
           onValueChange={(next) => update({ smartEscalation: next })}
         />
@@ -112,11 +118,11 @@ export default function AccessibilitySettings() {
               label: captionColors[key].label,
             }))}
           />
-          {!captionsOn && (
-            <p className="text-sm text-neutral-600">
-              Captions are off, so size and colour cannot be changed yet.
-            </p>
-          )}
+          <p className="text-sm text-neutral-600">
+            {captionsOn
+              ? `Currently ${sizeLabel}. Both colours clear WCAG 2.2 AA against the caption panel.`
+              : 'Captions are off, so the size cannot be changed yet.'}
+          </p>
 
           <figure className="m-0">
             <figcaption className="text-sm font-semibold text-neutral-700 mb-1">
@@ -132,7 +138,7 @@ export default function AccessibilitySettings() {
                 }}
               >
                 {captionsOn
-                  ? 'Reminder: take your morning medication.'
+                  ? '[Preview] Reminder: Take your morning medication.'
                   : 'Captions are off. Nothing will appear here.'}
               </p>
             </div>
@@ -149,7 +155,7 @@ export default function AccessibilitySettings() {
           testId="slider-volume"
           title="Alert volume"
           valueLabel={`${volumePercent(settings)}%`}
-          description="Zero is fine: the banner and vibration still arrive. Every alert banner also has a pause button."
+          description="Use the pause button on any alert banner to stop the sound instantly. You can also pause audio during video calls from the in-call controls."
           value={settings.alertVolume}
           min={volumeRange.min}
           max={volumeRange.max}
@@ -157,13 +163,13 @@ export default function AccessibilitySettings() {
           minLabel="0%"
           maxLabel="100%"
           onValueChange={(next) => update({ alertVolume: next })}
-          valueText={`${volumePercent(settings)} per cent`}
+          valueText={`Alert volume ${volumePercent(settings)} per cent`}
         />
         <SettingsSliderRow
           testId="slider-balance"
           title="Audio balance"
           valueLabel={balanceLabel(settings)}
-          description="Move sound between left and right. Useful with a hearing aid in one ear."
+          description="Adjust sound between left and right. Useful with hearing aids."
           value={settings.audioBalance}
           min={balanceRange.min}
           max={balanceRange.max}
@@ -171,14 +177,14 @@ export default function AccessibilitySettings() {
           minLabel="Left"
           maxLabel="Right"
           onValueChange={(next) => update({ audioBalance: next })}
-          valueText={balanceLabel(settings)}
+          valueText={`Audio balance ${balanceLabel(settings)}`}
         />
       </SettingsSection>
 
       <SettingsSection
         Icon={Vibrate}
         title="Vibration"
-        description="Each alert type has its own rhythm, so you can tell them apart without looking. Play one to see it pulse — and, on a phone, feel it."
+        description="Each alert type has its own rhythm, so you can tell them apart without looking at your phone. Play one to feel it on a phone, or watch it pulse on a computer."
       >
         <SettingsSwitchRow
           testId="switch-vibration"
@@ -200,18 +206,27 @@ export default function AccessibilitySettings() {
         ))}
       </SettingsSection>
 
-      <div className="pt-2">
-        <Button
-          variant="danger"
-          icon={<RotateCcw className="w-5 h-5" />}
-          onClick={reset}
-          confirmTitle="Reset accessibility settings?"
-          confirmDescription="Captions, volume, balance and vibration go back to how CareConnect started. Visual alert banners stay on."
-          confirmLabel="Reset settings"
-        >
-          Reset to defaults
-        </Button>
-      </div>
+      <SettingsSection
+        Icon={User}
+        title="Account"
+        description={`${user?.name ?? 'Margaret Whitfield'} · Care Recipient`}
+      >
+        <div className="p-4">
+          {/* Danger variant: asks in a dialog first, as the header's sign-out
+              does not — leaving by accident from a settings page is easy. */}
+          <Button
+            variant="danger"
+            icon={<LogOut className="w-5 h-5" />}
+            onClick={signOut}
+            className="w-full"
+            confirmTitle="Sign out of CareConnect?"
+            confirmDescription="Your messages and settings stay saved on this device."
+            confirmLabel="Sign out"
+          >
+            Sign out
+          </Button>
+        </div>
+      </SettingsSection>
     </div>
   );
 }
