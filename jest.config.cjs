@@ -22,6 +22,7 @@ module.exports = {
     'src/pages/Contacts.tsx',
     'src/pages/MessageThread.tsx',
     'src/pages/AccessibilitySettings.tsx',
+    'src/pages/PlaceholderPage.tsx',
     'src/components/contacts/**/*.tsx',
     'src/components/messaging/**/*.tsx',
     'src/components/settings/**/*.tsx',

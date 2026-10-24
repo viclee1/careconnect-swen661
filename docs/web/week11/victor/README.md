@@ -13,7 +13,7 @@ screenshot is in [`screenshots/`](screenshots).
 | State | [`src/context/MessagesContext.tsx`](../../../../src/context/MessagesContext.tsx), [`src/context/SettingsContext.tsx`](../../../../src/context/SettingsContext.tsx) (Context API) |
 | Custom hooks | [`useLocalStorageState`](../../../../src/hooks/useLocalStorageState.ts), [`useOnlineStatus`](../../../../src/hooks/useOnlineStatus.ts) |
 | Domain logic | [`src/models/`](../../../../src/models), [`src/utils/`](../../../../src/utils) |
-| Unit and component tests | 160 Jest tests in 14 suites (listed in [§3](#3-testing-implementation)) |
+| Unit and component tests | 165 Jest tests in 15 suites (listed in [§3](#3-testing-implementation)) |
 | E2E tests | [`e2e/`](../../../../e2e) (Playwright), 9 tests covering 5 critical flows, run in 4 browser projects |
 | Coverage | [`coverage/lcov-report/index.html`](../../../../coverage/lcov-report/index.html) |
 
@@ -47,6 +47,33 @@ through sound must also be communicated visually or in text*.
 | Form handling and validation | The message form is a real `<form>` with a labelled `<textarea>`. Ctrl/⌘+Enter or the Send button submits it. An empty message, or one over 500 characters, is refused with a written reason (`role="alert"`, linked to the field with `aria-describedby`, and the field gets `aria-invalid`). Focus returns to the field. A live counter shows the characters left. |
 | Offline functionality | Conversations and settings are kept in localStorage, so nothing is fetched and both screens work with no connection. A message written offline is **kept, marked "Sending" in words, and sent automatically when the connection returns**. A banner explains this while offline. The team's service worker serves the app shell and the cached lazy chunks, so the screens also open from cold while offline. This is verified by an E2E test. |
 | PWA | Uses the team's manifest and service worker. My screens add the offline behaviour above. |
+
+### Teammates' screens on this branch
+
+Like the desktop client's first build, this branch carries **only Victor's
+screens**. Every other route shows a "build in progress" page
+([`src/pages/PlaceholderPage.tsx`](../../../../src/pages/PlaceholderPage.tsx))
+that names the screen, says "*X* is not on this branch yet", and shows the
+owner:
+
+| Screen | Owner (Assignment 11 split) |
+|:--|:--|
+| Welcome, Sign In, Sign Up, Home, My Day | Justin Zhang |
+| Appointments, Medicines, Memories | Upneet Bir |
+| Caregiver dashboard, notes, activity log, manage medications and appointments | Not yet assigned |
+
+Inside the app, each placeholder has **Go to Contacts**. The Welcome, Sign
+In and Sign Up placeholders offer **Continue to Contacts as Margaret
+Whitfield** instead, since this branch has no sign-in to get past. The
+desktop's first build likewise opened straight onto Contacts.
+
+The teammates' page files are **untouched and still imported**. One switch,
+`SHOW_TEAMMATE_PAGES` in [`src/branchScope.ts`](../../../../src/branchScope.ts),
+decides which version shows. **Set it to `true` before this branch is
+merged**, or the merge would replace the team's working pages with
+placeholders.
+
+![Placeholder for a teammate's screen](screenshots/features/placeholder-in-app.png)
 
 ### Matching the desktop and mobile apps
 
@@ -261,13 +288,14 @@ it('never honours a request to switch the visual banner off', () => {
 });
 ```
 
-### Component tests: 59 tests, 7 suites
+### Component tests: 64 tests, 8 suites
 
 | Suite | Tests | Covers |
 |:--|--:|:--|
 | `src/pages/Contacts.test.tsx` | 9 | No `tel:` links anywhere, previews and waiting badges, search with the announced result count, Escape clears, "/" focuses, empty state, Enter opens a conversation |
 | `src/pages/MessageThread.test.tsx` | 20 | Transcript and caption headings, relationship shown in words, day headings, send with the button and with Ctrl+Enter, Enter adds a new line, empty-message error linked to the field, counter, alert flash and written record, confirmation buzz (and none when vibration is off), vibration-off wording, captioned call request, captions-off warning, offline queue → sent, Escape behaviour, unknown contact |
 | `src/pages/AccessibilitySettings.test.tsx` | 12 | Named regions and switches, locked banner switch with its reason, Space toggles, captions-off conformance warning, radio group and arrow keys, slider value text, vibration rhythm (fake timers and `navigator.vibrate`), Account section and sign out through the dialog, repair of corrupt saved data |
+| `src/pages/PlaceholderPage.test.tsx` | 5 | Screen name, owner (or "not yet assigned"), Go to Contacts, the standalone skip link, banner, main and title, and continuing as the demo care recipient (sign-up the first time, sign-in after) |
 | `src/context/*.test.tsx` | 13 | Seeding, read state, blank-message guard, alert record, corrupt storage, offline queue, error outside the provider, clamping |
 | `src/hooks/*.test.ts` | 5 | Saving and repairing stored values, storage that refuses writes, online/offline switching |
 | `src/accessibility.test.tsx` (team suite) | +9 | axe, landmark and title checks on my three routes. The header test now also checks there is no `tel:` link |
@@ -290,7 +318,7 @@ it('queues messages written offline and sends them when the connection returns',
 ```
 
 ![Jest results for Victor's suites](screenshots/testing/01-jest-victor-suites.png)
-![Whole web app: 482 tests passing](screenshots/testing/02-jest-all-summary.png)
+![Whole web app: 486 tests passing, 1 skipped](screenshots/testing/02-jest-all-summary.png)
 
 ### End-to-end tests (Playwright): 5 critical flows
 
@@ -328,7 +356,7 @@ test('messages written offline are queued and sent when the connection returns',
 });
 ```
 
-**Results: 25 passed, 2 skipped by design, 0 failed** across Chromium,
+**Results: 28 passed, 2 skipped by design, 0 failed** across Chromium,
 WebKit (Safari) and mobile Safari. The two skips are the service-worker
 offline test on WebKit, where Playwright cannot emulate it reliably.
 
@@ -367,9 +395,10 @@ makes the run fail if any of them drops below that.
 
 | Measured scope | Statements | Branches | Functions | Lines |
 |:--|--:|--:|--:|--:|
-| **All measured files** (Victor's plus the Appointments, Medicines and Memories pages already listed) | **94.72%** | **87.56%** | **87.86%** | **95.05%** |
+| **All measured files** (Victor's plus the Appointments, Medicines and Memories pages already listed) | **92.41%** | **83.92%** | **84.43%** | **92.93%** |
 | Contacts.tsx | 100% | 100% | 100% | 100% |
 | MessageThread.tsx | 100% | 90.9% | 100% | 100% |
+| PlaceholderPage.tsx | 100% | 100% | 100% | 100% |
 | AccessibilitySettings.tsx | 96.9% | 100% | 91.7% | 96.9% |
 | components/contacts, messaging, settings | 96.6–100% | 92–100% | 84.6–100% | 100% |
 | context, models, utils | 100% | 98.9–100% | 100% | 100% |
@@ -440,9 +469,14 @@ scripts and this write-up. I checked the output in four ways:
     up `.claude/worktrees`), my files in coverage, and the 75% threshold.
   - Removed the old `Contact` type and `contacts` mock data, which only the
     old Contacts page used.
-- **Coverage gap that isn't mine:** `src/pages/Memories.tsx` is at about 26%
-  in the same report. It doesn't threaten the 75% total, but more tests there
-  would help.
+- **Before merging, set `SHOW_TEAMMATE_PAGES = true`** in `src/branchScope.ts`.
+  With it off, this branch shows "build in progress" pages for every screen
+  that isn't Victor's. Turning it back on also re-runs the one skipped Landing
+  test.
+- **Coverage while the placeholders are on:** the app-wide accessibility test
+  no longer renders Upneet's real pages, so `Medications.tsx` falls from about
+  80% to 41%, and `Memories.tsx` stays at about 26%. The total is still above
+  75%, and both recover when the switch is turned back on.
 - **New dev dependencies:** `@playwright/test` and
   `@testing-library/user-event`. The new CI workflow runs Firefox, which can't
   launch locally on macOS 27.

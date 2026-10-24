@@ -114,6 +114,10 @@ for (const [bp, w, h] of widths) {
   await page.getByText('You are offline').waitFor({ state: 'detached' });
   await shot(page, 'features/offline-sent');
 
+  await page.goto(`${base}/app/medications`);
+  await page.locator('h1').first().waitFor();
+  await shot(page, 'features/placeholder-in-app');
+
   await page.goto(`${base}/app/settings`);
   await page.locator('h1').first().waitFor();
   await page.getByRole('switch', { name: 'Show captions' }).click();
