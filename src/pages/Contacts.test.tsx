@@ -2,6 +2,7 @@ import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import Contacts from './Contacts';
+import { MESSAGES_KEY } from '../context/MessagesContext';
 import { renderWithProviders } from '../test-utils/renderWithProviders';
 
 beforeEach(() => localStorage.clear());
@@ -30,7 +31,8 @@ describe('Contacts', () => {
     renderContacts();
     const joyce = screen.getByTestId('contact-c1');
     expect(joyce).toHaveTextContent('Good morning Margaret!');
-    expect(joyce).toHaveTextContent('1 waiting');
+    // A red count on the avatar, also written out in words.
+    expect(joyce).toHaveTextContent('1 message waiting');
     // Dr. Sharma's voicemail was answered, so nothing is waiting there.
     expect(screen.getByTestId('contact-c2')).not.toHaveTextContent('waiting');
   });
@@ -96,4 +98,47 @@ describe('Contacts', () => {
     await user.keyboard('{Enter}');
     expect(await screen.findByRole('heading', { name: 'Conversation page' })).toBeInTheDocument();
   });
+
+  it('asks the primary contact for a captioned video call, never a voice call', async () => {
+    const user = userEvent.setup();
+    renderContacts();
+    const button = screen.getByRole('button', { name: 'Video call Joyce with live captions' });
+    await user.click(button);
+    // On a phone the request is confirmed inside Joyce's conversation.
+    expect(await screen.findByRole('heading', { name: 'Conversation page' })).toBeInTheDocument();
+  });
+
+  describe('on a desktop', () => {
+    beforeEach(() => setWide(true));
+    afterEach(() => setWide(false));
+
+    it('opens the primary conversation beside the list, with its row selected', () => {
+      renderContacts();
+      expect(screen.getByRole('heading', { level: 1, name: 'Contacts' })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { level: 2, name: 'Joyce' })).toBeInTheDocument();
+      expect(screen.getByTestId('contact-c1')).toHaveAttribute('aria-current', 'true');
+      expect(screen.getByRole('region', { name: 'Conversation with Joyce' })).toBeInTheDocument();
+      // Opened, so Joyce's message is no longer waiting.
+      expect(JSON.parse(localStorage.getItem(MESSAGES_KEY) ?? '{}').read).toContain('c1');
+    });
+
+    it('shows the video call request in the open conversation', async () => {
+      const user = userEvent.setup();
+      renderContacts();
+      await user.click(screen.getByRole('button', { name: 'Video call Joyce with live captions' }));
+      expect(screen.getByText('Captioned video call requested')).toBeInTheDocument();
+      await user.click(screen.getByRole('button', { name: 'Dismiss this message' }));
+      expect(screen.queryByText('Captioned video call requested')).not.toBeInTheDocument();
+    });
+  });
 });
+
+/** Makes the desktop media query match, as a 1440px window would. */
+function setWide(wide: boolean) {
+  (window.matchMedia as jest.Mock).mockImplementation((query: string) => ({
+    matches: wide && query === '(min-width: 1024px)',
+    media: query,
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+  }));
+}

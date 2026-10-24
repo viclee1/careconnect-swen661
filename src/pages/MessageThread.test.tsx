@@ -1,9 +1,11 @@
-import { act, fireEvent, screen, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 
 import MessageThread from './MessageThread';
-import { MESSAGES_KEY } from '../context/MessagesContext';
-import { SETTINGS_KEY } from '../context/SettingsContext';
+import { AuthProvider } from '../auth/AuthContext';
+import { MESSAGES_KEY, MessagesProvider } from '../context/MessagesContext';
+import { SETTINGS_KEY, SettingsProvider } from '../context/SettingsContext';
 import { renderWithProviders } from '../test-utils/renderWithProviders';
 
 const route = '/app/contacts/:contactId';
@@ -113,6 +115,9 @@ describe('MessageThread', () => {
     renderThread('c1');
     await user.click(screen.getByRole('button', { name: /Alert Joyce you want to talk/ }));
     expect(screen.getByTestId('visual-flash')).toHaveTextContent('Alert sent to Joyce.');
+    // A banner stays behind once the flash has faded, in case it was missed.
+    expect(screen.getByText('Alert sent to Joyce')).toBeInTheDocument();
+    expect(screen.getByText(/Nothing made a sound/)).toBeInTheDocument();
     expect(screen.getByText(/You alerted Joyce that you want to talk/)).toBeInTheDocument();
   });
 
@@ -150,9 +155,14 @@ describe('MessageThread', () => {
   it('requests a captioned video call and lets the banner be dismissed', async () => {
     const user = userEvent.setup();
     renderThread('c1');
-    await user.click(screen.getByRole('button', { name: 'Call Joyce now with live captions' }));
+    await user.click(screen.getByRole('button', { name: 'Video call Joyce with live captions' }));
     expect(screen.getByText('Captioned video call requested')).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: 'Dismiss this message' }));
+    await user.click(
+      within(screen.getByText('Captioned video call requested').closest('[role="status"]') as HTMLElement).getByRole(
+        'button',
+        { name: 'Dismiss this message' },
+      ),
+    );
     expect(screen.queryByText('Captioned video call requested')).not.toBeInTheDocument();
   });
 
@@ -201,5 +211,131 @@ describe('MessageThread', () => {
     renderThread('nobody');
     expect(screen.getByRole('heading', { level: 1, name: 'That contact is not in your list' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Back to contacts' })).toHaveAttribute('href', '/app/contacts');
+  });
+
+  it('puts a quick reply in the field from a keyboard-operable menu', async () => {
+    const user = userEvent.setup();
+    renderThread('c1');
+    const menuButton = screen.getByRole('button', { name: 'Quick replies' });
+    menuButton.focus();
+    await user.keyboard('{ArrowDown}');
+    const menu = screen.getByRole('menu', { name: 'Quick replies' });
+    const items = within(menu).getAllByRole('menuitem');
+    expect(items[0]).toHaveFocus();
+    await user.keyboard('{ArrowUp}');
+    expect(items[items.length - 1]).toHaveFocus();
+    await user.keyboard('{Home}{ArrowDown}');
+    expect(items[1]).toHaveFocus();
+    await user.keyboard('{End}');
+    expect(items[items.length - 1]).toHaveFocus();
+    await user.keyboard('{Home}{Enter}');
+
+    const field = screen.getByRole('textbox', { name: 'Message Joyce' });
+    expect(field).toHaveValue("I'm fine, thank you.");
+    expect(field).toHaveFocus();
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+  });
+
+  it('closes the quick-replies menu with Escape, back on its button, without leaving the page', async () => {
+    const user = userEvent.setup();
+    renderThread('c1');
+    const menuButton = screen.getByRole('button', { name: 'Quick replies' });
+    await user.click(menuButton);
+    expect(menuButton).toHaveAttribute('aria-expanded', 'true');
+    await user.keyboard('{Escape}');
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    expect(menuButton).toHaveFocus();
+    expect(screen.getByRole('heading', { level: 1, name: 'Joyce' })).toBeInTheDocument();
+  });
+
+  it('closes the quick-replies menu on Tab or a click elsewhere, and adds to a draft', async () => {
+    const user = userEvent.setup();
+    renderThread('c1');
+    const field = screen.getByRole('textbox', { name: 'Message Joyce' });
+    await user.type(field, 'Hello.');
+    await user.click(screen.getByRole('button', { name: 'Quick replies' }));
+    await user.keyboard('{Tab}');
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Quick replies' }));
+    await user.click(screen.getByRole('heading', { level: 1, name: 'Joyce' }));
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Quick replies' }));
+    await user.click(screen.getByRole('menuitem', { name: "I've taken my medicine." }));
+    expect(field).toHaveValue("Hello. I've taken my medicine.");
+  });
+
+  it('plays a video message with its captions in the chosen colour, line by line', () => {
+    jest.useFakeTimers();
+    try {
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify({ captionColor: 'yellow' }));
+      renderThread('c3');
+      const caption = screen.getByTestId('video-caption-m6');
+      expect(caption).toHaveTextContent('[CC] Hi Mum, the garden is finally done.');
+      expect(caption).toHaveStyle({ color: '#FFFF00' });
+
+      fireEvent.click(screen.getByRole('button', { name: 'Play video message from Maria' }));
+      act(() => jest.advanceTimersByTime(2500));
+      expect(caption).toHaveTextContent('Wait until you see the roses by the back gate.');
+      act(() => jest.advanceTimersByTime(2500));
+      expect(caption).toHaveTextContent('We will bring more photographs on Sunday.');
+
+      // Pausing returns to the start; playing to the end does too.
+      fireEvent.click(screen.getByRole('button', { name: 'Pause video message from Maria' }));
+      expect(caption).toHaveTextContent('Hi Mum');
+      fireEvent.click(screen.getByRole('button', { name: 'Play video message from Maria' }));
+      act(() => jest.advanceTimersByTime(7500));
+      expect(screen.getByRole('button', { name: 'Play video message from Maria' })).toBeInTheDocument();
+    } finally {
+      jest.useRealTimers();
+    }
+  });
+
+  it('says on the video when captions are switched off', () => {
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify({ captionsEnabled: false }));
+    renderThread('c3');
+    expect(screen.getByText('Captions are off in your settings')).toBeInTheDocument();
+    expect(screen.queryByTestId('video-caption-m6')).not.toBeInTheDocument();
+  });
+
+  it('confirms a video call requested from the Contacts header on arrival', () => {
+    render(
+      <MemoryRouter initialEntries={[{ pathname: '/app/contacts/c1', state: { requestCall: true } }]}>
+        <AuthProvider>
+          <SettingsProvider>
+            <MessagesProvider>
+              <Routes>
+                <Route path={route} element={<MessageThread />} />
+              </Routes>
+            </MessagesProvider>
+          </SettingsProvider>
+        </AuthProvider>
+      </MemoryRouter>,
+    );
+    expect(screen.getByText('Captioned video call requested')).toBeInTheDocument();
+  });
+
+  it('keeps the contact list beside the conversation on a desktop', async () => {
+    (window.matchMedia as jest.Mock).mockImplementation((query: string) => ({
+      matches: query === '(min-width: 1024px)',
+      media: query,
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+    }));
+    try {
+      renderThread('c3');
+      expect(screen.getByRole('heading', { level: 1, name: 'Messages' })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { level: 2, name: 'Maria' })).toBeInTheDocument();
+      expect(screen.getByTestId('contact-c3')).toHaveAttribute('aria-current', 'true');
+      expect(screen.getByRole('list', { name: 'Your contacts' })).toBeInTheDocument();
+    } finally {
+      (window.matchMedia as jest.Mock).mockImplementation((query: string) => ({
+        matches: false,
+        media: query,
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+      }));
+    }
   });
 });

@@ -39,6 +39,14 @@ export const contactChannelLabels: Record<ContactChannel, string> = {
   textRelay: 'Text relay',
 };
 
+/**
+ * The avatar's colour. Each contact keeps one colour everywhere they appear,
+ * so a familiar face is found by colour as well as by name — never by colour
+ * alone, since the name and initials are always printed beside it. Every tone
+ * carries white initials at 4.5:1 or better.
+ */
+export type AvatarTone = 'calm' | 'teal' | 'green' | 'amber' | 'rose';
+
 /** A person or service on the Contacts screen. */
 export interface Contact {
   id: string;
@@ -64,6 +72,8 @@ export interface Contact {
    * one is not supplied.
    */
   avatarInitials?: string;
+  /** Avatar colour; falls back to the brand blue. */
+  avatarTone?: AvatarTone;
   /** The contact to reach first. Rendered as a "Primary" pill on the card. */
   isPrimary?: boolean;
   /** An emergency or urgent-care service rather than a person. */

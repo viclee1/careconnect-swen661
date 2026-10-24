@@ -57,27 +57,23 @@ export default function VibrationPatternRow({
   }
 
   return (
-    <div className="px-2 py-3 sm:p-4">
+    <li>
       <button
         type="button"
         data-testid={`pattern-${pattern.id}`}
         disabled={!enabled}
         aria-describedby={hintId}
         onClick={play}
-        className="w-full flex items-center gap-3 sm:gap-4 text-left rounded-lg border-2 border-neutral-300 bg-white hover:bg-calm-50 px-4 py-3 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-white"
+        className="w-full flex items-center gap-3 text-left rounded-xl border-2 border-neutral-300 bg-white hover:bg-calm-50 px-4 py-3 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-white"
       >
         <span className="flex-1 min-w-0 flex flex-col">
           <span className="font-semibold text-neutral-800">{pattern.alertType}</span>{' '}
           <span className="text-sm text-neutral-600">{pattern.rhythmName}</span>
-          {/* Phones: the rhythm's shape sits under its name, so the three
-              never compete for one narrow line. */}
-          <span className="sm:hidden font-mono text-lg text-neutral-700 whitespace-pre" aria-hidden="true">
-            {pattern.glyph}
+          {/* Drawn bolder than the shared glyph's dots and dashes, which are
+              too faint to read at a glance on screen. */}
+          <span className="font-mono text-base text-calm-700 whitespace-pre leading-tight mt-1" aria-hidden="true">
+            {pattern.glyph.replace(/·/g, '●').replace(/—/g, '▬')}
           </span>
-        </span>
-
-        <span className="hidden sm:inline font-mono text-lg text-neutral-700 whitespace-pre" aria-hidden="true">
-          {pattern.glyph}
         </span>
 
         {/* The lamp is the visual stand-in for the buzz. Hidden from assistive
@@ -92,7 +88,10 @@ export default function VibrationPatternRow({
           }`}
         />
 
-        <Play className="w-6 h-6 text-calm-600 flex-shrink-0" aria-hidden="true" />
+        <span className="inline-flex items-center gap-1.5 rounded-lg bg-calm-600 px-3 py-1.5 text-sm font-semibold text-white flex-shrink-0">
+          <Play className="w-4 h-4" aria-hidden="true" />
+          Play
+        </span>
       </button>
 
       <span id={hintId} className="sr-only">
@@ -103,6 +102,6 @@ export default function VibrationPatternRow({
       <span role="status" className="sr-only">
         {playing ? `Playing the ${pattern.rhythmName} rhythm.` : ''}
       </span>
-    </div>
+    </li>
   );
 }

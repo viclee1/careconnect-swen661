@@ -24,16 +24,22 @@ export default function NotifyButton({
       type="button"
       data-testid="notify-button"
       onClick={onActivate}
-      className="w-full flex items-center gap-4 text-left rounded-xl border-2 border-warm-300 bg-warm-50 hover:bg-warm-100 px-4 py-3 min-h-[3.5rem] transition-colors"
+      className="w-full flex items-center gap-3 text-left rounded-xl border-2 border-warm-400 bg-warm-50 hover:bg-warm-100 px-4 py-3 min-h-[3.5rem] transition-colors"
     >
-      <BellRing className="w-7 h-7 flex-shrink-0 text-warm-800" aria-hidden="true" />
-      <span className="flex flex-col">
-        <span className="font-bold text-neutral-800">Alert {contactName} you want to talk</span>{' '}
-        <span className="text-sm text-neutral-700">
+      <BellRing className="w-6 h-6 flex-shrink-0 text-warm-800" aria-hidden="true" />
+      <span className="flex-1 min-w-0 flex flex-col">
+        <span className="font-semibold text-warm-900">Alert {contactName} you want to talk</span>{' '}
+        <span className="text-sm text-warm-800">
           {vibrationEnabled
             ? 'Sends a visual flash and vibration — no sound'
             : 'Sends a visual flash — vibration is off in your settings'}
         </span>
+      </span>
+      <span
+        className="flex-shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-lg bg-warm-700 text-white"
+        aria-hidden="true"
+      >
+        <BellRing className="w-5 h-5" />
       </span>
     </button>
   );

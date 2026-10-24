@@ -72,6 +72,20 @@ test.describe('Accessibility settings', () => {
   });
 });
 
+test.describe('Screen flash cues', () => {
+  test('each alert type previews its own flash, named in words', async ({ page }) => {
+    await signInAsPatient(page, '/app/settings');
+    await page.getByRole('button', { name: /Appointment Teal flash/ }).click();
+    const flash = page.getByTestId('visual-flash');
+    await expect(flash).toContainText('Appointment alert');
+    await expect(flash).toHaveAttribute('data-tone', 'calm');
+    await expect(flash).toBeHidden({ timeout: 4000 });
+
+    await page.getByRole('switch', { name: 'Screen flash alerts' }).click();
+    await expect(page.getByRole('button', { name: /Appointment Teal flash/ })).toBeDisabled();
+  });
+});
+
 test.describe('Responsive navigation', () => {
   test('Settings is reachable at every width', async ({ page, isMobile }) => {
     await signInAsPatient(page, '/app');

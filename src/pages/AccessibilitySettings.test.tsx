@@ -18,7 +18,7 @@ beforeEach(() => localStorage.clear());
 describe('AccessibilitySettings', () => {
   it('groups the preferences under labelled sections', () => {
     renderSettings();
-    for (const name of ['Visual Alerts', 'Captions', 'Audio', 'Vibration', 'Account']) {
+    for (const name of ['Visual Alerts', 'Captions', 'Audio', 'Screen Flash & Desktop Alerts', 'Vibration', 'Account']) {
       expect(screen.getByRole('region', { name })).toBeInTheDocument();
     }
   });
@@ -100,7 +100,7 @@ describe('AccessibilitySettings', () => {
     const user = userEvent.setup();
     renderSettings();
     await user.click(screen.getByRole('switch', { name: 'Vibration alerts' }));
-    expect(screen.getByRole('button', { name: /Appointment/ })).toBeDisabled();
+    expect(screen.getByRole('button', { name: /Appointment Long-short-long/ })).toBeDisabled();
     expect(screen.getByText('Turn vibration on above to play these.')).toBeInTheDocument();
   });
 
@@ -158,5 +158,92 @@ describe('AccessibilitySettings', () => {
     localStorage.setItem(SETTINGS_KEY, '{not json');
     renderSettings();
     expect(screen.getByRole('switch', { name: 'Show captions' })).toBeChecked();
+  });
+
+  it('draws the locked banner setting as "Always on" while keeping its switch', () => {
+    renderSettings();
+    expect(screen.getByText('Always on')).toBeInTheDocument();
+    expect(screen.getByRole('switch', { name: 'Visual alert banners' })).toBeChecked();
+  });
+
+  it('previews each alert type\'s screen flash in its own colour, in words too', () => {
+    jest.useFakeTimers();
+    try {
+      renderSettings();
+      fireEvent.click(screen.getByRole('button', { name: /Missed \/ Escalated Rapid red double-flash/ }));
+      const flash = screen.getByTestId('visual-flash');
+      expect(flash).toHaveAttribute('data-tone', 'alert');
+      expect(flash).toHaveTextContent('Missed / Escalated alert');
+      expect(flash).toHaveStyle({ animationIterationCount: '2' });
+      act(() => jest.advanceTimersByTime(1700));
+      expect(screen.queryByTestId('visual-flash')).not.toBeInTheDocument();
+    } finally {
+      jest.useRealTimers();
+    }
+  });
+
+  it('disables the flash previews when screen flashes are off', async () => {
+    const user = userEvent.setup();
+    renderSettings();
+    await user.click(screen.getByRole('switch', { name: 'Screen flash alerts' }));
+    expect(screen.getByRole('button', { name: /Medication Amber flash/ })).toBeDisabled();
+    expect(screen.getByText('Turn screen flash alerts on above to preview these.')).toBeInTheDocument();
+    expect(stored().screenFlashEnabled).toBe(false);
+  });
+
+  it('turns connected devices on and off', async () => {
+    const user = userEvent.setup();
+    renderSettings();
+    const devices = screen.getByRole('switch', { name: 'Alert my connected devices' });
+    expect(devices).not.toBeChecked();
+    await user.click(devices);
+    expect(devices).toBeChecked();
+    expect(stored().connectedDevices).toBe(true);
+  });
+
+  describe('desktop notifications', () => {
+    afterEach(() => {
+      delete (window as { Notification?: unknown }).Notification;
+    });
+
+    function mockNotification(permission: NotificationPermission, answer: NotificationPermission) {
+      const shown: string[] = [];
+      const Fake = jest.fn((title: string) => {
+        shown.push(title);
+      }) as unknown as typeof Notification & { permission: NotificationPermission };
+      Object.assign(Fake, { permission, requestPermission: jest.fn().mockResolvedValue(answer) });
+      Object.defineProperty(window, 'Notification', { configurable: true, writable: true, value: Fake });
+      return shown;
+    }
+
+    it('asks the browser, then shows a notification once allowed', async () => {
+      const user = userEvent.setup();
+      const shown = mockNotification('default', 'granted');
+      renderSettings();
+      const toggle = screen.getByRole('switch', { name: 'Desktop notifications' });
+      await user.click(toggle);
+      expect(await screen.findByRole('switch', { name: 'Desktop notifications', checked: true })).toBeInTheDocument();
+      expect(shown).toEqual(['CareConnect notifications are on']);
+
+      await user.click(toggle);
+      expect(toggle).not.toBeChecked();
+      expect(stored().desktopNotifications).toBe(false);
+    });
+
+    it('stays off and explains when the browser blocks notifications', async () => {
+      const user = userEvent.setup();
+      mockNotification('default', 'denied');
+      renderSettings();
+      await user.click(screen.getByRole('switch', { name: 'Desktop notifications' }));
+      expect(await screen.findByText(/Your browser blocked notifications/)).toBeInTheDocument();
+      expect(screen.getByRole('switch', { name: 'Desktop notifications' })).not.toBeChecked();
+    });
+
+    it('explains a browser with no notifications at all', async () => {
+      const user = userEvent.setup();
+      renderSettings();
+      await user.click(screen.getByRole('switch', { name: 'Desktop notifications' }));
+      expect(await screen.findByText(/This browser cannot show notifications/)).toBeInTheDocument();
+    });
   });
 });

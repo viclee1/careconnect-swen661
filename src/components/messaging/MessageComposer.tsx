@@ -2,6 +2,7 @@ import { forwardRef, useId, useImperativeHandle, useRef, useState } from 'react'
 import type { FormEvent, KeyboardEvent } from 'react';
 import { Send } from 'lucide-react';
 
+import QuickReplies from './QuickReplies';
 import { canSend, charactersRemaining, maxMessageLength, validateMessage } from '../../utils/validators';
 
 export interface ComposerHandle {
@@ -17,7 +18,8 @@ export interface ComposerHandle {
  * with aria-describedby and marked aria-invalid.
  *
  * Enter starts a new line, as it does in a letter; Ctrl+Enter (⌘+Enter on a
- * Mac) sends, and so does the Send button.
+ * Mac) sends, and so does the Send button. The quick-replies menu on the left
+ * drops a ready-made reply into the field.
  */
 const MessageComposer = forwardRef<
   ComposerHandle,
@@ -58,38 +60,52 @@ const MessageComposer = forwardRef<
 
   const remaining = charactersRemaining(draft);
 
+  function insertReply(reply: string) {
+    setDraft((current) => (current.trim().length > 0 ? `${current.trimEnd()} ${reply}` : reply));
+    setShowError(false);
+    inputRef.current?.focus();
+  }
+
   return (
     <form
       onSubmit={submit}
       noValidate
       aria-label={`Message ${contactName}`}
-      className="border-t-2 border-neutral-200 pt-4 space-y-2"
+      className="border-t-2 border-neutral-200 bg-white rounded-b-2xl px-3 pt-3 pb-2 md:px-4 space-y-1.5"
     >
-      <label htmlFor={fieldId} className="block text-base font-semibold text-neutral-800">
+      {/* Named for screen readers; the placeholder says the same thing on screen. */}
+      <label htmlFor={fieldId} className="sr-only">
         Message {contactName}
       </label>
-      <div className="flex items-end gap-3">
+      <div className="flex items-end gap-2 md:gap-3">
+        <QuickReplies onChoose={insertReply} />
         <textarea
           ref={inputRef}
           id={fieldId}
           data-testid="composer-input"
-          rows={2}
+          rows={1}
           value={draft}
           maxLength={maxMessageLength + 100}
-          placeholder={`Write to ${contactName}…`}
+          placeholder={`Message ${contactName}…`}
           aria-describedby={[error ? errorId : '', hintId].filter(Boolean).join(' ')}
           aria-invalid={error ? true : undefined}
           onChange={(event) => setDraft(event.target.value)}
           onKeyDown={onKeyDown}
           className={[
-            'flex-1 min-w-0 rounded-lg border-2 bg-white px-4 py-3 text-base text-neutral-800',
+            // Two lines tall on phones, where "Message Maria…" wraps at the
+            // base 18px size rather than being cut off; one line from 768px.
+            'flex-1 min-w-0 min-h-[4.75rem] md:min-h-touch rounded-xl border-2 bg-white px-3 md:px-4 py-2.5 text-base text-neutral-800',
             'placeholder:text-neutral-500 resize-y focus:outline-none',
             error ? 'border-alert-500' : 'border-neutral-400 hover:border-neutral-500 focus:border-calm-600',
           ].join(' ')}
         />
-        <button type="submit" data-testid="composer-send" className="btn btn-primary flex-shrink-0">
+        <button
+          type="submit"
+          data-testid="composer-send"
+          className="inline-flex items-center justify-center gap-2 min-h-touch min-w-touch rounded-xl bg-calm-600 px-0 md:px-4 font-semibold text-white hover:bg-calm-700 flex-shrink-0"
+        >
           <Send className="w-5 h-5" aria-hidden="true" />
-          Send
+          <span className="sr-only md:not-sr-only">Send</span>
         </button>
       </div>
 
@@ -101,8 +117,8 @@ const MessageComposer = forwardRef<
 
       <p id={hintId} className="flex flex-wrap justify-between gap-x-4 text-sm text-neutral-600">
         <span>
-          Press <kbd className="font-mono font-semibold">Ctrl</kbd>+
-          <kbd className="font-mono font-semibold">Enter</kbd> to send. Enter starts a new line.
+          <kbd className="font-mono font-semibold">Ctrl</kbd>+
+          <kbd className="font-mono font-semibold">Enter</kbd> sends. Enter starts a new line.
         </span>
         {/* Polite: the count changes on every keystroke, so an assertive region
             here would talk over the user's own typing. */}

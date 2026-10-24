@@ -61,6 +61,19 @@ export interface AccessibilitySettings {
   audioBalance: number;
   /** Vibrate for every notification. */
   vibrationEnabled: boolean;
+  /**
+   * Flash the whole screen, in the alert type's colour, for every
+   * notification — the visual stand-in for a ringtone.
+   */
+  screenFlashEnabled: boolean;
+  /**
+   * Show a system notification even when CareConnect is in the background.
+   * Off until the browser has granted permission, because a switch that is on
+   * but cannot deliver anything would be a promise the page cannot keep.
+   */
+  desktopNotifications: boolean;
+  /** Also flash a smart light and notify a paired phone and watch. */
+  connectedDevices: boolean;
 }
 
 export const volumeRange = { min: 0, max: 1 } as const;
@@ -76,6 +89,9 @@ export const defaultSettings: AccessibilitySettings = {
   alertVolume: 0.7,
   audioBalance: 0,
   vibrationEnabled: true,
+  screenFlashEnabled: true,
+  desktopNotifications: false,
+  connectedDevices: false,
 };
 
 export function clampVolume(value: number): number {
@@ -158,6 +174,9 @@ export function settingsFromStored(raw: Record<string, unknown>): AccessibilityS
     alertVolume: clampVolume(num('alertVolume', defaultSettings.alertVolume)),
     audioBalance: clampBalance(num('audioBalance', defaultSettings.audioBalance)),
     vibrationEnabled: bool('vibrationEnabled', defaultSettings.vibrationEnabled),
+    screenFlashEnabled: bool('screenFlashEnabled', defaultSettings.screenFlashEnabled),
+    desktopNotifications: bool('desktopNotifications', defaultSettings.desktopNotifications),
+    connectedDevices: bool('connectedDevices', defaultSettings.connectedDevices),
   };
 }
 
@@ -171,6 +190,9 @@ export function settingsEqual(a: AccessibilitySettings, b: AccessibilitySettings
     a.captionColor === b.captionColor &&
     a.alertVolume === b.alertVolume &&
     a.audioBalance === b.audioBalance &&
-    a.vibrationEnabled === b.vibrationEnabled
+    a.vibrationEnabled === b.vibrationEnabled &&
+    a.screenFlashEnabled === b.screenFlashEnabled &&
+    a.desktopNotifications === b.desktopNotifications &&
+    a.connectedDevices === b.connectedDevices
   );
 }

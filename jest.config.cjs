@@ -32,6 +32,7 @@ module.exports = {
     'src/context/settings.ts',
     'src/hooks/useLocalStorageState.ts',
     'src/hooks/useOnlineStatus.ts',
+    'src/hooks/useMediaQuery.ts',
     'src/models/**/*.ts',
     'src/utils/**/*.ts',
     '!src/**/__tests__/**',

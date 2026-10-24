@@ -1,7 +1,12 @@
 import { useId } from 'react';
+import type { LucideIcon } from 'lucide-react';
+
+import SettingIcon from './SettingIcon';
+import type { SettingTone } from './settingTones';
 
 /**
- * A labelled slider with its value written out beside the title.
+ * A labelled slider with its value written out under the middle of the track,
+ * between the two ends' labels, as the design draws it.
  *
  * A native <input type="range">, so it arrives with arrow keys, Home and End,
  * Page Up and Page Down and the platform's own value announcement. The value is
@@ -9,6 +14,8 @@ import { useId } from 'react';
  * position alone.
  */
 export default function SettingsSliderRow({
+  Icon,
+  tone,
   title,
   valueLabel,
   description,
@@ -22,6 +29,8 @@ export default function SettingsSliderRow({
   valueText,
   testId,
 }: {
+  Icon?: LucideIcon;
+  tone?: SettingTone;
   title: string;
   valueLabel: string;
   description: string;
@@ -40,35 +49,34 @@ export default function SettingsSliderRow({
   const descriptionId = useId();
 
   return (
-    <div className="p-4 space-y-2">
-      <div className="flex items-center justify-between gap-4">
+    <div className="flex items-start gap-3 md:gap-4 py-3">
+      {Icon && tone && <SettingIcon Icon={Icon} tone={tone} />}
+      <div className="flex-1 min-w-0">
         <label htmlFor={inputId} className="font-semibold text-neutral-800">
           {title}
         </label>
-        <span className="font-semibold text-calm-700 tabular-nums" aria-hidden="true">
-          {valueLabel}
-        </span>
+        <input
+          id={inputId}
+          type="range"
+          data-testid={testId}
+          value={value}
+          min={min}
+          max={max}
+          step={step}
+          aria-describedby={descriptionId}
+          aria-valuetext={valueText}
+          onChange={(event) => onValueChange(Number(event.target.value))}
+          className="block w-full min-h-[2.75rem] accent-calm-600 cursor-pointer"
+        />
+        <div className="grid grid-cols-3 text-sm text-neutral-600" aria-hidden="true">
+          <span>{minLabel}</span>
+          <span className="text-center font-bold text-calm-700 tabular-nums">{valueLabel}</span>
+          <span className="text-right">{maxLabel}</span>
+        </div>
+        <p id={descriptionId} className="text-sm text-neutral-600 mt-1">
+          {description}
+        </p>
       </div>
-      <input
-        id={inputId}
-        type="range"
-        data-testid={testId}
-        value={value}
-        min={min}
-        max={max}
-        step={step}
-        aria-describedby={descriptionId}
-        aria-valuetext={valueText}
-        onChange={(event) => onValueChange(Number(event.target.value))}
-        className="w-full min-h-[2.75rem] accent-calm-600 cursor-pointer"
-      />
-      <div className="flex justify-between text-sm text-neutral-600" aria-hidden="true">
-        <span>{minLabel}</span>
-        <span>{maxLabel}</span>
-      </div>
-      <p id={descriptionId} className="text-sm text-neutral-600">
-        {description}
-      </p>
     </div>
   );
 }

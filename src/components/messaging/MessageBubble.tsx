@@ -1,5 +1,6 @@
 import { AlertTriangle, Captions, Check, CheckCheck, Clock, Voicemail, type LucideIcon } from 'lucide-react';
 
+import CaptionedVideo from './CaptionedVideo';
 import {
   alternativeHeading,
   deliveryStatusLabels,
@@ -25,13 +26,13 @@ const statusIcons: Record<DeliveryStatus, LucideIcon> = {
  * Three of the assigned hearing constraints land here:
  * - a voicemail renders its **transcript**, so audio always has a text
  *   alternative;
- * - a video message states in words whether captions are attached;
+ * - a video message is drawn with its caption track and states in words
+ *   whether captions are attached, with the words printed in full beneath;
  * - delivery state is written out ("Delivered") next to its tick, never left
  *   to an icon or colour alone.
  *
- * Every fact is real text in the document, so a screen reader's browse mode
- * can walk it line by line. Only the icons are hidden, each sitting beside the
- * word it stands for.
+ * Who wrote a message is shown by which side it sits on and its colour, and
+ * written out for screen readers, so position is never the only cue.
  */
 export default function MessageBubble({
   message,
@@ -47,17 +48,20 @@ export default function MessageBubble({
   const mine = isMine(message);
   const status = message.status ?? 'sent';
   const StatusIcon = statusIcons[status];
+  const video = kindOf(message) === 'videoMessage';
 
   return (
     <li>
       {showDayLabel && (
-        <h2 className="text-center text-sm font-semibold text-neutral-600 uppercase tracking-wide my-4">
-          {dayLabel(message.sentAt, now)}
+        <h2 className="flex justify-center my-4">
+          <span className="rounded-pill bg-neutral-200 px-3 py-0.5 text-sm font-semibold text-neutral-700">
+            {dayLabel(message.sentAt, now)}
+          </span>
         </h2>
       )}
 
       {isSystem(message) ? (
-        <div className="rounded-xl border-2 border-warning-300 bg-warning-50 p-4 my-2">
+        <div className="rounded-xl border-2 border-warning-300 bg-warning-50 p-4 my-3">
           <p className="flex items-center gap-2 font-bold text-warning-900">
             <AlertTriangle className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
             CareConnect alert · {clock(message.sentAt)}
@@ -65,38 +69,37 @@ export default function MessageBubble({
           <p className="text-warning-900 mt-1">{message.body}</p>
         </div>
       ) : (
-        <div className={`flex my-2 ${mine ? 'justify-end' : 'justify-start'}`}>
+        <div className={`flex flex-col my-3 ${mine ? 'items-end' : 'items-start'}`}>
           <div
             className={[
-              'max-w-[85%] md:max-w-[70%] rounded-2xl px-4 py-3 border-2',
+              'max-w-[85%] md:max-w-[70%] lg:max-w-[32rem] overflow-hidden rounded-2xl',
               mine
-                ? 'bg-calm-600 border-calm-600 text-white rounded-br-sm'
-                : 'bg-white border-neutral-200 text-neutral-800 rounded-bl-sm',
+                ? 'bg-calm-600 text-white rounded-br-sm'
+                : 'bg-white text-neutral-800 rounded-bl-sm shadow-card',
+              video ? 'w-full' : '',
             ].join(' ')}
           >
-            <p className={`text-sm font-semibold ${mine ? 'text-calm-50' : 'text-neutral-600'}`}>
-              {mine ? 'You' : contactName}
-            </p>
+            {video && <CaptionedVideo message={message} contactName={contactName} />}
 
-            {isTextAlternative(message) && <MediaHeader message={message} />}
+            <div className="px-4 py-3">
+              <p className="sr-only">{mine ? 'You' : contactName}:</p>
 
-            <p className="whitespace-pre-wrap break-words">{message.body}</p>
+              {isTextAlternative(message) && <MediaHeader message={message} />}
 
-            <p
-              className={`flex items-center justify-end gap-1 text-sm mt-1 ${
-                mine ? 'text-calm-50' : 'text-neutral-600'
-              }`}
-            >
-              <span>{clock(message.sentAt)}</span>
-              {mine && (
-                <>
-                  <span aria-hidden="true">·</span>
-                  <StatusIcon className="w-4 h-4" aria-hidden="true" />
-                  <span>{deliveryStatusLabels[status]}</span>
-                </>
-              )}
-            </p>
+              <p className="whitespace-pre-wrap break-words">{message.body}</p>
+            </div>
           </div>
+
+          <p className="flex items-center gap-1 text-sm text-neutral-600 mt-1 px-1">
+            <span>{clock(message.sentAt)}</span>
+            {mine && (
+              <>
+                <span aria-hidden="true">·</span>
+                <StatusIcon className="w-4 h-4" aria-hidden="true" />
+                <span>{deliveryStatusLabels[status]}</span>
+              </>
+            )}
+          </p>
         </div>
       )}
     </li>
@@ -113,7 +116,7 @@ function MediaHeader({ message }: { message: Message }) {
   const text = message.mediaLabel ? `${heading} · ${message.mediaLabel}` : heading;
 
   return (
-    <p className="flex items-center gap-2 text-sm font-bold text-calm-800 bg-calm-50 rounded-md px-2 py-1 my-1">
+    <p className="flex items-center gap-2 text-sm font-bold text-calm-800 bg-calm-50 rounded-md px-2 py-1 mb-2">
       <Icon className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
       {text}
     </p>

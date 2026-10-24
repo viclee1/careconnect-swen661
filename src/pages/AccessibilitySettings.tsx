@@ -1,7 +1,20 @@
-import { Captions, Eye, LogOut, User, Vibrate, Volume2 } from 'lucide-react';
+import { useState } from 'react';
+import {
+  Captions,
+  Eye,
+  LogOut,
+  Monitor,
+  Siren,
+  Smartphone,
+  Vibrate,
+  Volume2,
+  Zap,
+} from 'lucide-react';
 
 import Banner from '../components/Banner';
 import Button from '../components/Button';
+import VisualFlash from '../components/messaging/VisualFlash';
+import FlashCueRow from '../components/settings/FlashCueRow';
 import SegmentedChoice from '../components/settings/SegmentedChoice';
 import SettingsSection from '../components/settings/SettingsSection';
 import SettingsSliderRow from '../components/settings/SettingsSliderRow';
@@ -22,7 +35,9 @@ import {
   type CaptionColor,
   type CaptionSize,
 } from '../models/accessibilitySettings';
+import { flashCueMessage, flashCues, type FlashCue } from '../models/flashCue';
 import { vibrationPatterns } from '../models/vibrationPattern';
+import { enableDesktopNotifications, notificationProblem } from '../utils/notifications';
 
 /** Caption panel backing; white and yellow text both exceed 8:1 on it. */
 const CAPTION_PANEL = '#0F5272';
@@ -33,23 +48,40 @@ const CAPTION_PANEL = '#0F5272';
  * Every preference serves one of the team's assigned hearing-impairment
  * constraints, and the page will not let a user configure their way into an
  * alert that reaches them by sound alone: the visual banner is fixed on, and
- * only the layers on top of it can change. Preferences are saved in this
- * browser and work offline.
+ * only the layers on top of it — screen flash, vibration, sound — can change.
+ * Preferences are saved in this browser and work offline.
  *
- * The sections, their order and their wording are the ones the desktop,
- * React Native and Flutter clients share, so the page reads the same on
- * every device.
+ * The sections, their order and their wording follow the Week 11 web design,
+ * which matches the desktop, React Native and Flutter clients.
  */
 export default function AccessibilitySettings() {
   const { settings, update } = useSettings();
   const { user, signOut } = useAuth();
+  const [flash, setFlash] = useState<{ cue: FlashCue; trigger: number } | null>(null);
+  const [notificationNote, setNotificationNote] = useState<string | null>(null);
+
   const compliant = meetsHearingConstraints(settings);
   const captionsOn = settings.captionsEnabled;
   const sizeLabel = captionSizes[settings.captionSize].label.toLowerCase();
   const colourLabel = captionColors[settings.captionColor].label.toLowerCase();
 
+  function previewFlash(cue: FlashCue) {
+    setFlash((current) => ({ cue, trigger: (current?.trigger ?? 0) + 1 }));
+  }
+
+  async function changeDesktopNotifications(next: boolean) {
+    setNotificationNote(null);
+    if (!next) {
+      update({ desktopNotifications: false });
+      return;
+    }
+    const outcome = await enableDesktopNotifications();
+    update({ desktopNotifications: outcome === 'granted' });
+    setNotificationNote(notificationProblem(outcome));
+  }
+
   return (
-    <div className="space-y-8 page-container max-w-3xl">
+    <div className="space-y-5 page-container max-w-4xl">
       <div>
         <h1 className="text-2xl font-bold text-neutral-800">Accessibility Settings</h1>
         <p className="text-neutral-600 mt-1">Adjust how CareConnect alerts and informs you</p>
@@ -63,31 +95,33 @@ export default function AccessibilitySettings() {
         {conformanceMessage(settings)}
       </Banner>
 
-      <SettingsSection
-        Icon={Eye}
-        title="Visual Alerts"
-        description="What appears on screen when CareConnect needs you."
-      >
+      <SettingsSection title="Visual Alerts">
         <SettingsSwitchRow
+          Icon={Eye}
+          tone="warm"
           testId="switch-banners"
           title="Visual alert banners"
           description="Flashing banners for all notifications."
           value={settings.visualAlertBanners}
           onValueChange={() => undefined}
           locked
-          lockedReason="Always on. Without a banner an alert could reach you by sound alone, which this application will not do."
+          lockedReason="Always on — an alert could reach you by sound alone without it, which this application will not do."
         />
         <SettingsSwitchRow
+          Icon={Siren}
+          tone="alert"
           testId="switch-escalation"
           title="Smart alert escalation"
-          description="Missed alerts are escalated automatically, so an alert you did not see is passed to your care team."
+          description="Missed alerts are escalated automatically to your care team."
           value={settings.smartEscalation}
           onValueChange={(next) => update({ smartEscalation: next })}
         />
       </SettingsSection>
 
-      <SettingsSection Icon={Captions} title="Captions" description="Text for anything spoken aloud.">
+      <SettingsSection title="Captions">
         <SettingsSwitchRow
+          Icon={Captions}
+          tone="calm"
           testId="switch-captions"
           title="Show captions"
           description="Text for all audio and video content."
@@ -95,7 +129,7 @@ export default function AccessibilitySettings() {
           onValueChange={(next) => update({ captionsEnabled: next })}
         />
 
-        <div className="p-4 space-y-4">
+        <div className="py-3 space-y-4">
           <SegmentedChoice<CaptionSize>
             name="caption-size"
             legend="Caption size"
@@ -118,17 +152,12 @@ export default function AccessibilitySettings() {
               label: captionColors[key].label,
             }))}
           />
-          <p className="text-sm text-neutral-600">
-            {captionsOn
-              ? `Currently ${sizeLabel}. Both colours clear WCAG 2.2 AA against the caption panel.`
-              : 'Captions are off, so the size cannot be changed yet.'}
-          </p>
 
           <figure className="m-0">
             <figcaption className="text-sm font-semibold text-neutral-700 mb-1">
               Caption preview{captionsOn ? ` — ${sizeLabel}, ${colourLabel} text` : ''}
             </figcaption>
-            <div className="rounded-lg px-4 py-5" style={{ backgroundColor: CAPTION_PANEL }}>
+            <div className="rounded-xl px-4 py-4" style={{ backgroundColor: CAPTION_PANEL }}>
               <p
                 data-testid="caption-preview"
                 className="font-semibold leading-snug m-0"
@@ -143,19 +172,22 @@ export default function AccessibilitySettings() {
               </p>
             </div>
           </figure>
+          <p className="text-sm text-neutral-600">
+            {captionsOn
+              ? 'Both colours clear WCAG 2.2 AA against the caption panel.'
+              : 'Captions are off, so the size cannot be changed yet.'}
+          </p>
         </div>
       </SettingsSection>
 
-      <SettingsSection
-        Icon={Volume2}
-        title="Audio"
-        description="Sound is never the only way CareConnect tells you something. These controls decide how much of it there is."
-      >
+      <SettingsSection title="Audio">
         <SettingsSliderRow
+          Icon={Volume2}
+          tone="success"
           testId="slider-volume"
           title="Alert volume"
           valueLabel={`${volumePercent(settings)}%`}
-          description="Use the pause button on any alert banner to stop the sound instantly. You can also pause audio during video calls from the in-call controls."
+          description="Sound is never the only way CareConnect tells you something. Use the pause button on any alert banner to stop the sound instantly, or pause audio during a video call from the in-call controls."
           value={settings.alertVolume}
           min={volumeRange.min}
           max={volumeRange.max}
@@ -169,7 +201,7 @@ export default function AccessibilitySettings() {
           testId="slider-balance"
           title="Audio balance"
           valueLabel={balanceLabel(settings)}
-          description="Adjust sound between left and right. Useful with hearing aids."
+          description="Adjust sound between left and right — useful with hearing aids."
           value={settings.audioBalance}
           min={balanceRange.min}
           max={balanceRange.max}
@@ -181,37 +213,86 @@ export default function AccessibilitySettings() {
         />
       </SettingsSection>
 
-      <SettingsSection
-        Icon={Vibrate}
-        title="Vibration"
-        description="Each alert type has its own rhythm, so you can tell them apart without looking at your phone. Play one to feel it on a phone, or watch it pulse on a computer."
-      >
+      <SettingsSection title="Screen Flash & Desktop Alerts">
         <SettingsSwitchRow
+          Icon={Zap}
+          tone="warm"
+          testId="switch-screen-flash"
+          title="Screen flash alerts"
+          description="Flash the whole screen for every notification."
+          value={settings.screenFlashEnabled}
+          onValueChange={(next) => update({ screenFlashEnabled: next })}
+        />
+        <div className="py-3 space-y-2">
+          <h3 className="text-sm font-semibold text-neutral-700">Flash cues — choose one to preview it</h3>
+          <ul className="list-none p-0 m-0 space-y-2" aria-label="Flash cues">
+            {flashCues.map((cue) => (
+              <FlashCueRow
+                key={cue.id}
+                cue={cue}
+                enabled={settings.screenFlashEnabled}
+                onPreview={previewFlash}
+              />
+            ))}
+          </ul>
+          <p className="text-sm text-neutral-600">
+            {settings.screenFlashEnabled
+              ? 'Each alert type flashes a different colour so you can tell them apart at a glance — no sound needed. The alert’s name is always shown too.'
+              : 'Turn screen flash alerts on above to preview these.'}
+          </p>
+        </div>
+        <SettingsSwitchRow
+          Icon={Monitor}
+          tone="calm"
+          testId="switch-desktop-notifications"
+          title="Desktop notifications"
+          description={
+            notificationNote ?? 'Show a notification even when CareConnect is in the background.'
+          }
+          value={settings.desktopNotifications}
+          onValueChange={(next) => void changeDesktopNotifications(next)}
+        />
+        <SettingsSwitchRow
+          Icon={Smartphone}
+          tone="success"
+          testId="switch-connected-devices"
+          title="Alert my connected devices"
+          description="Also flash a smart light and notify your phone and watch."
+          value={settings.connectedDevices}
+          onValueChange={(next) => update({ connectedDevices: next })}
+        />
+      </SettingsSection>
+
+      <SettingsSection title="Vibration">
+        <SettingsSwitchRow
+          Icon={Vibrate}
+          tone="violet"
           testId="switch-vibration"
           title="Vibration alerts"
-          description="Vibrate for every notification."
+          description="Vibrate your phone for every notification."
           value={settings.vibrationEnabled}
           onValueChange={(next) => update({ vibrationEnabled: next })}
         />
-        <div className="px-4 pt-4">
-          <h3 className="text-base font-semibold text-neutral-800">Vibration patterns</h3>
+        <div className="py-3 space-y-2">
+          <h3 className="text-sm font-semibold text-neutral-700">Vibration patterns</h3>
           <p className="text-sm text-neutral-600">
             {settings.vibrationEnabled
-              ? 'Choose a rhythm to play it.'
+              ? 'Each alert has its own rhythm, so you can tell them apart with your phone in a pocket. Choose Play to feel it on a phone, or watch the lamp pulse on a computer.'
               : 'Turn vibration on above to play these.'}
           </p>
+          <ul className="list-none p-0 m-0 space-y-2" aria-label="Vibration patterns">
+            {vibrationPatterns.map((pattern) => (
+              <VibrationPatternRow key={pattern.id} pattern={pattern} enabled={settings.vibrationEnabled} />
+            ))}
+          </ul>
         </div>
-        {vibrationPatterns.map((pattern) => (
-          <VibrationPatternRow key={pattern.id} pattern={pattern} enabled={settings.vibrationEnabled} />
-        ))}
       </SettingsSection>
 
       <SettingsSection
-        Icon={User}
         title="Account"
         description={`${user?.name ?? 'Margaret Whitfield'} · Care Recipient`}
       >
-        <div className="p-4">
+        <div className="pt-3">
           {/* Danger variant: asks in a dialog first, as the header's sign-out
               does not — leaving by accident from a settings page is easy. */}
           <Button
@@ -227,6 +308,15 @@ export default function AccessibilitySettings() {
           </Button>
         </div>
       </SettingsSection>
+
+      {flash && (
+        <VisualFlash
+          trigger={flash.trigger}
+          tone={flash.cue.tone}
+          flashes={flash.cue.flashes}
+          message={flashCueMessage(flash.cue)}
+        />
+      )}
     </div>
   );
 }
