@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>13/13</span>
+                <span class='fraction'>15/15</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>13/13</span>
+                <span class='fraction'>15/15</span>
             </div>
         
             
@@ -184,9 +184,13 @@
 <a name='L119'></a><a href='#L119'>119</a>
 <a name='L120'></a><a href='#L120'>120</a>
 <a name='L121'></a><a href='#L121'>121</a>
-<a name='L122'></a><a href='#L122'>122</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<a name='L122'></a><a href='#L122'>122</a>
+<a name='L123'></a><a href='#L123'>123</a>
+<a name='L124'></a><a href='#L124'>124</a>
+<a name='L125'></a><a href='#L125'>125</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -196,9 +200,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -219,7 +223,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -230,11 +234,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">153x</span>
-<span class="cline-any cline-yes">153x</span>
-<span class="cline-any cline-yes">153x</span>
+<span class="cline-any cline-yes">193x</span>
+<span class="cline-any cline-yes">193x</span>
+<span class="cline-any cline-yes">193x</span>
+<span class="cline-any cline-yes">193x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">153x</span>
+<span class="cline-any cline-yes">193x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -294,11 +299,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">28x</span>
-<span class="cline-any cline-yes">28x</span>
-<span class="cline-any cline-yes">28x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-yes">34x</span>
+<span class="cline-any cline-yes">34x</span>
+<span class="cline-any cline-yes">34x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">34x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -307,6 +313,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { AlertTriangle, Captions, Check, CheckCheck, Clock, Voicemail, type LucideIcon } from 'lucide-react';
 &nbsp;
+import CaptionedVideo from './CaptionedVideo';
 import {
   alternativeHeading,
   deliveryStatusLabels,
@@ -332,13 +339,13 @@ const statusIcons: Record&lt;DeliveryStatus, LucideIcon&gt; = {
  * Three of the assigned hearing constraints land here:
  * - a voicemail renders its **transcript**, so audio always has a text
  *   alternative;
- * - a video message states in words whether captions are attached;
+ * - a video message is drawn with its caption track and states in words
+ *   whether captions are attached, with the words printed in full beneath;
  * - delivery state is written out ("Delivered") next to its tick, never left
  *   to an icon or colour alone.
  *
- * Every fact is real text in the document, so a screen reader's browse mode
- * can walk it line by line. Only the icons are hidden, each sitting beside the
- * word it stands for.
+ * Who wrote a message is shown by which side it sits on and its colour, and
+ * written out for screen readers, so position is never the only cue.
  */
 export default function MessageBubble({
   message,
@@ -354,17 +361,20 @@ export default function MessageBubble({
   const mine = isMine(message);
   const status = message.status ?? 'sent';
   const StatusIcon = statusIcons[status];
+  const video = kindOf(message) === 'videoMessage';
 &nbsp;
   return (
     &lt;li&gt;
       {showDayLabel &amp;&amp; (
-        &lt;h2 className="text-center text-sm font-semibold text-neutral-600 uppercase tracking-wide my-4"&gt;
-          {dayLabel(message.sentAt, now)}
+        &lt;h2 className="flex justify-center my-4"&gt;
+          &lt;span className="rounded-pill bg-neutral-200 px-3 py-0.5 text-sm font-semibold text-neutral-700"&gt;
+            {dayLabel(message.sentAt, now)}
+          &lt;/span&gt;
         &lt;/h2&gt;
       )}
 &nbsp;
       {isSystem(message) ? (
-        &lt;div className="rounded-xl border-2 border-warning-300 bg-warning-50 p-4 my-2"&gt;
+        &lt;div className="rounded-xl border-2 border-warning-300 bg-warning-50 p-4 my-3"&gt;
           &lt;p className="flex items-center gap-2 font-bold text-warning-900"&gt;
             &lt;AlertTriangle className="w-5 h-5 flex-shrink-0" aria-hidden="true" /&gt;
             CareConnect alert · {clock(message.sentAt)}
@@ -372,38 +382,37 @@ export default function MessageBubble({
           &lt;p className="text-warning-900 mt-1"&gt;{message.body}&lt;/p&gt;
         &lt;/div&gt;
       ) : (
-        &lt;div className={`flex my-2 ${mine ? 'justify-end' : 'justify-start'}`}&gt;
+        &lt;div className={`flex flex-col my-3 ${mine ? 'items-end' : 'items-start'}`}&gt;
           &lt;div
             className={[
-              'max-w-[85%] md:max-w-[70%] rounded-2xl px-4 py-3 border-2',
+              'max-w-[85%] md:max-w-[70%] lg:max-w-[32rem] overflow-hidden rounded-2xl',
               mine
-                ? 'bg-calm-600 border-calm-600 text-white rounded-br-sm'
-                : 'bg-white border-neutral-200 text-neutral-800 rounded-bl-sm',
+                ? 'bg-calm-600 text-white rounded-br-sm'
+                : 'bg-white text-neutral-800 rounded-bl-sm shadow-card',
+              video ? 'w-full' : '',
             ].join(' ')}
           &gt;
-            &lt;p className={`text-sm font-semibold ${mine ? 'text-calm-50' : 'text-neutral-600'}`}&gt;
-              {mine ? 'You' : contactName}
-            &lt;/p&gt;
+            {video &amp;&amp; &lt;CaptionedVideo message={message} contactName={contactName} /&gt;}
 &nbsp;
-            {isTextAlternative(message) &amp;&amp; &lt;MediaHeader message={message} /&gt;}
+            &lt;div className="px-4 py-3"&gt;
+              &lt;p className="sr-only"&gt;{mine ? 'You' : contactName}:&lt;/p&gt;
 &nbsp;
-            &lt;p className="whitespace-pre-wrap break-words"&gt;{message.body}&lt;/p&gt;
+              {isTextAlternative(message) &amp;&amp; &lt;MediaHeader message={message} /&gt;}
 &nbsp;
-            &lt;p
-              className={`flex items-center justify-end gap-1 text-sm mt-1 ${
-                mine ? 'text-calm-50' : 'text-neutral-600'
-              }`}
-            &gt;
-              &lt;span&gt;{clock(message.sentAt)}&lt;/span&gt;
-              {mine &amp;&amp; (
-                &lt;&gt;
-                  &lt;span aria-hidden="true"&gt;·&lt;/span&gt;
-                  &lt;StatusIcon className="w-4 h-4" aria-hidden="true" /&gt;
-                  &lt;span&gt;{deliveryStatusLabels[status]}&lt;/span&gt;
-                &lt;/&gt;
-              )}
-            &lt;/p&gt;
+              &lt;p className="whitespace-pre-wrap break-words"&gt;{message.body}&lt;/p&gt;
+            &lt;/div&gt;
           &lt;/div&gt;
+&nbsp;
+          &lt;p className="flex items-center gap-1 text-sm text-neutral-600 mt-1 px-1"&gt;
+            &lt;span&gt;{clock(message.sentAt)}&lt;/span&gt;
+            {mine &amp;&amp; (
+              &lt;&gt;
+                &lt;span aria-hidden="true"&gt;·&lt;/span&gt;
+                &lt;StatusIcon className="w-4 h-4" aria-hidden="true" /&gt;
+                &lt;span&gt;{deliveryStatusLabels[status]}&lt;/span&gt;
+              &lt;/&gt;
+            )}
+          &lt;/p&gt;
         &lt;/div&gt;
       )}
     &lt;/li&gt;
@@ -420,7 +429,7 @@ function MediaHeader({ message }: { message: Message }) {
   const text = message.mediaLabel ? `${heading} · ${message.mediaLabel}` : <span class="branch-1 cbranch-no" title="branch not covered" >heading;</span>
 &nbsp;
   return (
-    &lt;p className="flex items-center gap-2 text-sm font-bold text-calm-800 bg-calm-50 rounded-md px-2 py-1 my-1"&gt;
+    &lt;p className="flex items-center gap-2 text-sm font-bold text-calm-800 bg-calm-50 rounded-md px-2 py-1 mb-2"&gt;
       &lt;Icon className="w-4 h-4 flex-shrink-0" aria-hidden="true" /&gt;
       {text}
     &lt;/p&gt;
@@ -433,7 +442,7 @@ function MediaHeader({ message }: { message: Message }) {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-24T02:55:48.853Z
+                at 2026-10-24T20:28:32.168Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

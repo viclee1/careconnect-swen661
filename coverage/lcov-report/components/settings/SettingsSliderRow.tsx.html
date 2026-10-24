@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
@@ -137,7 +137,20 @@
 <a name='L72'></a><a href='#L72'>72</a>
 <a name='L73'></a><a href='#L73'>73</a>
 <a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -175,13 +188,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">90x</span>
-<span class="cline-any cline-yes">90x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">90x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">132x</span>
+<span class="cline-any cline-yes">132x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">132x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -199,6 +213,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -212,9 +228,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useId } from 'react';
+import type { LucideIcon } from 'lucide-react';
+&nbsp;
+import SettingIcon from './SettingIcon';
+import type { SettingTone } from './settingTones';
 &nbsp;
 /**
- * A labelled slider with its value written out beside the title.
+ * A labelled slider with its value written out under the middle of the track,
+ * between the two ends' labels, as the design draws it.
  *
  * A native &lt;input type="range"&gt;, so it arrives with arrow keys, Home and End,
  * Page Up and Page Down and the platform's own value announcement. The value is
@@ -222,6 +243,8 @@
  * position alone.
  */
 export default function SettingsSliderRow({
+  Icon,
+  tone,
   title,
   valueLabel,
   description,
@@ -235,6 +258,8 @@ export default function SettingsSliderRow({
   valueText,
   testId,
 }: {
+  Icon?: LucideIcon;
+  tone?: SettingTone;
   title: string;
   valueLabel: string;
   description: string;
@@ -253,35 +278,34 @@ export default function SettingsSliderRow({
   const descriptionId = useId();
 &nbsp;
   return (
-    &lt;div className="p-4 space-y-2"&gt;
-      &lt;div className="flex items-center justify-between gap-4"&gt;
+    &lt;div className="flex items-start gap-3 md:gap-4 py-3"&gt;
+      {Icon &amp;&amp; tone &amp;&amp; &lt;SettingIcon Icon={Icon} tone={tone} /&gt;}
+      &lt;div className="flex-1 min-w-0"&gt;
         &lt;label htmlFor={inputId} className="font-semibold text-neutral-800"&gt;
           {title}
         &lt;/label&gt;
-        &lt;span className="font-semibold text-calm-700 tabular-nums" aria-hidden="true"&gt;
-          {valueLabel}
-        &lt;/span&gt;
+        &lt;input
+          id={inputId}
+          type="range"
+          data-testid={testId}
+          value={value}
+          min={min}
+          max={max}
+          step={step}
+          aria-describedby={descriptionId}
+          aria-valuetext={valueText}
+          onChange={(event) =&gt; onValueChange(Number(event.target.value))}
+          className="block w-full min-h-[2.75rem] accent-calm-600 cursor-pointer"
+        /&gt;
+        &lt;div className="grid grid-cols-3 text-sm text-neutral-600" aria-hidden="true"&gt;
+          &lt;span&gt;{minLabel}&lt;/span&gt;
+          &lt;span className="text-center font-bold text-calm-700 tabular-nums"&gt;{valueLabel}&lt;/span&gt;
+          &lt;span className="text-right"&gt;{maxLabel}&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;p id={descriptionId} className="text-sm text-neutral-600 mt-1"&gt;
+          {description}
+        &lt;/p&gt;
       &lt;/div&gt;
-      &lt;input
-        id={inputId}
-        type="range"
-        data-testid={testId}
-        value={value}
-        min={min}
-        max={max}
-        step={step}
-        aria-describedby={descriptionId}
-        aria-valuetext={valueText}
-        onChange={(event) =&gt; onValueChange(Number(event.target.value))}
-        className="w-full min-h-[2.75rem] accent-calm-600 cursor-pointer"
-      /&gt;
-      &lt;div className="flex justify-between text-sm text-neutral-600" aria-hidden="true"&gt;
-        &lt;span&gt;{minLabel}&lt;/span&gt;
-        &lt;span&gt;{maxLabel}&lt;/span&gt;
-      &lt;/div&gt;
-      &lt;p id={descriptionId} className="text-sm text-neutral-600"&gt;
-        {description}
-      &lt;/p&gt;
     &lt;/div&gt;
   );
 }
@@ -292,7 +316,7 @@ export default function SettingsSliderRow({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-24T02:55:48.853Z
+                at 2026-10-24T20:28:32.168Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

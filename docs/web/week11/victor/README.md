@@ -11,10 +11,11 @@ screenshot is in [`screenshots/`](screenshots).
 |:--|:--|
 | Source | [`src/pages/Contacts.tsx`](../../../../src/pages/Contacts.tsx), [`src/pages/MessageThread.tsx`](../../../../src/pages/MessageThread.tsx), [`src/pages/AccessibilitySettings.tsx`](../../../../src/pages/AccessibilitySettings.tsx), and the components in [`src/components/contacts/`](../../../../src/components/contacts), [`messaging/`](../../../../src/components/messaging) and [`settings/`](../../../../src/components/settings) |
 | State | [`src/context/MessagesContext.tsx`](../../../../src/context/MessagesContext.tsx), [`src/context/SettingsContext.tsx`](../../../../src/context/SettingsContext.tsx) (Context API) |
-| Custom hooks | [`useLocalStorageState`](../../../../src/hooks/useLocalStorageState.ts), [`useOnlineStatus`](../../../../src/hooks/useOnlineStatus.ts) |
+| Custom hooks | [`useLocalStorageState`](../../../../src/hooks/useLocalStorageState.ts), [`useOnlineStatus`](../../../../src/hooks/useOnlineStatus.ts), [`useMediaQuery`](../../../../src/hooks/useMediaQuery.ts) |
+| Design reference | Figma file *Webpage design*: Contacts, Messaging and Accessibility Settings frames at 402, 768 and 1440 px |
 | Domain logic | [`src/models/`](../../../../src/models), [`src/utils/`](../../../../src/utils) |
-| Unit and component tests | 165 Jest tests in 15 suites (listed in [§3](#3-testing-implementation)) |
-| E2E tests | [`e2e/`](../../../../e2e) (Playwright), 9 tests covering 5 critical flows, run in 4 browser projects |
+| Unit and component tests | 204 Jest tests in 20 suites (listed in [§3](#3-testing-implementation)) |
+| E2E tests | [`e2e/`](../../../../e2e) (Playwright), 13 tests covering 5 critical flows, run in 4 browser projects |
 | Coverage | [`coverage/lcov-report/index.html`](../../../../coverage/lcov-report/index.html) |
 
 ---
@@ -32,9 +33,9 @@ through sound must also be communicated visually or in text*.
 
 | Screen | Route | What it does |
 |:--|:--|:--|
-| Contacts | `/app/contacts` | Lists everyone, with the primary contact first. Each row is a **link to a written conversation**, never a voice call. A row shows a preview of the last message and a "*n* waiting" badge. Search matches name, relationship or role (for example, "doctor" finds Dr. Sharma). |
-| Conversation | `/app/contacts/:contactId` | Shows the message history grouped under "Today" and "Yesterday" headings. A **voicemail is shown as its transcript**, a **video message says whether captions are attached**, and delivery state is written as a word ("Delivered"), not shown as a tick alone. The **Alert** button sends a silent visual flash and vibration instead of a ring. Other features: a captioned video-call request, a message form with validation, and offline queueing. |
-| Accessibility Settings | `/app/settings` | Visual alert banners (shown but locked on), smart escalation, captions on/off, caption size and colour with a live preview, alert volume and left/right balance sliders, vibration on/off with the three alert rhythms (played as a visual pulse, and as a real vibration on phones that support it), and an Account section with Sign out behind a confirmation dialog. |
+| Contacts | `/app/contacts` | Lists everyone, with the primary contact first. Each row is a **link to a written conversation**, never a voice call. A row shows a coloured avatar, a preview of the last message and a red count of messages waiting (also written out for screen readers). Search matches name, relationship or role (for example, "doctor" finds Dr. Sharma). The header's one action is **Video call Joyce**, a captioned video call. **On a desktop the primary contact's conversation opens beside the list**, as in the Figma design. |
+| Conversation | `/app/contacts/:contactId` | Shows the message history grouped under "Today" and "Yesterday" pills. A **voicemail is shown as its transcript**. A **video message is drawn with its caption track over the video**, in the size and colour chosen in Settings, and Play steps through the captions line by line, with the full words printed below. Delivery state is written as a word ("Delivered"), not shown as a tick alone. The **Alert** button sends a silent visual flash and vibration instead of a ring, and leaves an **"Alert sent to Joyce"** banner behind after the flash fades. Other features: a captioned video-call request, a **Quick replies** menu, a message form with validation, and offline queueing. On a desktop the contact list stays on the left. |
+| Accessibility Settings | `/app/settings` | Six cards, as in the design: **Visual Alerts** (banners shown as "Always on" with a padlock, smart escalation), **Captions** (on/off, size and colour as equal-width choices, live preview), **Audio** (volume and left/right balance sliders with the value printed under the track), **Screen Flash & Desktop Alerts** (screen flash on/off, a preview of each alert type's flash colour, desktop notifications through the browser's Notification API, connected devices), **Vibration** (on/off and the three alert rhythms, played as a visual pulse and as a real vibration on phones that support it), and **Account** with Sign out behind a confirmation dialog. |
 
 **Requirements met in this part:**
 
@@ -42,8 +43,8 @@ through sound must also be communicated visually or in text*.
 |:--|:--|
 | React Router | New routes `contacts/:contactId` and `settings` under `/app/*`. The **Contacts, Conversation and Settings pages are loaded with `React.lazy`**, so each builds as its own chunk (`Contacts-*.js` 5.5 kB, `MessageThread-*.js` 12.6 kB, `AccessibilitySettings-*.js` 12.3 kB) and loads on first visit, not with the home screen. |
 | State management | Context API. `MessagesProvider` holds contacts, conversations, read state and the offline queue. `SettingsProvider` holds the accessibility preferences. Each context object and its `use…` hook live in a separate module ([`messages.ts`](../../../../src/context/messages.ts), [`settings.ts`](../../../../src/context/settings.ts)), so React Fast Refresh keeps working and ESLint passes with no new warnings. |
-| Custom hooks | `useLocalStorageState(key, initial, revive)` is `useState` that is saved to localStorage. It checks and repairs whatever is stored (bad JSON or the wrong types fall back to safe values), and it keeps working when storage is blocked. `useOnlineStatus()` uses `useSyncExternalStore` on the browser's `online` and `offline` events. |
-| Reusable components | `ContactRow`, `MessageBubble`, `MessageComposer`, `NotifyButton`, `VisualFlash`, `SettingsSection`, `SettingsSwitchRow`, `SettingsSliderRow`, `SegmentedChoice` and `VibrationPatternRow`, plus the team's existing `Banner`, `Button` and `ConfirmDialog`. |
+| Custom hooks | `useLocalStorageState(key, initial, revive)` is `useState` that is saved to localStorage. It checks and repairs whatever is stored (bad JSON or the wrong types fall back to safe values), and it keeps working when storage is blocked. `useOnlineStatus()` uses `useSyncExternalStore` on the browser's `online` and `offline` events. `useMediaQuery(query)` does the same for a CSS media query, so the desktop two-pane layout is *mounted* only on wide screens (opening a conversation marks it read, which must not happen behind a phone's list). |
+| Reusable components | `ContactList`, `ContactRow`, `ContactAvatar`, `ContactsPageHeader`, `ContactsTwoPane`, `Conversation` (used by both pages), `MessageBubble`, `CaptionedVideo`, `MessageComposer`, `QuickReplies`, `NotifyButton`, `VideoCallButton`, `VisualFlash` (now with a colour per alert type), `SettingsSection`, `SettingsSwitchRow`, `SettingsSliderRow`, `SegmentedChoice`, `FlashCueRow`, `SettingIcon` and `VibrationPatternRow`, plus the team's existing `Banner`, `Button` and `ConfirmDialog`. |
 | Form handling and validation | The message form is a real `<form>` with a labelled `<textarea>`. Ctrl/⌘+Enter or the Send button submits it. An empty message, or one over 500 characters, is refused with a written reason (`role="alert"`, linked to the field with `aria-describedby`, and the field gets `aria-invalid`). Focus returns to the field. A live counter shows the characters left. |
 | Offline functionality | Conversations and settings are kept in localStorage, so nothing is fetched and both screens work with no connection. A message written offline is **kept, marked "Sending" in words, and sent automatically when the connection returns**. A banner explains this while offline. The team's service worker serves the app shell and the cached lazy chunks, so the screens also open from cold while offline. This is verified by an E2E test. |
 | PWA | Uses the team's manifest and service worker. My screens add the offline behaviour above. |
@@ -75,6 +76,29 @@ placeholders.
 
 ![Placeholder for a teammate's screen](screenshots/features/placeholder-in-app.png)
 
+### Matching the Figma design
+
+The three screens follow the team's Figma web design (*Webpage design*):
+
+- **Contacts and Messaging** use the design's two-pane desktop layout: the
+  hint, search box and contact rows on the left, the open conversation on the
+  right with the amber **Alert** bar, grey message area, white incoming and
+  teal outgoing bubbles, a "Today" pill and a composer bar (quick replies,
+  message field, Send). Phones and tablets show the list and the conversation
+  as separate screens, as the design's 402 px and 768 px frames do.
+- **Accessibility Settings** uses the design's white cards with small
+  capitalised headings, a coloured icon tile beside each setting, equal-width
+  caption choices, sliders with the value under the middle of the track, the
+  **Screen Flash & Desktop Alerts** card and the **Vibration** card with Play
+  buttons.
+- **Hard-of-hearing changes made in the design and the code together:** every
+  "Call *name* now" voice button became **Video call *name*** (captioned,
+  never rings); the Alert copy says exactly what the other person gets (a
+  silent flash and vibration); video messages show their captions on the
+  video; and faint grey text was darkened to meet 4.5:1.
+- **Not taken from the design:** the app shell (header, sidebar, bottom bar)
+  is shared with the team, so it is unchanged.
+
 ### Matching the desktop and mobile apps
 
 The three web screens follow the versions the team built in earlier weeks:
@@ -85,9 +109,9 @@ reference.
 | Same as desktop and mobile | Detail |
 |:--|:--|
 | Data and rules | The contact, message and accessibility-settings models are the desktop and mobile files, copied unchanged with their unit tests. The contacts and conversations are the same Week 3 prototype data (Joyce as primary, Dr. Sharma, Maria, James, NHS 111). |
-| Contacts | One list, primary first. Each card shows initials, name, a Primary badge, the relationship, a preview of the last message, and a waiting count drawn as a circle with the word "waiting" under it. The "Getting someone's attention" banner. No call button. |
-| Conversation | The header shows the name and relationship with its role icon. Captioned video call ("Call Joyce now", which asks for live captions). "Captions are turned off" warning with **Open settings**. Day headings. Transcripts and caption labels. The Alert button with the same two lines of text. A worded flash, and a short confirmation buzz on the sender's own phone (mobile's `notifyBuzz`, using the browser's Vibration API where it exists). |
-| Settings | The same five sections in the same order, with the same wording: Visual Alerts (banners locked on), Captions (size, colour and preview), Audio (volume and balance), Vibration (switch and three rhythms), and **Account** ("Margaret Whitfield · Care Recipient" with Sign out). |
+| Contacts | One list, primary first. Each card shows initials, name, a Primary badge, the relationship, a preview of the last message, and a waiting count. The hint about getting someone's attention with Alert. No voice-call button. |
+| Conversation | The header shows the name and relationship with its role icon. Captioned video call ("Video call Joyce", which asks for live captions and never rings). "Captions are turned off" warning with **Open settings**. Day headings. Transcripts and caption labels. The Alert button with the same two lines of text. A worded flash, and a short confirmation buzz on the sender's own phone (mobile's `notifyBuzz`, using the browser's Vibration API where it exists). |
+| Settings | The same sections in the same order, with the same wording: Visual Alerts (banners locked on), Captions (size, colour and preview), Audio (volume and balance), Screen Flash & Desktop Alerts (from the desktop app), Vibration (switch and three rhythms), and **Account** ("Margaret Whitfield · Care Recipient" with Sign out). |
 
 | Different on the web, on purpose | Why |
 |:--|:--|
@@ -95,7 +119,7 @@ reference.
 | Search box, opened with "/" | Desktop has search opened with Ctrl+F. Browsers already use Ctrl+F for find in page, and "/" is the usual web shortcut for a page's search. |
 | Sign out asks for confirmation first | On desktop it runs straight away. On mobile it isn't built yet ("Sign out is not ready yet"). On the web it really signs out, so it asks first. |
 | Offline queue | A website can lose its connection mid-conversation. Messages are kept as "Sending" and go out when the connection returns. |
-| No Ctrl/⌘+Shift+N alert shortcut or system notification | These are desktop-only features with no browser equivalent the user would expect. |
+| No Ctrl/⌘+Shift+N alert shortcut | A desktop-only feature with no browser equivalent the user would expect. Desktop notifications *are* offered, through the browser's own permission prompt. |
 
 **The header now matches too.** The web header had a green **Call my
 caregiver** button that dialled Joyce's phone number (`tel:`). None of the
@@ -121,7 +145,11 @@ Feature states: [search](screenshots/features/contacts-search.png),
 [no match](screenshots/features/contacts-no-match.png),
 [voicemail transcript](screenshots/features/voicemail-transcript.png),
 [form validation](screenshots/features/composer-validation.png),
-[alert flash](screenshots/features/alert-flash.png),
+[alert flash](screenshots/features/alert-flash.png) →
+[alert sent banner](screenshots/features/alert-sent-banner.png),
+[video call requested](screenshots/features/video-call-requested.png),
+[captioned video playing](screenshots/features/captioned-video-playing.png),
+[flash cue preview](screenshots/features/settings-flash-preview.png),
 [offline: queued](screenshots/features/offline-queued.png) →
 [back online: sent](screenshots/features/offline-sent.png),
 [captions off](screenshots/features/settings-captions-off.png) →
@@ -129,18 +157,21 @@ Feature states: [search](screenshots/features/contacts-search.png),
 
 ### How the layout adapts
 
-- **Contacts.** One column on mobile and two from 768 px, using the team's
-  `.card-grid`. The preview line is cut off with an ellipsis instead of
-  wrapping, and the waiting count is a small circle with "waiting" underneath
-  (as on mobile), so the name and relationship keep their room at 375 px.
-- **Conversation.** Bubbles take up to 85% of the width on mobile and 70% from
-  768 px. The "Call *name*" button sits beside the name on wider screens and
-  drops to its own full-width row below 640 px. The page is capped at a
-  readable width on desktop.
-- **Settings.** A single readable column at every width. The size and colour
-  choices wrap rather than overflow at 320 px. On phones, each vibration
-  rhythm's dotted pattern sits under its name instead of beside it, so the
-  name doesn't wrap one word per line.
+- **Contacts.** One column of rows on phones and tablets, as in the design.
+  From 1024 px the list narrows to a 19–22 rem column and the primary
+  contact's conversation opens beside it. The preview line is cut off with an
+  ellipsis, and the waiting count sits on the avatar's corner, so the name and
+  relationship keep their room at 375 px. The **Video call** button is full
+  width under the title on phones and beside it from 768 px.
+- **Conversation.** Phones and tablets: a full-width card under **Back to
+  contacts**. Desktop: the same card in the right-hand pane, as tall as the
+  window allows, so the history scrolls inside it and the message field stays
+  in view. Bubbles take up to 85% of the width on mobile and 70% from 768 px.
+  The Quick replies and Send buttons show their words from 768 px and are
+  labelled icons below that.
+- **Settings.** A single readable column of cards at every width, capped at
+  56 rem on desktop. The size and colour choices share the row equally, and
+  each rhythm's pattern sits under its name.
 - **Navigation.** Settings appears in the sidebar from 768 px. The care
   recipient's mobile bottom bar holds six tabs at 375 px, so it does not get a
   seventh. Instead, the mobile header shows a labelled **Settings** link, and
@@ -149,8 +180,11 @@ Feature states: [search](screenshots/features/contacts-search.png),
 - **Touch and click targets.** Every control is at least 44 × 44 px. Contact
   rows are 72 px or taller, and the Alert button is at least 56 px. The switch
   hit area covers the whole visible track, not just the hidden checkbox.
-- No horizontal scrolling at 375, 768 or 1440 px. This is checked by an E2E
-  test, and there are no console errors or warnings.
+- No horizontal scrolling at 320, 375, 768 or 1440 px, and **no axe-core
+  violations** on Contacts, a conversation (including with the Alert banner
+  and the Quick replies menu open) and Settings at all four widths. Checked
+  with `@axe-core/playwright` and an E2E test; there are no console errors or
+  warnings.
 
 **Shared-layout fix found by my tests.** At 375 px the team's sticky header
 (date, time, greeting and "Call my caregiver") is about 360 px tall, more than
@@ -170,20 +204,25 @@ added only where HTML has no element for the job.
 
 | Element | Markup | Why |
 |:--|:--|:--|
-| Contact row | `<a href>` (React Router `<Link>`) inside `<ul aria-label="Your contacts">` | It goes somewhere, so it is a link. Its name is the printed text in printed order ("Joyce Primary Caregiver · Daughter …"), which satisfies WCAG 2.5.3. "Urgent care service" is added in `sr-only` text because the screen shows it only through colour. |
+| Contact row | `<a href>` (React Router `<Link>`) inside `<ul aria-label="Your contacts">` | It goes somewhere, so it is a link. Its name is the printed text in printed order ("Joyce Primary Caregiver · Daughter …"), which satisfies WCAG 2.5.3. The red count on the avatar is decorative; "1 message waiting" and "Urgent care service" are added in `sr-only` text. On a desktop the open contact's row has `aria-current="true"`. |
 | Search | `<label>` + `<input type="search">`, hint linked with `aria-describedby` | Exposed as a named searchbox. |
 | Search result count | `<p role="status">` | Reads out "2 contacts match 'daughter'", because rows disappearing is invisible to a screen-reader user. |
 | Conversation history | `<div role="region" aria-label="Conversation with Maria" tabindex="0">` containing a `<ul>`, with day headings as `<h2>` | Keyboard users can scroll it (WCAG 2.1.1), and screen-reader users can jump by heading. |
 | Message bubble | Plain text: author, "Transcript · Voicemail · 0:34", body, time, "Delivered" | Nothing is folded into an `aria-label`. Icons are `aria-hidden` and each sits next to the word it stands for. |
 | Alert button | `<button>` whose name is its two printed lines | No `aria-label`, so what is announced matches what is shown. |
-| Alert flash | Shown inside a `role="status"` region that is always present | The words "Alert sent to Joyce…" are announced. A flash with no words would only tell a deaf user that *something* happened. |
-| Message form | `<form aria-label>`, `<label for>`, `<textarea>`, `<button type="submit">`. On error: `aria-invalid` and `aria-describedby` pointing to the `role="alert"` message | Standard form semantics. The error is announced and tied to its field. |
+| Alert flash | Shown inside a `role="status"` region that is always present, then an "Alert sent to Joyce" banner (`role="status"`, dismissable) | The words are announced. A flash with no words would only tell a deaf user that *something* happened, and the banner stays in case the flash was missed. |
+| Video call | `<button>` "Video call Joyce" with `aria-label="Video call Joyce with live captions"` | The accessible name starts with the printed words (WCAG 2.5.3) and adds what the icon cannot say. |
+| Captioned video | Play/Pause `<button>` named "Play video message from Maria"; the caption track over the video is `aria-hidden` | The same words are printed in full below the video, so a screen reader reads them once, not twice. |
+| Quick replies | Menu button (`aria-haspopup="menu"`, `aria-expanded`, `aria-controls`) opening `role="menu"` with `role="menuitem"` buttons | The ARIA menu pattern, because HTML has no native menu button. |
+| Message form | `<form aria-label>`, `<label for>` (visually hidden; the placeholder shows the same words), `<textarea>`, `<button type="submit">` named "Send". On error: `aria-invalid` and `aria-describedby` pointing to the `role="alert"` message | Standard form semantics. The error is announced and tied to its field. |
 | Character counter | `role="status"` (polite) | A polite region waits for a pause, so it does not interrupt the user's typing. |
 | Settings groups | `<section aria-labelledby>` + `<h2>` | Each group is both a heading and a landmark. |
-| On/off settings | `<input type="checkbox" role="switch">` with `<label for>` and a description linked by `aria-describedby`. The locked banner switch is natively `disabled` and its description says why. The word "On" or "Off" is printed next to it. | A real checkbox brings Space-to-toggle and the platform's "switch, on" announcement. The printed word means the state is not shown by colour or position alone. |
+| On/off settings | `<input type="checkbox" role="switch">` with `<label for>` and a description linked by `aria-describedby`. The locked banner switch is natively `disabled`, drawn as an "Always on" pill with a padlock, and its description says why. The word "On" or "Off" is printed next to the others. | A real checkbox brings Space-to-toggle and the platform's "switch, on" announcement. The printed word means the state is not shown by colour or position alone. |
 | Caption size and colour | `<fieldset>` + `<legend>` + native `<input type="radio">` | One Tab stop, arrow keys to change, and "2 of 3" announced, all from the browser. |
 | Volume and balance | `<input type="range">` + `<label for>` + `aria-valuetext` ("70 per cent", "50% left") | Arrow, Home, End and Page keys come from the browser. The value is read as words, not "0.7". |
 | Vibration rhythms | `<button>` with the description in `aria-describedby`. The lamp is `aria-hidden`. `role="status"` says "Playing the Double pulse rhythm." once | Avoids announcing nine blinks in two seconds. |
+| Flash cues | `<button>` per alert type, named by its printed alert type and colour ("Medication Amber flash"); the swatch is `aria-hidden`; the preview flash is a `role="status"` region with the alert's name in words | The colour is never the only signal. |
+| Desktop notifications | A switch that asks the browser for permission; if refused, its description changes to a written reason | The user is told why it stayed off, instead of a switch that silently flips back. |
 | Sign out | The team's `ConfirmDialog` (`role="dialog"`, `aria-modal`, `aria-labelledby`) | Focus moves into the dialog and returns to the trigger when it closes. |
 
 `jest-axe` runs the axe-core rules on all three routes inside the real app
@@ -195,12 +234,12 @@ shell, with no violations. The routes are in the team's
 
 | Key | Contacts | Conversation | Settings |
 |:--|:--|:--|:--|
-| **Tab / Shift+Tab** | Search → each contact row in list order | Back → Call → history region → Alert → message field → Send | Each switch → caption size group → caption colour group → sliders → vibration switch → rhythm buttons → Sign out |
-| **Enter** | Opens the focused conversation | Activates Back, Call, Alert or Send. In the field, Enter starts a new line | Activates rhythm buttons and Sign out |
+| **Tab / Shift+Tab** | Video call → search → each contact row in list order (desktop: then the open conversation) | Back (or the contact list on desktop) → Video call → Alert → any banner's Dismiss → history region → Quick replies → message field → Send | Each switch → caption size group → caption colour group → sliders → flash cue buttons → notification switches → vibration switch → rhythm buttons → Sign out |
+| **Enter** | Opens the focused conversation | Activates Back, Video call, Alert, Play, Quick replies, a reply or Send. In the field, Enter starts a new line | Activates flash previews, rhythm buttons and Sign out |
 | **Ctrl/⌘ + Enter** | — | Sends the message from the field | — |
 | **Space** | — | Activates buttons | Toggles a switch, activates buttons |
-| **Arrow keys** | — | Scroll the focused history region (as do Page Up/Down) | Change the caption size or colour, move a slider |
-| **Escape** | Clears the search | Returns to Contacts, *except* in the message field, where it would throw away a draft | Closes the Sign out dialog and returns focus to the Sign out button |
+| **Arrow keys** | — | Scroll the focused history region (as do Page Up/Down). Down on Quick replies opens the menu; Up/Down, Home and End move through it | Change the caption size or colour, move a slider |
+| **Escape** | Clears the search | Closes the Quick replies menu and returns focus to its button. Otherwise returns to Contacts, *except* in the message field, where it would throw away a draft | Closes the Sign out dialog and returns focus to the Sign out button |
 | **/** | Jumps to the search box from anywhere on the page, but not while typing in a field | — | — |
 
 **Focus management.** After any in-app navigation the team's layout moves
@@ -208,8 +247,10 @@ focus to `<main>`, so a screen reader announces the new page. The page title
 also changes ("Conversation — CareConnect"). After sending, focus stays in the
 message field so the next message can be typed straight away. After a refused
 send, focus returns to the field next to the error. "Clear search" puts focus
-back in the search box. The Sign out dialog traps focus and returns it to the
-button that opened it.
+back in the search box. Opening Quick replies moves focus to the first reply;
+choosing one puts it in the message field and moves focus there; Tab or a
+click elsewhere closes the menu. The Sign out dialog traps focus and returns
+it to the button that opened it.
 
 **Visible focus.** The team's 3 px `calm-600` outline is applied to every
 focused element. The two custom-styled controls carry it explicitly: the
@@ -239,7 +280,8 @@ The screenshots below were captured from real key presses by
 | | |
 |:--|:--|
 | ![/ jumps to search](screenshots/keyboard/01-slash-focuses-search.png) "/" jumps to the search box | ![Contact row focus](screenshots/keyboard/02-contact-row-focus.png) Tab reaches the first contact; Enter opens it |
-| ![Alert focus](screenshots/keyboard/03-alert-button-focus.png) Tab from the history to the Alert button | ![Composer](screenshots/keyboard/04-composer-focus.png) Typing in the message field |
+| ![Alert focus](screenshots/keyboard/03-alert-button-focus.png) Shift+Tab from the history to the Alert button | ![Quick replies](screenshots/keyboard/03b-quick-replies-menu.png) Down arrow on Quick replies opens the menu, focus on the first reply |
+| ![Composer](screenshots/keyboard/04-composer-focus.png) Escape closes it; Tab reaches the message field | |
 | ![Sent](screenshots/keyboard/05-ctrl-enter-sent.png) Ctrl+Enter sent it; focus stays in the field | ![Switch focus](screenshots/keyboard/06-switch-focus.png) Focus ring on a switch |
 | ![Radio arrows](screenshots/keyboard/07-radio-arrow-keys.png) ArrowRight selects "Large"; the preview updates | ![Dialog](screenshots/keyboard/08-sign-out-dialog.png) Enter on Sign out opens the confirmation dialog |
 | ![Escape](screenshots/keyboard/09-dialog-escape-returns-focus.png) Escape closes it; focus is back on Sign out | |
@@ -276,10 +318,10 @@ three levels:
    (`vite preview`, with the service worker active) in Chromium, Firefox,
    WebKit (desktop Safari) and mobile Safari at 375 px.
 
-### Unit tests: 101 tests, 7 suites
+### Unit tests: 112 tests, 10 suites
 
-`src/models/__tests__/{contact,message,accessibilitySettings,vibrationPattern}.test.ts`,
-`src/utils/__tests__/{search,validators,formatters}.test.ts`
+`src/models/__tests__/{contact,message,accessibilitySettings,vibrationPattern,flashCue}.test.ts`,
+`src/utils/__tests__/{search,validators,formatters,captions,notifications}.test.ts`
 
 ```ts
 // src/models/__tests__/accessibilitySettings.test.ts
@@ -288,16 +330,16 @@ it('never honours a request to switch the visual banner off', () => {
 });
 ```
 
-### Component tests: 64 tests, 8 suites
+### Component tests: 92 tests, 10 suites
 
 | Suite | Tests | Covers |
 |:--|--:|:--|
-| `src/pages/Contacts.test.tsx` | 9 | No `tel:` links anywhere, previews and waiting badges, search with the announced result count, Escape clears, "/" focuses, empty state, Enter opens a conversation |
-| `src/pages/MessageThread.test.tsx` | 20 | Transcript and caption headings, relationship shown in words, day headings, send with the button and with Ctrl+Enter, Enter adds a new line, empty-message error linked to the field, counter, alert flash and written record, confirmation buzz (and none when vibration is off), vibration-off wording, captioned call request, captions-off warning, offline queue → sent, Escape behaviour, unknown contact |
-| `src/pages/AccessibilitySettings.test.tsx` | 12 | Named regions and switches, locked banner switch with its reason, Space toggles, captions-off conformance warning, radio group and arrow keys, slider value text, vibration rhythm (fake timers and `navigator.vibrate`), Account section and sign out through the dialog, repair of corrupt saved data |
+| `src/pages/Contacts.test.tsx` | 12 | No `tel:` links anywhere, previews and waiting counts, search with the announced result count, Escape clears, "/" focuses, empty state, Enter opens a conversation, the captioned video-call request, and the desktop two-pane layout (primary conversation open, its row `aria-current`, marked read) |
+| `src/pages/MessageThread.test.tsx` | 27 | Transcript and caption headings, relationship shown in words, day headings, send with the button and with Ctrl+Enter, Enter adds a new line, empty-message error linked to the field, counter, alert flash, "Alert sent" banner and written record, confirmation buzz (and none when vibration is off), vibration-off wording, captioned call request (and arriving with one from Contacts), captions-off warning, captioned video playback line by line in the chosen colour, Quick replies by keyboard (arrows, Home, End, Enter, Escape, Tab, click outside), offline queue → sent, Escape behaviour, desktop layout, unknown contact |
+| `src/pages/AccessibilitySettings.test.tsx` | 19 | Named regions and switches, locked banner switch with its reason and "Always on" pill, Space toggles, captions-off conformance warning, radio group and arrow keys, slider value text, flash cue previews (colour, double flash, words) and disabling them, connected devices, desktop notifications (granted, blocked, unsupported browser), vibration rhythm (fake timers and `navigator.vibrate`), Account section and sign out through the dialog, repair of corrupt saved data |
 | `src/pages/PlaceholderPage.test.tsx` | 5 | Screen name, owner (or "not yet assigned"), Go to Contacts, the standalone skip link, banner, main and title, and continuing as the demo care recipient (sign-up the first time, sign-in after) |
 | `src/context/*.test.tsx` | 13 | Seeding, read state, blank-message guard, alert record, corrupt storage, offline queue, error outside the provider, clamping |
-| `src/hooks/*.test.ts` | 5 | Saving and repairing stored values, storage that refuses writes, online/offline switching |
+| `src/hooks/*.test.ts` | 7 | Saving and repairing stored values, storage that refuses writes, online/offline switching, a media query following window resizes |
 | `src/accessibility.test.tsx` (team suite) | +9 | axe, landmark and title checks on my three routes. The header test now also checks there is no `tel:` link |
 
 ```tsx
@@ -317,8 +359,14 @@ it('queues messages written offline and sends them when the connection returns',
 });
 ```
 
-![Jest results for Victor's suites](screenshots/testing/01-jest-victor-suites.png)
-![Whole web app: 486 tests passing, 1 skipped](screenshots/testing/02-jest-all-summary.png)
+![Jest results for Victor's suites: 195 tests in 19 suites, all passing](screenshots/testing/01-jest-victor-suites.png)
+![Whole web app: 516 tests passing, 1 skipped](screenshots/testing/02-jest-all-summary.png)
+
+The first screenshot lists my 19 suites (195 tests). The other 9 of my 204
+tests are my three routes' rows in the team's `src/accessibility.test.tsx`,
+which also tests every other route, so it is counted with the whole app. The
+whole web app runs **516 Jest tests, all passing, 1 skipped** (the Landing
+test, by design on this branch).
 
 ### End-to-end tests (Playwright): 5 critical flows
 
@@ -328,16 +376,21 @@ config in [`playwright.config.ts`](../../../../playwright.config.ts).
 
 1. **Find → open → send → reload.** Search "son", open James, send a
    message, reload, and see it saved and shown as the preview on Contacts.
-2. **Silent alert.** The worded flash appears and the written record lands in
-   the conversation. Also: a voicemail shows as a transcript, and an empty
-   send is refused with a reason.
+2. **Silent alert and captioned calls.** The worded flash appears, the
+   "Alert sent" banner stays, and the written record lands in the
+   conversation. The Contacts header asks for a captioned video call (no
+   `tel:` link anywhere). A video message shows its captions and plays. A
+   voicemail shows as a transcript, and an empty send is refused with a
+   reason. Quick replies work from the keyboard, and Escape closes the menu
+   without leaving the page.
 3. **Offline.** `context.setOffline(true)` → the message shows "Sending" →
    back online → it is sent. With the service worker active, Contacts and a
    conversation also **open from cold while offline** (Chromium).
 4. **Settings by keyboard only.** Space on a switch, Tab into the radio group,
    arrows, arrow keys on a slider, then a reload confirms everything was
    saved. The Sign out dialog closes with Escape and returns focus, and
-   confirming it really signs out.
+   confirming it really signs out. Each flash cue previews its own colour and
+   is disabled when screen flashes are off.
 5. **Settings across screens and widths.** Captions turned off → a warning
    in a conversation with a video message, which links back to Settings.
    Settings is reachable at every width, with no horizontal scroll.
@@ -356,9 +409,12 @@ test('messages written offline are queued and sent when the connection returns',
 });
 ```
 
-**Results: 28 passed, 2 skipped by design, 0 failed** across Chromium,
-WebKit (Safari) and mobile Safari. The two skips are the service-worker
-offline test on WebKit, where Playwright cannot emulate it reliably.
+**Results: 40 passed, 2 skipped by design, 0 failed** across Chromium,
+WebKit (Safari) and mobile Safari (this includes the team's placeholder
+spec). The two skips are the service-worker offline test on WebKit, where
+Playwright cannot emulate it reliably. The specs work at both widths: at
+1440 px the conversation's name is an `<h2>` beside the list, at 375 px it
+is the page's `<h1>`.
 
 ![Playwright run](screenshots/testing/03-playwright-run.png)
 ![Playwright HTML report](screenshots/testing/05-playwright-html-report.png)
@@ -395,24 +451,28 @@ makes the run fail if any of them drops below that.
 
 | Measured scope | Statements | Branches | Functions | Lines |
 |:--|--:|--:|--:|--:|
-| **All measured files** (Victor's plus the Appointments, Medicines and Memories pages already listed) | **92.41%** | **83.92%** | **84.43%** | **92.93%** |
-| Contacts.tsx | 100% | 100% | 100% | 100% |
-| MessageThread.tsx | 100% | 90.9% | 100% | 100% |
+| **All measured files** (Victor's plus the Appointments, Medicines and Memories pages already listed) | **93.99%** | **85.74%** | **87.03%** | **94.51%** |
+| Contacts.tsx | 100% | 87.5% | 100% | 100% |
+| MessageThread.tsx | 100% | 92.3% | 100% | 100% |
 | PlaceholderPage.tsx | 100% | 100% | 100% | 100% |
-| AccessibilitySettings.tsx | 96.9% | 100% | 91.7% | 96.9% |
-| components/contacts, messaging, settings | 96.6–100% | 92–100% | 84.6–100% | 100% |
-| context, models, utils | 100% | 98.9–100% | 100% | 100% |
-| hooks | 90.9% | 100% | 77.8% | 90.9% |
+| AccessibilitySettings.tsx | 98.1% | 100% | 94.7% | 98.0% |
+| components/contacts | 100% | 92.3% | 100% | 100% |
+| components/messaging | 98.0% | 92.9% | 93.5% | 99.5% |
+| components/settings | 100% | 93.9% | 100% | 100% |
+| context, utils | 100% | 100% | 100% | 100% |
+| models | 100% | 98.9% | 100% | 100% |
+| hooks | 91.9% | 100% | 81.3% | 91.2% |
 
 **Exclusions and why.**
 - `src/**/__tests__/**` and `*.test.*`: test code is not measured.
 - `src/data/contactsData.ts` and `messagesData.ts`: static seed data with no
   branches to test.
 - `src/test-utils/`: a test helper.
-- The only uncovered lines in my files are the `getServerSnapshot` fallback
-  in `useOnlineStatus`, which runs only during server-side rendering (this app
-  renders in the browser only), and `useLocalStorageState`'s default `revive`
-  callback, which the providers always replace with their own.
+- The only uncovered lines in my files are the `getServerSnapshot` fallbacks
+  in `useOnlineStatus` and `useMediaQuery`, which run only during server-side
+  rendering (this app renders in the browser only), and
+  `useLocalStorageState`'s default `revive` callback, which the providers
+  always replace with their own.
 
 ---
 
@@ -436,11 +496,14 @@ npm run lint && npm run typecheck
 
 I used Claude (Anthropic) in Claude Code as a pair programmer for this part.
 It ported the existing desktop TypeScript models and screens to React with
-Tailwind, drafted the component and Playwright tests, and wrote the screenshot
-scripts and this write-up. I checked the output in four ways:
+Tailwind, completed my screens in the team's Figma file and then restyled the
+web pages to match those frames, drafted the component and Playwright tests,
+and wrote the screenshot scripts and this write-up. I checked the output in
+four ways:
 
 - Every test was run and had to pass. The coverage threshold is enforced.
-- I compared the screens by eye against the 375, 768 and 1440 px screenshots.
+- I compared the screens by eye against the 375, 768 and 1440 px screenshots
+  and the Figma frames, and ran axe-core on every state at four widths.
 - I ran the keyboard paths with real key presses in Playwright and `user-event`.
 - I kept the failures the tests found, which led to real fixes: the
   header covering Send on mobile, and the alert flash being invisible under

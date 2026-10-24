@@ -105,7 +105,20 @@ for (const [bp, w, h] of widths) {
   await page.getByTestId('visual-flash').waitFor();
   await shot(page, 'features/alert-flash');
   await page.getByTestId('visual-flash').waitFor({ state: 'detached' });
+  await shot(page, 'features/alert-sent-banner');
 
+  await page.getByRole('button', { name: 'Video call Joyce with live captions' }).click();
+  await shot(page, 'features/video-call-requested');
+
+  await page.goto(`${base}/app/contacts/c3`);
+  await page.locator('h1').first().waitFor();
+  await page.getByRole('button', { name: 'Play video message from Maria' }).click();
+  await page.getByTestId('video-caption-m6').scrollIntoViewIfNeeded();
+  await page.waitForTimeout(2700);
+  await shot(page, 'features/captioned-video-playing');
+
+  await page.goto(`${base}/app/contacts/c1`);
+  await page.locator('h1').first().waitFor();
   await ctx.setOffline(true);
   await page.getByRole('textbox', { name: 'Message Joyce' }).fill('Written with no connection');
   await page.getByTestId('composer-send').click();
@@ -120,6 +133,10 @@ for (const [bp, w, h] of widths) {
 
   await page.goto(`${base}/app/settings`);
   await page.locator('h1').first().waitFor();
+  await page.getByRole('button', { name: /Missed \/ Escalated Rapid red double-flash/ }).click();
+  await page.getByTestId('visual-flash').waitFor();
+  await shot(page, 'features/settings-flash-preview');
+  await page.getByTestId('visual-flash').waitFor({ state: 'detached' });
   await page.getByRole('switch', { name: 'Show captions' }).click();
   await shot(page, 'features/settings-captions-off');
   await page.goto(`${base}/app/contacts/c3`);
@@ -138,12 +155,19 @@ for (const [bp, w, h] of widths) {
   await page.keyboard.press('Tab'); // from the search box to the first contact
   await shot(page, 'keyboard/02-contact-row-focus');
   await page.keyboard.press('Enter');
-  await page.locator('h1', { hasText: 'Joyce' }).waitFor();
+  await page.getByRole('heading', { name: 'Joyce', exact: true }).waitFor();
+  // Let the shell finish moving focus to <main> after the navigation.
+  await page.waitForTimeout(600);
 
   await page.getByRole('region', { name: 'Conversation with Joyce' }).focus();
-  await page.keyboard.press('Tab');
+  await page.keyboard.press('Shift+Tab');
   await shot(page, 'keyboard/03-alert-button-focus');
-  await page.keyboard.press('Tab');
+  await page.keyboard.press('Tab'); // the history
+  await page.keyboard.press('Tab'); // quick replies
+  await page.keyboard.press('ArrowDown');
+  await shot(page, 'keyboard/03b-quick-replies-menu');
+  await page.keyboard.press('Escape');
+  await page.keyboard.press('Tab'); // the message field
   await page.keyboard.type('Typed with the keyboard');
   await shot(page, 'keyboard/04-composer-focus');
   await page.keyboard.press('Control+Enter');

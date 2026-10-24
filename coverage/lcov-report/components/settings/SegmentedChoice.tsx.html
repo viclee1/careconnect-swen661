@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/5</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80% </span>
+                <span class="strong">85.71% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/5</span>
+                <span class='fraction'>6/7</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>5/5</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
@@ -125,7 +125,19 @@
 <a name='L60'></a><a href='#L60'>60</a>
 <a name='L61'></a><a href='#L61'>61</a>
 <a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -153,13 +165,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">90x</span>
+<span class="cline-any cline-yes">132x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">225x</span>
-<span class="cline-any cline-yes">225x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">330x</span>
+<span class="cline-any cline-yes">330x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -187,7 +204,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">export interface Segment&lt;T extends string&gt; {
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Check } from 'lucide-react';
+&nbsp;
+export interface Segment&lt;T extends string&gt; {
   value: T;
   label: string;
 }
@@ -196,7 +216,8 @@
  * A row of mutually exclusive choices, built from native radio buttons inside
  * a &lt;fieldset&gt;. The browser supplies everything a keyboard user expects: one
  * Tab stop for the group, arrow keys to move the selection, and "2 of 3"
- * announcements. The selected option is filled *and* checked, so the choice is
+ * announcements. The options share the row equally, as the design draws them,
+ * and the selected one is tinted, outlined *and* ticked, so the choice is
  * legible without colour.
  */
 export default function SegmentedChoice&lt;T extends string&gt;({
@@ -217,18 +238,23 @@ export default function SegmentedChoice&lt;T extends string&gt;({
 }) {
   return (
     &lt;fieldset disabled={disabled} className="border-0 p-0 m-0 min-w-0"&gt;
-      &lt;legend className="font-semibold text-neutral-800 mb-2"&gt;{legend}&lt;/legend&gt;
-      &lt;div className="inline-flex flex-wrap rounded-lg border-2 border-calm-600 overflow-hidden"&gt;
+      &lt;legend className="text-sm font-semibold text-neutral-700 mb-2"&gt;{legend}&lt;/legend&gt;
+      &lt;div
+        className="grid gap-2"
+        style={{ gridTemplateColumns: `repeat(${segments.length}, minmax(0, 1fr))` }}
+      &gt;
         {segments.map((segment) =&gt; {
           const selected = segment.value === value;
           return (
             &lt;label
               key={segment.value}
               className={[
-                'relative inline-flex items-center justify-center min-h-[2.75rem] min-w-[5rem] px-4',
-                'font-semibold cursor-pointer select-none',
-                'has-[:focus-visible]:outline has-[:focus-visible]:outline-[3px] has-[:focus-visible]:outline-calm-800 has-[:focus-visible]:-outline-offset-4',
-                selected ? 'bg-calm-600 text-white' : 'bg-white text-calm-700 hover:bg-calm-50',
+                'relative inline-flex items-center justify-center gap-1.5 min-h-[2.75rem] px-2 rounded-xl border-2',
+                'font-semibold cursor-pointer select-none text-center',
+                'has-[:focus-visible]:outline has-[:focus-visible]:outline-[3px] has-[:focus-visible]:outline-calm-800 has-[:focus-visible]:outline-offset-2',
+                selected
+                  ? 'bg-calm-50 border-calm-600 text-calm-800'
+                  : 'bg-white border-neutral-300 text-neutral-700 hover:border-calm-400',
                 disabled ? 'opacity-60 cursor-not-allowed' : '',
               ].join(' ')}
             &gt;
@@ -241,6 +267,7 @@ export default function SegmentedChoice&lt;T extends string&gt;({
                 onChange={() =&gt; onChange(segment.value)}
                 className="sr-only"
               /&gt;
+              {selected &amp;&amp; &lt;Check className="w-4 h-4 flex-shrink-0" aria-hidden="true" /&gt;}
               {segment.label}
             &lt;/label&gt;
           );
@@ -256,7 +283,7 @@ export default function SegmentedChoice&lt;T extends string&gt;({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-24T02:55:48.853Z
+                at 2026-10-24T20:28:32.168Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
