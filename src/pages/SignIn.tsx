@@ -123,14 +123,14 @@ export default function SignIn() {
                 onChange={(e) => setPassword((e.target as HTMLInputElement).value)}
                 error={errors.password}
                 required
-                hint="Any password works — this is a demonstration app."
+                hint="Any password works — authentication is relaxed."
               />
 
               <button
                 type="submit"
                 disabled={submitting}
                 aria-disabled={submitting}
-                className="w-full inline-flex items-center justify-center gap-2 font-bold rounded-lg px-5 py-4 min-h-[3rem] text-base bg-calm-600 text-white border-2 border-calm-600 hover:bg-calm-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full inline-flex items-center justify-center gap-2 font-bold rounded-lg px-5 py-4 min-h-[3rem] text-base bg-calm-600 text-white border-2 border-calm-600 hover:bg-calm-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               >
                 <LogIn className="w-5 h-5" aria-hidden="true" />
                 {submitting ? 'Signing in…' : 'Sign in'}

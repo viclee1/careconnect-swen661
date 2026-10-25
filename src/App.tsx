@@ -18,7 +18,7 @@ import SignUp      from './pages/SignUp';
 import RoleChooser from './pages/RoleChooser';
 
 // App pages (do not modify) — teammates' screens, see SHOW_TEAMMATE_PAGES
-import Today        from './pages/Today';
+import Home         from './pages/Home';
 import Schedule     from './pages/Schedule';
 import Appointments from './pages/Appointments';
 import Medications  from './pages/Medications';
@@ -32,7 +32,7 @@ import ManageAppointments    from './pages/ManageAppointments';
 import type { AppView } from './types';
 
 // Contacts, conversations and settings are split into their own chunks and
-// fetched on first visit, so the Today screen loads without them.
+// fetched on first visit, so the Home screen loads without them.
 const Contacts              = lazy(() => import('./pages/Contacts'));
 const MessageThread         = lazy(() => import('./pages/MessageThread'));
 const AccessibilitySettings = lazy(() => import('./pages/AccessibilitySettings'));
@@ -83,9 +83,9 @@ function AppShell() {
       <Layout view={view} onSwitchRole={handleSwitchRole} onSignOut={signOut}>
         <Suspense fallback={<PageLoading />}>
           <Routes>
-            {/* Patient sees the calm "Today" screen; caregiver sees the dashboard */}
+            {/* Patient sees the calm "Home" screen (Home.tsx); caregiver sees the dashboard */}
             <Route index                        element={view === 'patient'
-              ? teammate(<Today />, 'Home', 'Justin Zhang')
+              ? teammate(<Home view={view} />, 'Home', 'Justin Zhang')
               : teammate(<CaregiverDashboard />, 'Caregiver dashboard')} />
             <Route path="schedule"              element={teammate(<Schedule />, 'My Day', 'Justin Zhang')} />
             <Route path="appointments"          element={teammate(<Appointments />, 'Appointments', 'Upneet Bir')} />
@@ -136,7 +136,7 @@ function AppRoutes() {
   );
 }
 
-// ── Root ───────────────────────────────────────────────────────────────────────
+// ── Root ───────────────────────────────────────────────────────
 
 export default function App() {
   return (

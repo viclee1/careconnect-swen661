@@ -1,204 +1,195 @@
-import { Calendar, Pill, Phone, BookOpen, Sun, CheckCircle2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { scheduleItems, medications } from '../data/mockData';
+import { useState } from 'react';
+import { Calendar, Pill, Video, Bell } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import type { AppView } from '../types';
+import MockVideoCall from '../components/MockVideoCall';
 
 interface HomeProps {
   view: AppView;
 }
 
-const categoryEmoji: Record<string, string> = {
-  meal: '🍽',
-  medication: '💊',
-  activity: '🌿',
-  appointment: '📞',
-  rest: '🛌',
-};
+export default function Home({ view: _view }: HomeProps) {
+  const navigate = useNavigate();
+  const [bannerDismissed, setBannerDismissed] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [callSimulated, setCallSimulated] = useState(false);
 
-export default function Home({ view }: HomeProps) {
-  const now = new Date();
-  const hours = now.getHours();
-  const greeting =
-    hours < 12 ? 'Good morning' : hours < 17 ? 'Good afternoon' : 'Good evening';
-
-  const todayDate = now.toLocaleDateString('en-GB', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
+  // Read tasks from localStorage to sync live progress with Schedule page
+  const [tasks] = useState(() => {
+    try {
+      const raw = localStorage.getItem('careconnect_web_myday_tasks');
+      if (raw) return JSON.parse(raw);
+    } catch {
+      // fallback
+    }
+    return [
+      { done: true },
+      { done: false },
+      { done: false },
+      { done: false },
+      { done: false },
+      { done: false },
+      { done: false },
+    ];
   });
 
-  const upcomingItems = scheduleItems
-    .filter((item) => !item.done)
-    .slice(0, 3);
-
-  const doneCount = scheduleItems.filter((i) => i.done).length;
-  const totalCount = scheduleItems.length;
-
-  const pendingMeds = medications.filter(
-    (m) => !m.taken[new Date().toISOString().split('T')[0]]
-  ).length;
-
-  const isPatient = view === 'patient';
+  const doneCount = tasks.filter((t: any) => t.done).length;
+  const totalCount = tasks.length || 7;
+  const percentage = Math.round((doneCount / totalCount) * 100);
 
   return (
-    <div className="space-y-6">
-      {/* ── Greeting banner ──────────────────────────────────────────────── */}
-      <section aria-label="Greeting">
-        <div className="card bg-gradient-to-br from-calm-600 to-calm-700 text-white border-calm-700">
-          <div className="flex items-start gap-4">
-            <span
-              className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0"
-              aria-hidden="true"
-            >
-              <Sun className="w-6 h-6 text-white" />
+    <div className="space-y-6 max-w-4xl mx-auto">
+      {/* Simulate Incoming Call / Fake Video Call Modal */}
+      {callSimulated && <MockVideoCall onClose={() => setCallSimulated(false)} />}
+
+      {/* Top Appointment Banner */}
+      {!bannerDismissed && (
+        <div className="rounded-xl border-2 border-[#0f5272] bg-[#edf6fa] p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-sm">
+          <div className="flex items-start gap-3">
+            <span className="w-10 h-10 rounded-lg bg-calm-600 text-white flex items-center justify-center flex-shrink-0">
+              <Calendar className="w-5 h-5" />
             </span>
             <div>
-              <h1 className="text-2xl font-bold text-white">
-                {isPatient ? `${greeting}, Dorothy!` : `${greeting}, Joyce!`}
-              </h1>
-              <p className="text-calm-100 mt-1 text-base">
-                {isPatient
-                  ? `Today is ${todayDate}. Here is your day at a glance.`
-                  : `Viewing Dorothy's care plan for ${todayDate}.`}
+              <strong className="block text-base font-bold text-neutral-900">Upcoming appointment</strong>
+              <p className="text-sm text-neutral-700 m-0">
+                Blood pressure check with Dr. Sharma today at 10:30 am — Greenfield Surgery
               </p>
+              <span className="text-xs text-neutral-500 mt-1 block">Today at 10:30 am</span>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* ── Quick stats ───────────────────────────────────────────────────── */}
-      <section aria-label="Today's summary">
-        <h2 className="sr-only">Today's summary</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <StatCard
-            label="Tasks done"
-            value={`${doneCount} / ${totalCount}`}
-            icon={<CheckCircle2 className="w-5 h-5 text-success-600" aria-hidden="true" />}
-            accent="text-success-700"
-          />
-          <StatCard
-            label="Medicines left"
-            value={pendingMeds.toString()}
-            icon={<Pill className="w-5 h-5 text-warm-700" aria-hidden="true" />}
-            accent={pendingMeds > 0 ? 'text-warm-700' : 'text-success-700'}
-          />
-          <StatCard
-            label="Appointments"
-            value="1"
-            icon={<Phone className="w-5 h-5 text-calm-600" aria-hidden="true" />}
-            accent="text-calm-700"
-          />
-          <StatCard
-            label="Memory cards"
-            value="6"
-            icon={<BookOpen className="w-5 h-5 text-neutral-500" aria-hidden="true" />}
-            accent="text-neutral-700"
-          />
-        </div>
-      </section>
-
-      {/* ── What's next ───────────────────────────────────────────────────── */}
-      <section aria-label="What's next today">
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-xl font-semibold text-neutral-800 flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-calm-600" aria-hidden="true" />
-            What's next today
-          </h2>
-          <Link to="/schedule" className="text-sm font-medium text-calm-600 no-underline hover:underline">
-            See full day
-          </Link>
-        </div>
-        {upcomingItems.length === 0 ? (
-          <div className="card text-center text-neutral-500 py-10">
-            <CheckCircle2 className="w-10 h-10 text-success-600 mx-auto mb-3" aria-hidden="true" />
-            <p className="font-medium text-neutral-700">All done for today!</p>
-            <p className="text-sm mt-1">What a great day.</p>
-          </div>
-        ) : (
-          <ul className="space-y-3 list-none p-0 m-0" role="list">
-            {upcomingItems.map((item) => (
-              <li key={item.id}>
-                <div className="card card-hover flex items-center gap-4 p-4">
-                  <span
-                    className="text-2xl flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-neutral-100"
-                    aria-hidden="true"
-                  >
-                    {categoryEmoji[item.category]}
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <p className="font-semibold text-neutral-800 text-base leading-tight">
-                      {item.label}
-                    </p>
-                    {item.description && (
-                      <p className="text-sm text-neutral-500 mt-0.5 truncate">
-                        {item.description}
-                      </p>
-                    )}
-                  </div>
-                  <time
-                    dateTime={item.time}
-                    className="text-calm-700 font-semibold text-base flex-shrink-0 tabular-nums"
-                  >
-                    {formatTime(item.time)}
-                  </time>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-
-      {/* ── Quick links ───────────────────────────────────────────────────── */}
-      <section aria-label="Quick links">
-        <h2 className="text-xl font-semibold text-neutral-800 mb-3">Quick links</h2>
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-          {[
-            { to: '/schedule',    Icon: Calendar, label: 'My Day',     colour: 'bg-calm-50 text-calm-700 border-calm-200' },
-            { to: '/medications', Icon: Pill,      label: 'Medicines',  colour: 'bg-warm-50 text-warm-700 border-warm-200' },
-            { to: '/memories',    Icon: BookOpen,  label: 'Memories',   colour: 'bg-success-50 text-success-700 border-success-200' },
-            { to: '/contacts',    Icon: Phone,     label: 'Contacts',   colour: 'bg-neutral-100 text-neutral-700 border-neutral-200' },
-          ].map(({ to, Icon, label, colour }) => (
-            <Link
-              key={to}
-              to={to}
-              className={`flex flex-col items-center justify-center gap-2 rounded-card border p-5 min-h-touch font-semibold text-sm no-underline transition-shadow duration-200 hover:shadow-card ${colour}`}
+          <div className="flex items-center gap-2 self-end md:self-center">
+            <button
+              type="button"
+              onClick={() => setIsPaused(!isPaused)}
+              className="px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm font-semibold text-neutral-800 hover:bg-neutral-50 cursor-pointer"
             >
-              <Icon className="w-6 h-6" aria-hidden="true" />
-              {label}
-            </Link>
-          ))}
+              {isPaused ? '▶ Resume' : '|| Pause'}
+            </button>
+            <button
+              type="button"
+              onClick={() => setBannerDismissed(true)}
+              className="px-4 py-2 bg-calm-700 text-white rounded-lg text-sm font-bold hover:bg-calm-800 cursor-pointer"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Closed Captions Banner */}
+      <div className="bg-[#1e293b] text-white rounded-xl px-4 py-3 flex items-center gap-3 text-sm font-medium shadow-sm">
+        <span className="bg-[#334155] px-2 py-0.5 rounded text-xs font-bold">
+          [CC]
+        </span>
+        <span>Upcoming: Video call with Maria at 3:00 PM — your daughter will call you.</span>
+      </div>
+
+      {/* Greeting & Progress Header linked to Scheduling Page */}
+      <Link
+        to="/app/schedule"
+        className="block no-underline group space-y-3 bg-white border-2 border-neutral-200 hover:border-calm-500 rounded-2xl p-6 shadow-sm transition-all cursor-pointer"
+        aria-label={`View My Day schedule: ${doneCount} of ${totalCount} things done`}
+      >
+        <h1 className="text-3xl font-extrabold text-neutral-900 group-hover:text-calm-700 transition-colors">
+          Here's your day, Margaret
+        </h1>
+        <div className="flex items-center justify-between text-base font-semibold text-neutral-700">
+          <span>{doneCount} of {totalCount} things done today</span>
+          <span className="text-calm-700 font-bold group-hover:underline flex items-center gap-1">
+            View My Day →
+          </span>
+        </div>
+
+        <div className="w-full bg-neutral-200 h-3 rounded-full overflow-hidden border border-neutral-300">
+          <div
+            className="bg-calm-700 h-full rounded-full transition-all duration-300"
+            style={{ width: `${percentage}%` }}
+          />
+        </div>
+      </Link>
+
+      {/* NEXT THING TO DO Featured Card */}
+      <section className="bg-white border-2 border-neutral-900 rounded-2xl p-6 shadow-md space-y-6">
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-extrabold tracking-wider text-neutral-500 uppercase">
+            NEXT THING TO DO
+          </span>
+          <span className="px-3 py-1 bg-sky-100 text-sky-800 border border-sky-300 rounded-full text-xs font-semibold">
+            Coming up
+          </span>
+        </div>
+
+        <div className="flex items-start gap-4">
+          <div className="w-14 h-14 rounded-2xl bg-calm-100 text-calm-800 flex items-center justify-center flex-shrink-0">
+            <Video className="w-7 h-7" />
+          </div>
+          <div>
+            <span className="text-sm font-semibold text-neutral-500">Appointment 3:00 pm</span>
+            <h2 className="text-2xl font-extrabold text-neutral-900 mt-0.5 mb-1">
+              Video call with Maria
+            </h2>
+            <p className="text-neutral-600 text-base m-0">Your daughter — she will call you</p>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <Link
+            to="/app/contacts/c1"
+            className="w-full flex items-center justify-between px-6 py-4 bg-calm-700 hover:bg-calm-800 text-white rounded-xl font-bold text-lg transition-colors no-underline shadow-sm"
+          >
+            <div className="flex items-center gap-3">
+              <Video className="w-5 h-5" />
+              <span>Video preview — 3:00 pm</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="bg-white/20 px-2 py-0.5 rounded text-xs font-semibold">|| Controls</span>
+              <span className="bg-white/20 px-2 py-0.5 rounded text-xs font-semibold">CC</span>
+            </div>
+          </Link>
+
+          <button
+            type="button"
+            onClick={() => setCallSimulated(true)}
+            className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-white border-2 border-neutral-900 hover:bg-neutral-50 text-neutral-900 rounded-xl font-bold text-lg transition-colors cursor-pointer"
+          >
+            <Bell className="w-5 h-5 text-calm-700" />
+            <span>Simulate incoming call</span>
+          </button>
+        </div>
+      </section>
+
+      {/* Later Today Section */}
+      <section className="space-y-4">
+        <h2 className="text-xl font-bold text-neutral-900">Later today</h2>
+
+        <div className="bg-white border border-neutral-200 rounded-xl p-5 flex items-center gap-4 shadow-sm">
+          <div className="w-12 h-12 rounded-full bg-yellow-100 text-yellow-800 flex items-center justify-center flex-shrink-0">
+            <Pill className="w-6 h-6" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <strong className="block text-lg font-bold text-neutral-900">Atorvastatin</strong>
+            <p className="text-sm text-neutral-600 m-0">20 mg — 1 tablet</p>
+          </div>
+          <span className="px-3 py-1 bg-yellow-100 text-yellow-800 border border-yellow-300 rounded-lg text-xs font-semibold">
+            Medication
+          </span>
+          <time className="text-base font-bold text-neutral-700 tabular-nums">8:00 pm</time>
+        </div>
+
+        <div className="bg-white border border-neutral-200 rounded-xl p-5 flex items-center gap-4 shadow-sm">
+          <div className="w-12 h-12 rounded-full bg-sky-100 text-sky-800 flex items-center justify-center flex-shrink-0">
+            <Calendar className="w-6 h-6" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <strong className="block text-lg font-bold text-neutral-900">Blood pressure check</strong>
+            <p className="text-sm text-neutral-600 m-0">Greenfield Surgery — Dr. Sharma</p>
+          </div>
+          <span className="px-3 py-1 bg-sky-100 text-sky-800 border border-sky-300 rounded-lg text-xs font-semibold">
+            Today
+          </span>
+          <time className="text-base font-bold text-neutral-700 tabular-nums">10:30 am</time>
         </div>
       </section>
     </div>
   );
-}
-
-function StatCard({
-  label,
-  value,
-  icon,
-  accent,
-}: {
-  label: string;
-  value: string;
-  icon: React.ReactNode;
-  accent: string;
-}) {
-  return (
-    <div className="card flex flex-col gap-2 p-4">
-      <div className="flex items-center justify-between">
-        <span className="text-sm text-neutral-500 font-medium">{label}</span>
-        {icon}
-      </div>
-      <span className={`text-2xl font-bold tabular-nums ${accent}`}>{value}</span>
-    </div>
-  );
-}
-
-function formatTime(time: string) {
-  const [h, m] = time.split(':').map(Number);
-  const suffix = h >= 12 ? 'pm' : 'am';
-  const hour = h % 12 || 12;
-  return `${hour}:${String(m).padStart(2, '0')} ${suffix}`;
 }
