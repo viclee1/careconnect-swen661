@@ -131,6 +131,25 @@ export default function Layout({
     document.getElementById('main-content')?.focus();
   }, [location.pathname]);
 
+  // From 768px the header is sticky. Whatever is scrolled into view — a field
+  // focused after a failed Save, a card Tab reaches — must land below it, not
+  // under it (WCAG 2.4.11). The header's height changes with the width and
+  // the greeting, so it is measured and handed to CSS (scroll-padding-top).
+  const headerRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header || typeof ResizeObserver === 'undefined') return;
+    const root = document.documentElement;
+    const observer = new ResizeObserver(() => {
+      root.style.setProperty('--header-height', `${header.offsetHeight}px`);
+    });
+    observer.observe(header);
+    return () => {
+      observer.disconnect();
+      root.style.removeProperty('--header-height');
+    };
+  }, []);
+
   // Caregiver's mobile menu (hamburger). Closed on every route change.
   const [menuOpen, setMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
@@ -165,6 +184,7 @@ export default function Layout({
             over half the screen tall, and pinned it would cover the control
             that has focus (WCAG 2.4.11) — e.g. a conversation's Send button. */}
         <header
+          ref={headerRef}
           role="banner"
           className="bg-white border-b-2 border-neutral-200 shadow-sm md:sticky md:top-0 z-40"
         >

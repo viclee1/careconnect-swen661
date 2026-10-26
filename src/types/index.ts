@@ -33,8 +33,16 @@ export interface MemoryCard {
   title: string;
   body: string;
   imageUrl?: string;
+  /** Wider versions of the photo for `srcset`, e.g. "/memories/mc1-800.webp 800w". */
+  imageSrcSet?: string;
+  /** What the photo shows, for people who cannot see it. */
+  imageAlt?: string;
   category: 'family' | 'place' | 'event' | 'hobby' | 'pet';
   pinned: boolean;
+  /** When it happened, in the user's own words — "Summer 1975". */
+  when?: string;
+  /** Saved by the user on the Memories screen, so they may remove it. */
+  addedByUser?: boolean;
 }
 
 // ── Caregiver notes ───────────────────────────────────────────────────────

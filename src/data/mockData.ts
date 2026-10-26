@@ -4,8 +4,9 @@ import type {
   MemoryCard,
   CaregiverNote,
 } from '../types';
+import { localISODate } from '../utils/dates';
 
-const TODAY = new Date().toISOString().split('T')[0];
+const TODAY = localISODate();
 
 // ── Daily Schedule ─────────────────────────────────────────────────────────
 
@@ -70,7 +71,9 @@ export const memoryCards: MemoryCard[] = [
     id: 'mc1',
     title: 'Maria — Your Daughter',
     body: 'Maria lives in Bristol with her husband Tom and your two grandchildren, Ella (8) and James (5). She calls every Tuesday and Sunday afternoon.',
-    imageUrl: 'https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&cs=tinysrgb&w=600',
+    imageUrl: '/memories/mc1-480.webp',
+    imageSrcSet: '/memories/mc1-480.webp 480w, /memories/mc1-800.webp 800w',
+    imageAlt: 'A smiling family of four at a table set for tea',
     category: 'family',
     pinned: true,
   },
@@ -78,7 +81,9 @@ export const memoryCards: MemoryCard[] = [
     id: 'mc2',
     title: 'Your Home',
     body: 'You live at 14 Meadow Lane. The front door key is hanging on the blue hook by the kitchen. Your bedroom is the first door on the left upstairs.',
-    imageUrl: 'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=600',
+    imageUrl: '/memories/mc2-480.webp',
+    imageSrcSet: '/memories/mc2-480.webp 480w, /memories/mc2-800.webp 800w',
+    imageAlt: 'A two-storey house with lit windows at sunset',
     category: 'place',
     pinned: true,
   },
@@ -86,7 +91,9 @@ export const memoryCards: MemoryCard[] = [
     id: 'mc3',
     title: 'Your Garden',
     body: 'You love spending time in your garden. You grow tomatoes, sweet peas, and sunflowers every summer. Your favourite bench is by the rose bush.',
-    imageUrl: 'https://images.pexels.com/photos/1084188/pexels-photo-1084188.jpeg?auto=compress&cs=tinysrgb&w=600',
+    imageUrl: '/memories/mc3-480.webp',
+    imageSrcSet: '/memories/mc3-480.webp 480w, /memories/mc3-800.webp 800w',
+    imageAlt: 'A green potted plant on a wooden shelf',
     category: 'hobby',
     pinned: false,
   },
@@ -94,7 +101,9 @@ export const memoryCards: MemoryCard[] = [
     id: 'mc4',
     title: 'Buddy — Your Cat',
     body: 'Buddy is a ginger tabby cat, 4 years old. He eats twice a day — morning and evening. His food is in the blue tin under the kitchen sink.',
-    imageUrl: 'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=600',
+    imageUrl: '/memories/mc4-480.webp',
+    imageSrcSet: '/memories/mc4-480.webp 480w, /memories/mc4-800.webp 800w',
+    imageAlt: 'A fluffy white kitten with blue eyes',
     category: 'pet',
     pinned: true,
   },
@@ -102,7 +111,9 @@ export const memoryCards: MemoryCard[] = [
     id: 'mc5',
     title: '50th Wedding Anniversary',
     body: 'You and Robert celebrated your golden anniversary in June 2018 with a party at the village hall. Over 60 friends and family came to celebrate.',
-    imageUrl: 'https://images.pexels.com/photos/1024993/pexels-photo-1024993.jpeg?auto=compress&cs=tinysrgb&w=600',
+    imageUrl: '/memories/mc5-480.webp',
+    imageSrcSet: '/memories/mc5-480.webp 480w, /memories/mc5-800.webp 800w',
+    imageAlt: 'A bride and groom walking along a beach at sunset',
     category: 'event',
     pinned: false,
   },
@@ -110,7 +121,9 @@ export const memoryCards: MemoryCard[] = [
     id: 'mc6',
     title: 'Favourite Walk — River Path',
     body: 'The river path starts at the end of Meadow Lane. It is a flat, 20-minute loop through the meadow and back. You used to walk it every morning.',
-    imageUrl: 'https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?auto=compress&cs=tinysrgb&w=600',
+    imageUrl: '/memories/mc6-480.webp',
+    imageSrcSet: '/memories/mc6-480.webp 480w, /memories/mc6-800.webp 800w',
+    imageAlt: 'A turquoise lake below snow-capped mountains',
     category: 'place',
     pinned: false,
   },
