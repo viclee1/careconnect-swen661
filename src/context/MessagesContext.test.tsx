@@ -12,9 +12,18 @@ function wrapper({ children }: { children: ReactNode }) {
   return <MessagesProvider>{children}</MessagesProvider>;
 }
 
+// The seed places some messages at fixed times today (up to 09:05), so pin the
+// clock to noon: anything sent during a test then sorts after them.
+const NOON = new Date(2026, 9, 27, 12, 0).getTime();
+
 beforeEach(() => {
   localStorage.clear();
   Object.defineProperty(navigator, 'onLine', { configurable: true, get: () => true });
+  jest.spyOn(Date, 'now').mockReturnValue(NOON);
+});
+
+afterEach(() => {
+  jest.restoreAllMocks();
 });
 
 describe('MessagesProvider', () => {
