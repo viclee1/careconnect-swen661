@@ -55,9 +55,18 @@ describe('MessageThread', () => {
   });
 
   it('groups messages under day headings', () => {
-    renderThread('c1');
-    expect(screen.getByRole('heading', { level: 2, name: 'Yesterday' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { level: 2, name: 'Today' })).toBeInTheDocument();
+    // Midday, so this morning's seed messages are "Today" whatever the real
+    // time is (just after midnight they would still be in the future).
+    const noon = new Date();
+    noon.setHours(12, 0, 0, 0);
+    jest.useFakeTimers({ now: noon, advanceTimers: true });
+    try {
+      renderThread('c1');
+      expect(screen.getByRole('heading', { level: 2, name: 'Yesterday' })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { level: 2, name: 'Today' })).toBeInTheDocument();
+    } finally {
+      jest.useRealTimers();
+    }
   });
 
   it('makes the history a focusable, named region so it can be scrolled by keyboard', () => {

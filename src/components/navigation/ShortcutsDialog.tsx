@@ -6,7 +6,6 @@ import { useFocusTrap } from '../../hooks/useFocusTrap';
 
 const shortcuts: [keys: string[], what: string][] = [
   [['Ctrl', 'K'], 'Search medicines, appointments and people (⌘K on a Mac)'],
-  [['?'], 'Show these shortcuts'],
   [['Tab'], 'Move to the next button or link'],
   [['Space'], 'Tick a medicine or a My Day task'],
   [['/'], 'On Contacts: jump to “Find a contact”'],

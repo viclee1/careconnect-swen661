@@ -38,6 +38,7 @@ A responsive, accessible medical companion application for care recipients and t
 - [Testing](#testing)
 - [Git workflow](#git-workflow)
 - [Deployment](#deployment)
+- [React web client](#react-web-client)
 - [Flutter mobile client](#flutter-mobile-client)
 - [React Native mobile client](#react-native-mobile-client)
 - [Electron desktop client](#electron-desktop-client)
@@ -107,7 +108,7 @@ Instructor-assigned hearing-impairment constraints, mapped to WCAG 2.2:
 
 | Target | Stack | Folder | Status |
 |:-------|:------|:-------|:-------|
-| Web — responsive application / PWA | React 18 + Vite + TypeScript + Tailwind | repository root (moving to `web/`) | Base app in place |
+| Web — responsive application / PWA | React 18 + Vite + TypeScript + Tailwind | repository root | Assignment 11: every screen built and aligned to the Figma web design. See [React web client](#react-web-client) |
 | Mobile — Android and iOS | Flutter + Dart | `flutter/` | In progress — see [Flutter mobile client](#flutter-mobile-client) |
 | Mobile — Android and iOS | React Native + Expo | `mobile/` | In progress — see [React Native mobile client](#react-native-mobile-client) |
 | Desktop — Windows (also builds for macOS, Linux) | Electron + React | `desktop/` | Built for Assignment 8 — Windows installer; all eleven pages ported. See [Electron desktop client](#electron-desktop-client) |
@@ -190,7 +191,7 @@ CareConnect lowers the daily cognitive load for people who need help remembering
 - Today home with a prominent "Next thing to do" card and the day's remaining items.
 - Medications with pill images, plain-language doses, always-visible status, and a 10-second undo on every dose.
 - Appointments in chronological order with full-word dates, locations, and "who is taking me."
-- A persistent "Call my caregiver" action on every patient screen.
+- A persistent "Call my caregiver" action on every patient screen. *Our project removed it: a voice call is the one channel a deaf user cannot rely on. Caregivers are reached by written messages, captioned video calls and silent visual alerts (see [React web client](#react-web-client)).*
 
 **Caregiver**
 
@@ -200,7 +201,7 @@ CareConnect lowers the daily cognitive load for people who need help remembering
 
 **Shared**
 
-- Public landing page with an accessible, scoped AI assistant (explains the app and guides sign in/up; never gives medical advice).
+- Public landing page with an accessible, scoped AI assistant (explains the app and guides sign in/up; never gives medical advice). *The assistant component (`ChatBot.tsx`) is still in the code but has not been mounted since the Week 11 Landing page.*
 - Installable PWA with offline access to the day's schedule.
 
 ---
@@ -211,7 +212,7 @@ The base application is designed and verified against 21 WCAG 2.1 A/AA success c
 
 Assignment 10's web accessibility documentation — semantic HTML, landmarks, skip links, forms, keyboard and focus management, screen-reader patterns, and the audit that brought the web app from 71 axe violations to 0 at mobile, tablet and desktop widths — is in [`docs/web/accessibility/`](docs/web/accessibility/README.md) (also as Word and PDF). Run it with `npm run a11y:web`.
 
-The Assignment 10 early React implementation — responsive navigation (hamburger on mobile, collapsible sidebar on tablet, full sidebar on desktop), the layout grid, screenshots of every screen at all three breakpoints, completed work, differences to resolve with the Figma design and remaining tasks — is written up in [`docs/web/implementation/`](docs/web/implementation/README.md).
+The Assignment 10 early React implementation — the responsive layout, screenshots of every screen at all three breakpoints, the differences from the Figma design and remaining tasks — is written up in [`docs/web/implementation/`](docs/web/implementation/README.md), updated for Week 11, when the app shell was rebuilt to the Figma design (a ☰ Menu drawer below 1024 px, a sidebar from 1024 px). The Assignment 11 write-ups are indexed in [`docs/web/week11/`](docs/web/week11/README.md).
 
 On top of that baseline, this project adds the five hearing-impairment constraints above, measured against **WCAG 2.2 Level AA**. Accessibility is a merge gate, not a final pass — the QA / Testing Lead can block a merge on a failing check.
 
@@ -231,7 +232,8 @@ On top of that baseline, this project adds the five hearing-impairment constrain
 | PWA | Web App Manifest + Service Worker |
 | Mobile | Flutter + Dart · React Native + Expo |
 | Desktop | Electron + React (macOS `.dmg`, Windows `.exe`, Linux `.AppImage`/`.deb`) |
-| Tooling | ESLint, `tsc --noEmit`, Playwright (screenshot automation) |
+| Testing | Jest + React Testing Library + `user-event` + jest-axe; Playwright with `@axe-core/playwright` (end to end) |
+| Tooling | ESLint, `tsc --noEmit`, Playwright (screenshot automation, accessibility audit) |
 | Design | Figma (Education) |
 | Accessibility testing | axe DevTools, WAVE, Lighthouse, NVDA / VoiceOver |
 | Coverage | Coverage Gutters (VS Code) + `lcov` |
@@ -249,36 +251,42 @@ careconnect-swen661/
 │   ├── manifest.webmanifest         # PWA manifest
 │   └── sw.js                        # service worker (offline day schedule)
 ├── docs/
-│   └── screenshots/                 # README images (01-landing.png … 14-caregiver-activity.png)
+│   ├── screenshots/                 # README images (01-landing.png … 14-caregiver-activity.png; no 02)
+│   ├── web/accessibility/           # web accessibility documentation, audit, structure report
+│   ├── web/implementation/          # responsive implementation + every screen at three widths
+│   └── web/week11/                  # Assignment 11: team overview, victor/, upneet/ write-ups
+├── e2e/                             # Playwright specs (care pages, contacts & messaging, settings)
+├── coverage/                        # Jest coverage report (committed)
 ├── scripts/
-│   ├── screenshots.ts               # Playwright screenshot automation
+│   ├── screenshots.ts               # README screenshots
+│   ├── web-responsive-screenshots.mjs  # every screen at 375 / 820 / 1280 px
+│   ├── week11-*-evidence.mjs        # Assignment 11 screenshots (victor, upneet, testing)
+│   ├── web-a11y-audit.mjs, web-a11y-structure.mjs  # axe audit, landmark/heading report
 │   ├── gen-icons.mjs                # PWA icon generation
 │   ├── verify-pwa.mjs               # PWA manifest / service worker check
 │   └── verify-responsive.mjs        # responsive reflow check
 ├── src/
 │   ├── components/                  # Accessible component library
-│   │   ├── Banner.tsx
-│   │   ├── BigActionTile.tsx
-│   │   ├── Button.tsx
-│   │   ├── Card.tsx
-│   │   ├── ChatBot.tsx              # accessible, scoped AI assistant
-│   │   ├── ConfirmDialog.tsx
-│   │   ├── Field.tsx
-│   │   ├── InstallPrompt.tsx
-│   │   ├── Layout.tsx               # app shell + semantic landmarks
-│   │   ├── ProtectedRoute.tsx       # redirects unauthenticated users
-│   │   └── index.ts
+│   │   ├── Layout.tsx               # app shell: header, <main>, sidebar or drawer, status bar
+│   │   ├── navigation/              # NavPanel, SideNav, NavDrawer, AppSearch, AccountMenu,
+│   │   │                            # ShortcutsDialog, StatusBar, useAlerts, navItems
+│   │   ├── AppointmentBanner.tsx    # visual "Upcoming appointment" alert
+│   │   ├── CaptionStrip.tsx         # [CC] caption, following Accessibility Settings
+│   │   ├── appointments/ medicines/ memories/ contacts/ messaging/ settings/
+│   │   ├── Banner, Button, Card, ConfirmDialog, Field, InstallPrompt, MockVideoCall
+│   │   ├── ChatBot.tsx              # AI assistant (not mounted since Week 11)
+│   │   └── ProtectedRoute.tsx       # redirects unauthenticated users
 │   ├── auth/
 │   │   ├── AuthContext.tsx          # mock auth, persisted to localStorage
 │   │   └── mockAuth.ts
-│   ├── context/
-│   │   └── AppContext.tsx           # role + application state
-│   ├── pages/                       # Landing, SignIn, SignUp, RoleChooser,
-│   │   │                            # Home, Today, Medications, Appointments,
-│   │   │                            # Schedule, Memories, Contacts,
-│   │   │                            # Caregiver, CaregiverDashboard,
-│   │   │                            # ManageMedications, ManageAppointments,
-│   │   └── …                        # ActivityLog
+│   ├── context/                     # App, Appointments, Medicines, Memories, Messages, Settings
+│   ├── hooks/                       # useLocalStorageState, useOnlineStatus, useMediaQuery,
+│   │                                # useFocusTrap, useHighContrast, useDocumentTitle
+│   ├── models/, utils/              # domain rules and helpers (unit tested)
+│   ├── pages/                       # Landing, SignIn, SignUp, RoleChooser, Home, Schedule (My Day),
+│   │   │                            # Appointments, Medications, Memories, Contacts, MessageThread,
+│   │   │                            # AccessibilitySettings, CaregiverDashboard, ManageMedications,
+│   │   └── …                        # ManageAppointments, ActivityLog, Caregiver, PlaceholderPage
 │   ├── data/                        # mock data + local stores
 │   │   ├── mockData.ts
 │   │   ├── medsStore.ts
@@ -336,7 +344,7 @@ flowchart TD
     A[Landing page] -->|Sign up / Sign in| B{Authenticated?}
     B -->|No| A
     B -->|Yes, first time| C[Role chooser]
-    C -->|Care recipient| D[Patient: Today / Medications / Appointments]
+    C -->|Care recipient| D[Patient: Home / My Day / Appointments / Medicines / Memories / Contacts / Settings]
     C -->|Caregiver| E[Caregiver: Dashboard / Manage / Activity]
     B -->|Yes, returning| F[Stored role -> straight to home]
     F --> D
@@ -405,7 +413,7 @@ VITE_SUPABASE_ANON_KEY=your_supabase_anon_key  # public/anon key (protected by R
 ANTHROPIC_API_KEY=your_anthropic_key           # used by the chat-assistant Edge Function
 ```
 
-Anything prefixed `VITE_` is compiled into the browser bundle — never put a secret behind that prefix. The app runs on mock `localStorage` data without any backend keys; if the Anthropic key is absent, the assistant falls back to a scripted guided helper.
+Anything prefixed `VITE_` is compiled into the browser bundle — never put a secret behind that prefix. The app runs on mock `localStorage` data without any backend keys, so `.env` is optional. Sign in with any well-formed email and password and choose **care recipient** or **caregiver**; the avatar's menu switches role or signs out. See [React web client](#react-web-client) for screens, tests and known issues.
 
 ### Flutter — Android & iOS
 
@@ -469,73 +477,82 @@ These are the scripts currently defined in `package.json`:
 | `npm run typecheck` | TypeScript check, no emit (`tsconfig.app.json`) |
 | `npm run screenshots` | Regenerate the README screenshots via Playwright |
 | `npm test` | Jest + React Testing Library |
-| `npm run test:coverage` | Jest with a coverage report in `coverage/lcov-report/` |
+| `npm run test:coverage` | Jest with a coverage report in `coverage/lcov-report/` (fails under 75%) |
+| `npm run test:e2e` | Playwright against the production build (builds, serves on :4173) |
+| `npm run test:e2e:report` | Open the Playwright HTML report |
+| `npm run a11y:web` | axe-core audit and keyboard checks at 375 / 820 / 1280 px → `docs/web/accessibility/audit/` (needs `npm run dev -- --port 5180`) |
+| `npm run a11y:structure` | Landmarks, headings, links and fields per page → `docs/web/accessibility/structure.md` (same dev server) |
+| `npm run screenshots:responsive` | Every screen at three widths → `docs/web/implementation/screenshots/` (same dev server) |
 
-Additional helper scripts in `scripts/` are run directly with Node: `node scripts/gen-icons.mjs`, `node scripts/verify-pwa.mjs`, `node scripts/verify-responsive.mjs`.
+Additional helper scripts in `scripts/` are run directly with Node: `node scripts/week11-victor-evidence.mjs`, `node scripts/week11-upneet-evidence.mjs` (Assignment 11 screenshots; same dev server), `node scripts/week11-testing-evidence.mjs` (test screenshots from real runs), `node scripts/gen-icons.mjs`, `node scripts/verify-pwa.mjs`, `node scripts/verify-responsive.mjs`. The screenshot scripts fix the browser clock at 9:45 am so the images look the same whenever they are taken.
 
 ---
 
 ## Screens & walkthrough
 
-> **Capturing screenshots:** run `npm run dev`, then `npm run screenshots` (Playwright), or capture manually with your OS tool. Images live in `docs/screenshots/` and are embedded below.
+> **Capturing screenshots:** `npm run screenshots` builds the app, serves it and captures these images at 1280 × 800 into `docs/screenshots/`. Every screen at phone, tablet and desktop width is in [`docs/web/implementation/screenshots/`](docs/web/implementation/screenshots); the Assignment 11 screens, features and keyboard states are in [`docs/web/week11/`](docs/web/week11/README.md). All were regenerated on 27 October 2026.
 
 ### 1. Landing page
 
-Public entry: hero, "How it helps" cards, privacy reassurance, Sign up / Sign in CTAs.
+Public entry: "Your daily companion for calm, confident care", the three hearing-accessibility promises (visual alerts, captions everywhere, screen flash and desktop alerts) and Sign up / Sign in.
 
 ![Landing page](docs/screenshots/01-landing.png)
 
-### 2. AI assistant
-
-Accessible chatbot panel (aria-live, focus management) scoped to onboarding — no medical advice.
-
-![AI assistant panel](docs/screenshots/02-assistant.png)
-
-### 3. Sign up
+### 2. Sign up
 
 Accessible registration form with visible labels and inline validation.
 
 ![Sign up form](docs/screenshots/03-signup.png)
 
-### 4. Sign in
+### 3. Sign in
 
 Mock auth with the same accessible form pattern.
 
 ![Sign in form](docs/screenshots/04-signin.png)
 
-### 5. Role chooser
+### 4. Role chooser
 
-Post sign-in choice between Care Recipient and Caregiver; persists for future logins.
+Post sign-in choice between Care Recipient and Caregiver; remembered for future visits.
 
 ![Role chooser](docs/screenshots/05-role-chooser.png)
 
-### 6. Patient — Today
+### 5. Care recipient — Home
 
-Calm home with "Next thing to do" and the day's remaining items.
+The app shell from the Figma design — header with search (Ctrl K), CC, high contrast, keyboard shortcuts and the avatar with the alerts badge; sidebar with the greeting, date and time, pages, Settings and alerts; status bar. Home shows the **Upcoming appointment** visual alert and its **[CC]** caption, today's progress, the next thing to do (a captioned video call) and Later today.
 
-![Patient Today home](docs/screenshots/06-patient-today.png)
+![Care recipient Home](docs/screenshots/06-patient-today.png)
 
-### 7. Patient — Medications
+### 6. Care recipient — Medicines
 
-Pill images, plain-language doses, always-visible status.
+Today's medicines on the left, the chosen one in detail on the right, "3 still to take today" beside the title, and the next reminder written out as a caption.
 
-![Patient medications list](docs/screenshots/07-patient-medications.png)
+![Medicines](docs/screenshots/07-patient-medications.png)
 
-### 8. Medication taken
+### 7. Medicine marked as taken
 
-Polite confirmation plus a 10-second undo.
+Marked from the detail panel's large button: the tick, the strike-through and the word "Taken", the count updated (and announced), and **Taken — tap to undo**.
 
-![Medication marked as taken](docs/screenshots/08-medication-taken.png)
+![Medicine marked as taken](docs/screenshots/08-medication-taken.png)
 
-### 9. Patient — Appointments
+### 8. Care recipient — Appointments
 
-Chronological appointments with full-word dates and directions.
+Visits grouped under Today, Later this week and Coming up; the chosen visit with the time and place in full words, who is taking you, directions and **Add to My Day**. Export to calendar saves every visit with on-screen reminders, never a sound.
 
-![Patient appointments](docs/screenshots/09-patient-appointments.png)
+![Appointments](docs/screenshots/09-patient-appointments.png)
+
+### 9. Care recipient — My Day, Memories, Contacts, Conversation, Settings
+
+| My Day | Memories |
+|:--|:--|
+| ![My Day](docs/web/implementation/screenshots/desktop/06-my-day.png) | ![Memories](docs/web/week11/upneet/screenshots/desktop/04-navigation.png) |
+| **Contacts** — written conversations, never voice calls; the primary contact's conversation beside the list on desktop | **Conversation** — transcripts, captioned video messages, the silent **Alert** (screen flash and vibration), quick replies, offline queue |
+| ![Contacts](docs/web/week11/victor/screenshots/desktop/04-navigation.png) | ![Conversation](docs/web/week11/victor/screenshots/features/captioned-video-playing.png) |
+| **Accessibility Settings** — visual alerts (always on), captions (size, colour, preview), audio, screen flash and desktop alerts, vibration rhythms, account | **On a phone** — the ☰ Menu drawer, with search, opened by Ctrl K |
+| ![Accessibility Settings](docs/web/week11/victor/screenshots/mobile/03-settings-top.png) | ![Menu drawer on a phone](docs/web/week11/victor/screenshots/features/shell-drawer-search-mobile.png) |
 
 ### 10. Caregiver — Dashboard
 
-Adherence summary, alerts region, recent activity.
+Margaret's status today (medicines, check-in, next appointment), alerts for overdue items, and recent activity. The sidebar says whose care plan is being viewed.
 
 ![Caregiver dashboard](docs/screenshots/10-caregiver-dashboard.png)
 
@@ -570,12 +587,13 @@ Timestamped log of taken/skipped doses and check-ins.
 **Currently in the repository**
 
 - **Static checks** — ESLint (`npm run lint`) and TypeScript strict mode (`npm run typecheck`). Both must pass before a pull request merges.
-- **Playwright** — installed and used by `npm run screenshots` for automated screen capture, and by the `verify-pwa` / `verify-responsive` helper scripts.
-- **Unit & component tests** — Jest + React Testing Library + `user-event` (`npm test`). `npm run test:coverage` writes `coverage/lcov-report/index.html` (committed) and fails below **75%** on statements, branches, functions or lines. The web suite has 517 tests (516 passing, 1 skipped on this branch) at 94.0% statement coverage over the measured files (Contacts, Messaging, Accessibility Settings, Appointments, Medicines, Memories, plus their models, contexts and hooks). Each client has its own suite — see the [Flutter](#flutter-mobile-client), [React Native](#react-native-mobile-client) and [Electron](#electron-desktop-client) sections.
-- **End-to-end** — Playwright (`npm run test:e2e`) against the production build (`vite preview`, service worker active) in Chromium, Firefox, WebKit and mobile Safari at 375px. Specs in [`e2e/`](e2e): contacts → conversation → send → reload, silent alert, captioned video-call request, captioned video messages, keyboard-operated quick replies, offline queueing and offline launch, keyboard-only settings, screen-flash previews, and responsive navigation. Run `npx playwright install chromium firefox webkit` once first; `npm run test:e2e:report` opens the HTML report.
-- **CI** — [`.github/workflows/web-tests.yml`](.github/workflows/web-tests.yml) runs lint, typecheck, coverage and every Playwright project on each pull request.
+- **Playwright** — used by the screenshot scripts, the accessibility audit (`npm run a11y:web`), the `verify-pwa` / `verify-responsive` helpers and the end-to-end tests.
+- **Unit & component tests** — Jest + React Testing Library + `user-event` + jest-axe (`npm test`). `npm run test:coverage` writes `coverage/lcov-report/index.html` (committed) and fails below **75%** on statements, branches, functions or lines. The web suite has **375 tests in 29 suites, all passing**, at **95.8% statements / 91.1% branches / 94.1% functions / 96.4% lines** over the measured files (every Assignment 11 screen, the app shell, and their models, contexts, hooks and utilities). Each client has its own suite — see the [Flutter](#flutter-mobile-client), [React Native](#react-native-mobile-client) and [Electron](#electron-desktop-client) sections.
+- **End-to-end** — Playwright (`npm run test:e2e`) against the production build (`vite preview`, service worker active) in Chromium, Firefox, WebKit and mobile Safari at 375px. Specs in [`e2e/`](e2e): medicines by keyboard, appointments (My Day and calendar export read back from the real file), memories (form errors, save, pin, remove, filter), the memory book offline, every care page at every width with axe; contacts → conversation → send → reload, silent alert, captioned calls and video messages, quick replies, offline queueing and offline launch, keyboard-only settings, flash previews, and Settings reachable at every width. Latest local run (Chromium, WebKit, mobile Safari): **58 passed, 7 skipped by design, 1 failed** — see [known issues](#known-issues-and-limitations-web). Run `npx playwright install chromium firefox webkit` once first; `npm run test:e2e:report` opens the HTML report.
+- **Accessibility audit** — `npm run a11y:web`: 17 routes and the shell's interactive states at three widths, **64 scans, 0 violations, 53/53 keyboard and structure checks**.
+- **CI** — [`.github/workflows/web-tests.yml`](.github/workflows/web-tests.yml) runs lint, typecheck, coverage and every Playwright project (Firefox included) on each pull request.
 
-Assignment 11 write-ups: [Contacts, Messaging and Accessibility Settings](docs/web/week11/victor/README.md).
+Assignment 11 write-ups: [team overview](docs/web/week11/README.md) · [Contacts, Messaging, Accessibility Settings and the app shell](docs/web/week11/victor/README.md) · [Appointments, Medicines and Memories](docs/web/week11/upneet/README.md).
 
 **Accessibility verification**
 
@@ -638,6 +656,85 @@ npm run build       # outputs to /dist
 Deploy `/dist` to Netlify or Vercel. Configure the assistant's Supabase Edge Function and set `ANTHROPIC_API_KEY` in the host's environment settings — never client-side.
 
 Windows desktop artifacts are produced by Electron. Members without a native Windows install should build through GitHub Actions on a `windows-latest` runner and treat CI as the authoritative build environment.
+
+---
+
+## React web client
+
+The web app is the repository root (`src/`, `public/`, `e2e/`). It is the project's main client: a responsive, installable PWA for the care recipient and the caregiver, built so that **nothing depends on hearing**. The full Assignment 11 write-ups, with screenshots at 375 / 768 / 1440 px, keyboard evidence and test results, are in [`docs/web/week11/`](docs/web/week11/README.md).
+
+### Project description
+
+**The app shell** (every signed-in screen) follows the team's Figma web design:
+
+- **Header:** ☰ Menu (below 1024 px), logo, **search** for medicines, appointments, people and pages (Ctrl/⌘ K), **CC** (captions on or off everywhere), **high contrast**, **keyboard shortcuts**, and the **avatar** with the number of alerts waiting; its menu switches role and signs out.
+- **Sidebar** (1024 px and up) or **Menu drawer** (phones and tablets): who you are using the app as, "Good morning, Margaret" with the date and time, the pages, **Settings**, and an **alerts** list (unread messages, medicines still to take, today's visits — each a link).
+- **Status bar:** connection state in words, active alerts, "WCAG 2.2 AA · No sound required".
+
+**Screens**
+
+| Screen | Route | What it does for a deaf or hard-of-hearing user |
+|:--|:--|:--|
+| Landing, Sign in, Sign up, Role chooser | `/`, `/signin`, `/signup`, `/role` | States the "no sound required" promise up front; accessible forms; mock sign-in |
+| Home | `/app` | The **Upcoming appointment** visual alert (Pause, OK) and its **[CC]** caption; today's progress; the next thing to do; a simulated incoming **video call** whose live captions, volume and balance follow Settings |
+| My Day | `/app/schedule` | Everything to do today, ticked off in place; progress written as words and a bar |
+| Appointments | `/app/appointments` | Grouped list and detail: full-word dates, the place, who is taking you, directions, **Add to My Day**; **Export to calendar** with on-screen reminders, never a sound |
+| Medicines | `/app/medications` | List and detail; tick a medicine or mark it from the detail; "still to take" count announced; the next reminder as a caption |
+| Memories | `/app/memories` | A memory book with photos that opens offline; add, pin, filter and remove, with validation |
+| Contacts | `/app/contacts` | Written conversations, never voice calls; search; a **captioned video call** to the primary caregiver |
+| Conversation | `/app/contacts/:id` | Voicemail as a transcript, video messages with captions, a silent **Alert** (screen flash and vibration) instead of a ring, quick replies, messages kept and sent when an offline connection returns |
+| Accessibility Settings | `/app/settings` | Visual alert banners (always on), captions (size, colour, preview), audio volume and balance, screen flash and desktop notifications, vibration rhythms, sign out |
+| Caregiver dashboard, Manage medications, Manage appointments, Activity log, Notes | `/app`, `/app/manage-*`, `/app/activity`, `/app/caregiver` | The caregiver's view of the same plan, with accessible forms and confirm-on-delete |
+
+**Architecture.** React 18 + TypeScript + Vite, React Router 7 with lazy-loaded routes, Tailwind design tokens, and the Context API for state (`AppointmentsProvider`, `MedicinesProvider`, `MemoriesProvider`, `MessagesProvider`, `SettingsProvider`), each persisted through `useLocalStorageState`, which repairs corrupt saved data. Domain rules live in `src/models/` and `src/utils/`, shared with the desktop and mobile clients where they existed first. A service worker caches the app shell, lazy chunks and memory photos for offline use.
+
+### How to run the app
+
+```bash
+npm install
+npm run dev                         # http://localhost:5173
+npm run build && npm run preview    # production build with the service worker
+```
+
+Sign in with any well-formed email and password, then choose **care recipient** or **caregiver**.
+
+### How to run tests
+
+```bash
+npm test                            # Jest + React Testing Library (375 tests)
+npm run test:coverage               # + coverage/lcov-report/index.html, fails under 75%
+npx playwright install chromium firefox webkit   # once
+npm run test:e2e                    # Playwright, every browser project
+npm run test:e2e -- --project=chromium           # one browser
+npm run dev -- --port 5180 & npm run a11y:web    # axe audit + keyboard checks
+npm run lint && npm run typecheck
+```
+
+### Link to test coverage report
+
+[`coverage/lcov-report/index.html`](coverage/lcov-report/index.html) (committed): **95.82% statements, 91.14% branches, 94.1% functions, 96.44% lines** over the measured files listed in `jest.config.cjs`.
+
+### Known issues and limitations (web)
+
+- **One end-to-end check is timing-sensitive.** In Chromium only, the Memories flow sometimes measures the focused field before the browser has finished scrolling it below the sticky header, and fails. It fails the same way on the commit before the Figma work and passed in one of the latest runs; WebKit and mobile Safari pass.
+- **Firefox cannot launch locally on macOS 27** (Playwright's Firefox build hangs at its sandbox). CI runs the Firefox project on Ubuntu.
+- **Home and My Day keep their own task list** rather than reading the medicines and appointments stores, so ticking a medicine on Medicines does not tick it on My Day.
+- **The Medicines reminder caption** names the next medicine still to come today, not an overdue one.
+- **"/" on Contacts** is a single-character shortcut that cannot be turned off (WCAG 2.1.4); the plan is in the [accessibility documentation](docs/web/accessibility/README.md#9-known-gaps-and-next-steps).
+- **The AI assistant** (`ChatBot.tsx`) is not mounted since the Week 11 Landing page; whether it returns is a team decision.
+- Data is mock data in `localStorage`; nothing is sent to a server.
+
+### Team member contributions this week (Assignment 11)
+
+| Member | Screens and work |
+|:--|:--|
+| Justin Zhang | Landing, Sign in, Sign up, Home, My Day, the simulated video call |
+| Upneet Bir | Appointments, Medicines, Memories: Context state, calendar export, the memory form, offline photos, tests ([write-up](docs/web/week11/upneet/README.md)) |
+| Victor Lee | Contacts, Conversation, Accessibility Settings; after the merge, the app shell rebuilt to the Figma design, captions applied app-wide, and the three care pages laid out as in Figma ([write-up](docs/web/week11/victor/README.md)) |
+
+### AI usage
+
+Claude (Anthropic), in Claude Code, was used as a pair programmer: porting desktop and mobile features to React, matching the Figma frames, drafting tests, and writing the screenshot and audit scripts and these documents. Every change was checked by running the tests, the axe audit and the screenshot comparisons; details are in each write-up.
 
 ---
 

@@ -5,7 +5,19 @@ team's Assignment 11 Word document. It covers the **Appointments**,
 **Medicines** and **Memories** screens of the React web app. The headings
 follow the submission's sections, so each part can be pasted into the
 matching section of the team document. Every screenshot is in
-[`screenshots/`](screenshots).
+[`screenshots/`](screenshots); the team overview is in
+[`../README.md`](../README.md).
+
+> **Updated after the merge (Victor, commit `c2fdf6b`).** When the three
+> branches were combined, the whole app was aligned to the team's Figma web
+> design, and that changed the *layout* of these three screens: Medicines
+> and Appointments became a list with a detail panel, Memories a single list
+> of rows, and the medicines became the design's four (Amlodipine,
+> Lisinopril, Metformin, Atorvastatin) so the page agrees with My Day. The
+> state, rules, form, export, offline behaviour and accessibility work
+> described below are unchanged. The parts of this write-up that describe
+> layout, the medicine tests and the results have been updated to match, and
+> every screenshot was recreated.
 
 | Item | Where |
 |:--|:--|
@@ -13,7 +25,7 @@ matching section of the team document. Every screenshot is in
 | State | [`AppointmentsContext.tsx`](../../../../src/context/AppointmentsContext.tsx), [`MedicinesContext.tsx`](../../../../src/context/MedicinesContext.tsx), [`MemoriesContext.tsx`](../../../../src/context/MemoriesContext.tsx) (Context API), each with its hook in [`appointments.ts`](../../../../src/context/appointments.ts), [`medicines.ts`](../../../../src/context/medicines.ts), [`memories.ts`](../../../../src/context/memories.ts) |
 | Custom hooks | `useAppointments`, `useMedicines`, `useMemories`, built on the team's [`useLocalStorageState`](../../../../src/hooks/useLocalStorageState.ts) |
 | Domain logic | [`src/models/appointment.ts`](../../../../src/models/appointment.ts), [`medicine.ts`](../../../../src/models/medicine.ts), [`memory.ts`](../../../../src/models/memory.ts), [`src/utils/dates.ts`](../../../../src/utils/dates.ts), [`calendar.ts`](../../../../src/utils/calendar.ts) |
-| Unit and component tests | 99 Jest tests in 9 suites, plus my 3 routes in the team's `src/accessibility.test.tsx` (listed in [§3](#3-testing-implementation)) |
+| Unit and component tests | 103 Jest tests in 9 suites, plus my 3 routes in the team's `src/accessibility.test.tsx` (listed in [§3](#3-testing-implementation)) |
 | E2E tests | [`e2e/care-pages.spec.ts`](../../../../e2e/care-pages.spec.ts) (Playwright), 8 tests covering 4 critical flows plus a per-page width and axe check, run in 4 browser projects |
 | Coverage | [`coverage/lcov-report/index.html`](../../../../coverage/lcov-report/index.html) |
 | Screenshot script | [`scripts/week11-upneet-evidence.mjs`](../../../../scripts/week11-upneet-evidence.mjs) |
@@ -35,9 +47,9 @@ state, ported the missing features, and added the ones a website needs.
 
 | Screen | Route | What it does |
 |:--|:--|:--|
-| Appointments | `/app/appointments` | Upcoming visits grouped under **Today**, **Later this week** and **Coming up** headings. Each card gives the date and time in full words ("Sunday, 25 October — 10:30 am") in a `<time>` element, the place with its kind ("Telephone — no travel needed"), **who is taking the user**, and the caregiver's note. **Get directions** is a link that opens a map in a new tab (and says so). **Add to My Day** is a checkbox, saved on the device. **Export to calendar** (from the desktop app) downloads every visit as an `.ics` file for Outlook, Apple Calendar or Google Calendar, with an **on-screen reminder an hour before, never a sound**. |
-| Medicines | `/app/medications` | Today's tracker. A status line reads **"2 of 4 taken. 2 medicines still to take today."** above a native `<progress>` bar. Each medicine is a **native checkbox** whose card is one large click or tap target. It shows the name, dose, times and instructions, and "Taken" or "Not yet" in words. Ticks survive navigation, a reload and a lost connection, and **start fresh each day**. Each tick is logged to the caregiver's activity log, and the caregiver dashboard reads the same ticks. |
-| Memories | `/app/memories` | People, places and moments, **pinned first**, filtered by kind with a radio group drawn as pills. Long stories are cut to three lines behind **Read more**. **Add a memory** opens a form (name, when, kind, the story, pin) with **validation**. Any memory can be **pinned or unpinned**, and the user's own memories can be **removed** behind a confirmation dialog. Photos are **local, responsive WebP** files, so the memory book opens offline. |
+| Appointments | `/app/appointments` | Upcoming visits listed on the left, grouped under **Today**, **Later this week** and **Coming up** headings; choosing one shows it in the detail panel on the right (below the list on a phone). The detail gives the date and time in full words ("Sunday, 25 October — 10:30 am") in a `<time>` element, the place with its kind ("Telephone — no travel needed"), **who is taking the user**, and the caregiver's note. **Get directions** is a link that opens a map in a new tab (and says so). **Add to My Day** is a checkbox drawn as the panel's large button, saved on the device. **Export to calendar** (from the desktop app) downloads every visit as an `.ics` file for Outlook, Apple Calendar or Google Calendar, with an **on-screen reminder an hour before, never a sound**. |
+| Medicines | `/app/medications` | Today's tracker. An amber pill beside the title reads **"3 still to take today"**, and a screen reader hears the full sentence ("1 of 4 taken. 3 medicines still to take today."). The four medicines are listed on the left, each with a round **native checkbox** to tick it; choosing a row shows the medicine in the detail panel — when, status, how to take it and what it is for — with a large **Mark as taken / Taken — tap to undo** button. A **[CC] caption** writes out the next reminder. Taken is shown by the tick, a strike-through and the word "Taken". Ticks survive navigation, a reload and a lost connection, and **start fresh each day**. Each tick is logged to the caregiver's activity log, and the caregiver dashboard reads the same ticks. |
+| Memories | `/app/memories` | People, places and moments as a single list of rows (a small photo, the title, kind, when and the story), **pinned first**, filtered by kind with a radio group drawn as pills. Long stories are cut to two lines behind **Read more**. **Add a memory** opens a form (name, when, kind, the story, pin) with **validation**. Any memory can be **pinned or unpinned**, and the user's own memories can be **removed** behind a confirmation dialog. Photos are **local, responsive WebP** files, so the memory book opens offline. |
 
 **Requirements met in this part:**
 
@@ -46,7 +58,7 @@ state, ported the missing features, and added the ones a website needs.
 | React Router | The three routes under `/app/*` are now **loaded with `React.lazy`**, like Victor's. Each builds as its own chunk (`Medications-*.js` 4.9 kB / 1.8 kB gzip, `Appointments-*.js` 10.3 kB / 3.9 kB, `Memories-*.js` 13.3 kB / 4.5 kB) and loads on first visit, not with the home screen. |
 | State management | Context API. `AppointmentsProvider` holds the visits and the user's My Day choices. `MedicinesProvider` holds today's ticks and the progress, and logs each change for the caregiver. `MemoriesProvider` holds the memory book with add, pin and remove. The providers sit above the router, so ticking a medicine and visiting another page does not un-tick it. Each context object and its hook are in their own module, so Fast Refresh keeps working and ESLint passes. |
 | Custom hooks | `useAppointments()`, `useMedicines()` and `useMemories()` each throw a clear error outside their provider. All three providers persist through the team's `useLocalStorageState(key, initial, revive)`, with my own revive functions that **repair corrupt saved data** instead of crashing (tested). |
-| Reusable components | `PageHeader`, `AppointmentCard`, `AppointmentGroup`, `CalendarExport`, `MedicineProgress`, `MedicineRow`, `MemoryCard`, `MemoryFilters` and `AddMemoryForm`, plus the team's `Banner`, `Field` and `ConfirmDialog`. |
+| Reusable components | `PageHeader`, `AppointmentRow`, `AppointmentDetail`, `AppointmentGroup`, `CalendarExport`, `MedicineProgress`, `MedicineRow`, `MedicineDetail`, `MemoryCard`, `MemoryFilters` and `AddMemoryForm`, plus the team's `Banner`, `Field`, `ConfirmDialog`, `AppointmentBanner` and `CaptionStrip`. |
 | Form handling and validation | **Add a memory** is a real `<form noValidate>`. Errors are checked on Save, not while typing: the name is required (up to 60 characters), "when" is optional (up to 40), the kind is required, and the story must be 10 to 500 characters. Each error is a plain sentence printed under its field (`role="alert"`), linked with `aria-describedby`, and the field gets `aria-invalid`. **Focus moves to the first field to fix.** After the first Save, each error clears as soon as its field is put right. A live hint counts the characters left. |
 | Offline functionality | Everything is read from the device. My Day choices, medicine ticks and the memory book are saved in localStorage. The memory photos were moved from an external photo site to **same-origin WebP files** in `public/memories/`, which the team's service worker caches, so the memory book, **photos included**, opens with no connection. This is verified by an E2E test. |
 | PWA | Uses the team's manifest and service worker. My screens add the offline behaviour above. |
@@ -55,9 +67,9 @@ state, ported the missing features, and added the ones a website needs.
 
 | Same as desktop and mobile | Detail |
 |:--|:--|
-| Appointments | Export to calendar with an on-screen (DISPLAY) reminder, never AUDIO. A written result banner whose Dismiss button returns focus to Export. Two cards a row from tablet width. An empty state. |
-| Medicines | "*n* of *m* taken" announced as a status. A native checkbox per medicine in a `<fieldset>` (Tab + Space). An "All done for today" message. State kept across navigation. |
-| Memories | Cards with headings for screen-reader navigation, in a grid that fills a wide window. An empty state. |
+| Appointments | Export to calendar with an on-screen (DISPLAY) reminder, never AUDIO. A written result banner whose Dismiss button returns focus to Export. An empty state. |
+| Medicines | "*n* of *m* taken" announced as a status. A native checkbox per medicine (Tab + Space). An "All taken" message. State kept across navigation. |
+| Memories | Memories with headings for screen-reader navigation. An empty state. |
 
 | Different on the web, on purpose | Why |
 |:--|:--|
@@ -82,7 +94,9 @@ state, ported the missing features, and added the ones a website needs.
 Feature states:
 [added to My Day](screenshots/features/appointments-my-day-added.png),
 [exported to calendar](screenshots/features/appointments-exported.png),
-[3 of 4 taken](screenshots/features/medicines-three-of-four.png) →
+[a visit chosen in the list](screenshots/features/appointments-detail-selected.png),
+[a medicine chosen in the list](screenshots/features/medicines-detail-selected.png) →
+[marked from the detail panel: 2 still to take](screenshots/features/medicines-two-of-four.png) →
 [all taken](screenshots/features/medicines-all-taken.png),
 [Add a memory form](screenshots/features/memories-add-form.png) →
 [validation errors](screenshots/features/memories-validation.png) →
@@ -93,22 +107,19 @@ Feature states:
 
 ### How the layout adapts
 
-- **Appointments.** One column of cards on a phone, two from 768 px
-  (`card-grid`). The group heading's line fills the remaining width. The
-  Export button is full width under the title on a phone and sits beside
-  its hint from 768 px. The card's actions wrap: on a narrow card, Get
-  directions and the My Day checkbox stack.
-- **Medicines.** The status line and bar sit above one column of medicine
-  cards on a phone and two from 768 px. The pill swatch and the "Taken" word
-  stay on the right of each card at every width.
-- **Memories.** One, two or three cards a row (`grid-cols-1
-  md:grid-cols-2 lg:grid-cols-3`). Every photo sits in a fixed 16:9 box, so
-  cards line up and the page does not jump as photos arrive. The filter
-  pills wrap. **Add a memory** is full width under the title on a phone. The
-  form's name and "when" fields share a row from 768 px.
-- **Navigation.** Unchanged from the team's shell: a bottom tab bar on
-  phones, an icon rail on tablets, and a labelled sidebar on desktop, each
-  with the current page marked.
+- **Appointments.** From 768 px, the grouped list is a 15–18 rem column
+  on the left and the chosen visit fills the right. On a phone the detail
+  follows the list. Export to calendar sits under the list with its hint
+  below it.
+- **Medicines.** The same list and detail layout. The "still to take" pill
+  sits beside the title and wraps under it on a narrow phone. The appointment
+  banner and the [CC] reminder run the full width above.
+- **Memories.** One column of rows, capped at 56 rem, as in the design.
+  Every photo is a fixed square thumbnail, so rows line up and the page does
+  not jump as photos arrive. The filter pills wrap. The form's name and
+  "when" fields share a row from 768 px.
+- **Navigation.** The app shell's sidebar from 1024 px, and the ☰ Menu
+  drawer below that, as in the design's phone and tablet frames.
 - **Touch and click targets.** Every control is at least 44 × 44 px; an E2E
   test measures every button, link and checkbox label on all three pages at
   1440 px and 375 px. Larger where it helps: **each medicine card is one
@@ -118,7 +129,8 @@ Feature states:
   test in every browser project, and no console errors or warnings.
 
 **Shared-layout fix found by my screenshots.** From 768 px the team's
-header is sticky and about 190 px tall. When Save moved focus to the first
+header was sticky and about 190 px tall (it is now the design's 68 px header
+at every width). When Save moved focus to the first
 field to fix, the browser scrolled that field to the top of the window,
 **under the header**, so the focused field could not be seen (WCAG 2.4.11,
 Focus Not Obscured). `Layout.tsx` now measures the header with a
@@ -150,13 +162,14 @@ is added only where HTML has no element for the job.
 | Element | Markup | Why |
 |:--|:--|:--|
 | Date groups | `<section aria-labelledby>` + `<h2>` ("Today", "Later this week", "Coming up"), cards as `<h3>` | Screen-reader users jump group to group or card to card by heading. |
-| Appointment card | `<article aria-labelledby>` its `<h3>` | One article per visit. The team's `Card` would have made each card a labelled region, adding eight landmarks. |
+| Visit in the list | `<button aria-current>` inside its group's list, named by its title and time | Choosing a visit shows it in the detail panel; `aria-current` says which one is shown. |
+| Appointment detail | `<article aria-labelledby>` its `<h2>` | One article for the visit being shown. |
 | Date and time | `<time datetime="2026-10-25T10:30">Sunday, 25 October — 10:30 am</time>` | Full words for people, a machine-readable value for software. |
 | Get directions | `<a href target="_blank" rel="noopener noreferrer">` with "to Greenfield Surgery (opens in a new tab)" in `sr-only` text | A link, because it goes somewhere. Its name says where and warns of the new tab. |
 | Add to My Day | Native `<input type="checkbox">` in a `<label>`, named "Add to My Day: Blood test — fasting needed" | Space toggles it, the state is announced, and **focus stays put**. The old version swapped the button for a badge, which dropped focus to the top of the page. |
 | Export result | The team's `Banner` (`role="status"`, or `role="alert"` when nothing could be exported) | The outcome is announced in words. |
-| Medicine progress | One always-present `<p role="status" aria-live="polite">` with the sentence, plus a native `<progress>` labelled "Taken today" | Each tick announces "3 of 4 taken. 1 medicine still to take today." The old page swapped between two status `<div>`s, and a status region that is replaced instead of updated is often not announced. |
-| Medicines | `<fieldset>` with `<legend>` "Mark each medicine as taken", and a native checkbox per medicine named by its name and dose, **described** (`aria-describedby`) by "Take at 8:00 pm. Take in the evening." | Tab moves between medicines and Space ticks one. "Checkbox, checked" is announced by the browser. The times are read as a sentence, not as a row of chips. |
+| Medicine progress | The "still to take" pill is one always-present `<p role="status" aria-live="polite">`; it shows the short form and reads the full sentence | Each tick announces "2 of 4 taken. 2 medicines still to take today." A status region that is updated, not replaced, is reliably announced. |
+| Medicines | Each row is a `<button aria-current>` that shows the medicine in detail (its name reads "Lisinopril, 10 mg — 1 tablet, at 9:00 am, not taken yet") and a native checkbox named "Lisinopril taken". The detail panel is a labelled region with a `<dl>` for When and Status | Tab moves between rows and ticks and Space ticks one. "Checkbox, checked" is announced by the browser. The times are read as a sentence, not as a row of chips. |
 | Memory filter | `<fieldset>` + `<legend>` "Show" + native radios drawn as pills | One choice at a time is what radios mean. One Tab stop, arrow keys, and "Family, radio button, 2 of 6" all come from the browser. The old version used six `aria-pressed` toggle buttons. |
 | Memory card | `<article aria-labelledby>` its `<h3>`. Pinned and Kind are printed badges | |
 | Read more | `<button aria-expanded aria-controls>` named "Read more about Your Home" | The disclosure pattern. The name says which story. |
@@ -178,8 +191,8 @@ A and AA in Chromium, WebKit and mobile Safari, with **no violations**.
 
 | Key | Appointments | Medicines | Memories |
 |:--|:--|:--|:--|
-| **Tab / Shift+Tab** | Export to calendar → (banner's Dismiss) → each card's Get directions → its My Day checkbox | Each medicine's checkbox, in list order | Add a memory → (form fields → Cancel → Save) → the filter group (one stop) → each card's Read more → Pin → Remove |
-| **Enter** | Follows Get directions; activates Export and Dismiss | — | Opens or closes the form, Read more, Pin, Remove; in a single-line field, saves the form |
+| **Tab / Shift+Tab** | Each visit in the list → Export to calendar → (banner's Dismiss) → the detail's Get directions → its My Day checkbox | Each medicine's row, then its tick, in list order → the detail's Mark as taken button | Add a memory → (form fields → Cancel → Save) → the filter group (one stop) → each card's Read more → Pin → Remove |
+| **Enter** | Shows the focused visit in detail; follows Get directions; activates Export and Dismiss | Shows the focused medicine in detail; activates Mark as taken | Opens or closes the form, Read more, Pin, Remove; in a single-line field, saves the form |
 | **Space** | Ticks or unticks My Day; activates buttons | **Ticks or unticks the medicine** | Activates buttons; ticks "Pin to the top" in the form |
 | **Arrow keys** | — | — | Move through the filter choices (wrapping); choose the kind in the `<select>` |
 | **Escape** | — | — | **Closes the form and keeps the draft**, with focus back on Add a memory. Closes the Remove dialog with focus back on Remove |
@@ -208,8 +221,9 @@ moves focus to `<main>`. On my screens:
 focused element. The custom-drawn controls carry it explicitly:
 - The filter pills (`peer-focus-visible:outline`, since the radio itself is
   visually hidden).
-- The My Day chip and each medicine card (`has-[:focus-visible]:outline`,
-  drawn around the whole card rather than the small box).
+- The My Day button (`has-[:focus-visible]:outline`, drawn around the whole
+  button rather than the small box) and each medicine's round tick
+  (`peer-focus-visible:outline`).
 
 Focused elements are never hidden under the sticky header (see the fix
 above).
@@ -236,7 +250,7 @@ screenshots below were captured from real key presses by
 
 | | |
 |:--|:--|
-| ![Tab to a medicine](screenshots/keyboard/01-medicine-tab-focus.png) Tab moves to the next medicine; the whole card shows the focus ring | ![Space ticks](screenshots/keyboard/02-medicine-space-ticks.png) Space ticks it; the count updates |
+| ![Tab to a medicine](screenshots/keyboard/01-medicine-tab-focus.png) Tab moves to the next medicine's row, then to its tick | ![Space ticks](screenshots/keyboard/02-medicine-space-ticks.png) Space ticks it; the count updates |
 | ![My Day](screenshots/keyboard/03-my-day-space.png) Space adds a visit to My Day; focus stays on the checkbox | ![Export focus](screenshots/keyboard/04-export-focus.png) Focus on Export to calendar |
 | ![Filter arrows](screenshots/keyboard/05-filter-arrow-keys.png) ArrowRight moves the filter to Family | ![Form opens](screenshots/keyboard/06-form-opens-focus-first-field.png) Enter on Add a memory; focus is in the first field |
 | ![Escape](screenshots/keyboard/07-escape-returns-focus.png) Escape closes the form; focus is back on Add a memory | ![Error focus](screenshots/keyboard/08-save-error-focuses-field.png) Save with no kind chosen: focus moves to that field, below the header |
@@ -309,12 +323,12 @@ it('reminds on screen an hour before and never with sound', () => {
 });
 ```
 
-### Component tests: 47 tests, 4 suites (+9 in the team's accessibility suite)
+### Component tests: 51 tests, 4 suites (+9 in the team's accessibility suite)
 
 | Suite | Tests | Covers |
 |:--|--:|:--|
-| `src/pages/Appointments.test.tsx` | 11 | Groups and their headings, `<time>` values, escort and notes, directions link (new tab, named), telephone visits with no travel, My Day checkbox (focus kept, saved, Space unticks, caregiver defaults and the user's overrides), Export (file made, result banner, Dismiss returns focus, partial and failed exports), empty state |
-| `src/pages/Medications.test.tsx` | 12 | Status sentence and `<progress>`, fieldset and checkbox names, times described in words, tick by click, Space and clicking the name, Tab order, saved ticks and the caregiver activity log, all-taken message, kept after reload, **yesterday's ticks not carried over**, corrupt storage, empty list |
+| `src/pages/Appointments.test.tsx` | 12 | Groups and their headings, the first visit shown in detail and choosing another, `<time>` values, escort and notes, directions link (new tab, named), telephone visits with no travel, My Day checkbox (focus kept, saved, Space unticks, caregiver defaults and the user's overrides), Export (file made, result banner, Dismiss returns focus, partial and failed exports), empty state |
+| `src/pages/Medications.test.tsx` | 15 | The "still to take" pill and its full sentence, the four checkboxes, the first medicine in detail (when, status, how to take it, what for), choosing another, rows named in words, tick by click and Space, marking and undoing from the detail panel, Tab order (row then tick), saved ticks and the caregiver activity log, all-taken message, the [CC] reminder (and none when captions are off), kept after reload, **yesterday's ticks not carried over**, corrupt storage, empty list |
 | `src/pages/Memories.test.tsx` | 18 | Pinned and More sections, photo alt, lazy WebP `srcset`, radio filter (click and arrows), Read more, pin moving the card with focus following, the form as a disclosure, empty Save (three errors, focus, `aria-invalid`, descriptions), errors clearing, story-only error, character count, saving (focus, announcement, persisted after remount), filter reset, Escape keeps the draft, remove with confirm and cancel, empty book, empty filter, corrupt storage |
 | `src/context/CareContexts.test.tsx` | 6 | Each hook's error outside its provider, unknown ids, storage that refuses writes |
 | `src/accessibility.test.tsx` (team suite) | +9 | axe, landmark and title checks on my three routes (Memories added) |
@@ -335,21 +349,22 @@ it('refuses an empty form, explains each problem and focuses the first', async (
 });
 ```
 
-![Jest results for Upneet's suites: 99 tests in 9 suites, all passing](screenshots/testing/01-jest-upneet-suites.png)
-![Whole web app: 364 tests in 29 suites, all passing](screenshots/testing/02-jest-all-summary.png)
+![Jest results for Upneet's suites: 103 tests in 9 suites, all passing](screenshots/testing/01-jest-upneet-suites.png)
+![Whole web app: 375 tests in 29 suites, all passing](screenshots/testing/02-jest-all-summary.png)
 
-The whole web app runs **364 Jest tests in 29 suites, all passing**.
+The whole web app runs **375 Jest tests in 29 suites, all passing**.
 
 ### End-to-end tests (Playwright): 4 critical flows
 
 [`e2e/care-pages.spec.ts`](../../../../e2e/care-pages.spec.ts), config in
 [`playwright.config.ts`](../../../../playwright.config.ts).
 
-1. **Medicines by keyboard.** Tab to a medicine and press Space; the status
-   reads "3 of 4 taken". Click a card's name; the status reads "All 4
-   medicines taken". Reload; both are still ticked.
+1. **Medicines by keyboard.** From Amlodipine's tick, Tab reaches
+   Lisinopril's row and then its tick; Space ticks it and the status reads
+   "2 of 4 taken". Choose Metformin, mark it from the detail panel, tick
+   Atorvastatin: "All 4 medicines taken". Reload; the ticks are kept.
 2. **Appointments.**
-   - Add a visit to My Day, reload, and it is still added.
+   - Choose a visit, add it to My Day, reload, and it is still added.
    - Get directions opens in a new tab.
    - Export downloads `careconnect-appointments.ics`. The test reads the
      **real file**: 8 events, `ACTION:DISPLAY`, no `ACTION:AUDIO`.
@@ -381,13 +396,20 @@ expect(ics).toContain('ACTION:DISPLAY');
 expect(ics).not.toContain('ACTION:AUDIO');
 ```
 
-**Results:**
-- My spec: **22 passed, 2 skipped by design, 0 failed** across Chromium,
+**Results (recreated after the merge):**
+- My spec: **21 passed, 2 skipped by design, 1 failed** across Chromium,
   WebKit and mobile Safari. The skips are the offline test on WebKit and
   mobile Safari, where Playwright cannot emulate the service worker offline
   reliably.
-- The whole suite: **59 passed, 7 skipped, 0 failed**.
-- Repeated twice with `--repeat-each=2`, my spec gave the same result.
+- The failure is the Memories flow in **Chromium only**, at the step that
+  measures whether the field focused after an empty Save sits below the
+  sticky header. It fails the same way on the commit before the Figma work,
+  and passed in one of the runs made for these screenshots, so it is
+  timing-sensitive (the measurement can run before the browser finishes
+  scrolling). It passes in WebKit and mobile Safari, and the focused field is
+  visible in the keyboard screenshot above. It is listed as a known issue in
+  the team overview.
+- The whole suite: **58 passed, 7 skipped, 1 failed** (the same test).
 
 ![Playwright HTML report](screenshots/testing/04-playwright-html-report.png)
 ![My spec in the report](screenshots/testing/05-playwright-care-pages.png)
@@ -413,12 +435,12 @@ any of them drops below that.
 
 | Measured scope | Statements | Branches | Functions | Lines |
 |:--|--:|--:|--:|--:|
-| **All measured files** (the whole team's) | **99.22%** | **96.58%** | **98.02%** | **99.47%** |
+| **All measured files** (the whole team's, now including the app shell) | **95.82%** | **91.14%** | **94.1%** | **96.44%** |
 | Appointments.tsx | 100% | 100% | 100% | 100% |
 | Medications.tsx | 100% | 100% | 100% | 100% |
 | Memories.tsx | 100% | 96.4% | 100% | 100% |
-| components/appointments | 100% | 97.4% | 100% | 100% |
-| components/medicines | 100% | 95.5% | 100% | 100% |
+| components/appointments | 100% | 97.7% | 100% | 100% |
+| components/medicines | 100% | 94.9% | 100% | 100% |
 | components/memories | 100% | 93.2% | 100% | 100% |
 | PageHeader.tsx | 100% | 100% | 100% | 100% |
 | AppointmentsContext, MemoriesContext, and the three hook modules | 100% | 100% | 100% | 100% |
@@ -455,6 +477,7 @@ npm run test:e2e                    # builds, starts vite preview on :4173, runs
 npm run test:e2e -- e2e/care-pages.spec.ts --project=chromium   # my flows, one browser
 npm run test:e2e:report             # opens the HTML report
 npm run dev -- --port 5180 & node scripts/week11-upneet-evidence.mjs   # regenerate my screenshots
+node scripts/week11-testing-evidence.mjs                               # the test screenshots, from real runs
 ```
 
 ---

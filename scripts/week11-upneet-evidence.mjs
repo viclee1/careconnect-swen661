@@ -19,6 +19,11 @@ const out = path.resolve(here, '../docs/web/week11/upneet/screenshots');
 const base = (process.env.WEB_URL ?? 'http://localhost:5180').replace(/\/$/, '');
 const user = { id: 'u', name: 'Margaret Whitfield', email: 'margaret@example.com' };
 
+// Screenshots show the demo at 9:45 am today, whatever time they are taken:
+// morning greeting, this morning's messages, the 10:30 visit still to come.
+const demoTime = new Date();
+demoTime.setHours(9, 45, 0, 0);
+
 const widths = [
   ['mobile', 375, 812],
   ['tablet', 768, 1024],
@@ -40,6 +45,7 @@ async function open(width, height, p) {
     acceptDownloads: true,
   });
   const page = await ctx.newPage();
+  await page.clock.setFixedTime(demoTime);
   await page.goto(`${base}/`);
   await page.evaluate((s) => {
     localStorage.clear();
@@ -69,7 +75,7 @@ await mkdir(path.join(out, 'features'), { recursive: true });
 // ── Each screen at each breakpoint ───────────────────────────────────────────
 // Tablet and desktop: the full page. Mobile: the top and the bottom of the
 // page as a phone shows them, because a full-page capture would paint the
-// fixed bottom tab bar halfway down the image.
+// sticky header and status bar halfway down the image.
 for (const [id, p] of screens) {
   for (const [bp, w, h] of widths) {
     const { ctx, page } = await open(w, h, p);
@@ -93,6 +99,7 @@ for (const [id, p] of screens) {
 // ── Navigation at each width ─────────────────────────────────────────────────
 for (const [bp, w, h] of widths) {
   const { ctx, page } = await open(w, h, '/app/memories');
+  if (bp !== 'desktop') await page.getByRole('button', { name: 'Menu', exact: true }).click();
   await shot(page, `${bp}/04-navigation`);
   await ctx.close();
 }
@@ -101,6 +108,8 @@ console.log('✔ navigation');
 // ── Feature states (desktop) ─────────────────────────────────────────────────
 {
   const { ctx, page } = await open(1440, 900, '/app/appointments');
+  await page.getByRole('button', { name: /^Blood test — fasting needed/ }).click();
+  await shot(page, 'features/appointments-detail-selected');
   const box = page.getByRole('checkbox', { name: /Blood test — fasting needed/ });
   await box.check();
   await shotAt(page, box, 'features/appointments-my-day-added');
@@ -111,9 +120,12 @@ console.log('✔ navigation');
 }
 {
   const { ctx, page } = await open(1440, 900, '/app/medications');
-  await page.locator('label', { hasText: 'Atorvastatin' }).click();
-  await shot(page, 'features/medicines-three-of-four');
-  await page.locator('label', { hasText: 'Vitamin D3' }).click();
+  await page.getByRole('button', { name: /^Metformin/ }).click();
+  await shot(page, 'features/medicines-detail-selected');
+  await page.getByRole('button', { name: 'Mark Metformin as taken' }).click();
+  await shot(page, 'features/medicines-two-of-four');
+  await page.getByRole('checkbox', { name: 'Lisinopril taken' }).check();
+  await page.getByRole('checkbox', { name: 'Atorvastatin taken' }).check();
   await shot(page, 'features/medicines-all-taken');
   await ctx.close();
 }
@@ -158,8 +170,9 @@ console.log('✔ features');
 // ── Keyboard focus states (desktop, real key presses) ────────────────────────
 {
   const { ctx, page } = await open(1440, 900, '/app/medications');
-  await page.getByRole('checkbox', { name: /Amlodipine/ }).focus();
-  await page.keyboard.press('Tab');
+  await page.getByRole('checkbox', { name: 'Amlodipine taken' }).focus();
+  await page.keyboard.press('Tab'); // the next row (shows it in detail with Enter)
+  await page.keyboard.press('Tab'); // that row's tick
   await shot(page, 'keyboard/01-medicine-tab-focus');
   await page.keyboard.press('Space');
   await shot(page, 'keyboard/02-medicine-space-ticks');
@@ -167,6 +180,8 @@ console.log('✔ features');
 }
 {
   const { ctx, page } = await open(1440, 900, '/app/appointments');
+  await page.getByRole('button', { name: /^Blood test — fasting needed/ }).focus();
+  await page.keyboard.press('Enter');
   const box = page.getByRole('checkbox', { name: /Blood test — fasting needed/ });
   await box.focus();
   await page.keyboard.press('Space');

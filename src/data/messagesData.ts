@@ -20,7 +20,7 @@ export function buildSeedMessages(now: number): Message[] {
   const at = (daysAgo: number, hour: number, minute: number): number =>
     midnight - daysAgo * 86_400_000 + hour * 3_600_000 + minute * 60_000;
 
-  return [
+  const seed: Message[] = [
     // ── Joyce — caregiver, daughter, primary contact ────────────────────
     {
       id: 'm1',
@@ -102,4 +102,12 @@ export function buildSeedMessages(now: number): Message[] {
       status: 'read',
     },
   ];
+
+  // Shortly after midnight this morning's messages (8:02, 9:05…) would be in
+  // the future, and a message sent now would sort above them. Move the whole
+  // seed back so the newest message is a minute old; the order and the gaps
+  // between messages stay the same.
+  const newest = Math.max(...seed.map((m) => m.sentAt));
+  const shift = newest >= now ? newest - now + 60_000 : 0;
+  return shift === 0 ? seed : seed.map((m) => ({ ...m, sentAt: m.sentAt - shift }));
 }

@@ -80,12 +80,6 @@ function isDisplayed(el: HTMLElement): boolean {
   return true;
 }
 
-/** True when the user is typing, so single-key shortcuts stay out of the way. */
-function isTyping(target: EventTarget | null): boolean {
-  const el = target as HTMLElement | null;
-  return !!el && (el.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(el.tagName));
-}
-
 // ── Header buttons ────────────────────────────────────────────────────────────
 
 const iconButton =
@@ -181,7 +175,10 @@ export default function Layout({
   const closeShortcuts = useCallback(() => setShortcutsOpen(false), []);
 
   // Ctrl+K / ⌘K: the search field — in the header on desktop, otherwise in
-  // the drawer, which opens for it. "?" lists every shortcut.
+  // the drawer, which opens for it. There is deliberately no single-character
+  // shortcut (such as "?") here: WCAG 2.1.4 forbids one that cannot be turned
+  // off, and speech users dictating text would trigger it. The keyboard
+  // button lists every shortcut instead.
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
@@ -193,9 +190,6 @@ export default function Layout({
           setMenuForSearch(true);
           setMenuOpen(true);
         }
-      } else if (event.key === '?' && !isTyping(event.target)) {
-        event.preventDefault();
-        setShortcutsOpen(true);
       }
     }
     document.addEventListener('keydown', onKey);
@@ -276,7 +270,6 @@ export default function Layout({
                 type="button"
                 onClick={() => setShortcutsOpen(true)}
                 aria-label="Keyboard shortcuts"
-                aria-keyshortcuts="Shift+?"
                 className={`hidden lg:flex ${iconButton}`}
               >
                 <Keyboard className="w-5 h-5" aria-hidden="true" />

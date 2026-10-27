@@ -388,10 +388,12 @@ describe('header controls', () => {
     expect(within(dialog).getByRole('combobox', { name: /search medicines/i })).toHaveFocus();
   });
 
-  it('"?" opens the keyboard shortcuts dialog; Escape closes it', async () => {
+  it('the keyboard button opens the shortcuts dialog; Escape closes it; no single-key shortcut does (WCAG 2.1.4)', async () => {
     renderAt('/app', 'patient');
     await screen.findByRole('heading', { level: 1 });
     fireEvent.keyDown(document.body, { key: '?' });
+    expect(screen.queryByRole('dialog', { name: 'Keyboard shortcuts' })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Keyboard shortcuts' }));
     expect(screen.getByRole('dialog', { name: 'Keyboard shortcuts' })).toBeInTheDocument();
     fireEvent.keyDown(document, { key: 'Escape' });
     expect(screen.queryByRole('dialog', { name: 'Keyboard shortcuts' })).not.toBeInTheDocument();

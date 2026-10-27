@@ -41,6 +41,13 @@ module.exports = {
     'src/context/SettingsContext.tsx',
     'src/context/messages.ts',
     'src/context/settings.ts',
+    // App shell aligned to the Figma design (Victor)
+    'src/components/Layout.tsx',
+    'src/components/navigation/**/*.{ts,tsx}',
+    'src/components/AppointmentBanner.tsx',
+    'src/components/CaptionStrip.tsx',
+    'src/hooks/useFocusTrap.ts',
+    'src/hooks/useHighContrast.ts',
     'src/hooks/useLocalStorageState.ts',
     'src/hooks/useOnlineStatus.ts',
     'src/hooks/useMediaQuery.ts',

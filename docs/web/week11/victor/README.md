@@ -3,18 +3,22 @@
 **SWEN 661 Team 2 (The Acuity Health Group).** This is Victor's part of the
 team's Assignment 11 Word document. It covers the **Contacts**,
 **Messaging** (conversation) and **Accessibility Settings** screens of the
-React web app. The headings follow the submission's sections, so each part
-can be pasted into the matching section of the team document. Every
-screenshot is in [`screenshots/`](screenshots).
+React web app, and the **app shell** (header, sidebar, phone and tablet menu,
+status bar) that every screen sits in, which Victor rebuilt to the Figma web
+design after the team's three branches were merged. The headings follow the
+submission's sections, so each part can be pasted into the matching section
+of the team document. Every screenshot is in [`screenshots/`](screenshots);
+the team overview is in [`../README.md`](../README.md).
 
 | Item | Where |
 |:--|:--|
 | Source | [`src/pages/Contacts.tsx`](../../../../src/pages/Contacts.tsx), [`src/pages/MessageThread.tsx`](../../../../src/pages/MessageThread.tsx), [`src/pages/AccessibilitySettings.tsx`](../../../../src/pages/AccessibilitySettings.tsx), and the components in [`src/components/contacts/`](../../../../src/components/contacts), [`messaging/`](../../../../src/components/messaging) and [`settings/`](../../../../src/components/settings) |
+| App shell | [`src/components/Layout.tsx`](../../../../src/components/Layout.tsx) and [`src/components/navigation/`](../../../../src/components/navigation) (sidebar, drawer, search, account menu, shortcuts dialog, status bar, alerts), [`AppointmentBanner.tsx`](../../../../src/components/AppointmentBanner.tsx), [`CaptionStrip.tsx`](../../../../src/components/CaptionStrip.tsx) |
 | State | [`src/context/MessagesContext.tsx`](../../../../src/context/MessagesContext.tsx), [`src/context/SettingsContext.tsx`](../../../../src/context/SettingsContext.tsx) (Context API) |
-| Custom hooks | [`useLocalStorageState`](../../../../src/hooks/useLocalStorageState.ts), [`useOnlineStatus`](../../../../src/hooks/useOnlineStatus.ts), [`useMediaQuery`](../../../../src/hooks/useMediaQuery.ts) |
-| Design reference | Figma file *Webpage design*: Contacts, Messaging and Accessibility Settings frames at 402, 768 and 1440 px |
+| Custom hooks | [`useLocalStorageState`](../../../../src/hooks/useLocalStorageState.ts), [`useOnlineStatus`](../../../../src/hooks/useOnlineStatus.ts), [`useMediaQuery`](../../../../src/hooks/useMediaQuery.ts), [`useFocusTrap`](../../../../src/hooks/useFocusTrap.ts), [`useHighContrast`](../../../../src/hooks/useHighContrast.ts) |
+| Design reference | Figma file *Webpage design*: every screen at 1440 and 402 px, and Contacts, Messaging and Accessibility Settings at 768 px |
 | Domain logic | [`src/models/`](../../../../src/models), [`src/utils/`](../../../../src/utils) |
-| Unit and component tests | 204 Jest tests in 20 suites (listed in [§3](#3-testing-implementation)) |
+| Unit and component tests | 195 Jest tests in 19 suites of my own, plus my routes and the app-shell tests in the team's accessibility suite (listed in [§3](#3-testing-implementation)) |
 | E2E tests | [`e2e/`](../../../../e2e) (Playwright), 13 tests covering 5 critical flows, run in 4 browser projects |
 | Coverage | [`coverage/lcov-report/index.html`](../../../../coverage/lcov-report/index.html) |
 
@@ -49,32 +53,33 @@ through sound must also be communicated visually or in text*.
 | Offline functionality | Conversations and settings are kept in localStorage, so nothing is fetched and both screens work with no connection. A message written offline is **kept, marked "Sending" in words, and sent automatically when the connection returns**. A banner explains this while offline. The team's service worker serves the app shell and the cached lazy chunks, so the screens also open from cold while offline. This is verified by an E2E test. |
 | PWA | Uses the team's manifest and service worker. My screens add the offline behaviour above. |
 
-### Teammates' screens on this branch
+### The app shell, aligned to the Figma design
 
-Like the desktop client's first build, this branch carries **only Victor's
-screens**. Every other route shows a "build in progress" page
-([`src/pages/PlaceholderPage.tsx`](../../../../src/pages/PlaceholderPage.tsx))
-that names the screen, says "*X* is not on this branch yet", and shows the
-owner:
+After Justin's and Upneet's branches were merged into this one, the whole
+app was compared with the Figma board at 402, 768 and 1440 px. My three
+screens already matched, but the frame around every screen did not: the app
+had a large date-and-time header with a "Message my caregiver" button and,
+on phones, a bottom tab bar whose labels were cut off ("Appoi…", "Medici…").
+I rebuilt the shell to the design:
 
-| Screen | Owner (Assignment 11 split) |
-|:--|:--|
-| Welcome, Sign In, Sign Up, Home, My Day | Justin Zhang |
-| Appointments, Medicines, Memories | Upneet Bir |
-| Caregiver dashboard, notes, activity log, manage medications and appointments | Not yet assigned |
+| Part | What it is | Where |
+|:--|:--|:--|
+| Header | Logo; **search** ("Search medicines, appointments, people…", Ctrl/⌘ K); **CC** (captions on/off, the same setting as Settings); **high contrast**; **keyboard shortcuts**; the **avatar** with the alerts badge, which opens the account menu (Switch role, Sign out) | `Layout.tsx`, `navigation/AppSearch.tsx`, `AccountMenu.tsx`, `ShortcutsDialog.tsx` |
+| Sidebar (1024 px and up) | Role pill, "Good morning, Margaret" with the date and time, the six pages, then **Settings** and **"5 alerts"** pinned to the foot. The alerts button expands into a list of links (unread messages, medicines still to take, today's visits) | `navigation/SideNav.tsx`, `NavPanel.tsx`, `useAlerts.ts` |
+| Menu drawer (below 1024 px) | The same panel slides in from the left when ☰ Menu is pressed, as the design's phone and tablet frames show. It also holds the search field and the high-contrast switch, which the header has no room for there | `navigation/NavDrawer.tsx` |
+| Status bar | "Online · synced just now", the number of active alerts in red, and "WCAG 2.2 AA · No sound required". Sticky along the foot | `navigation/StatusBar.tsx` |
+| Visual alert and captions | The **Upcoming appointment** banner (Pause, OK) on Home, My Day, Appointments and Medicines, and the dark **[CC]** caption strip under it. Both read Accessibility Settings, so turning captions off, or changing their size or colour, changes them everywhere | `AppointmentBanner.tsx`, `CaptionStrip.tsx` |
 
-Inside the app, each placeholder has **Go to Contacts**. The Welcome, Sign
-In and Sign Up placeholders offer **Continue to Contacts as Margaret
-Whitfield** instead, since this branch has no sign-in to get past. The
-desktop's first build likewise opened straight onto Contacts.
+The same pass reworked the teammates' screens that differed from the board
+(Medicines and Appointments into a list with a detail panel, Memories into a
+single list) and applied the caption settings to the simulated video call on
+Home; those changes are described in the team overview and in Upneet's
+write-up. `SHOW_TEAMMATE_PAGES` in [`src/branchScope.ts`](../../../../src/branchScope.ts)
+is now `true`, so every route shows its real page. The "build in progress"
+page ([`PlaceholderPage.tsx`](../../../../src/pages/PlaceholderPage.tsx)) is
+kept for any future screen without an owner.
 
-The teammates' page files are **untouched and still imported**. One switch,
-`SHOW_TEAMMATE_PAGES` in [`src/branchScope.ts`](../../../../src/branchScope.ts),
-decides which version shows. **Set it to `true` before this branch is
-merged**, or the merge would replace the team's working pages with
-placeholders.
-
-![Placeholder for a teammate's screen](screenshots/features/placeholder-in-app.png)
+![The app shell at 1440 px: header with search, CC, contrast, shortcuts and avatar; sidebar; status bar](screenshots/desktop/04-navigation.png)
 
 ### Matching the Figma design
 
@@ -96,8 +101,8 @@ The three screens follow the team's Figma web design (*Webpage design*):
   never rings); the Alert copy says exactly what the other person gets (a
   silent flash and vibration); video messages show their captions on the
   video; and faint grey text was darkened to meet 4.5:1.
-- **Not taken from the design:** the app shell (header, sidebar, bottom bar)
-  is shared with the team, so it is unchanged.
+- **The app shell now follows the design too** (see above): header, sidebar,
+  phone and tablet menu drawer, and status bar.
 
 ### Matching the desktop and mobile apps
 
@@ -121,12 +126,13 @@ reference.
 | Offline queue | A website can lose its connection mid-conversation. Messages are kept as "Sending" and go out when the connection returns. |
 | No Ctrl/⌘+Shift+N alert shortcut | A desktop-only feature with no browser equivalent the user would expect. Desktop notifications *are* offered, through the browser's own permission prompt. |
 
-**The header now matches too.** The web header had a green **Call my
+**No voice calls anywhere.** The original web header had a green **Call my
 caregiver** button that dialled Joyce's phone number (`tel:`). None of the
 other apps has a voice-call button, because a phone call is the one channel
-a deaf user can't rely on. It is now **Message my caregiver**, which opens the
-written conversation with Joyce. The footer's "View contacts" link also no
-longer reloads the whole page.
+a deaf user can't rely on. It first became **Message my caregiver**; with the
+Figma header it is gone, and Joyce is reached from Contacts, from search, or
+from Home's video preview, which opens Maria's written conversation. The team
+accessibility suite checks that no `tel:` link exists.
 
 ### Screenshots at 375 / 768 / 1440 px
 
@@ -140,6 +146,14 @@ longer reloads the whole page.
 ![Contacts at 1440px](screenshots/desktop/01-contacts.png)
 ![Conversation at 375px](screenshots/mobile/02-conversation-bottom.png)
 ![Accessibility Settings at 768px](screenshots/tablet/03-settings.png)
+
+App shell: [search with Ctrl K](screenshots/features/shell-search.png),
+[account menu](screenshots/features/shell-account-menu.png),
+[alerts list](screenshots/features/shell-alerts-list.png),
+[keyboard shortcuts](screenshots/features/shell-shortcuts-dialog.png),
+[high contrast](screenshots/features/shell-high-contrast.png),
+[captions off from the header](screenshots/features/shell-captions-off-home.png),
+[menu drawer opened by Ctrl K on a phone](screenshots/features/shell-drawer-search-mobile.png).
 
 Feature states: [search](screenshots/features/contacts-search.png),
 [no match](screenshots/features/contacts-no-match.png),
@@ -172,11 +186,12 @@ Feature states: [search](screenshots/features/contacts-search.png),
 - **Settings.** A single readable column of cards at every width, capped at
   56 rem on desktop. The size and colour choices share the row equally, and
   each rhythm's pattern sits under its name.
-- **Navigation.** Settings appears in the sidebar from 768 px. The care
-  recipient's mobile bottom bar holds six tabs at 375 px, so it does not get a
-  seventh. Instead, the mobile header shows a labelled **Settings** link, and
-  the bottom bar filters on `inBottomBar: false` in `navItems.ts`, the one
-  list every navigation surface reads.
+- **Navigation.** From 1024 px the sidebar sits beside the page, with
+  Settings at its foot. Below 1024 px (phones and tablets, as in the design's
+  402 and 768 px frames) the header keeps only ☰ Menu, the logo, CC and the
+  avatar, and Menu opens the same panel as a drawer. The sidebar and drawer
+  render one component (`NavPanel`) from one list (`navItems.ts`), so they
+  cannot drift apart.
 - **Touch and click targets.** Every control is at least 44 × 44 px. Contact
   rows are 72 px or taller, and the Alert button is at least 56 px. The switch
   hit area covers the whole visible track, not just the hidden checkbox.
@@ -186,12 +201,14 @@ Feature states: [search](screenshots/features/contacts-search.png),
   with `@axe-core/playwright` and an E2E test; there are no console errors or
   warnings.
 
-**Shared-layout fix found by my tests.** At 375 px the team's sticky header
-(date, time, greeting and "Call my caregiver") is about 360 px tall, more than
-half the screen. Pinned in place, it covered the conversation's Send button,
-which also fails WCAG 2.4.11 (Focus Not Obscured). The mobile Safari E2E run
-caught this. The header is now sticky only from 768 px
-(`md:sticky md:top-0` in `Layout.tsx`).
+**Shared-layout fixes found by my tests.** The old header (date, time,
+greeting and "Call my caregiver") was about 360 px tall at 375 px; pinned in
+place it covered the conversation's Send button, failing WCAG 2.4.11 (Focus
+Not Obscured), which the mobile Safari E2E run caught. The Figma header is
+68 px at every width, so it is sticky again everywhere. Its height and the
+status bar's are measured into `--header-height` and `--status-height`;
+`scroll-padding` keeps focused fields clear of both, and the desktop sidebar
+stops above the status bar instead of running under it.
 
 ---
 
@@ -224,6 +241,14 @@ added only where HTML has no element for the job.
 | Flash cues | `<button>` per alert type, named by its printed alert type and colour ("Medication Amber flash"); the swatch is `aria-hidden`; the preview flash is a `role="status"` region with the alert's name in words | The colour is never the only signal. |
 | Desktop notifications | A switch that asks the browser for permission; if refused, its description changes to a written reason | The user is told why it stayed off, instead of a switch that silently flips back. |
 | Sign out | The team's `ConfirmDialog` (`role="dialog"`, `aria-modal`, `aria-labelledby`) | Focus moves into the dialog and returns to the trigger when it closes. |
+| Header search | `<input type="search" role="combobox">` with `aria-expanded`, `aria-controls`, `aria-activedescendant` and a `role="listbox"` of `role="option"`s; the match count in a `role="status"` region; `aria-keyshortcuts="Control+K Meta+K"` | The ARIA 1.2 combobox pattern. Results appearing under a field are invisible to a screen-reader user, so the count is announced. |
+| CC and high contrast | `<button aria-pressed>`; CC is named by its printed letters plus hidden "captions" ("CC captions") | Toggle buttons announce "pressed" or "not pressed", and the name starts with the visible text (WCAG 2.5.3). |
+| Avatar | A disclosure `<button aria-expanded aria-controls>` whose name is its content: "Margaret, account menu, 5 alerts" (the first name is visible from 1024 px and visually hidden below) | No `aria-label`, so the visible words are always part of the name. The red badge's number is read with the word "alerts". |
+| Menu drawer | `role="dialog" aria-modal="true" aria-label="Menu"` containing `<nav aria-label="Main navigation">`; `useFocusTrap` | Focus moves in, Tab wraps, Escape closes and returns focus to ☰ Menu. Opened by Ctrl K, focus starts in its search field. |
+| Sidebar alerts | `<button aria-expanded aria-controls>` "5 alerts" revealing a list of links, each written out ("1 new message from Joyce") | Every alert is words and a destination; nothing is carried by the badge colour alone. |
+| Shortcuts | The keyboard button opens a `role="dialog"` with a `<dl>` of `<kbd>` keys and what they do | The shortcuts are discoverable without documentation. There is no "?" shortcut: a single-character shortcut that cannot be turned off fails WCAG 2.1.4. |
+| Status bar | `<footer role="contentinfo">` with the connection state as words beside the coloured dot | The state never rests on colour. |
+| Caption strip | A `<p>` with "[CC]" hidden from screen readers and "Caption:" read first | The caption's text, size and colour come from Settings; with captions off it is not rendered. |
 
 `jest-axe` runs the axe-core rules on all three routes inside the real app
 shell, with no violations. The routes are in the team's
@@ -241,6 +266,14 @@ shell, with no violations. The routes are in the team's
 | **Arrow keys** | — | Scroll the focused history region (as do Page Up/Down). Down on Quick replies opens the menu; Up/Down, Home and End move through it | Change the caption size or colour, move a slider |
 | **Escape** | Clears the search | Closes the Quick replies menu and returns focus to its button. Otherwise returns to Contacts, *except* in the message field, where it would throw away a draft | Closes the Sign out dialog and returns focus to the Sign out button |
 | **/** | Jumps to the search box from anywhere on the page, but not while typing in a field | — | — |
+
+The app shell adds, on every screen:
+
+| Key | What it does |
+|:--|:--|
+| **Ctrl+K / ⌘K** | Focuses the header search on desktop; below 1024 px opens the Menu drawer with its search focused |
+| **↑ ↓, Enter, Escape** (in search) | Move through the matches, open one, clear the search (a second Escape reaches the page or drawer) |
+| **Escape** | Closes the account menu, the drawer or the shortcuts dialog and returns focus to the button that opened it |
 
 **Focus management.** After any in-app navigation the team's layout moves
 focus to `<main>`, so a screen reader announces the new page. The page title
@@ -359,14 +392,30 @@ it('queues messages written offline and sends them when the connection returns',
 });
 ```
 
-![Jest results for Victor's suites: 195 tests in 19 suites, all passing](screenshots/testing/01-jest-victor-suites.png)
-![Whole web app: 516 tests passing, 1 skipped](screenshots/testing/02-jest-all-summary.png)
+The team suite `src/accessibility.test.tsx` (77 tests) also holds the
+app-shell tests I wrote with the Figma rebuild: one sidebar per role with
+Settings and the alerts at its foot, the alerts list, the Menu drawer as a
+modal dialog for both roles (focus in, Escape returns it), choosing a page
+closes the drawer, CC switching captions everywhere and saving it, high
+contrast theming the document and being remembered, Ctrl+K search finding a
+medicine and opening its page (and opening the drawer with search focused on
+a phone), the keyboard button opening the shortcuts dialog (and "?" not doing so), the account menu, the status
+bar, and axe at phone width on every route.
 
-The first screenshot lists my 19 suites (195 tests). The other 9 of my 204
-tests are my three routes' rows in the team's `src/accessibility.test.tsx`,
-which also tests every other route, so it is counted with the whole app. The
-whole web app runs **516 Jest tests, all passing, 1 skipped** (the Landing
-test, by design on this branch).
+![Jest results for Victor's suites: 195 tests in 19 suites, all passing](screenshots/testing/01-jest-victor-suites.png)
+![Whole web app: 375 tests in 29 suites, all passing, with coverage](screenshots/testing/02-jest-all-summary.png)
+
+The first screenshot lists my 19 suites (195 tests). The whole web app runs
+**375 Jest tests in 29 suites, all passing**. (Before the merge this branch
+ran 516; the difference is the older Appointments, Medicines and Memories
+page tests, which Upneet replaced with his own smaller suites.)
+
+**A clock bug found while recreating these screenshots.** Run just after
+midnight, two `MessagesContext` tests failed: the seed puts this morning's
+messages at 8:02 and 9:05, which at 00:40 are still in the future, so a
+message sent "now" sorted *above* them. `buildSeedMessages` now moves the
+whole seed back when its newest message would be in the future (order and
+gaps unchanged), and the day-heading test pins its clock to midday.
 
 ### End-to-end tests (Playwright): 5 critical flows
 
@@ -409,12 +458,23 @@ test('messages written offline are queued and sent when the connection returns',
 });
 ```
 
-**Results: 40 passed, 2 skipped by design, 0 failed** across Chromium,
-WebKit (Safari) and mobile Safari (this includes the team's placeholder
-spec). The two skips are the service-worker offline test on WebKit, where
-Playwright cannot emulate it reliably. The specs work at both widths: at
-1440 px the conversation's name is an `<h2>` beside the list, at 375 px it
-is the page's `<h1>`.
+**My specs: 37 passed, 2 skipped by design, 0 failed** (13 tests in each of
+Chromium, WebKit and mobile Safari). The two skips are the service-worker
+offline test on WebKit, where Playwright cannot emulate it reliably. The
+specs work at both widths: at 1440 px the conversation's name is an `<h2>`
+beside the list, at 375 px it is the page's `<h1>`. "Settings is reachable at
+every width" now opens Settings from the sidebar on desktop and from the Menu
+drawer on mobile Safari. The captions test now waits until the switch is off
+and saved before leaving the page; under parallel load WebKit could reload
+before the setting was written.
+
+**The whole run** (all four spec files, three browser projects): **58
+passed, 7 skipped, 1 failed**. The failure is in Upneet's Memories spec, in
+Chromium only: after a refused save, the test measures whether the focused
+field sits below the sticky header. It fails the same way on the commit
+before the Figma work and passed in one of the runs made for these
+screenshots, so it is timing-sensitive rather than caused by the shell; it is
+listed under the known issues in the team overview.
 
 ![Playwright run](screenshots/testing/03-playwright-run.png)
 ![Playwright HTML report](screenshots/testing/05-playwright-html-report.png)
@@ -435,7 +495,7 @@ request. It uploads the coverage and Playwright reports as artifacts.
 |:--|:--|
 | Test files | `src/**/*.test.ts(x)`, `src/models/__tests__`, `src/utils/__tests__`, `e2e/` |
 | Shared render helper | `src/test-utils/renderWithProviders.tsx` |
-| Screenshot scripts | `scripts/week11-victor-evidence.mjs` |
+| Screenshot scripts | `scripts/week11-victor-evidence.mjs` (screens, shell, keyboard) and `scripts/week11-testing-evidence.mjs` (these test screenshots, from real runs) |
 
 ---
 
@@ -451,24 +511,33 @@ makes the run fail if any of them drops below that.
 
 | Measured scope | Statements | Branches | Functions | Lines |
 |:--|--:|--:|--:|--:|
-| **All measured files** (Victor's plus the Appointments, Medicines and Memories pages already listed) | **93.99%** | **85.74%** | **87.03%** | **94.51%** |
+| **All measured files** (Victor's, Upneet's and the app shell) | **95.82%** | **91.14%** | **94.1%** | **96.44%** |
 | Contacts.tsx | 100% | 87.5% | 100% | 100% |
 | MessageThread.tsx | 100% | 92.3% | 100% | 100% |
-| PlaceholderPage.tsx | 100% | 100% | 100% | 100% |
+| PlaceholderPage.tsx | 95.7% | 92.3% | 100% | 100% |
 | AccessibilitySettings.tsx | 98.1% | 100% | 94.7% | 98.0% |
 | components/contacts | 100% | 92.3% | 100% | 100% |
 | components/messaging | 98.0% | 92.9% | 93.5% | 99.5% |
 | components/settings | 100% | 93.9% | 100% | 100% |
-| context, utils | 100% | 100% | 100% | 100% |
-| models | 100% | 98.9% | 100% | 100% |
-| hooks | 91.9% | 100% | 81.3% | 91.2% |
+| context, utils | 99.5–100% | 100% | 100% | 99.4–100% |
+| models | 100% | 99.4% | 100% | 100% |
+| Layout.tsx | 89.3% | 79.1% | 83.3% | 90.1% |
+| components/navigation (shell) | 83.8% | 73.6% | 78.3% | 84.9% |
+| AppointmentBanner.tsx, CaptionStrip.tsx | 82.8%, 100% | 75%, 100% | 50%, 100% | 91.3%, 100% |
+| hooks (including useFocusTrap, useHighContrast) | 79.3% | 52.9% | 84.0% | 81.8% |
+
+The app-shell files were added to `collectCoverageFrom` for this report. They
+are tested through the real app in the team's accessibility suite and are
+above the 75% threshold on lines; the lowest are `StatusBar`'s resize
+measurement and `useFocusTrap`'s Tab-wrapping branches, which need real
+layout and are exercised by Playwright instead.
 
 **Exclusions and why.**
 - `src/**/__tests__/**` and `*.test.*`: test code is not measured.
 - `src/data/contactsData.ts` and `messagesData.ts`: static seed data with no
   branches to test.
 - `src/test-utils/`: a test helper.
-- The only uncovered lines in my files are the `getServerSnapshot` fallbacks
+- Apart from the shell measurements above, the only uncovered lines in my files are the `getServerSnapshot` fallbacks
   in `useOnlineStatus` and `useMediaQuery`, which run only during server-side
   rendering (this app renders in the browser only), and
   `useLocalStorageState`'s default `revive` callback, which the providers
@@ -488,6 +557,8 @@ npm run test:e2e                    # builds, starts vite preview on :4173, runs
 npm run test:e2e -- --project=chromium           # one browser
 npm run test:e2e:report             # opens the HTML report
 npm run lint && npm run typecheck
+node scripts/week11-victor-evidence.mjs     # screenshots (needs npm run dev -- --port 5180)
+node scripts/week11-testing-evidence.mjs    # test screenshots from real runs
 ```
 
 ---
@@ -517,29 +588,23 @@ four ways:
 ## Notes for the team
 
 - **Shared files I changed:**
-  - `Layout.tsx`: the header is sticky only from 768 px; the mobile header
-    has a Settings link; added screen titles for Conversation and Settings.
-  - `navItems.ts` and `BottomNav.tsx`: added Settings, with an
-    `inBottomBar` flag.
-  - `App.tsx`: added my routes, lazy-loaded, and the two providers.
-  - `index.css`: flash and lamp styles.
-  - `Layout.tsx` header: **Call my caregiver** (a `tel:` link) is now
-    **Message my caregiver**, which opens Joyce's conversation, to match the
-    desktop and mobile apps. The footer link uses the router.
-  - `ConfirmDialog.tsx`: more room on the right of the title (`pr-12`), so a
-    long title no longer runs under the × button.
-  - `jest.config.cjs`: `.test.ts` files, `roots: ['src']` (stops Jest picking
-    up `.claude/worktrees`), my files in coverage, and the 75% threshold.
-  - Removed the old `Contact` type and `contacts` mock data, which only the
-    old Contacts page used.
-- **Before merging, set `SHOW_TEAMMATE_PAGES = true`** in `src/branchScope.ts`.
-  With it off, this branch shows "build in progress" pages for every screen
-  that isn't Victor's. Turning it back on also re-runs the one skipped Landing
-  test.
-- **Coverage while the placeholders are on:** the app-wide accessibility test
-  no longer renders Upneet's real pages, so `Medications.tsx` falls from about
-  80% to 41%, and `Memories.tsx` stays at about 26%. The total is still above
-  75%, and both recover when the switch is turned back on.
+  - `Layout.tsx` and `src/components/navigation/`: the app shell rebuilt to
+    the Figma design (header, sidebar, Menu drawer, search, account menu,
+    shortcuts dialog, status bar, alerts). `BottomNav.tsx` and
+    `MobileMenu.tsx` were removed; Switch role and Sign out moved into the
+    avatar's account menu.
+  - `AppointmentBanner.tsx`, `CaptionStrip.tsx`, `MockVideoCall.tsx`: the
+    visual alert and captions follow Accessibility Settings on every screen.
+  - `index.css`: flash and lamp styles, the drawer animation, scroll padding
+    for the sticky header and status bar, and the high-contrast overrides.
+  - `App.tsx`: my routes, lazy-loaded, and the two providers.
+  - `ConfirmDialog.tsx`: more room on the right of the title (`pr-12`).
+  - `jest.config.cjs`: `.test.ts` files, `roots: ['src']`, my files and the
+    app shell in coverage, and the 75% threshold.
+  - `messagesData.ts`: the seed never lands in the future (the clock bug
+    above).
+- **`SHOW_TEAMMATE_PAGES` is `true`** in `src/branchScope.ts` since the
+  merge, so every route shows its real page.
 - **New dev dependencies:** `@playwright/test` and
   `@testing-library/user-event`. The new CI workflow runs Firefox, which can't
   launch locally on macOS 27.

@@ -12,12 +12,20 @@ React implementation grows. Every rule is taken from the current source and was
 checked against the running app (§8); file references let a reviewer trace each
 claim.
 
+> **Updated for Week 11 (27 October 2026).** The app shell was rebuilt to
+> the team's Figma web design (header with search, CC, high contrast,
+> shortcuts and the account menu; a sidebar from 1024 px; a ☰ Menu drawer
+> below that; a status bar). The sections that describe the shell, the
+> landmarks, the breakpoints and the component reference now describe that
+> shell, and the audit and structure report were re-run on it. The
+> Assignment 10 audit history in §8 is kept.
+
 | Evidence | Where |
 |:--|:--|
-| Automated audit — 0 violations, 44/44 keyboard & structure checks | [`audit/axe-results.png`](audit/axe-results.png), [`audit/report.html`](audit/report.html) |
+| Automated audit — 64 scans, 0 violations, 53/53 keyboard & structure checks (Week 11) | [`audit/axe-results.png`](audit/axe-results.png), [`audit/report.html`](audit/report.html) |
 | Audit before the fixes — 71 violations, 5 failed checks | [`audit-before/`](audit-before) |
 | Landmarks, heading outline, links and fields of every page, at every breakpoint | [`structure.md`](structure.md) |
-| Accessibility tests (54) | [`src/accessibility.test.tsx`](../../../src/accessibility.test.tsx) |
+| Accessibility tests (77) | [`src/accessibility.test.tsx`](../../../src/accessibility.test.tsx) |
 | Earlier project-wide notes (WCAG map, memory-loss design) | [`ACCESSIBILITY.md`](../../../ACCESSIBILITY.md) |
 
 ---
@@ -43,19 +51,19 @@ accessible-name rules with it, in every browser and screen reader.
 
 | Element | Used for | Where |
 |:--|:--|:--|
-| `<header>` | The page banner: logo, role indicator, Switch role / Sign out, and on app pages the orientation bar (date, live time, greeting, current screen, Call my caregiver) | `Layout.tsx`, `Landing.tsx`, `SignIn.tsx`, `SignUp.tsx`, `RoleChooser.tsx` |
-| `<nav>` | Groups of site navigation links only — never a toolbar of actions | App: sidebar (tablet/desktop), care recipient's bottom tab bar or caregiver's Menu panel (mobile) — `src/components/navigation/`. Landing: Sign in / Sign up (`Landing.tsx`) |
+| `<header>` | The page banner. In the app: ☰ Menu (below 1024px), logo, search, CC, high contrast, keyboard shortcuts, and the avatar with the alerts badge | `Layout.tsx`, `Landing.tsx`, `SignIn.tsx`, `SignUp.tsx`, `RoleChooser.tsx` |
+| `<nav>` | Groups of site navigation links only — never a toolbar of actions | App: the sidebar (1024px+) or the same panel inside the Menu drawer (below 1024px) — `src/components/navigation/`. Landing: Sign in / Sign up (`Landing.tsx`) |
 | `<main id="main-content" tabindex="-1">` | The one primary content area per page; the skip link's and route-change focus target | Every shell |
-| `<footer>` | Site-wide footer: copyright and a "View contacts" help link | `Landing.tsx` (all widths); `Layout.tsx` (desktop only — see §1.3) |
+| `<footer>` | Landing: copyright and accessibility note. App: the status bar (connection, active alerts, "WCAG 2.2 AA · No sound required") at every width | `Landing.tsx`; `navigation/StatusBar.tsx` |
 | `<section aria-label/aria-labelledby>` | A titled part of a page; becomes a named *region* | `Card.tsx` (every card), Today, Appointments date groups, Memories (Pinned / More), dashboard Alerts |
 | `<article>` | One self-contained item in a feed or list that makes sense on its own: a schedule entry, a medicine, a memory, a contact, a caregiver note | `Schedule.tsx`, `Medications.tsx`, `Memories.tsx`, `Contacts.tsx`, `Caregiver.tsx` |
 | `<aside>` | **Not used.** Nothing in the app is tangential to the main content. The caregiver sidebar is navigation, so it is a `<nav>`, not an `<aside>`. If a "related tips" panel is added, it will be an `<aside aria-label="…">`. | — |
 | `<h1>`–`<h3>` | Exactly one `<h1>` per page, then `<h2>` sections, `<h3>` items, no skipped levels | All pages (outlines in [`structure.md`](structure.md)) |
 | `<button>` | Anything that **does** something on this page: toggle, open, delete, switch role, send | Everywhere |
-| `<a href>` / `<Link>` | Anything that **goes** somewhere: another page, a phone number (`tel:`), the skip target | Nav, quick links, Call my caregiver |
+| `<a href>` / `<Link>` | Anything that **goes** somewhere: another page, a map, the skip target. There is no `tel:` link anywhere (a test checks): a voice call is the one channel a deaf user cannot rely on | Nav, contacts, alerts list, Get directions |
 | `<ul role="list">` / `<ol role="list">` | Lists of items; `role="list"` restores list semantics Safari/VoiceOver drops when CSS removes bullets | Nav items, schedule, medicines, appointments |
 | `<form noValidate>`, `<label for>`, `<fieldset>` + `<legend>` | Forms; one visible label per field; groups such as "Schedule times" | `Field.tsx`, Sign in/up, Manage medications/appointments |
-| `<time datetime>` | Dates and times machine-readably | Header clock, schedule and appointment times |
+| `<time datetime>` | Dates and times machine-readably | Sidebar date and time, schedule and appointment times |
 
 **Buttons vs links.** The test is what happens, not what it looks like: a
 "Manage medications" card on the dashboard is a link (it goes to a page) even
@@ -66,23 +74,23 @@ page). Screen readers announce the role, and users choose by it.
 
 ```
 <a class="skip-link" href="#main-content">Skip to main content</a>   ← first Tab stop
-<header role="banner">  logo · role · Switch role · Sign out
-                        date · time · greeting · current screen · Call my caregiver
+<header role="banner">  ☰ Menu · logo · search (combobox) · CC · contrast · shortcuts · avatar (account menu)
 </header>
 <main id="main-content" tabindex="-1" aria-label="Main content">
   <h1>…</h1>
   <section aria-labelledby="…"><h2 id="…">…</h2> … <article>…</article> </section>
 </main>
-<nav aria-label="Main navigation"> <ul role="list"> <li><a aria-current="page">…</a> … </ul> </nav>
-<footer role="contentinfo"> … </footer>          ← desktop only in the app shell
+<nav aria-label="Main navigation">  role · greeting · <time> · <ul role="list"> pages </ul> · Settings · alerts
+</nav>                                         ← sidebar from 1024px; below that, inside the Menu dialog
+<footer role="contentinfo"> connection · active alerts · WCAG note </footer>
 ```
 
 The navigation comes **after** `<main>` in the source on purpose: a keyboard or
 screen-reader user reaches the page's content first and the menu second. CSS
-places it visually (the sidebar on the left from 768px via `order-1`; the bottom
-tab bar fixed to the bottom of the screen on mobile) without changing that order.
-Only one navigation exists at a time for assistive technology: the others are
-`display:none` at that width, which removes them from the accessibility tree.
+places it visually (the sidebar on the left from 1024px via `order-1`) without
+changing that order. Below 1024px the sidebar is `display:none`, which removes it
+from the accessibility tree, and the same navigation is rendered only while the
+Menu drawer is open — so only one "Main navigation" exists at a time.
 
 ### 1.3 How the structure adapts across breakpoints
 
@@ -92,11 +100,10 @@ same structure on a desktop.
 
 | | Mobile 320–767px | Tablet 768–1023px | Desktop 1024px+ |
 |:--|:--|:--|:--|
-| Header | Below 640px Switch role and Sign out are icon-only (named by `aria-label`); date, time and greeting stack | Role pill appears; controls show their text; orientation bar in one row | Same as tablet, wider |
-| Care recipient navigation | Fixed bottom tab bar, 6 links, icon + label (kept instead of a hamburger — nothing to remember) | Collapsible sidebar: a labelled rail; "Expand menu" (`aria-expanded`) widens it | Full sidebar |
-| Caregiver navigation | **Menu** button (hamburger, `aria-expanded`, `aria-controls`) opens the navigation under the header | Collapsible sidebar | Full sidebar |
-| Main content | Single column | Single column; short form fields side by side (Manage appointments) | Two-column layouts on Today and Caregiver notes |
-| Footer (`contentinfo`) | Hidden — the bottom bar occupies that edge; "Contacts" is in the nav | Hidden | Shown |
+| Header | ☰ Menu, logo icon, CC, avatar (its name "Margaret, account menu, 5 alerts" read from visually hidden text) | Same | Logo and name, search, CC, high contrast, shortcuts, avatar with the first name shown |
+| Navigation (both roles) | **Menu** (`aria-expanded`, `aria-controls="nav-drawer"`) opens a modal drawer holding the navigation, search and high contrast | Same drawer, as in the design's 768px frames | Sidebar, always visible |
+| Main content | Single column; list then detail on Medicines and Appointments | List beside detail | Same, wider |
+| Footer (`contentinfo`) | The status bar, sticky | Same, plus the WCAG note | Same |
 
 Verified per page and breakpoint in [`structure.md`](structure.md) ("Shown at" column).
 
@@ -114,7 +121,7 @@ rotor → Landmarks; NVDA `D`; JAWS `R`). CareConnect's rules:
 | `main` | `<main>` | implicit | "Main content" / page name ("Sign in", "Choose your role") | Exactly one per page; carries `id="main-content"` and `tabindex="-1"`. |
 | `contentinfo` | `<footer>` (top level) | `role="contentinfo"` | — | At most one per page. |
 | `region` | `<section aria-label>` / `aria-labelledby` | implicit | The section's heading | Only sections with a name become regions; unnamed sections are not landmarks. |
-| `dialog` | `ConfirmDialog`, assistant panel | `role="dialog"` | The dialog's heading via `aria-labelledby` | See §5. |
+| `dialog` | `ConfirmDialog`, the Menu drawer, the keyboard shortcuts dialog | `role="dialog"` | The heading via `aria-labelledby`, or "Menu" | All modal (`aria-modal="true"`, focus trapped). See §5. |
 
 **Explicit roles on `<header>` and `<footer>`.** `role="banner"` and
 `role="contentinfo"` repeat what the elements already mean. They are kept on
@@ -239,11 +246,16 @@ Every interaction uses native elements, so the keys are the ones users already k
 | `Tab` / `Shift+Tab` | Next / previous control, in reading order: skip link → header → page content → navigation → footer |
 | `Enter` | Follow a link; press a button; submit a form from any field |
 | `Space` | Press a button or toggle; tick a checkbox |
-| `Esc` | Close the confirm dialog (focus returns to its trigger); close the assistant (focus returns to its launcher); dismiss the install banner |
+| `Esc` | Close the confirm dialog, the Menu drawer, the shortcuts dialog or the account menu (focus returns to the button that opened it); clear the search; dismiss the install banner |
+| `Ctrl+K` / `⌘K` | Search: focuses the header search on desktop; below 1024px opens the Menu drawer with its search focused |
+| `↑` `↓` `Enter` (in search) | Move through the matches and open one |
 | Arrow keys | Native only: move within a `<select>`, move the caret in a field, scroll the page |
 
-There are no single-key shortcuts, so nothing fires when a speech-recognition user
-dictates text (WCAG 2.1.4).
+Shortcuts use a modifier (Ctrl/⌘), so nothing fires when a speech-recognition
+user dictates text (WCAG 2.1.4). One exception remains: on Contacts, "/" jumps to
+"Find a contact" (not while typing in a field). It is listed in §9 with a plan.
+The "?" shortcut that briefly opened the shortcuts dialog was removed for this
+reason; the header's keyboard button opens it instead.
 
 ### 5.2 Focus visibility and order
 
@@ -251,12 +263,12 @@ dictates text (WCAG 2.1.4).
   — 6.5:1 on white. It appears for keyboard focus and not for mouse clicks, and is
   never removed. Verified at every stop by the audit.
 - **Targets are at least 44 × 44px** (`min-h/min-w-[2.75rem]`), well above the
-  24px WCAG 2.2 minimum; bottom-bar links are 56px tall.
+  24px WCAG 2.2 minimum; navigation links are 48px tall.
 - **Focus order follows the source order** (§1.2); CSS `order` is used only for
   visual placement that keeps content-first reading order.
 - **Route changes move focus to `<main>`** (`Layout.tsx`). In a single-page app
   the document never reloads, so without this a keyboard user who chose
-  "Medicines" in the bottom bar would stay on that link while the content changed
+  "Medicines" in the sidebar would stay on that link while the content changed
   silently above it. Now focus moves to main, the screen reader announces the new
   page, and the next `Tab` continues from the new content. The window title changes
   too ("Medicines — CareConnect"). It does not happen on the first load, so the
@@ -344,7 +356,7 @@ h1  My Appointments                         h1  Dashboard
   Blood test". Where the visible text already says everything, the `aria-label`
   was removed instead.
 - **Icon-only controls have a name** ("Close dialog", "Dismiss install prompt",
-  the mobile Switch role / Sign out buttons), and every decorative icon is
+  "Menu", "Close menu", "High contrast", "Keyboard shortcuts"), and every decorative icon is
   `aria-hidden="true"`.
 - **Never `aria-label` on a plain `<span>` or `<div>`**: screen readers ignore it.
   Extra context goes in visually hidden text (`.sr-only`) instead — e.g. "In My
@@ -388,13 +400,21 @@ The implementation plan the team follows when building or changing a component.
 | Component | Element(s) | Keyboard | Name / ARIA | Notes |
 |:--|:--|:--|:--|:--|
 | Skip link | `<a href="#main-content">` | Tab (first), Enter | Text "Skip to main content" | Off-screen until focused |
-| App header (`Layout`) | `<header role="banner">`, `<time>` | Tab through controls | Icon-only controls have `aria-label`s that start with any visible text | Sticky |
-| Main navigation (`SideNav`, `BottomNav`) | `<nav aria-label="Main navigation">` → `<ul role="list">` → `NavLink` | Tab, Enter | `aria-current="page"` on the current link | After `<main>` in source; one per width |
-| Sidebar toggle (tablet) | `<button aria-expanded aria-controls="sidebar-links">` "Expand menu" / "Collapse menu" | Enter, Space | State in `aria-expanded`; the visible text changes with it | Collapsed rail keeps every label visible |
+| App header (`Layout`) | `<header role="banner">` | Tab through controls | Every control's name starts with its visible text | Sticky, 68px; its height is measured into `--header-height` for `scroll-padding-top` |
+| Main navigation (`SideNav`, `NavPanel`) | `<nav aria-label="Main navigation">` → `<ul role="list">` → `NavLink` | Tab, Enter | `aria-current="page"` on the current link | After `<main>` in source; one at a time |
+| Menu drawer (`NavDrawer`, below 1024px) | `<button aria-expanded aria-controls="nav-drawer">` "Menu" + `role="dialog" aria-modal="true" aria-label="Menu"` | Enter/Space opens; Tab trapped inside; Esc or Close returns focus to Menu; following a link closes it | Name "Menu" | `useFocusTrap`; opened by Ctrl+K it starts in the search field |
+| Search (`AppSearch`) | `<input type="search" role="combobox">` + `role="listbox"` of `role="option"` | Ctrl/⌘+K focuses; ↑↓ move; Enter opens; Esc clears | `aria-expanded`, `aria-controls`, `aria-activedescendant`, `aria-keyshortcuts`; match count in `role="status"` | ARIA 1.2 combobox |
+| CC / high contrast | `<button aria-pressed>` | Enter, Space | "CC captions" (printed "CC" + hidden "captions"); "High contrast" | CC is the Settings captions switch; high contrast adds `html.high-contrast` |
+| Account menu (`AccountMenu`) | Disclosure `<button aria-expanded aria-controls>` + panel with Switch role and Sign out | Enter/Space; Esc closes and returns focus; click outside closes | Name from content: "Margaret, account menu, 5 alerts" | No `aria-label`, so the visible words are always in the name |
+| Alerts (`NavPanel`) | `<button aria-expanded aria-controls>` "5 alerts" + list of links | Enter/Space | Each alert written out ("1 new message from Joyce") | Never colour alone |
+| Keyboard shortcuts (`ShortcutsDialog`) | `role="dialog" aria-modal` + `<dl>` of `<kbd>` | The header's keyboard button opens it; Esc closes and returns focus | `aria-labelledby` its heading | No "?" shortcut (WCAG 2.1.4) |
+| Status bar (`StatusBar`) | `<footer role="contentinfo">` | — | Connection as words beside the dot | Sticky; height in `--status-height` |
+| Visual alert (`AppointmentBanner`) | `<section aria-labelledby>` "Upcoming appointment" with Pause (`aria-pressed`) and OK | Tab, Enter | OK named "OK, dismiss the reminder for …" | Dismissed for the day on every screen |
+| Caption strip (`CaptionStrip`) | `<p>` with "[CC]" hidden and "Caption:" read first | — | — | Not rendered when captions are off; size and colour from Settings |
 | Route change | `<main tabindex="-1">` | — | Focus moves to main; title updates | Not on first load |
 | Button (`Button.tsx`) | `<button>` | Enter, Space | Visible text; `aria-label` only when icon-only | `danger` variant always opens `ConfirmDialog` |
 | Confirm dialog | `role="dialog" aria-modal="true"` | Focus in, Tab trapped, Esc, return focus | `aria-labelledby`, `aria-describedby` | §5.3 |
-| Assistant | `<button aria-expanded aria-controls>` + `role="dialog"` panel | Enter opens, Esc closes, Tab can leave | Panel labelled by its heading; live log | Non-modal |
+| Assistant (`ChatBot.tsx`, not mounted since Week 11) | `<button aria-expanded aria-controls>` + `role="dialog"` panel | Enter opens, Esc closes, Tab can leave | Panel labelled by its heading; live log | Non-modal |
 | Text field (`Field.tsx`) | `<label for>` + `<input>`/`<textarea>` | Native | `aria-required`, `aria-invalid`, `aria-describedby` (hint, error) | §4 |
 | Select (`SelectField`) | `<label for>` + `<select>` | Arrows, type-ahead | Same as Field | Native list, no custom combobox |
 | Field group | `<fieldset>` + `<legend>` | Native | Legend names the group | Schedule times |
@@ -407,14 +427,26 @@ The implementation plan the team follows when building or changing a component.
 | Install prompt | `role="region" aria-labelledby aria-live="polite"` | Tab to Install / Not now / Dismiss; Esc | Dismiss has `aria-label` | Never takes focus |
 | Tooltips (planned, Part 1 design system) | Trigger `<button aria-describedby>` + `role="tooltip"` | Show on focus and hover; Esc hides | Never holds essential information | WCAG 1.4.13 |
 | Tabs (planned) | `role="tablist/tab/tabpanel"` | Arrows move, Home/End, Tab into panel | `aria-selected`, `aria-controls` | Use links instead if each tab is a page |
-| Dropdown menu (planned) | `<button aria-expanded aria-haspopup="menu">` + `role="menu"` | Enter/Space/↓ opens, arrows, Esc returns focus | | Prefer a native `<select>` for choosing a value |
-| Hamburger menu (`MobileMenu`, caregiver, below 768px) | `<button aria-expanded aria-controls="mobile-menu">` "Menu" + `<nav aria-label="Main navigation">` panel | Enter/Space toggles; next Tab enters the panel; Esc closes and returns focus to Menu; closes on navigation | Name "Menu"; `aria-expanded` | A disclosure in the page flow, not a modal: it pushes content down, so nothing behind it needs trapping |
+| Dropdown menu (built: Quick replies in Messaging) | `<button aria-expanded aria-haspopup="menu">` + `role="menu"` | Enter/Space/↓ opens, arrows, Esc returns focus | | Prefer a native `<select>` for choosing a value |
 
 ---
 
 ## 8. Verification and results
 
-**Automated audit** — `npm run a11y:web` (`scripts/web-a11y-audit.mjs`): axe-core
+**Week 11 re-run (27 October 2026)** — the same script, updated for the
+Figma shell, over **17 routes** (Conversation and Accessibility Settings
+added) and the interactive states that now exist: sign-in errors, the confirm
+dialog, the Menu drawer for each role at 375px and 820px, and on desktop the
+header search with results, the account menu and the shortcuts dialog. **64
+scans, 0 violations; 53/53 keyboard and structure checks pass**, including
+Tab staying inside the drawer and Escape returning focus to Menu at both
+widths, Ctrl+K focusing search, Escape closing the account menu with focus
+back on the avatar, and no horizontal scroll at 320px on every route. The
+re-run found one regression and it was fixed: completed My Day tasks were
+faded with `opacity-75`, putting their time and description at 3.24:1 (rule
+1 below).
+
+**Assignment 10 audit** — `npm run a11y:web` (`scripts/web-a11y-audit.mjs`): axe-core
 4.14 with the WCAG 2.0/2.1 A and AA rule sets, best practices and the
 label-in-name rule, in Chromium, over 15 routes and 3 interactive states (sign-in
 errors, the assistant open, the confirm dialog open) at 375px, 820px and 1280px,
@@ -456,9 +488,11 @@ and 44 keyboard and structure checks.
 | The page behind the modal dialog is not `inert`; `aria-modal` relies on the screen reader honouring it | Set `inert` on the app root while a dialog is open |
 | Each field error is also `role="alert"`, so submitting a form with four errors announces five times | Keep the summary as the only alert; field errors are read through `aria-describedby` when focused; move focus to the first invalid field |
 | Done toggles (My Day, Medicines) change their label with the state ("Mark Breakfast as done" ↔ "…as not done") **and** set `aria-pressed`, so a screen reader hears "Mark Breakfast as not done, toggle button, pressed" — two state signals that read as contradictory | Keep `aria-pressed` and give the button a fixed name ("Breakfast done"), as the WAI-ARIA toggle-button pattern advises |
-| The app footer (`contentinfo`) is hidden below 1024px | Acceptable for now (its one link, Contacts, is in the nav); revisit with the Part 1 responsive designs |
+| ~~The app footer (`contentinfo`) is hidden below 1024px~~ | Resolved in Week 11: the status bar is shown at every width |
+| On Contacts, "/" is a single-character shortcut that cannot be turned off (WCAG 2.1.4) | Make it work only while the contact list has focus, or add an off switch in Accessibility Settings |
 | No manual screen-reader pass on the web app yet | VoiceOver (Safari, macOS and iOS) and NVDA (Chrome/Firefox, Windows) through the main flows before the next submission |
-| Tooltips, tabs and dropdowns are in the Part 1 design system but not built | Build to the patterns in §7, with a test each |
+| Tooltips and tabs are in the Part 1 design system but not built | No Figma frame uses them; build to the patterns in §7 if one does. Menus (account, Quick replies) and a combobox (search) are built |
+| The sticky status bar can sit over the last line of a long page while scrolling | `scroll-padding-bottom` keeps focused elements clear of it (WCAG 2.4.11); content is never hidden at the end of the page |
 
 ---
 

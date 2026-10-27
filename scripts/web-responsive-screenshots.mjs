@@ -20,6 +20,11 @@ const out = path.resolve(here, '../docs/web/implementation/screenshots');
 const base = (process.env.WEB_URL ?? 'http://localhost:5180').replace(/\/$/, '');
 const user = { id: 'u', name: 'Margaret Whitfield', email: 'margaret@example.com' };
 
+// Screenshots show the demo at 9:45 am today, whatever time they are taken:
+// morning greeting, this morning's messages, the 10:30 visit still to come.
+const demoTime = new Date();
+demoTime.setHours(9, 45, 0, 0);
+
 const breakpoints = [
   { id: 'mobile', label: 'Mobile — 375px', width: 375, height: 812 },
   { id: 'tablet', label: 'Tablet — 820px', width: 820, height: 1180 },
@@ -43,7 +48,8 @@ export const screens = [
   ['13-manage-appointments', 'Manage appointments', '/app/manage-appointments', 'caregiver'],
   ['14-activity', 'Activity log', '/app/activity', 'caregiver'],
   ['15-notes', 'Caregiver notes', '/app/caregiver', 'caregiver'],
-  ['16-navigation-open', 'Navigation opened (mobile Menu / tablet expanded sidebar)', '/app', 'caregiver', 'open-nav'],
+  ['16-navigation-open', 'Navigation opened (phone and tablet Menu drawer; desktop sidebar)', '/app', 'patient', 'open-nav'],
+  ['17-search', 'Header search (Ctrl K) with results', '/app', 'patient', 'search'],
 ];
 
 const browser = await chromium.launch();
@@ -54,6 +60,7 @@ for (const [id, title, p, role, action] of screens) {
   for (const bp of breakpoints) {
     const ctx = await browser.newContext({ viewport: { width: bp.width, height: bp.height }, deviceScaleFactor: 1 });
     const page = await ctx.newPage();
+    await page.clock.setFixedTime(demoTime);
     await page.goto(`${base}/`);
     await page.evaluate((s) => {
       localStorage.clear();
@@ -61,9 +68,13 @@ for (const [id, title, p, role, action] of screens) {
     }, role === null ? null : JSON.stringify({ user, role: role === 'none' ? null : role }));
     await page.goto(`${base}${p}`);
     await page.locator('h1').first().waitFor();
-    if (action === 'open-nav') {
-      if (bp.id === 'mobile') await page.getByRole('button', { name: 'Menu' }).click();
-      if (bp.id === 'tablet') await page.getByRole('button', { name: 'Expand menu' }).click();
+    if (action === 'open-nav' && bp.id !== 'desktop') {
+      await page.getByRole('button', { name: 'Menu', exact: true }).click();
+    }
+    if (action === 'search') {
+      // Ctrl+K: the header field on desktop, the drawer's field below 1024px.
+      await page.keyboard.press('Control+k');
+      await page.keyboard.type('metf');
     }
     await page.mouse.move(0, 0);
     await page.waitForTimeout(450); // page-enter animation

@@ -3,11 +3,15 @@
  *
  * Runs axe-core (the engine inside axe DevTools) over every route and the
  * interactive states that matter (form errors, the confirm dialog, the
- * assistant panel) at the three breakpoints the web design uses:
+ * header search, account menu and shortcuts dialog, the Menu drawer) at the
+ * three breakpoints the web design uses:
  *   mobile 375px · tablet 820px · desktop 1280px   (+ 320px reflow check)
- * and checks the keyboard behaviours the Part 2 documentation promises:
- * skip link, focus trap and focus return in the modal, Escape on the
- * assistant, and one main / one banner landmark per page.
+ * and checks the keyboard behaviours the documentation promises: skip link,
+ * focus trap and focus return in the modals and the drawer, Escape on the
+ * account menu, and one main / one banner landmark per page.
+ *
+ * (Assignment 10 also scanned the AI assistant panel; it has not been
+ * mounted since the Week 11 Landing page.)
  *
  *   npm run dev -- --port 5180          # terminal 1
  *   npm run a11y:web                    # terminal 2
@@ -42,12 +46,14 @@ const pages = [
   ['signin', 'Sign in', '/signin', null],
   ['signup', 'Sign up', '/signup', null],
   ['role', 'Role chooser', '/role', 'none'],
-  ['today', 'Today (patient home)', '/app', 'patient'],
+  ['today', 'Home (patient)', '/app', 'patient'],
   ['schedule', 'My Day', '/app/schedule', 'patient'],
   ['appointments', 'Appointments', '/app/appointments', 'patient'],
   ['medications', 'Medicines', '/app/medications', 'patient'],
   ['memories', 'Memories', '/app/memories', 'patient'],
   ['contacts', 'Contacts', '/app/contacts', 'patient'],
+  ['conversation', 'Conversation', '/app/contacts/c3', 'patient'],
+  ['settings', 'Accessibility Settings', '/app/settings', 'patient'],
   ['dashboard', 'Caregiver dashboard', '/app', 'caregiver'],
   ['manage-meds', 'Manage medications', '/app/manage-medications', 'caregiver'],
   ['manage-appts', 'Manage appointments', '/app/manage-appointments', 'caregiver'],
@@ -160,21 +166,36 @@ async function run() {
     }
     await page.close();
 
-    // Assistant panel on the landing page.
-    page = await open(context, '/', null);
-    const launcher = page.getByRole('button', { name: /open assistant/i });
-    await launcher.focus();
-    await page.keyboard.press('Enter');
-    await page.waitForTimeout(250);
-    await scan(page, 'chatbot', 'Landing — assistant open', bp);
+    // App shell: the header's search, account menu and shortcuts dialog.
     if (bp.id === 'desktop') {
-      const expanded = await page.locator('[aria-controls="chatbot-panel"]').getAttribute('aria-expanded');
+      page = await open(context, '/app', 'patient');
+      await page.keyboard.press('Control+k');
+      const search = page.getByRole('combobox', { name: /search medicines/i });
+      check('Search: Ctrl+K focuses the header search', await search.evaluate((el) => el === document.activeElement));
+      await page.keyboard.type('metf');
+      await scan(page, 'search', 'Header search — results open', bp);
+      check('Search: the results are a listbox and the first option is active', (await search.getAttribute('aria-expanded')) === 'true' && (await page.getByRole('option', { selected: true }).count()) === 1);
       await page.keyboard.press('Escape');
-      await page.waitForTimeout(150);
-      const back = await page.evaluate(() => document.activeElement?.getAttribute('aria-controls'));
-      check('Assistant: aria-expanded set; Escape closes it and returns focus to the launcher', expanded === 'true' && back === 'chatbot-panel');
+
+      const account = page.getByRole('button', { name: /account menu/ });
+      await account.focus();
+      await page.keyboard.press('Enter');
+      await scan(page, 'account-menu', 'Account menu open', bp);
+      await page.keyboard.press('Escape');
+      check('Account menu: Escape closes it and focus returns to the avatar', (await account.getAttribute('aria-expanded')) === 'false' && (await account.evaluate((el) => el === document.activeElement)));
+
+      await page.getByRole('button', { name: 'Keyboard shortcuts' }).focus();
+      await page.keyboard.press('Enter');
+      await page.getByRole('dialog', { name: 'Keyboard shortcuts' }).waitFor();
+      await scan(page, 'shortcuts', 'Keyboard shortcuts dialog', bp);
+      await page.keyboard.press('Escape');
+      check(
+        'Shortcuts: the keyboard button opens the dialog; Escape closes it and focus returns to the button',
+        (await page.getByRole('dialog').count()) === 0 &&
+          (await page.evaluate(() => document.activeElement?.getAttribute('aria-label'))) === 'Keyboard shortcuts',
+      );
+      await page.close();
     }
-    await page.close();
 
     // Confirm dialog (Manage medications → Delete).
     page = await open(context, '/app/manage-medications', 'caregiver');
@@ -199,31 +220,30 @@ async function run() {
     }
     await page.close();
 
-    // Responsive navigation states.
-    if (bp.id === 'mobile') {
-      page = await open(context, '/app', 'caregiver');
-      const menu = page.getByRole('button', { name: 'Menu' });
-      await menu.focus();
-      await page.keyboard.press('Enter');
-      await page.locator('#mobile-menu').waitFor();
-      await scan(page, 'mobile-menu', 'Caregiver — mobile menu open', bp);
-      await page.keyboard.press('Tab');
-      const firstLink = await page.evaluate(() => Boolean(document.activeElement?.closest('#mobile-menu')));
-      await page.keyboard.press('Escape');
-      const back = await page.evaluate(() => document.activeElement?.textContent?.trim());
-      const closed = (await page.locator('#mobile-menu').count()) === 0;
-      check('Mobile menu: Tab goes into the menu, Escape closes it and focus returns to Menu', firstLink && closed && back === 'Menu', `back on "${back}"`);
-      await page.close();
-    }
-    if (bp.id === 'tablet') {
-      page = await open(context, '/app', 'caregiver');
-      const toggle = page.getByRole('button', { name: 'Expand menu' });
-      await toggle.focus();
-      await page.keyboard.press('Enter');
-      await page.getByRole('button', { name: 'Collapse menu' }).waitFor();
-      await scan(page, 'sidebar-expanded', 'Caregiver — tablet sidebar expanded', bp);
-      check('Tablet sidebar: Enter on "Expand menu" expands it (aria-expanded true)', (await page.getByRole('button', { name: 'Collapse menu' }).getAttribute('aria-expanded')) === 'true');
-      await page.close();
+    // Responsive navigation: below 1024px the Menu drawer, for both roles.
+    if (bp.id !== 'desktop') {
+      for (const role of ['patient', 'caregiver']) {
+        page = await open(context, '/app', role);
+        const menu = page.getByRole('button', { name: 'Menu', exact: true });
+        await menu.focus();
+        await page.keyboard.press('Enter');
+        await page.locator('#nav-drawer').waitFor();
+        await scan(page, `drawer-${role}`, `${role === 'patient' ? 'Care recipient' : 'Caregiver'} — Menu drawer open`, bp);
+        const inside = [];
+        for (let i = 0; i < 25; i += 1) {
+          await page.keyboard.press('Tab');
+          inside.push(await page.evaluate(() => Boolean(document.activeElement?.closest('#nav-drawer'))));
+        }
+        await page.keyboard.press('Escape');
+        const back = await page.evaluate(() => document.activeElement?.getAttribute('aria-label'));
+        const closed = (await page.locator('#nav-drawer').count()) === 0;
+        check(
+          `Menu drawer (${bp.id}, ${role}): Tab stays inside, Escape closes it and focus returns to Menu`,
+          inside.every(Boolean) && closed && back === 'Menu',
+          `back on "${back}"`,
+        );
+        await page.close();
+      }
     }
 
     if (bp.id === 'desktop') {
