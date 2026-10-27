@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Calendar, Pill, Video, Bell } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import type { AppView } from '../types';
 import MockVideoCall from '../components/MockVideoCall';
 
@@ -9,13 +9,12 @@ interface HomeProps {
 }
 
 export default function Home({ view: _view }: HomeProps) {
-  const navigate = useNavigate();
   const [bannerDismissed, setBannerDismissed] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [callSimulated, setCallSimulated] = useState(false);
 
   // Read tasks from localStorage to sync live progress with Schedule page
-  const [tasks] = useState(() => {
+  const [tasks] = useState<{ done: boolean }[]>(() => {
     try {
       const raw = localStorage.getItem('careconnect_web_myday_tasks');
       if (raw) return JSON.parse(raw);
@@ -33,7 +32,7 @@ export default function Home({ view: _view }: HomeProps) {
     ];
   });
 
-  const doneCount = tasks.filter((t: any) => t.done).length;
+  const doneCount = tasks.filter((t) => t.done).length;
   const totalCount = tasks.length || 7;
   const percentage = Math.round((doneCount / totalCount) * 100);
 

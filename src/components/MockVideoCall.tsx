@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Volume2, Mic, MicOff, Pause, Play, Captions, PhoneOff, Video, AlertTriangle, Eye, Bell } from 'lucide-react';
+import { Volume2, Mic, MicOff, Pause, Play, Captions, Eye, Bell } from 'lucide-react';
 
 export default function MockVideoCall({ onClose }: { onClose: () => void }) {
   const [callState, setCallState] = useState<'incoming' | 'active'>('incoming');
