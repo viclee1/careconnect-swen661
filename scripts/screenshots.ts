@@ -14,14 +14,18 @@
  *      caregiver view), waits for a key selector so we never capture a blank or
  *      loading state, then writes a 1280x800 PNG into docs/screenshots/.
  *   4. Logs which screenshots succeeded and which failed, and exits non-zero if
- *      any of the 14 expected files is missing.
+ *      any of the 13 expected files is missing.
+ *
+ * There is no 02 any more: the AI assistant panel (ChatBot.tsx) is not mounted
+ * since the Week 11 Landing page, so there is nothing to capture.
  *
  * Run with:  npm run screenshots
  *
  * Note on the caregiver view: AppShell derives its initial view from the auth
  * role at mount, but the role hydrates asynchronously, so a fresh page load
  * always lands on the patient view. Caregiver screens are therefore reached the
- * same way a real user would — by clicking the header "Switch role" control.
+ * same way a real user would — from the avatar's account menu, "Switch to
+ * caregiver".
  */
 import { chromium, type Browser, type BrowserContext, type Page } from 'playwright';
 import { spawn, type ChildProcess } from 'node:child_process';
@@ -91,13 +95,13 @@ function run(cmd: string, args: string[]): Promise<void> {
 
 /** Switch the app chrome from the (default) patient view into the caregiver view. */
 async function switchToCaregiver(page: Page): Promise<void> {
-  const toggle = page.locator('button[aria-label="Switch to caregiver role"]');
-  await toggle.click();
+  await page.getByRole('button', { name: /account menu/ }).click();
+  await page.getByRole('button', { name: 'Switch to caregiver' }).click();
   // The caregiver chrome announces whose plan is being viewed.
   await page.getByText("Viewing Margaret's care plan").waitFor({ state: 'visible', timeout: 10_000 });
 }
 
-// ── The 14 screens ───────────────────────────────────────────────────────────
+// ── The 13 screens ───────────────────────────────────────────────────────────
 
 const shots: Shot[] = [
   {
@@ -105,15 +109,6 @@ const shots: Shot[] = [
     seed: 'none',
     path: '/',
     waitFor: (p) => p.getByRole('heading', { level: 1, name: /daily companion/i }).waitFor({ state: 'visible' }),
-  },
-  {
-    file: '02-assistant.png',
-    seed: 'none',
-    path: '/',
-    prepare: async (p) => {
-      await p.locator('button[aria-controls="chatbot-panel"]').click();
-    },
-    waitFor: (p) => p.getByRole('heading', { name: 'CareConnect Assistant' }).waitFor({ state: 'visible' }),
   },
   {
     file: '03-signup.png',
@@ -150,12 +145,11 @@ const shots: Shot[] = [
     seed: 'patient',
     path: '/app/medications',
     prepare: async (p) => {
-      // Mark the first medicine as taken to surface the polite confirmation state.
-      const markTaken = p.locator('button[aria-label^="Mark "][aria-label$=" as taken"]').first();
-      await markTaken.click();
-      // Wait until that toggle reports the pressed/taken state.
-      await p.locator('button[aria-label^="Mark "][aria-label$=" as not taken"]').first()
-        .waitFor({ state: 'visible', timeout: 10_000 });
+      // Choose Lisinopril in the list and mark it from the detail panel, to
+      // show the "Taken — tap to undo" state and the updated count.
+      await p.getByRole('button', { name: /^Lisinopril/ }).click();
+      await p.getByRole('button', { name: 'Mark Lisinopril as taken' }).click();
+      await p.getByRole('button', { name: 'Taken — tap to undo' }).waitFor({ state: 'visible', timeout: 10_000 });
     },
     waitFor: (p) => p.locator('[role="status"]').first().waitFor({ state: 'visible' }),
   },
@@ -185,7 +179,7 @@ const shots: Shot[] = [
     path: '/app/manage-medications',
     caregiver: true,
     prepare: async (p) => {
-      await p.locator('button[aria-label="Add new medication"]').click();
+      await p.getByRole('button', { name: 'Add medication', exact: true }).click();
     },
     waitFor: (p) => p.getByRole('heading', { name: /add new medication/i }).waitFor({ state: 'visible' }),
   },
@@ -223,6 +217,10 @@ async function capture(browser: Browser, origin: string, shot: Shot): Promise<vo
   }
 
   const page = await context.newPage();
+  // The demo at 9:45 am today, whatever time the screenshots are taken.
+  const demoTime = new Date();
+  demoTime.setHours(9, 45, 0, 0);
+  await page.clock.setFixedTime(demoTime);
   try {
     await page.goto(`${origin}${shot.path}`, { waitUntil: 'networkidle' });
 

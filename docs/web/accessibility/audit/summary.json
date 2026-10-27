@@ -7,11 +7,11 @@
     "wcag21aa",
     "best-practice"
   ],
-  "date": "2026-10-18T16:34:51.808Z",
-  "scans": 56,
+  "date": "2026-10-27T05:08:41.115Z",
+  "scans": 64,
   "violations": 0,
   "checks": {
-    "total": 44,
+    "total": 53,
     "failed": 0
   },
   "results": [
@@ -20,7 +20,7 @@
       "page": "Landing",
       "breakpoint": "mobile 375px",
       "violations": 0,
-      "passes": 39
+      "passes": 35
     },
     {
       "id": "mobile-signin",
@@ -45,80 +45,94 @@
     },
     {
       "id": "mobile-today",
-      "page": "Today (patient home)",
+      "page": "Home (patient)",
       "breakpoint": "mobile 375px",
       "violations": 0,
-      "passes": 37
+      "passes": 41
     },
     {
       "id": "mobile-schedule",
       "page": "My Day",
       "breakpoint": "mobile 375px",
       "violations": 0,
-      "passes": 38
+      "passes": 41
     },
     {
       "id": "mobile-appointments",
       "page": "Appointments",
       "breakpoint": "mobile 375px",
       "violations": 0,
-      "passes": 37
+      "passes": 43
     },
     {
       "id": "mobile-medications",
       "page": "Medicines",
       "breakpoint": "mobile 375px",
       "violations": 0,
-      "passes": 37
+      "passes": 45
     },
     {
       "id": "mobile-memories",
       "page": "Memories",
       "breakpoint": "mobile 375px",
       "violations": 0,
-      "passes": 39
+      "passes": 45
     },
     {
       "id": "mobile-contacts",
       "page": "Contacts",
       "breakpoint": "mobile 375px",
       "violations": 0,
-      "passes": 37
+      "passes": 43
+    },
+    {
+      "id": "mobile-conversation",
+      "page": "Conversation",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 44
+    },
+    {
+      "id": "mobile-settings",
+      "page": "Accessibility Settings",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 42
     },
     {
       "id": "mobile-dashboard",
       "page": "Caregiver dashboard",
       "breakpoint": "mobile 375px",
       "violations": 0,
-      "passes": 37
+      "passes": 39
     },
     {
       "id": "mobile-manage-meds",
       "page": "Manage medications",
       "breakpoint": "mobile 375px",
       "violations": 0,
-      "passes": 37
+      "passes": 40
     },
     {
       "id": "mobile-manage-appts",
       "page": "Manage appointments",
       "breakpoint": "mobile 375px",
       "violations": 0,
-      "passes": 37
+      "passes": 40
     },
     {
       "id": "mobile-activity",
       "page": "Activity log",
       "breakpoint": "mobile 375px",
       "violations": 0,
-      "passes": 37
+      "passes": 40
     },
     {
       "id": "mobile-notes",
       "page": "Caregiver notes",
       "breakpoint": "mobile 375px",
       "violations": 0,
-      "passes": 36
+      "passes": 39
     },
     {
       "id": "mobile-signin-errors",
@@ -128,32 +142,32 @@
       "passes": 40
     },
     {
-      "id": "mobile-chatbot",
-      "page": "Landing — assistant open",
-      "breakpoint": "mobile 375px",
-      "violations": 0,
-      "passes": 44
-    },
-    {
       "id": "mobile-dialog",
       "page": "Manage medications — confirm dialog",
       "breakpoint": "mobile 375px",
       "violations": 0,
-      "passes": 39
+      "passes": 41
     },
     {
-      "id": "mobile-mobile-menu",
-      "page": "Caregiver — mobile menu open",
+      "id": "mobile-drawer-patient",
+      "page": "Care recipient — Menu drawer open",
       "breakpoint": "mobile 375px",
       "violations": 0,
-      "passes": 37
+      "passes": 46
+    },
+    {
+      "id": "mobile-drawer-caregiver",
+      "page": "Caregiver — Menu drawer open",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 45
     },
     {
       "id": "tablet-landing",
       "page": "Landing",
       "breakpoint": "tablet 820px",
       "violations": 0,
-      "passes": 39
+      "passes": 35
     },
     {
       "id": "tablet-signin",
@@ -178,80 +192,94 @@
     },
     {
       "id": "tablet-today",
-      "page": "Today (patient home)",
+      "page": "Home (patient)",
       "breakpoint": "tablet 820px",
       "violations": 0,
-      "passes": 37
+      "passes": 41
     },
     {
       "id": "tablet-schedule",
       "page": "My Day",
       "breakpoint": "tablet 820px",
       "violations": 0,
-      "passes": 38
+      "passes": 41
     },
     {
       "id": "tablet-appointments",
       "page": "Appointments",
       "breakpoint": "tablet 820px",
       "violations": 0,
-      "passes": 37
+      "passes": 43
     },
     {
       "id": "tablet-medications",
       "page": "Medicines",
       "breakpoint": "tablet 820px",
       "violations": 0,
-      "passes": 37
+      "passes": 45
     },
     {
       "id": "tablet-memories",
       "page": "Memories",
       "breakpoint": "tablet 820px",
       "violations": 0,
-      "passes": 39
+      "passes": 45
     },
     {
       "id": "tablet-contacts",
       "page": "Contacts",
       "breakpoint": "tablet 820px",
       "violations": 0,
-      "passes": 37
+      "passes": 43
+    },
+    {
+      "id": "tablet-conversation",
+      "page": "Conversation",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 44
+    },
+    {
+      "id": "tablet-settings",
+      "page": "Accessibility Settings",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 42
     },
     {
       "id": "tablet-dashboard",
       "page": "Caregiver dashboard",
       "breakpoint": "tablet 820px",
       "violations": 0,
-      "passes": 38
+      "passes": 39
     },
     {
       "id": "tablet-manage-meds",
       "page": "Manage medications",
       "breakpoint": "tablet 820px",
       "violations": 0,
-      "passes": 37
+      "passes": 40
     },
     {
       "id": "tablet-manage-appts",
       "page": "Manage appointments",
       "breakpoint": "tablet 820px",
       "violations": 0,
-      "passes": 37
+      "passes": 40
     },
     {
       "id": "tablet-activity",
       "page": "Activity log",
       "breakpoint": "tablet 820px",
       "violations": 0,
-      "passes": 38
+      "passes": 40
     },
     {
       "id": "tablet-notes",
       "page": "Caregiver notes",
       "breakpoint": "tablet 820px",
       "violations": 0,
-      "passes": 37
+      "passes": 39
     },
     {
       "id": "tablet-signin-errors",
@@ -261,32 +289,32 @@
       "passes": 40
     },
     {
-      "id": "tablet-chatbot",
-      "page": "Landing — assistant open",
-      "breakpoint": "tablet 820px",
-      "violations": 0,
-      "passes": 44
-    },
-    {
       "id": "tablet-dialog",
       "page": "Manage medications — confirm dialog",
       "breakpoint": "tablet 820px",
       "violations": 0,
-      "passes": 39
+      "passes": 41
     },
     {
-      "id": "tablet-sidebar-expanded",
-      "page": "Caregiver — tablet sidebar expanded",
+      "id": "tablet-drawer-patient",
+      "page": "Care recipient — Menu drawer open",
       "breakpoint": "tablet 820px",
       "violations": 0,
-      "passes": 38
+      "passes": 46
+    },
+    {
+      "id": "tablet-drawer-caregiver",
+      "page": "Caregiver — Menu drawer open",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 44
     },
     {
       "id": "desktop-landing",
       "page": "Landing",
       "breakpoint": "desktop 1280px",
       "violations": 0,
-      "passes": 39
+      "passes": 35
     },
     {
       "id": "desktop-signin",
@@ -311,80 +339,94 @@
     },
     {
       "id": "desktop-today",
-      "page": "Today (patient home)",
+      "page": "Home (patient)",
       "breakpoint": "desktop 1280px",
       "violations": 0,
-      "passes": 39
+      "passes": 45
     },
     {
       "id": "desktop-schedule",
       "page": "My Day",
       "breakpoint": "desktop 1280px",
       "violations": 0,
-      "passes": 40
+      "passes": 45
     },
     {
       "id": "desktop-appointments",
       "page": "Appointments",
       "breakpoint": "desktop 1280px",
       "violations": 0,
-      "passes": 39
+      "passes": 44
     },
     {
       "id": "desktop-medications",
       "page": "Medicines",
       "breakpoint": "desktop 1280px",
       "violations": 0,
-      "passes": 39
+      "passes": 46
     },
     {
       "id": "desktop-memories",
       "page": "Memories",
       "breakpoint": "desktop 1280px",
       "violations": 0,
-      "passes": 41
+      "passes": 46
     },
     {
       "id": "desktop-contacts",
       "page": "Contacts",
       "breakpoint": "desktop 1280px",
       "violations": 0,
-      "passes": 39
+      "passes": 46
+    },
+    {
+      "id": "desktop-conversation",
+      "page": "Conversation",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 46
+    },
+    {
+      "id": "desktop-settings",
+      "page": "Accessibility Settings",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 45
     },
     {
       "id": "desktop-dashboard",
       "page": "Caregiver dashboard",
       "breakpoint": "desktop 1280px",
       "violations": 0,
-      "passes": 40
+      "passes": 44
     },
     {
       "id": "desktop-manage-meds",
       "page": "Manage medications",
       "breakpoint": "desktop 1280px",
       "violations": 0,
-      "passes": 39
+      "passes": 44
     },
     {
       "id": "desktop-manage-appts",
       "page": "Manage appointments",
       "breakpoint": "desktop 1280px",
       "violations": 0,
-      "passes": 39
+      "passes": 44
     },
     {
       "id": "desktop-activity",
       "page": "Activity log",
       "breakpoint": "desktop 1280px",
       "violations": 0,
-      "passes": 40
+      "passes": 45
     },
     {
       "id": "desktop-notes",
       "page": "Caregiver notes",
       "breakpoint": "desktop 1280px",
       "violations": 0,
-      "passes": 39
+      "passes": 44
     },
     {
       "id": "desktop-signin-errors",
@@ -394,30 +436,54 @@
       "passes": 40
     },
     {
-      "id": "desktop-chatbot",
-      "page": "Landing — assistant open",
+      "id": "desktop-search",
+      "page": "Header search — results open",
       "breakpoint": "desktop 1280px",
       "violations": 0,
-      "passes": 44
+      "passes": 47
+    },
+    {
+      "id": "desktop-account-menu",
+      "page": "Account menu open",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 45
+    },
+    {
+      "id": "desktop-shortcuts",
+      "page": "Keyboard shortcuts dialog",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 48
     },
     {
       "id": "desktop-dialog",
       "page": "Manage medications — confirm dialog",
       "breakpoint": "desktop 1280px",
       "violations": 0,
-      "passes": 41
+      "passes": 45
     }
   ],
   "checkResults": [
     {
-      "name": "Mobile menu: Tab goes into the menu, Escape closes it and focus returns to Menu",
+      "name": "Menu drawer (mobile, patient): Tab stays inside, Escape closes it and focus returns to Menu",
       "pass": true,
       "note": "back on \"Menu\""
     },
     {
-      "name": "Tablet sidebar: Enter on \"Expand menu\" expands it (aria-expanded true)",
+      "name": "Menu drawer (mobile, caregiver): Tab stays inside, Escape closes it and focus returns to Menu",
       "pass": true,
-      "note": ""
+      "note": "back on \"Menu\""
+    },
+    {
+      "name": "Menu drawer (tablet, patient): Tab stays inside, Escape closes it and focus returns to Menu",
+      "pass": true,
+      "note": "back on \"Menu\""
+    },
+    {
+      "name": "Menu drawer (tablet, caregiver): Tab stays inside, Escape closes it and focus returns to Menu",
+      "pass": true,
+      "note": "back on \"Menu\""
     },
     {
       "name": "Landing: one <main>, one top-level banner, one <h1>",
@@ -440,7 +506,7 @@
       "note": "main=1 banner=1 h1=1"
     },
     {
-      "name": "Today (patient home): one <main>, one top-level banner, one <h1>",
+      "name": "Home (patient): one <main>, one top-level banner, one <h1>",
       "pass": true,
       "note": "main=1 banner=1 h1=1"
     },
@@ -466,6 +532,16 @@
     },
     {
       "name": "Contacts: one <main>, one top-level banner, one <h1>",
+      "pass": true,
+      "note": "main=1 banner=1 h1=1"
+    },
+    {
+      "name": "Conversation: one <main>, one top-level banner, one <h1>",
+      "pass": true,
+      "note": "main=1 banner=1 h1=1"
+    },
+    {
+      "name": "Accessibility Settings: one <main>, one top-level banner, one <h1>",
       "pass": true,
       "note": "main=1 banner=1 h1=1"
     },
@@ -497,7 +573,7 @@
     {
       "name": "Each page has its own document title",
       "pass": true,
-      "note": "15 distinct titles for 15 pages"
+      "note": "17 distinct titles for 17 pages"
     },
     {
       "name": "Sign in: invalid fields are marked and described by their error",
@@ -505,7 +581,22 @@
       "note": "2 invalid field(s)"
     },
     {
-      "name": "Assistant: aria-expanded set; Escape closes it and returns focus to the launcher",
+      "name": "Search: Ctrl+K focuses the header search",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Search: the results are a listbox and the first option is active",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Account menu: Escape closes it and focus returns to the avatar",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Shortcuts: the keyboard button opens the dialog; Escape closes it and focus returns to the button",
       "pass": true,
       "note": ""
     },
@@ -575,7 +666,7 @@
       "note": ""
     },
     {
-      "name": "Today (patient home): no horizontal scroll at 320px",
+      "name": "Home (patient): no horizontal scroll at 320px",
       "pass": true,
       "note": ""
     },
@@ -601,6 +692,16 @@
     },
     {
       "name": "Contacts: no horizontal scroll at 320px",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Conversation: no horizontal scroll at 320px",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Accessibility Settings: no horizontal scroll at 320px",
       "pass": true,
       "note": ""
     },

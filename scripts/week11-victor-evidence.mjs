@@ -1,6 +1,7 @@
 /**
  * Screenshots for Victor's Week 11 write-up (Contacts, Messaging,
- * Accessibility Settings): each screen at 375 / 768 / 1440px, and the
+ * Accessibility Settings, and the app shell aligned to the Figma design):
+ * each screen at 375 / 768 / 1440px, the shell's controls, and the
  * keyboard-focus states described in the accessibility section.
  *
  *   npm run dev -- --port 5180                 # terminal 1
@@ -19,6 +20,11 @@ const out = path.resolve(here, '../docs/web/week11/victor/screenshots');
 const base = (process.env.WEB_URL ?? 'http://localhost:5180').replace(/\/$/, '');
 const user = { id: 'u', name: 'Margaret Whitfield', email: 'margaret@example.com' };
 
+// Screenshots show the demo at 9:45 am today, whatever time they are taken:
+// morning greeting, this morning's messages, the 10:30 visit still to come.
+const demoTime = new Date();
+demoTime.setHours(9, 45, 0, 0);
+
 const widths = [
   ['mobile', 375, 812],
   ['tablet', 768, 1024],
@@ -36,6 +42,7 @@ const browser = await chromium.launch();
 async function open(width, height, p) {
   const ctx = await browser.newContext({ viewport: { width, height }, reducedMotion: 'reduce' });
   const page = await ctx.newPage();
+  await page.clock.setFixedTime(demoTime);
   await page.goto(`${base}/`);
   await page.evaluate((s) => {
     localStorage.clear();
@@ -59,7 +66,7 @@ await mkdir(path.join(out, 'features'), { recursive: true });
 // ── Each screen at each breakpoint ───────────────────────────────────────────
 // Tablet and desktop: the full page. Mobile: the top and the bottom of the
 // page as a phone shows them, because a full-page capture would paint the
-// fixed bottom tab bar halfway down the image.
+// sticky header and status bar halfway down the image.
 for (const [id, p] of screens) {
   for (const [bp, w, h] of widths) {
     const { ctx, page } = await open(w, h, p);
@@ -75,10 +82,45 @@ for (const [id, p] of screens) {
   console.log('✔', id);
 }
 
-// ── Navigation: where Settings lives at each width ───────────────────────────
+// ── Navigation: the sidebar on desktop, the Menu drawer below 1024px ─────────
 for (const [bp, w, h] of widths) {
   const { ctx, page } = await open(w, h, '/app/contacts');
+  if (bp !== 'desktop') await page.getByRole('button', { name: 'Menu', exact: true }).click();
   await shot(page, `${bp}/04-navigation`);
+  await ctx.close();
+}
+
+// ── App shell controls (desktop unless noted) ────────────────────────────────
+{
+  const { ctx, page } = await open(1440, 900, '/app');
+  await page.keyboard.press('Control+k');
+  await page.keyboard.type('jo');
+  await shot(page, 'features/shell-search');
+  await page.keyboard.press('Escape');
+
+  await page.getByRole('button', { name: /account menu/ }).click();
+  await shot(page, 'features/shell-account-menu');
+  await page.keyboard.press('Escape');
+
+  await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('button', { name: /alerts?$/ }).click();
+  await shot(page, 'features/shell-alerts-list');
+
+  await page.getByRole('button', { name: 'Keyboard shortcuts' }).click();
+  await shot(page, 'features/shell-shortcuts-dialog');
+  await page.keyboard.press('Escape');
+
+  await page.getByRole('button', { name: 'High contrast' }).click();
+  await shot(page, 'features/shell-high-contrast');
+  await page.getByRole('button', { name: 'High contrast' }).click();
+
+  await page.getByRole('button', { name: 'CC captions' }).click();
+  await shot(page, 'features/shell-captions-off-home');
+  await ctx.close();
+}
+{
+  const { ctx, page } = await open(375, 812, '/app');
+  await page.keyboard.press('Control+k');
+  await shot(page, 'features/shell-drawer-search-mobile');
   await ctx.close();
 }
 
@@ -126,10 +168,6 @@ for (const [bp, w, h] of widths) {
   await ctx.setOffline(false);
   await page.getByText('You are offline').waitFor({ state: 'detached' });
   await shot(page, 'features/offline-sent');
-
-  await page.goto(`${base}/app/medications`);
-  await page.locator('h1').first().waitFor();
-  await shot(page, 'features/placeholder-in-app');
 
   await page.goto(`${base}/app/settings`);
   await page.locator('h1').first().waitFor();

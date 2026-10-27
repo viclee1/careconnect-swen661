@@ -24,9 +24,10 @@ export default function SideNav({
       className={[
         'hidden lg:block order-1 flex-shrink-0 w-[17rem]',
         'bg-white border-r border-neutral-200',
-        // Stays in view while the page scrolls, under the sticky header.
+        // Stays in view while the page scrolls, between the sticky header and
+        // the sticky status bar, so Settings and the alerts are never under it.
         'lg:sticky lg:top-[var(--header-height,4.25rem)] lg:self-start',
-        'lg:h-[calc(100dvh-var(--header-height,4.25rem))] overflow-y-auto',
+        'lg:h-[calc(100dvh-var(--header-height,4.25rem)-var(--status-height,2.75rem))] overflow-y-auto',
       ].join(' ')}
     >
       <NavPanel view={view} orientation={orientation} alerts={alerts} caption={caption} />

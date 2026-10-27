@@ -64,7 +64,13 @@ test.describe('Accessibility settings', () => {
 
   test('captions switched off warn inside a conversation with a video message', async ({ page }) => {
     await signInAsPatient(page, '/app/settings');
-    await page.getByRole('switch', { name: 'Show captions' }).click();
+    const captions = page.getByRole('switch', { name: 'Show captions' });
+    await captions.click();
+    // Saved before leaving: the setting is written to storage after render.
+    await expect(captions).not.toBeChecked();
+    await expect.poll(() => page.evaluate(() => localStorage.getItem('careconnect_accessibility_settings'))).toContain(
+      '"captionsEnabled":false',
+    );
     await page.goto('/app/contacts/c3');
     await expect(page.getByText('Captions are turned off')).toBeVisible();
     await page.getByRole('link', { name: 'Open settings' }).click();

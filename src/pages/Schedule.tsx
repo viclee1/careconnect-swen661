@@ -169,7 +169,7 @@ export default function Schedule() {
                 aria-pressed={isDone}
                 className={`w-full text-left bg-white border-2 rounded-2xl p-5 flex items-center gap-4 transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md ${
                   isDone
-                    ? 'border-neutral-300 bg-neutral-50/80 opacity-75'
+                    ? 'border-neutral-300 bg-neutral-50'
                     : 'border-neutral-200 hover:border-calm-500'
                 }`}
               >
