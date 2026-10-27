@@ -1,204 +1,171 @@
-import { Calendar, Pill, Phone, BookOpen, Sun, CheckCircle2 } from 'lucide-react';
+import { useState } from 'react';
+import { CalendarDays, Captions, Pause, Phone, Pill, Video } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { scheduleItems, medications } from '../data/mockData';
 import type { AppView } from '../types';
+import { useAuth } from '../auth/AuthContext';
+import AppointmentBanner from '../components/AppointmentBanner';
+import CaptionStrip from '../components/CaptionStrip';
+import MockVideoCall from '../components/MockVideoCall';
 
 interface HomeProps {
   view: AppView;
 }
 
-const categoryEmoji: Record<string, string> = {
-  meal: '🍽',
-  medication: '💊',
-  activity: '🌿',
-  appointment: '📞',
-  rest: '🛌',
-};
+export default function Home({ view: _view }: HomeProps) {
+  const { user } = useAuth();
+  const firstName = user?.name?.split(' ')[0] || 'there';
+  const [callSimulated, setCallSimulated] = useState(false);
 
-export default function Home({ view }: HomeProps) {
-  const now = new Date();
-  const hours = now.getHours();
-  const greeting =
-    hours < 12 ? 'Good morning' : hours < 17 ? 'Good afternoon' : 'Good evening';
-
-  const todayDate = now.toLocaleDateString('en-GB', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
+  // Read tasks from localStorage to sync live progress with Schedule page
+  const [tasks] = useState<{ done: boolean }[]>(() => {
+    try {
+      const raw = localStorage.getItem('careconnect_web_myday_tasks');
+      if (raw) return JSON.parse(raw);
+    } catch {
+      // fallback
+    }
+    return [
+      { done: true },
+      { done: false },
+      { done: false },
+      { done: false },
+      { done: false },
+      { done: false },
+      { done: false },
+    ];
   });
 
-  const upcomingItems = scheduleItems
-    .filter((item) => !item.done)
-    .slice(0, 3);
-
-  const doneCount = scheduleItems.filter((i) => i.done).length;
-  const totalCount = scheduleItems.length;
-
-  const pendingMeds = medications.filter(
-    (m) => !m.taken[new Date().toISOString().split('T')[0]]
-  ).length;
-
-  const isPatient = view === 'patient';
+  const doneCount = tasks.filter((t) => t.done).length;
+  const totalCount = tasks.length || 7;
+  const percentage = Math.round((doneCount / totalCount) * 100);
 
   return (
     <div className="space-y-6">
-      {/* ── Greeting banner ──────────────────────────────────────────────── */}
-      <section aria-label="Greeting">
-        <div className="card bg-gradient-to-br from-calm-600 to-calm-700 text-white border-calm-700">
+      {/* Simulate Incoming Call / Fake Video Call Modal */}
+      {callSimulated && <MockVideoCall onClose={() => setCallSimulated(false)} />}
+
+      {/* Visual alert and its caption, full width as in the design */}
+      <div className="space-y-1">
+        <AppointmentBanner />
+        <CaptionStrip>Upcoming: Video call with Maria at 3:00 PM — your daughter will call you.</CaptionStrip>
+      </div>
+
+      <div className="max-w-4xl mx-auto space-y-6">
+        {/* Greeting & progress, linked to My Day */}
+        <section aria-labelledby="home-title" className="space-y-2">
+          <h1 id="home-title" className="text-2xl md:text-3xl font-normal text-neutral-800 m-0">
+            Here's your day, {firstName}
+          </h1>
+          <p className="text-base text-neutral-600 m-0 flex flex-wrap items-baseline justify-between gap-2">
+            <span>
+              {doneCount} of {totalCount} things done today
+            </span>
+            <Link to="/app/schedule" className="text-calm-700 font-medium">
+              View My Day →
+            </Link>
+          </p>
+          <div
+            className="w-full bg-neutral-200 h-2.5 rounded-full overflow-hidden"
+            role="progressbar"
+            aria-label="Things done today"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={percentage}
+            aria-valuetext={`${doneCount} of ${totalCount} done`}
+          >
+            <div className="bg-calm-700 h-full rounded-full transition-all duration-300" style={{ width: `${percentage}%` }} />
+          </div>
+        </section>
+
+        {/* NEXT THING TO DO */}
+        <section
+          aria-labelledby="next-title"
+          className="bg-white border-2 border-calm-700 rounded-2xl p-4 md:p-5 space-y-4"
+        >
+          <div className="flex items-center justify-between gap-3">
+            <span className="text-sm tracking-wider text-neutral-600 uppercase">Next thing to do</span>
+            <span className="px-3 py-1 bg-calm-50 text-calm-700 rounded-pill text-sm">Coming up</span>
+          </div>
+
           <div className="flex items-start gap-4">
-            <span
-              className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0"
-              aria-hidden="true"
-            >
-              <Sun className="w-6 h-6 text-white" />
+            <span className="w-14 h-14 rounded-xl bg-calm-50 text-calm-800 flex items-center justify-center flex-shrink-0" aria-hidden="true">
+              <Phone className="w-6 h-6" />
             </span>
             <div>
-              <h1 className="text-2xl font-bold text-white">
-                {isPatient ? `${greeting}, Dorothy!` : `${greeting}, Joyce!`}
-              </h1>
-              <p className="text-calm-100 mt-1 text-base">
-                {isPatient
-                  ? `Today is ${todayDate}. Here is your day at a glance.`
-                  : `Viewing Dorothy's care plan for ${todayDate}.`}
+              <p className="text-sm text-neutral-600 m-0">
+                Appointment <span className="text-calm-700">3:00 pm</span>
               </p>
+              <h2 id="next-title" className="text-xl md:text-2xl font-normal text-neutral-800 m-0">
+                Video call with Maria
+              </h2>
+              <p className="text-neutral-600 text-base m-0">Your daughter — she will call you</p>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* ── Quick stats ───────────────────────────────────────────────────── */}
-      <section aria-label="Today's summary">
-        <h2 className="sr-only">Today's summary</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <StatCard
-            label="Tasks done"
-            value={`${doneCount} / ${totalCount}`}
-            icon={<CheckCircle2 className="w-5 h-5 text-success-600" aria-hidden="true" />}
-            accent="text-success-700"
-          />
-          <StatCard
-            label="Medicines left"
-            value={pendingMeds.toString()}
-            icon={<Pill className="w-5 h-5 text-warm-600" aria-hidden="true" />}
-            accent={pendingMeds > 0 ? 'text-warm-700' : 'text-success-700'}
-          />
-          <StatCard
-            label="Appointments"
-            value="1"
-            icon={<Phone className="w-5 h-5 text-calm-600" aria-hidden="true" />}
-            accent="text-calm-700"
-          />
-          <StatCard
-            label="Memory cards"
-            value="6"
-            icon={<BookOpen className="w-5 h-5 text-neutral-500" aria-hidden="true" />}
-            accent="text-neutral-700"
-          />
-        </div>
-      </section>
-
-      {/* ── What's next ───────────────────────────────────────────────────── */}
-      <section aria-label="What's next today">
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-xl font-semibold text-neutral-800 flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-calm-600" aria-hidden="true" />
-            What's next today
-          </h2>
-          <Link to="/schedule" className="text-sm font-medium text-calm-600 no-underline hover:underline">
-            See full day
+          <Link
+            to="/app/contacts/c3"
+            className="w-full min-h-[5.5rem] flex flex-col items-center justify-center gap-2 px-4 py-4 bg-calm-800 hover:bg-calm-900 text-white rounded-xl no-underline relative"
+          >
+            <span className="flex items-center gap-2 text-base">
+              <Video className="w-5 h-5" aria-hidden="true" />
+              Video preview — 3:00 pm
+            </span>
+            <span className="md:absolute md:right-3 md:bottom-3 flex items-center gap-1.5 text-sm" aria-hidden="true">
+              <span className="bg-neutral-900 px-2 py-0.5 rounded flex items-center gap-1">
+                <Pause className="w-3.5 h-3.5" /> Controls
+              </span>
+              <span className="bg-neutral-900 px-2 py-0.5 rounded flex items-center gap-1">
+                <Captions className="w-3.5 h-3.5" /> CC
+              </span>
+            </span>
           </Link>
-        </div>
-        {upcomingItems.length === 0 ? (
-          <div className="card text-center text-neutral-500 py-10">
-            <CheckCircle2 className="w-10 h-10 text-success-500 mx-auto mb-3" aria-hidden="true" />
-            <p className="font-medium text-neutral-700">All done for today!</p>
-            <p className="text-sm mt-1">What a great day.</p>
-          </div>
-        ) : (
-          <ul className="space-y-3 list-none p-0 m-0" role="list">
-            {upcomingItems.map((item) => (
-              <li key={item.id}>
-                <div className="card card-hover flex items-center gap-4 p-4">
-                  <span
-                    className="text-2xl flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-neutral-100"
-                    aria-hidden="true"
-                  >
-                    {categoryEmoji[item.category]}
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <p className="font-semibold text-neutral-800 text-base leading-tight">
-                      {item.label}
-                    </p>
-                    {item.description && (
-                      <p className="text-sm text-neutral-500 mt-0.5 truncate">
-                        {item.description}
-                      </p>
-                    )}
-                  </div>
-                  <time
-                    dateTime={item.time}
-                    className="text-calm-700 font-semibold text-base flex-shrink-0 tabular-nums"
-                  >
-                    {formatTime(item.time)}
-                  </time>
-                </div>
-              </li>
-            ))}
+
+          <button
+            type="button"
+            onClick={() => setCallSimulated(true)}
+            className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-calm-800 hover:bg-calm-900 text-white rounded-xl text-lg transition-colors"
+          >
+            <Video className="w-5 h-5" aria-hidden="true" />
+            Simulate incoming call
+          </button>
+        </section>
+
+        {/* Later today */}
+        <section aria-labelledby="later-title" className="space-y-3">
+          <h2 id="later-title" className="text-xl font-normal text-neutral-800 m-0">
+            Later today
+          </h2>
+
+          <ul role="list" className="list-none p-0 m-0 space-y-3">
+            <li className="bg-white rounded-xl p-4 flex items-center gap-4">
+              <span className="w-12 h-12 rounded-xl bg-warning-50 text-warning-700 flex items-center justify-center flex-shrink-0" aria-hidden="true">
+                <Pill className="w-6 h-6" />
+              </span>
+              <div className="flex-1 min-w-0">
+                <p className="text-base text-neutral-800 m-0">Atorvastatin</p>
+                <p className="text-sm text-neutral-600 m-0">20 mg — 1 tablet</p>
+              </div>
+              <div className="text-right flex-shrink-0">
+                <span className="inline-block px-2.5 py-0.5 bg-warning-50 text-warning-700 rounded-pill text-sm">Medication</span>
+                <p className="text-sm text-calm-700 m-0 mt-1 tabular-nums">8:00 pm</p>
+              </div>
+            </li>
+            <li className="bg-white rounded-xl p-4 flex items-center gap-4">
+              <span className="w-12 h-12 rounded-xl bg-calm-50 text-calm-700 flex items-center justify-center flex-shrink-0" aria-hidden="true">
+                <CalendarDays className="w-6 h-6" />
+              </span>
+              <div className="flex-1 min-w-0">
+                <p className="text-base text-neutral-800 m-0">Blood pressure check</p>
+                <p className="text-sm text-neutral-600 m-0">Greenfield Surgery — Dr. Sharma</p>
+              </div>
+              <div className="text-right flex-shrink-0">
+                <span className="inline-block px-2.5 py-0.5 bg-calm-50 text-calm-700 rounded-pill text-sm">Today</span>
+                <p className="text-sm text-calm-700 m-0 mt-1 tabular-nums">10:30 am</p>
+              </div>
+            </li>
           </ul>
-        )}
-      </section>
-
-      {/* ── Quick links ───────────────────────────────────────────────────── */}
-      <section aria-label="Quick links">
-        <h2 className="text-xl font-semibold text-neutral-800 mb-3">Quick links</h2>
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-          {[
-            { to: '/schedule',    Icon: Calendar, label: 'My Day',     colour: 'bg-calm-50 text-calm-700 border-calm-200' },
-            { to: '/medications', Icon: Pill,      label: 'Medicines',  colour: 'bg-warm-50 text-warm-700 border-warm-200' },
-            { to: '/memories',    Icon: BookOpen,  label: 'Memories',   colour: 'bg-success-50 text-success-700 border-success-200' },
-            { to: '/contacts',    Icon: Phone,     label: 'Contacts',   colour: 'bg-neutral-100 text-neutral-700 border-neutral-200' },
-          ].map(({ to, Icon, label, colour }) => (
-            <Link
-              key={to}
-              to={to}
-              className={`flex flex-col items-center justify-center gap-2 rounded-card border p-5 min-h-touch font-semibold text-sm no-underline transition-shadow duration-200 hover:shadow-card ${colour}`}
-            >
-              <Icon className="w-6 h-6" aria-hidden="true" />
-              {label}
-            </Link>
-          ))}
-        </div>
-      </section>
-    </div>
-  );
-}
-
-function StatCard({
-  label,
-  value,
-  icon,
-  accent,
-}: {
-  label: string;
-  value: string;
-  icon: React.ReactNode;
-  accent: string;
-}) {
-  return (
-    <div className="card flex flex-col gap-2 p-4">
-      <div className="flex items-center justify-between">
-        <span className="text-sm text-neutral-500 font-medium">{label}</span>
-        {icon}
+        </section>
       </div>
-      <span className={`text-2xl font-bold tabular-nums ${accent}`}>{value}</span>
     </div>
   );
-}
-
-function formatTime(time: string) {
-  const [h, m] = time.split(':').map(Number);
-  const suffix = h >= 12 ? 'pm' : 'am';
-  const hour = h % 12 || 12;
-  return `${hour}:${String(m).padStart(2, '0')} ${suffix}`;
 }

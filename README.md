@@ -209,6 +209,10 @@ CareConnect lowers the daily cognitive load for people who need help remembering
 
 The base application is designed and verified against 21 WCAG 2.1 A/AA success criteria, with full conformance mapping in [`ACCESSIBILITY.md`](ACCESSIBILITY.md). Highlights: 4.5:1 text contrast, full keyboard operability, visible focus indicators, semantic landmarks, ARIA live regions (`role="status"` / `role="alert"`), 44×44px minimum targets, 320px reflow with no horizontal scroll, and `prefers-reduced-motion` support.
 
+Assignment 10's web accessibility documentation — semantic HTML, landmarks, skip links, forms, keyboard and focus management, screen-reader patterns, and the audit that brought the web app from 71 axe violations to 0 at mobile, tablet and desktop widths — is in [`docs/web/accessibility/`](docs/web/accessibility/README.md) (also as Word and PDF). Run it with `npm run a11y:web`.
+
+The Assignment 10 early React implementation — responsive navigation (hamburger on mobile, collapsible sidebar on tablet, full sidebar on desktop), the layout grid, screenshots of every screen at all three breakpoints, completed work, differences to resolve with the Figma design and remaining tasks — is written up in [`docs/web/implementation/`](docs/web/implementation/README.md).
+
 On top of that baseline, this project adds the five hearing-impairment constraints above, measured against **WCAG 2.2 Level AA**. Accessibility is a merge gate, not a final pass — the QA / Testing Lead can block a merge on a failing check.
 
 ---
@@ -567,11 +571,11 @@ Timestamped log of taken/skipped doses and check-ins.
 
 - **Static checks** — ESLint (`npm run lint`) and TypeScript strict mode (`npm run typecheck`). Both must pass before a pull request merges.
 - **Playwright** — installed and used by `npm run screenshots` for automated screen capture, and by the `verify-pwa` / `verify-responsive` helper scripts.
-- **Unit & component tests** — Jest + React Testing Library (`npm test`, `npm run test:coverage`). The web app's suite covers the Appointments, Medications and Memories pages: 256 tests at 60.16% statement coverage. Each client has its own suite — see the [Flutter](#flutter-mobile-client), [React Native](#react-native-mobile-client) and [Electron](#electron-desktop-client) sections.
+- **Unit & component tests** — Jest + React Testing Library + `user-event` (`npm test`). `npm run test:coverage` writes `coverage/lcov-report/index.html` (committed) and fails below **75%** on statements, branches, functions or lines. The web suite has 517 tests (516 passing, 1 skipped on this branch) at 94.0% statement coverage over the measured files (Contacts, Messaging, Accessibility Settings, Appointments, Medicines, Memories, plus their models, contexts and hooks). Each client has its own suite — see the [Flutter](#flutter-mobile-client), [React Native](#react-native-mobile-client) and [Electron](#electron-desktop-client) sections.
+- **End-to-end** — Playwright (`npm run test:e2e`) against the production build (`vite preview`, service worker active) in Chromium, Firefox, WebKit and mobile Safari at 375px. Specs in [`e2e/`](e2e): contacts → conversation → send → reload, silent alert, captioned video-call request, captioned video messages, keyboard-operated quick replies, offline queueing and offline launch, keyboard-only settings, screen-flash previews, and responsive navigation. Run `npx playwright install chromium firefox webkit` once first; `npm run test:e2e:report` opens the HTML report.
+- **CI** — [`.github/workflows/web-tests.yml`](.github/workflows/web-tests.yml) runs lint, typecheck, coverage and every Playwright project on each pull request.
 
-**Planned**
-
-- **End-to-end** — Playwright specs for core flows (sign in → take medication → caregiver sees adherence).
+Assignment 11 write-ups: [Contacts, Messaging and Accessibility Settings](docs/web/week11/victor/README.md).
 
 **Accessibility verification**
 

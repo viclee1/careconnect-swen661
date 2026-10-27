@@ -27,3 +27,7 @@ dist-ssr
 .env
 .env.*
 !.env.example
+
+# Playwright output (the coverage/ report is committed on purpose)
+playwright-report
+test-results

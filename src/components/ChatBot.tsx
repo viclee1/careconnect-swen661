@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect, useId } from 'react';
 import { MessageCircle, X, Send, Bot, User } from 'lucide-react';
 
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from '../lib/env';
+
 // ── Types ──────────────────────────────────────────────────────────────────────
 
 interface ChatMessage {
@@ -55,7 +57,7 @@ function getScriptedResponse(message: string): string {
 
   // Features / what does it do
   if (/\b(feature|schedule|reminder|memory|contact|medication|appointment)\b/.test(msg)) {
-    return "CareConnect has five main areas: My Day (your full daily schedule), Medicines (a medication checklist), Memories (cards about people, places, and events), Contacts (emergency and family contacts), and Caregiver Notes (a private log for carers). Everything is designed to be calm and simple.";
+    return "CareConnect has five main areas: My Day (your full daily schedule), Medicines (a medication checklist), Memories (cards about people, places, and events), Contacts (written conversations with your carers, family and doctor), and Caregiver Notes (a private log for carers). Everything is designed to be calm and simple.";
   }
 
   // Cost / free
@@ -79,8 +81,8 @@ function getScriptedResponse(message: string): string {
 
 // ── Edge function call ─────────────────────────────────────────────────────────
 
-const EDGE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat-assistant`;
-const ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+const EDGE_URL = `${SUPABASE_URL}/functions/v1/chat-assistant`;
+const ANON_KEY = SUPABASE_ANON_KEY as string;
 
 interface ApiMessage {
   role: 'user' | 'assistant';
@@ -125,13 +127,17 @@ export default function ChatBot() {
   const panelLabelId   = useId();
   const messageLiveId  = useId();
 
-  // Focus input when panel opens; return focus to launcher on close
+  // Focus input when panel opens; return focus to launcher on close. Only on a
+  // real close: running on first render would pull focus to this corner button
+  // on page load, ahead of the skip link and the page's own content.
+  const wasOpen = useRef(false);
   useEffect(() => {
     if (open) {
       inputRef.current?.focus();
-    } else {
+    } else if (wasOpen.current) {
       launcherRef.current?.focus();
     }
+    wasOpen.current = open;
   }, [open]);
 
   // Scroll to latest message
@@ -250,7 +256,7 @@ export default function ChatBot() {
             <button
               onClick={() => setOpen(false)}
               aria-label="Close assistant"
-              className="w-8 h-8 flex items-center justify-center rounded-lg text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 transition-colors"
+              className="w-8 h-8 flex items-center justify-center rounded-lg text-neutral-500 hover:bg-neutral-100 hover:text-neutral-700 transition-colors"
             >
               <X className="w-4 h-4" aria-hidden="true" />
             </button>
@@ -350,7 +356,7 @@ export default function ChatBot() {
               autoComplete="off"
               disabled={sending}
               aria-label="Type your question and press Enter to send"
-              className="flex-1 min-h-[2.75rem] rounded-lg border-2 border-neutral-200 px-3 py-2 text-sm text-neutral-800 placeholder:text-neutral-400 focus:border-calm-600 focus:outline-none transition-colors disabled:opacity-50"
+              className="flex-1 min-h-[2.75rem] rounded-lg border-2 border-neutral-200 px-3 py-2 text-sm text-neutral-800 placeholder:text-neutral-500 focus:border-calm-600 focus:outline-none transition-colors disabled:opacity-50"
             />
             <button
               onClick={sendMessage}

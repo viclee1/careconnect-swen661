@@ -3,8 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Heart, LogIn } from 'lucide-react';
 import { Field } from '../components';
 import { useAuth } from '../auth/AuthContext';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 
 export default function SignIn() {
+  useDocumentTitle('Sign in');
   const { signIn } = useAuth();
   const navigate = useNavigate();
   const errorSummaryId = useId();
@@ -45,6 +47,11 @@ export default function SignIn() {
 
   return (
     <div className="min-h-screen bg-neutral-50 flex flex-col">
+      {/* Skip link — first focusable element, as on every other shell */}
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
+
       {/* ── Page header ──────────────────────────────────────────────────── */}
       <header className="bg-white border-b border-neutral-200" role="banner">
         <div className="max-w-5xl mx-auto px-4 md:px-6 h-16 flex items-center">
@@ -62,6 +69,7 @@ export default function SignIn() {
       {/* ── Main ─────────────────────────────────────────────────────────── */}
       <main
         id="main-content"
+        tabIndex={-1}
         className="flex-1 flex items-center justify-center px-4 py-12"
         aria-label="Sign in"
       >
@@ -115,14 +123,14 @@ export default function SignIn() {
                 onChange={(e) => setPassword((e.target as HTMLInputElement).value)}
                 error={errors.password}
                 required
-                hint="Any password works — this is a demonstration app."
+                hint="Any password works — authentication is relaxed."
               />
 
               <button
                 type="submit"
                 disabled={submitting}
                 aria-disabled={submitting}
-                className="w-full inline-flex items-center justify-center gap-2 font-bold rounded-lg px-5 py-4 min-h-[3rem] text-base bg-calm-600 text-white border-2 border-calm-600 hover:bg-calm-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full inline-flex items-center justify-center gap-2 font-bold rounded-lg px-5 py-4 min-h-[3rem] text-base bg-calm-600 text-white border-2 border-calm-600 hover:bg-calm-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               >
                 <LogIn className="w-5 h-5" aria-hidden="true" />
                 {submitting ? 'Signing in…' : 'Sign in'}

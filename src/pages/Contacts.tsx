@@ -1,118 +1,71 @@
-import { Phone, AlertTriangle, User, Stethoscope, ShieldAlert, Users, type LucideIcon } from 'lucide-react';
-import { contacts } from '../data/mockData';
-import type { Contact, ContactRole } from '../types';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const roleConfig: Record<
-  ContactRole,
-  { label: string; Icon: LucideIcon }
-> = {
-  caregiver: { label: 'Carer',     Icon: ShieldAlert },
-  family:    { label: 'Family',    Icon: Users },
-  doctor:    { label: 'Doctor',    Icon: Stethoscope },
-  emergency: { label: 'Emergency', Icon: AlertTriangle },
-};
+import ContactList from '../components/contacts/ContactList';
+import ContactsPageHeader from '../components/contacts/ContactsPageHeader';
+import ContactsTwoPane from '../components/contacts/ContactsTwoPane';
+import Conversation from '../components/messaging/Conversation';
+import VideoCallButton from '../components/messaging/VideoCallButton';
+import { useMessages } from '../context/messages';
+import { useMediaQuery, WIDE_LAYOUT } from '../hooks/useMediaQuery';
+import { conversationNameOf, supportsVideoRelay } from '../models/contact';
 
+/**
+ * The Contacts screen.
+ *
+ * On a phone or tablet it is one searchable list, primary contact first, each
+ * row opening a written conversation. On a desktop the primary contact's
+ * conversation opens beside the list, as the design shows at 1440px.
+ *
+ * There is no voice-call button anywhere on this page. The header's one action
+ * asks the primary contact for a captioned video call, and the hint above the
+ * list points at the Alert action that replaces "give me a ring" with a silent
+ * flash on the other person's screen.
+ */
 export default function Contacts() {
-  const emergency = contacts.filter((c) => c.isEmergency);
-  const others = contacts.filter((c) => !c.isEmergency);
+  const { contacts } = useMessages();
+  const wide = useMediaQuery(WIDE_LAYOUT);
+  const navigate = useNavigate();
+  const [callRequested, setCallRequested] = useState(false);
+
+  const primary = contacts.find((contact) => contact.isPrimary) ?? contacts[0];
+  const primaryName = conversationNameOf(primary);
+
+  function requestCall() {
+    // The request is confirmed inside the conversation, so on a phone the
+    // button takes the user there first.
+    if (wide) setCallRequested(true);
+    else navigate(`/app/contacts/${primary.id}`, { state: { requestCall: true } });
+  }
 
   return (
-    <div className="space-y-6">
-      {/* ── Page header ─────────────────────────────────────────────────── */}
-      <div>
-        <h1 className="text-2xl font-bold text-neutral-800">Contacts</h1>
-        <p className="text-neutral-500 mt-1">People who are here to help you</p>
-      </div>
+    <div className="space-y-6 page-container">
+      <ContactsPageHeader
+        title="Contacts"
+        subtitle="People who care for you"
+        action={
+          supportsVideoRelay(primary) && (
+            <VideoCallButton contactName={primaryName} onRequest={requestCall} />
+          )
+        }
+      />
 
-      {/* ── Emergency contacts ──────────────────────────────────────────── */}
-      <section aria-label="Emergency contacts">
-        <h2 className="text-base font-semibold text-neutral-500 uppercase tracking-wide mb-3 flex items-center gap-2">
-          <AlertTriangle className="w-4 h-4 text-alert-600" aria-hidden="true" />
-          Emergency contacts
-        </h2>
-        <ul className="space-y-3 list-none p-0 m-0" role="list">
-          {emergency.map((c) => (
-            <li key={c.id}>
-              <ContactCard contact={c} highlight />
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      {/* ── Other contacts ───────────────────────────────────────────────── */}
-      <section aria-label="Other contacts">
-        <h2 className="text-base font-semibold text-neutral-500 uppercase tracking-wide mb-3 flex items-center gap-2">
-          <User className="w-4 h-4" aria-hidden="true" />
-          Other contacts
-        </h2>
-        <ul className="space-y-3 list-none p-0 m-0" role="list">
-          {others.map((c) => (
-            <li key={c.id}>
-              <ContactCard contact={c} />
-            </li>
-          ))}
-        </ul>
-      </section>
+      {wide ? (
+        <ContactsTwoPane
+          list={<ContactList selectedId={primary.id} />}
+          conversation={
+            <Conversation
+              contact={primary}
+              headingLevel={2}
+              callRequested={callRequested}
+              onDismissCall={() => setCallRequested(false)}
+              fill
+            />
+          }
+        />
+      ) : (
+        <ContactList />
+      )}
     </div>
-  );
-}
-
-function ContactCard({ contact, highlight }: { contact: Contact; highlight?: boolean }) {
-  const { label: roleLabel, Icon: RoleIcon } = roleConfig[contact.role];
-
-  return (
-    <article
-      className={`card card-hover flex items-center gap-4 p-4 ${
-        highlight ? 'border-alert-200 bg-alert-50' : ''
-      }`}
-      aria-label={`${contact.name}, ${roleLabel}`}
-    >
-      {/* Avatar */}
-      <div
-        className={`w-12 h-12 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-white text-base ${contact.avatarColour}`}
-        aria-hidden="true"
-      >
-        {contact.avatarInitials}
-      </div>
-
-      {/* Info */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="font-bold text-neutral-800 text-base leading-tight">
-            {contact.name}
-          </span>
-          <span
-            className={`badge text-xs ${
-              contact.role === 'emergency'
-                ? 'badge-alert'
-                : contact.role === 'caregiver'
-                ? 'badge-calm'
-                : contact.role === 'doctor'
-                ? 'badge-warning'
-                : 'badge-neutral'
-            }`}
-          >
-            <RoleIcon className="w-3 h-3" aria-hidden="true" />
-            {roleLabel}
-          </span>
-        </div>
-        {contact.notes && (
-          <p className="text-sm text-neutral-500 mt-0.5 leading-snug">{contact.notes}</p>
-        )}
-      </div>
-
-      {/* Call button */}
-      <a
-        href={`tel:${contact.phone.replace(/\s/g, '')}`}
-        className={`flex-shrink-0 flex items-center gap-2 btn text-sm px-4 py-2 min-h-0 h-11 no-underline ${
-          contact.role === 'emergency' ? 'btn-primary bg-alert-600 border-alert-600 hover:bg-alert-700 hover:border-alert-700' : 'btn-secondary'
-        }`}
-        aria-label={`Call ${contact.name} on ${contact.phone}`}
-      >
-        <Phone className="w-4 h-4" aria-hidden="true" />
-        <span className="hidden md:inline">{contact.phone}</span>
-        <span className="md:hidden">Call</span>
-      </a>
-    </article>
   );
 }

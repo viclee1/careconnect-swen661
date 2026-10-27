@@ -91,11 +91,14 @@ export default function ConfirmDialog({
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [open, onCancel]);
 
-  // Return focus to trigger on close
+  // Return focus to trigger on close. Only after the dialog has actually been
+  // open: running on first render focused every page's Delete button on load.
+  const wasOpen = useRef(false);
   useEffect(() => {
-    if (!open) {
+    if (!open && wasOpen.current) {
       triggerRef.current?.focus();
     }
+    wasOpen.current = open;
   }, [open, triggerRef]);
 
   // Block body scroll while open
@@ -147,7 +150,7 @@ export default function ConfirmDialog({
         </button>
 
         {/* Icon + heading */}
-        <div className="flex items-start gap-4 pr-8">
+        <div className="flex items-start gap-4 pr-12">
           <span
             className="flex-shrink-0 w-11 h-11 rounded-full bg-alert-100 flex items-center justify-center"
             aria-hidden="true"
@@ -176,7 +179,7 @@ export default function ConfirmDialog({
         <hr className="border-neutral-200" />
 
         {/* Action row */}
-        <div className="flex flex-col-reverse sm:flex-row gap-3 justify-end">
+        <div className="flex flex-col-reverse md:flex-row gap-3 justify-end">
           <button
             onClick={onCancel}
             className="inline-flex items-center justify-center gap-2 font-semibold rounded-lg px-5 py-3 min-h-[2.75rem] min-w-[2.75rem] cursor-pointer bg-white text-neutral-700 border-2 border-neutral-300 hover:bg-neutral-50 hover:border-neutral-400 transition-colors"

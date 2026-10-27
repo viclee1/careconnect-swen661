@@ -1,0 +1,1845 @@
+[
+  {
+    "id": "mobile-landing",
+    "page": "Landing",
+    "breakpoint": "mobile 375px",
+    "violations": [
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".border-white",
+            "html": "<a class=\"inline-flex items-center justify-center gap-2 font-bold rounded-lg px-7 py-4 min-h-[3rem] text-lg bg-white text-calm-700 border-2 border-white hover:b"
+          },
+          {
+            "target": ".bg-transparent",
+            "html": "<a class=\"inline-flex items-ce...\" aria-label=\"Sign in to CareConne...\" href=\"/signin\" data-discover=\"true\">"
+          }
+        ]
+      }
+    ],
+    "passes": 39
+  },
+  {
+    "id": "mobile-signin",
+    "page": "Sign in",
+    "breakpoint": "mobile 375px",
+    "violations": [],
+    "passes": 38
+  },
+  {
+    "id": "mobile-signup",
+    "page": "Sign up",
+    "breakpoint": "mobile 375px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": ".text-xs",
+            "html": "<p class=\"text-center text-xs text-neutral-400 leading-relaxed\">CareConnect never gives medical advice and never shares your information with third parties.</p>"
+          }
+        ]
+      }
+    ],
+    "passes": 38
+  },
+  {
+    "id": "mobile-role",
+    "page": "Role chooser",
+    "breakpoint": "mobile 375px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": ".space-y-2 > .text-sm.text-neutral-400",
+            "html": "<p class=\"text-sm text-neutral-400\">Your choice is remembered. You can switch at any time from inside the app.</p>"
+          },
+          {
+            "target": ".max-w-xl > .text-sm.text-neutral-400",
+            "html": "<p class=\"text-center text-sm text-neutral-400\">This does not affect what information is stored — only which view you see first.</p>"
+          }
+        ]
+      }
+    ],
+    "passes": 34
+  },
+  {
+    "id": "mobile-today",
+    "page": "Today (patient home)",
+    "breakpoint": "mobile 375px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": ".uppercase",
+            "html": "<p class=\"text-sm font-bold text-neutral-400 uppercase tracking-widest\">Next thing to do</p>"
+          }
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".py-3",
+            "html": "<a href=\"tel:07700900456\" class=\"inline-flex items-ce...\" aria-label=\"Call your caregiver:...\">"
+          }
+        ]
+      }
+    ],
+    "passes": 37
+  },
+  {
+    "id": "mobile-schedule",
+    "page": "My Day",
+    "breakpoint": "mobile 375px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": "time[datetime=\"07:30\"]",
+            "html": "<time datetime=\"07:30\" class=\"text-calm-700 font-semibold tabular-nums text-sm w-14 flex-shrink-0 pt-0.5\">7:30 am</time>"
+          },
+          {
+            "target": "li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .flex-wrap.gap-2 > .line-through.text-neutral-400.leading-tight",
+            "html": "<p class=\"font-semibold text-base leading-tight line-through text-neutral-400\">Wake up &amp; stretch</p>"
+          },
+          {
+            "target": ".opacity-60 > .flex-1.min-w-0 > .flex-wrap.gap-2 > .bg-success-100.text-success-700.badge",
+            "html": "<span class=\"badge text-xs bg-success-100 text-success-700\">Activity</span>"
+          },
+          {
+            "target": "time[datetime=\"08:00\"]",
+            "html": "<time datetime=\"08:00\" class=\"text-calm-700 font-semibold tabular-nums text-sm w-14 flex-shrink-0 pt-0.5\">8:00 am</time>"
+          },
+          {
+            "target": "article[aria-label=\"8:00 am: Breakfast — done\"] > .flex-1.min-w-0 > .flex-wrap.gap-2 > .line-through.text-neutral-400.leading-tight",
+            "html": "<p class=\"font-semibold text-base leading-tight line-through text-neutral-400\">Breakfast</p>"
+          },
+          {
+            "target": "article[aria-label=\"8:00 am: Breakfast — done\"] > .flex-1.min-w-0 > .flex-wrap.gap-2 > .bg-warm-100.text-warm-700.badge",
+            "html": "<span class=\"badge text-xs bg-warm-100 text-warm-700\">Meal</span>"
+          },
+          {
+            "target": "article[aria-label=\"8:00 am: Breakfast — done\"] > .flex-1.min-w-0 > .mt-1.text-neutral-500",
+            "html": "<p class=\"text-sm text-neutral-500 mt-1\">Oatmeal with berries</p>"
+          },
+          {
+            "target": "time[datetime=\"08:30\"]",
+            "html": "<time datetime=\"08:30\" class=\"text-calm-700 font-semibold tabular-nums text-sm w-14 flex-shrink-0 pt-0.5\">8:30 am</time>"
+          },
+          {
+            "target": "li:nth-child(3) > .opacity-60 > .flex-1.min-w-0 > .flex-wrap.gap-2 > .line-through.text-neutral-400.leading-tight",
+            "html": "<p class=\"font-semibold text-base leading-tight line-through text-neutral-400\">Morning medications</p>"
+          },
+          {
+            "target": ".opacity-60 > .flex-1.min-w-0 > .flex-wrap.gap-2 > .bg-calm-100.badge.text-xs",
+            "html": "<span class=\"badge text-xs bg-calm-100 text-calm-700\">Medicine</span>"
+          },
+          {
+            "target": "li:nth-child(3) > .opacity-60 > .flex-1.min-w-0 > .mt-1.text-neutral-500",
+            "html": "<p class=\"text-sm text-neutral-500 mt-1\">Take with a full glass of water</p>"
+          },
+          {
+            "target": ".text-neutral-400.gap-2.text-sm > span",
+            "html": "<span>Tap the circle to mark a task done</span>"
+          }
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".rounded-xl",
+            "html": "<a href=\"tel:07700900456\" class=\"inline-flex items-ce...\" aria-label=\"Call your caregiver:...\">"
+          }
+        ]
+      }
+    ],
+    "passes": 36
+  },
+  {
+    "id": "mobile-appointments",
+    "page": "Appointments",
+    "breakpoint": "mobile 375px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": "section[aria-labelledby=\"group-today\"] > ul > li:nth-child(1) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 mt-0.5 font-medium\">Clinic visit</p>"
+          },
+          {
+            "target": "section[aria-label=\"Heart checkup — Dr. Lee\"] > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 mt-0.5 font-medium\">Hospital visit</p>"
+          },
+          {
+            "target": "section[aria-label=\"Blood test — fasting needed\"] > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 mt-0.5 font-medium\">Clinic visit</p>"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-week\"] > ul > li:nth-child(2) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 mt-0.5 font-medium\">Clinic visit</p>"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-week\"] > ul > li:nth-child(3) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 mt-0.5 font-medium\">Telephone — no travel needed</p>"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-coming\"] > ul > li:nth-child(1) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 mt-0.5 font-medium\">Clinic visit</p>"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-coming\"] > ul > li:nth-child(2) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 mt-0.5 font-medium\">Clinic visit</p>"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-coming\"] > ul > li:nth-child(3) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 mt-0.5 font-medium\">Clinic visit</p>"
+          },
+          {
+            "target": ".pb-2",
+            "html": "<p class=\"text-sm text-neutral-400 text-center pb-2\">Your caregiver can add or update appointments for you.<br>CareConnect never gives medical advice.</p>"
+          }
+        ]
+      },
+      {
+        "id": "heading-order",
+        "impact": "moderate",
+        "help": "Heading levels should only increase by one",
+        "nodes": [
+          {
+            "target": "section[aria-labelledby=\"group-today\"] > ul > li:nth-child(1) > .border-neutral-300.shadow-card.p-6 > .mb-4.gap-4.justify-between > h3",
+            "html": "<h3 class=\"font-semibold text-neutral-800 leading-tight\">Blood pressure check — Dr. Sharma</h3>"
+          }
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".px-6",
+            "html": "<a href=\"tel:07700900456\" class=\"inline-flex items-ce...\" aria-label=\"Call your caregiver:...\">"
+          },
+          {
+            "target": "section[aria-label=\"Blood test — fasting needed\"] > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\\:bg-calm-100.hover\\:border-calm-400.bg-calm-50",
+            "html": "<button class=\"inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-week\"] > ul > li:nth-child(2) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\\:bg-calm-100.hover\\:border-calm-400.bg-calm-50",
+            "html": "<button class=\"inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-week\"] > ul > li:nth-child(3) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\\:bg-calm-100.hover\\:border-calm-400.bg-calm-50",
+            "html": "<button class=\"inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-coming\"] > ul > li:nth-child(1) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\\:bg-calm-100.hover\\:border-calm-400.bg-calm-50",
+            "html": "<button class=\"inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-coming\"] > ul > li:nth-child(2) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\\:bg-calm-100.hover\\:border-calm-400.bg-calm-50",
+            "html": "<button class=\"inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-coming\"] > ul > li:nth-child(3) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\\:bg-calm-100.hover\\:border-calm-400.bg-calm-50",
+            "html": "<button class=\"inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover"
+          }
+        ]
+      }
+    ],
+    "passes": 37
+  },
+  {
+    "id": "mobile-medications",
+    "page": "Medicines",
+    "breakpoint": "mobile 375px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": "li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .line-through.text-neutral-400.text-lg",
+            "html": "<p class=\"font-bold text-lg leading-tight line-through text-neutral-400\">Amlodipine</p>"
+          },
+          {
+            "target": "li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .mt-0\\.5.text-neutral-600.text-sm",
+            "html": "<p class=\"text-neutral-600 text-sm mt-0.5\">5 mg — 1 tablet</p>"
+          },
+          {
+            "target": "li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .flex-wrap.mt-2.gap-2 > .badge.badge-calm.text-xs",
+            "html": "<span class=\"badge badge-calm text-xs\">8:30 am</span>"
+          },
+          {
+            "target": "li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .italic.mt-2.text-neutral-500",
+            "html": "<p class=\"text-sm text-neutral-500 mt-2 italic\">Take with food.</p>"
+          },
+          {
+            "target": "li:nth-child(3) > .opacity-60 > .flex-1.min-w-0 > .line-through.text-neutral-400.text-lg",
+            "html": "<p class=\"font-bold text-lg leading-tight line-through text-neutral-400\">Sertraline</p>"
+          },
+          {
+            "target": "li:nth-child(3) > .opacity-60 > .flex-1.min-w-0 > .mt-0\\.5.text-neutral-600.text-sm",
+            "html": "<p class=\"text-neutral-600 text-sm mt-0.5\">50 mg — 1 tablet</p>"
+          },
+          {
+            "target": "li:nth-child(3) > .opacity-60 > .flex-1.min-w-0 > .flex-wrap.mt-2.gap-2 > .badge.badge-calm.text-xs",
+            "html": "<span class=\"badge badge-calm text-xs\">8:30 am</span>"
+          },
+          {
+            "target": "li:nth-child(3) > .opacity-60 > .flex-1.min-w-0 > .italic.mt-2.text-neutral-500",
+            "html": "<p class=\"text-sm text-neutral-500 mt-2 italic\">Take with or without food.</p>"
+          },
+          {
+            "target": ".text-neutral-400.text-center.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 text-center\">Always take medicines as prescribed by your doctor. If unsure, ask your carer.</p>"
+          }
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".rounded-xl",
+            "html": "<a href=\"tel:07700900456\" class=\"inline-flex items-ce...\" aria-label=\"Call your caregiver:...\">"
+          }
+        ]
+      }
+    ],
+    "passes": 35
+  },
+  {
+    "id": "mobile-memories",
+    "page": "Memories",
+    "breakpoint": "mobile 375px",
+    "violations": [
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".rounded-xl",
+            "html": "<a href=\"tel:07700900456\" class=\"inline-flex items-ce...\" aria-label=\"Call your caregiver:...\">"
+          }
+        ]
+      }
+    ],
+    "passes": 38
+  },
+  {
+    "id": "mobile-contacts",
+    "page": "Contacts",
+    "breakpoint": "mobile 375px",
+    "violations": [
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".rounded-xl",
+            "html": "<a href=\"tel:07700900456\" class=\"inline-flex items-ce...\" aria-label=\"Call your caregiver:...\">"
+          }
+        ]
+      }
+    ],
+    "passes": 36
+  },
+  {
+    "id": "mobile-dashboard",
+    "page": "Caregiver dashboard",
+    "breakpoint": "mobile 375px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": ".mt-1.text-neutral-400.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 mt-1\">Activity appears here when Margaret takes medications or checks in.</p>"
+          },
+          {
+            "target": ".pb-2",
+            "html": "<p class=\"text-xs text-neutral-400 text-center pb-2\">Data refreshes when you return to this tab. Last seen adherence reflects Margaret's most recent actions.</p"
+          }
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": "a[aria-label=\"Manage medications\"]",
+            "html": "<a class=\"flex items-center gap-4 bg-white rounded-xl border-2 border-neutral-300 shadow-card px-5 py-4 no-underline group hover:border-calm-400 hover:shadow-ca"
+          },
+          {
+            "target": "a[aria-label=\"Manage appointments\"]",
+            "html": "<a class=\"flex items-center gap-4 bg-white rounded-xl border-2 border-neutral-300 shadow-card px-5 py-4 no-underline group hover:border-calm-400 hover:shadow-ca"
+          },
+          {
+            "target": "a[aria-label=\"View caregiver notes\"]",
+            "html": "<a class=\"flex items-center gap-4 bg-white rounded-xl border-2 border-neutral-300 shadow-card px-5 py-4 no-underline group hover:border-calm-400 hover:shadow-ca"
+          },
+          {
+            "target": "a[aria-label=\"View full activity log\"]",
+            "html": "<a class=\"flex items-center gap-4 bg-white rounded-xl border-2 border-neutral-300 shadow-card px-5 py-4 no-underline group hover:border-calm-400 hover:shadow-ca"
+          }
+        ]
+      }
+    ],
+    "passes": 38
+  },
+  {
+    "id": "mobile-manage-meds",
+    "page": "Manage medications",
+    "breakpoint": "mobile 375px",
+    "violations": [
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".hover\\:bg-calm-700",
+            "html": "<button class=\"inline-flex items-center gap-2 font-bold rounded-xl px-5 py-3 min-h-[2.75rem] text-base bg-calm-600 text-white border-2 border-calm-600 hover:bg-"
+          }
+        ]
+      }
+    ],
+    "passes": 38
+  },
+  {
+    "id": "mobile-manage-appts",
+    "page": "Manage appointments",
+    "breakpoint": "mobile 375px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": "li:nth-child(1) > .border-calm-300.border-neutral-300.shadow-card > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400",
+            "html": "<span class=\"text-neutral-400\"> — 12 Greenfield Road, Westfield</span>"
+          },
+          {
+            "target": "section[aria-label=\"Heart checkup — Dr. Lee\"] > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400",
+            "html": "<span class=\"text-neutral-400\"> — 45 Hospital Way, Westfield</span>"
+          },
+          {
+            "target": "section[aria-label=\"Blood test — fasting needed\"] > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400",
+            "html": "<span class=\"text-neutral-400\"> — 12 Greenfield Road, Westfield</span>"
+          },
+          {
+            "target": "li:nth-child(4) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400",
+            "html": "<span class=\"text-neutral-400\"> — 8 Meadow Lane, Westfield</span>"
+          },
+          {
+            "target": "li:nth-child(6) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400",
+            "html": "<span class=\"text-neutral-400\"> — 3 Riverside Walk, Westfield</span>"
+          },
+          {
+            "target": "li:nth-child(7) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400",
+            "html": "<span class=\"text-neutral-400\"> — 22 High Street, Westfield</span>"
+          },
+          {
+            "target": "li:nth-child(8) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400",
+            "html": "<span class=\"text-neutral-400\"> — 12 Greenfield Road, Westfield</span>"
+          }
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".hover\\:bg-calm-700",
+            "html": "<button class=\"inline-flex items-center gap-2 font-bold rounded-xl px-5 py-3 min-h-[2.75rem] text-base bg-calm-600 text-white border-2 border-calm-600 hover:bg-"
+          }
+        ]
+      }
+    ],
+    "passes": 38
+  },
+  {
+    "id": "mobile-activity",
+    "page": "Activity log",
+    "breakpoint": "mobile 375px",
+    "violations": [],
+    "passes": 38
+  },
+  {
+    "id": "mobile-notes",
+    "page": "Caregiver notes",
+    "breakpoint": "mobile 375px",
+    "violations": [],
+    "passes": 36
+  },
+  {
+    "id": "mobile-signin-errors",
+    "page": "Sign in — errors showing",
+    "breakpoint": "mobile 375px",
+    "violations": [],
+    "passes": 38
+  },
+  {
+    "id": "mobile-chatbot",
+    "page": "Landing — assistant open",
+    "breakpoint": "mobile 375px",
+    "violations": [
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".border-white",
+            "html": "<a class=\"inline-flex items-center justify-center gap-2 font-bold rounded-lg px-7 py-4 min-h-[3rem] text-lg bg-white text-calm-700 border-2 border-white hover:b"
+          },
+          {
+            "target": ".bg-transparent",
+            "html": "<a class=\"inline-flex items-ce...\" aria-label=\"Sign in to CareConne...\" href=\"/signin\" data-discover=\"true\">"
+          }
+        ]
+      }
+    ],
+    "passes": 44
+  },
+  {
+    "id": "mobile-dialog",
+    "page": "Manage medications — confirm dialog",
+    "breakpoint": "mobile 375px",
+    "violations": [
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".hover\\:bg-calm-700",
+            "html": "<button class=\"inline-flex items-center gap-2 font-bold rounded-xl px-5 py-3 min-h-[2.75rem] text-base bg-calm-600 text-white border-2 border-calm-600 hover:bg-"
+          }
+        ]
+      }
+    ],
+    "passes": 40
+  },
+  {
+    "id": "tablet-landing",
+    "page": "Landing",
+    "breakpoint": "tablet 820px",
+    "violations": [
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".border-white",
+            "html": "<a class=\"inline-flex items-center justify-center gap-2 font-bold rounded-lg px-7 py-4 min-h-[3rem] text-lg bg-white text-calm-700 border-2 border-white hover:b"
+          },
+          {
+            "target": ".bg-transparent",
+            "html": "<a class=\"inline-flex items-ce...\" aria-label=\"Sign in to CareConne...\" href=\"/signin\" data-discover=\"true\">"
+          }
+        ]
+      }
+    ],
+    "passes": 39
+  },
+  {
+    "id": "tablet-signin",
+    "page": "Sign in",
+    "breakpoint": "tablet 820px",
+    "violations": [],
+    "passes": 38
+  },
+  {
+    "id": "tablet-signup",
+    "page": "Sign up",
+    "breakpoint": "tablet 820px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": ".text-xs",
+            "html": "<p class=\"text-center text-xs text-neutral-400 leading-relaxed\">CareConnect never gives medical advice and never shares your information with third parties.</p>"
+          }
+        ]
+      }
+    ],
+    "passes": 38
+  },
+  {
+    "id": "tablet-role",
+    "page": "Role chooser",
+    "breakpoint": "tablet 820px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": ".space-y-2 > .text-sm.text-neutral-400",
+            "html": "<p class=\"text-sm text-neutral-400\">Your choice is remembered. You can switch at any time from inside the app.</p>"
+          },
+          {
+            "target": ".max-w-xl > .text-sm.text-neutral-400",
+            "html": "<p class=\"text-center text-sm text-neutral-400\">This does not affect what information is stored — only which view you see first.</p>"
+          }
+        ]
+      }
+    ],
+    "passes": 34
+  },
+  {
+    "id": "tablet-today",
+    "page": "Today (patient home)",
+    "breakpoint": "tablet 820px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": ".uppercase",
+            "html": "<p class=\"text-sm font-bold text-neutral-400 uppercase tracking-widest\">Next thing to do</p>"
+          }
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".py-3",
+            "html": "<a href=\"tel:07700900456\" class=\"inline-flex items-ce...\" aria-label=\"Call your caregiver:...\">"
+          }
+        ]
+      }
+    ],
+    "passes": 37
+  },
+  {
+    "id": "tablet-schedule",
+    "page": "My Day",
+    "breakpoint": "tablet 820px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": "time[datetime=\"07:30\"]",
+            "html": "<time datetime=\"07:30\" class=\"text-calm-700 font-semibold tabular-nums text-sm w-14 flex-shrink-0 pt-0.5\">7:30 am</time>"
+          },
+          {
+            "target": "li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .flex-wrap.gap-2 > .line-through.text-neutral-400.leading-tight",
+            "html": "<p class=\"font-semibold text-base leading-tight line-through text-neutral-400\">Wake up &amp; stretch</p>"
+          },
+          {
+            "target": ".opacity-60 > .flex-1.min-w-0 > .flex-wrap.gap-2 > .bg-success-100.text-success-700.badge",
+            "html": "<span class=\"badge text-xs bg-success-100 text-success-700\">Activity</span>"
+          },
+          {
+            "target": "time[datetime=\"08:00\"]",
+            "html": "<time datetime=\"08:00\" class=\"text-calm-700 font-semibold tabular-nums text-sm w-14 flex-shrink-0 pt-0.5\">8:00 am</time>"
+          },
+          {
+            "target": "article[aria-label=\"8:00 am: Breakfast — done\"] > .flex-1.min-w-0 > .flex-wrap.gap-2 > .line-through.text-neutral-400.leading-tight",
+            "html": "<p class=\"font-semibold text-base leading-tight line-through text-neutral-400\">Breakfast</p>"
+          },
+          {
+            "target": "article[aria-label=\"8:00 am: Breakfast — done\"] > .flex-1.min-w-0 > .flex-wrap.gap-2 > .bg-warm-100.text-warm-700.badge",
+            "html": "<span class=\"badge text-xs bg-warm-100 text-warm-700\">Meal</span>"
+          },
+          {
+            "target": "article[aria-label=\"8:00 am: Breakfast — done\"] > .flex-1.min-w-0 > .mt-1.text-neutral-500",
+            "html": "<p class=\"text-sm text-neutral-500 mt-1\">Oatmeal with berries</p>"
+          },
+          {
+            "target": "time[datetime=\"08:30\"]",
+            "html": "<time datetime=\"08:30\" class=\"text-calm-700 font-semibold tabular-nums text-sm w-14 flex-shrink-0 pt-0.5\">8:30 am</time>"
+          },
+          {
+            "target": "li:nth-child(3) > .opacity-60 > .flex-1.min-w-0 > .flex-wrap.gap-2 > .line-through.text-neutral-400.leading-tight",
+            "html": "<p class=\"font-semibold text-base leading-tight line-through text-neutral-400\">Morning medications</p>"
+          },
+          {
+            "target": ".opacity-60 > .flex-1.min-w-0 > .flex-wrap.gap-2 > .bg-calm-100.badge.text-xs",
+            "html": "<span class=\"badge text-xs bg-calm-100 text-calm-700\">Medicine</span>"
+          },
+          {
+            "target": "li:nth-child(3) > .opacity-60 > .flex-1.min-w-0 > .mt-1.text-neutral-500",
+            "html": "<p class=\"text-sm text-neutral-500 mt-1\">Take with a full glass of water</p>"
+          },
+          {
+            "target": ".text-neutral-400.gap-2.text-sm > span",
+            "html": "<span>Tap the circle to mark a task done</span>"
+          }
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".rounded-xl",
+            "html": "<a href=\"tel:07700900456\" class=\"inline-flex items-ce...\" aria-label=\"Call your caregiver:...\">"
+          }
+        ]
+      }
+    ],
+    "passes": 36
+  },
+  {
+    "id": "tablet-appointments",
+    "page": "Appointments",
+    "breakpoint": "tablet 820px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": "section[aria-labelledby=\"group-today\"] > ul > li:nth-child(1) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 mt-0.5 font-medium\">Clinic visit</p>"
+          },
+          {
+            "target": "section[aria-label=\"Heart checkup — Dr. Lee\"] > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 mt-0.5 font-medium\">Hospital visit</p>"
+          },
+          {
+            "target": "section[aria-label=\"Blood test — fasting needed\"] > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 mt-0.5 font-medium\">Clinic visit</p>"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-week\"] > ul > li:nth-child(2) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 mt-0.5 font-medium\">Clinic visit</p>"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-week\"] > ul > li:nth-child(3) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 mt-0.5 font-medium\">Telephone — no travel needed</p>"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-coming\"] > ul > li:nth-child(1) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 mt-0.5 font-medium\">Clinic visit</p>"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-coming\"] > ul > li:nth-child(2) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 mt-0.5 font-medium\">Clinic visit</p>"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-coming\"] > ul > li:nth-child(3) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 mt-0.5 font-medium\">Clinic visit</p>"
+          },
+          {
+            "target": ".pb-2",
+            "html": "<p class=\"text-sm text-neutral-400 text-center pb-2\">Your caregiver can add or update appointments for you.<br>CareConnect never gives medical advice.</p>"
+          }
+        ]
+      },
+      {
+        "id": "heading-order",
+        "impact": "moderate",
+        "help": "Heading levels should only increase by one",
+        "nodes": [
+          {
+            "target": "section[aria-labelledby=\"group-today\"] > ul > li:nth-child(1) > .border-neutral-300.shadow-card.p-6 > .mb-4.gap-4.justify-between > h3",
+            "html": "<h3 class=\"font-semibold text-neutral-800 leading-tight\">Blood pressure check — Dr. Sharma</h3>"
+          }
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".px-6",
+            "html": "<a href=\"tel:07700900456\" class=\"inline-flex items-ce...\" aria-label=\"Call your caregiver:...\">"
+          },
+          {
+            "target": "section[aria-label=\"Blood test — fasting needed\"] > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\\:bg-calm-100.hover\\:border-calm-400.bg-calm-50",
+            "html": "<button class=\"inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-week\"] > ul > li:nth-child(2) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\\:bg-calm-100.hover\\:border-calm-400.bg-calm-50",
+            "html": "<button class=\"inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-week\"] > ul > li:nth-child(3) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\\:bg-calm-100.hover\\:border-calm-400.bg-calm-50",
+            "html": "<button class=\"inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-coming\"] > ul > li:nth-child(1) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\\:bg-calm-100.hover\\:border-calm-400.bg-calm-50",
+            "html": "<button class=\"inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-coming\"] > ul > li:nth-child(2) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\\:bg-calm-100.hover\\:border-calm-400.bg-calm-50",
+            "html": "<button class=\"inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-coming\"] > ul > li:nth-child(3) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\\:bg-calm-100.hover\\:border-calm-400.bg-calm-50",
+            "html": "<button class=\"inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover"
+          }
+        ]
+      }
+    ],
+    "passes": 37
+  },
+  {
+    "id": "tablet-medications",
+    "page": "Medicines",
+    "breakpoint": "tablet 820px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": "li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .line-through.text-neutral-400.text-lg",
+            "html": "<p class=\"font-bold text-lg leading-tight line-through text-neutral-400\">Amlodipine</p>"
+          },
+          {
+            "target": "li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .mt-0\\.5.text-neutral-600.text-sm",
+            "html": "<p class=\"text-neutral-600 text-sm mt-0.5\">5 mg — 1 tablet</p>"
+          },
+          {
+            "target": "li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .flex-wrap.mt-2.gap-2 > .badge.badge-calm.text-xs",
+            "html": "<span class=\"badge badge-calm text-xs\">8:30 am</span>"
+          },
+          {
+            "target": "li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .italic.mt-2.text-neutral-500",
+            "html": "<p class=\"text-sm text-neutral-500 mt-2 italic\">Take with food.</p>"
+          },
+          {
+            "target": "li:nth-child(3) > .opacity-60 > .flex-1.min-w-0 > .line-through.text-neutral-400.text-lg",
+            "html": "<p class=\"font-bold text-lg leading-tight line-through text-neutral-400\">Sertraline</p>"
+          },
+          {
+            "target": "li:nth-child(3) > .opacity-60 > .flex-1.min-w-0 > .mt-0\\.5.text-neutral-600.text-sm",
+            "html": "<p class=\"text-neutral-600 text-sm mt-0.5\">50 mg — 1 tablet</p>"
+          },
+          {
+            "target": "li:nth-child(3) > .opacity-60 > .flex-1.min-w-0 > .flex-wrap.mt-2.gap-2 > .badge.badge-calm.text-xs",
+            "html": "<span class=\"badge badge-calm text-xs\">8:30 am</span>"
+          },
+          {
+            "target": "li:nth-child(3) > .opacity-60 > .flex-1.min-w-0 > .italic.mt-2.text-neutral-500",
+            "html": "<p class=\"text-sm text-neutral-500 mt-2 italic\">Take with or without food.</p>"
+          },
+          {
+            "target": ".text-neutral-400.text-center.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 text-center\">Always take medicines as prescribed by your doctor. If unsure, ask your carer.</p>"
+          }
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".rounded-xl",
+            "html": "<a href=\"tel:07700900456\" class=\"inline-flex items-ce...\" aria-label=\"Call your caregiver:...\">"
+          }
+        ]
+      }
+    ],
+    "passes": 35
+  },
+  {
+    "id": "tablet-memories",
+    "page": "Memories",
+    "breakpoint": "tablet 820px",
+    "violations": [
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".rounded-xl",
+            "html": "<a href=\"tel:07700900456\" class=\"inline-flex items-ce...\" aria-label=\"Call your caregiver:...\">"
+          }
+        ]
+      }
+    ],
+    "passes": 38
+  },
+  {
+    "id": "tablet-contacts",
+    "page": "Contacts",
+    "breakpoint": "tablet 820px",
+    "violations": [
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".rounded-xl",
+            "html": "<a href=\"tel:07700900456\" class=\"inline-flex items-ce...\" aria-label=\"Call your caregiver:...\">"
+          }
+        ]
+      }
+    ],
+    "passes": 36
+  },
+  {
+    "id": "tablet-dashboard",
+    "page": "Caregiver dashboard",
+    "breakpoint": "tablet 820px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": ".mt-1.text-neutral-400.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 mt-1\">Activity appears here when Margaret takes medications or checks in.</p>"
+          },
+          {
+            "target": ".pb-2",
+            "html": "<p class=\"text-xs text-neutral-400 text-center pb-2\">Data refreshes when you return to this tab. Last seen adherence reflects Margaret's most recent actions.</p"
+          }
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": "a[aria-label=\"Manage medications\"]",
+            "html": "<a class=\"flex items-center gap-4 bg-white rounded-xl border-2 border-neutral-300 shadow-card px-5 py-4 no-underline group hover:border-calm-400 hover:shadow-ca"
+          },
+          {
+            "target": "a[aria-label=\"Manage appointments\"]",
+            "html": "<a class=\"flex items-center gap-4 bg-white rounded-xl border-2 border-neutral-300 shadow-card px-5 py-4 no-underline group hover:border-calm-400 hover:shadow-ca"
+          },
+          {
+            "target": "a[aria-label=\"View caregiver notes\"]",
+            "html": "<a class=\"flex items-center gap-4 bg-white rounded-xl border-2 border-neutral-300 shadow-card px-5 py-4 no-underline group hover:border-calm-400 hover:shadow-ca"
+          },
+          {
+            "target": "a[aria-label=\"View full activity log\"]",
+            "html": "<a class=\"flex items-center gap-4 bg-white rounded-xl border-2 border-neutral-300 shadow-card px-5 py-4 no-underline group hover:border-calm-400 hover:shadow-ca"
+          }
+        ]
+      }
+    ],
+    "passes": 37
+  },
+  {
+    "id": "tablet-manage-meds",
+    "page": "Manage medications",
+    "breakpoint": "tablet 820px",
+    "violations": [
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".hover\\:bg-calm-700",
+            "html": "<button class=\"inline-flex items-center gap-2 font-bold rounded-xl px-5 py-3 min-h-[2.75rem] text-base bg-calm-600 text-white border-2 border-calm-600 hover:bg-"
+          }
+        ]
+      }
+    ],
+    "passes": 37
+  },
+  {
+    "id": "tablet-manage-appts",
+    "page": "Manage appointments",
+    "breakpoint": "tablet 820px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": "li:nth-child(1) > .border-calm-300.border-neutral-300.shadow-card > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400",
+            "html": "<span class=\"text-neutral-400\"> — 12 Greenfield Road, Westfield</span>"
+          },
+          {
+            "target": "section[aria-label=\"Heart checkup — Dr. Lee\"] > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400",
+            "html": "<span class=\"text-neutral-400\"> — 45 Hospital Way, Westfield</span>"
+          },
+          {
+            "target": "section[aria-label=\"Blood test — fasting needed\"] > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400",
+            "html": "<span class=\"text-neutral-400\"> — 12 Greenfield Road, Westfield</span>"
+          },
+          {
+            "target": "li:nth-child(4) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400",
+            "html": "<span class=\"text-neutral-400\"> — 8 Meadow Lane, Westfield</span>"
+          },
+          {
+            "target": "li:nth-child(6) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400",
+            "html": "<span class=\"text-neutral-400\"> — 3 Riverside Walk, Westfield</span>"
+          },
+          {
+            "target": "li:nth-child(7) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400",
+            "html": "<span class=\"text-neutral-400\"> — 22 High Street, Westfield</span>"
+          },
+          {
+            "target": "li:nth-child(8) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400",
+            "html": "<span class=\"text-neutral-400\"> — 12 Greenfield Road, Westfield</span>"
+          }
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".hover\\:bg-calm-700",
+            "html": "<button class=\"inline-flex items-center gap-2 font-bold rounded-xl px-5 py-3 min-h-[2.75rem] text-base bg-calm-600 text-white border-2 border-calm-600 hover:bg-"
+          }
+        ]
+      }
+    ],
+    "passes": 37
+  },
+  {
+    "id": "tablet-activity",
+    "page": "Activity log",
+    "breakpoint": "tablet 820px",
+    "violations": [],
+    "passes": 37
+  },
+  {
+    "id": "tablet-notes",
+    "page": "Caregiver notes",
+    "breakpoint": "tablet 820px",
+    "violations": [],
+    "passes": 35
+  },
+  {
+    "id": "tablet-signin-errors",
+    "page": "Sign in — errors showing",
+    "breakpoint": "tablet 820px",
+    "violations": [],
+    "passes": 38
+  },
+  {
+    "id": "tablet-chatbot",
+    "page": "Landing — assistant open",
+    "breakpoint": "tablet 820px",
+    "violations": [
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".border-white",
+            "html": "<a class=\"inline-flex items-center justify-center gap-2 font-bold rounded-lg px-7 py-4 min-h-[3rem] text-lg bg-white text-calm-700 border-2 border-white hover:b"
+          },
+          {
+            "target": ".bg-transparent",
+            "html": "<a class=\"inline-flex items-ce...\" aria-label=\"Sign in to CareConne...\" href=\"/signin\" data-discover=\"true\">"
+          }
+        ]
+      }
+    ],
+    "passes": 44
+  },
+  {
+    "id": "tablet-dialog",
+    "page": "Manage medications — confirm dialog",
+    "breakpoint": "tablet 820px",
+    "violations": [
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".hover\\:bg-calm-700",
+            "html": "<button class=\"inline-flex items-center gap-2 font-bold rounded-xl px-5 py-3 min-h-[2.75rem] text-base bg-calm-600 text-white border-2 border-calm-600 hover:bg-"
+          }
+        ]
+      }
+    ],
+    "passes": 39
+  },
+  {
+    "id": "desktop-landing",
+    "page": "Landing",
+    "breakpoint": "desktop 1280px",
+    "violations": [
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".border-white",
+            "html": "<a class=\"inline-flex items-center justify-center gap-2 font-bold rounded-lg px-7 py-4 min-h-[3rem] text-lg bg-white text-calm-700 border-2 border-white hover:b"
+          },
+          {
+            "target": ".bg-transparent",
+            "html": "<a class=\"inline-flex items-ce...\" aria-label=\"Sign in to CareConne...\" href=\"/signin\" data-discover=\"true\">"
+          }
+        ]
+      }
+    ],
+    "passes": 39
+  },
+  {
+    "id": "desktop-signin",
+    "page": "Sign in",
+    "breakpoint": "desktop 1280px",
+    "violations": [],
+    "passes": 38
+  },
+  {
+    "id": "desktop-signup",
+    "page": "Sign up",
+    "breakpoint": "desktop 1280px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": ".text-xs",
+            "html": "<p class=\"text-center text-xs text-neutral-400 leading-relaxed\">CareConnect never gives medical advice and never shares your information with third parties.</p>"
+          }
+        ]
+      }
+    ],
+    "passes": 38
+  },
+  {
+    "id": "desktop-role",
+    "page": "Role chooser",
+    "breakpoint": "desktop 1280px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": ".space-y-2 > .text-sm.text-neutral-400",
+            "html": "<p class=\"text-sm text-neutral-400\">Your choice is remembered. You can switch at any time from inside the app.</p>"
+          },
+          {
+            "target": ".max-w-xl > .text-sm.text-neutral-400",
+            "html": "<p class=\"text-center text-sm text-neutral-400\">This does not affect what information is stored — only which view you see first.</p>"
+          }
+        ]
+      }
+    ],
+    "passes": 34
+  },
+  {
+    "id": "desktop-today",
+    "page": "Today (patient home)",
+    "breakpoint": "desktop 1280px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": ".uppercase",
+            "html": "<p class=\"text-sm font-bold text-neutral-400 uppercase tracking-widest\">Next thing to do</p>"
+          },
+          {
+            "target": ".max-w-none > p:nth-child(1)",
+            "html": "<p>CareConnect © 2026 — Compassionate care, every day.</p>"
+          },
+          {
+            "target": ".max-w-none > p:nth-child(2)",
+            "html": "<p>Need help? <a href=\"/app/contacts\" class=\"text-calm-600 font-medium\">View contacts</a></p>"
+          }
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".py-3",
+            "html": "<a href=\"tel:07700900456\" class=\"inline-flex items-ce...\" aria-label=\"Call your caregiver:...\">"
+          }
+        ]
+      }
+    ],
+    "passes": 39
+  },
+  {
+    "id": "desktop-schedule",
+    "page": "My Day",
+    "breakpoint": "desktop 1280px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": "time[datetime=\"07:30\"]",
+            "html": "<time datetime=\"07:30\" class=\"text-calm-700 font-semibold tabular-nums text-sm w-14 flex-shrink-0 pt-0.5\">7:30 am</time>"
+          },
+          {
+            "target": "li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .flex-wrap.gap-2 > .line-through.text-neutral-400.leading-tight",
+            "html": "<p class=\"font-semibold text-base leading-tight line-through text-neutral-400\">Wake up &amp; stretch</p>"
+          },
+          {
+            "target": ".opacity-60 > .flex-1.min-w-0 > .flex-wrap.gap-2 > .bg-success-100.text-success-700.badge",
+            "html": "<span class=\"badge text-xs bg-success-100 text-success-700\">Activity</span>"
+          },
+          {
+            "target": "time[datetime=\"08:00\"]",
+            "html": "<time datetime=\"08:00\" class=\"text-calm-700 font-semibold tabular-nums text-sm w-14 flex-shrink-0 pt-0.5\">8:00 am</time>"
+          },
+          {
+            "target": "article[aria-label=\"8:00 am: Breakfast — done\"] > .flex-1.min-w-0 > .flex-wrap.gap-2 > .line-through.text-neutral-400.leading-tight",
+            "html": "<p class=\"font-semibold text-base leading-tight line-through text-neutral-400\">Breakfast</p>"
+          },
+          {
+            "target": "article[aria-label=\"8:00 am: Breakfast — done\"] > .flex-1.min-w-0 > .flex-wrap.gap-2 > .bg-warm-100.text-warm-700.badge",
+            "html": "<span class=\"badge text-xs bg-warm-100 text-warm-700\">Meal</span>"
+          },
+          {
+            "target": "article[aria-label=\"8:00 am: Breakfast — done\"] > .flex-1.min-w-0 > .mt-1.text-neutral-500",
+            "html": "<p class=\"text-sm text-neutral-500 mt-1\">Oatmeal with berries</p>"
+          },
+          {
+            "target": "time[datetime=\"08:30\"]",
+            "html": "<time datetime=\"08:30\" class=\"text-calm-700 font-semibold tabular-nums text-sm w-14 flex-shrink-0 pt-0.5\">8:30 am</time>"
+          },
+          {
+            "target": "li:nth-child(3) > .opacity-60 > .flex-1.min-w-0 > .flex-wrap.gap-2 > .line-through.text-neutral-400.leading-tight",
+            "html": "<p class=\"font-semibold text-base leading-tight line-through text-neutral-400\">Morning medications</p>"
+          },
+          {
+            "target": ".opacity-60 > .flex-1.min-w-0 > .flex-wrap.gap-2 > .bg-calm-100.badge.text-xs",
+            "html": "<span class=\"badge text-xs bg-calm-100 text-calm-700\">Medicine</span>"
+          },
+          {
+            "target": "li:nth-child(3) > .opacity-60 > .flex-1.min-w-0 > .mt-1.text-neutral-500",
+            "html": "<p class=\"text-sm text-neutral-500 mt-1\">Take with a full glass of water</p>"
+          },
+          {
+            "target": ".text-neutral-400.gap-2.text-sm > span",
+            "html": "<span>Tap the circle to mark a task done</span>"
+          },
+          {
+            "target": ".max-w-none > p:nth-child(1)",
+            "html": "<p>CareConnect © 2026 — Compassionate care, every day.</p>"
+          },
+          {
+            "target": ".max-w-none > p:nth-child(2)",
+            "html": "<p>Need help? <a href=\"/app/contacts\" class=\"text-calm-600 font-medium\">View contacts</a></p>"
+          }
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".rounded-xl",
+            "html": "<a href=\"tel:07700900456\" class=\"inline-flex items-ce...\" aria-label=\"Call your caregiver:...\">"
+          }
+        ]
+      }
+    ],
+    "passes": 38
+  },
+  {
+    "id": "desktop-appointments",
+    "page": "Appointments",
+    "breakpoint": "desktop 1280px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": "section[aria-labelledby=\"group-today\"] > ul > li:nth-child(1) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 mt-0.5 font-medium\">Clinic visit</p>"
+          },
+          {
+            "target": "section[aria-label=\"Heart checkup — Dr. Lee\"] > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 mt-0.5 font-medium\">Hospital visit</p>"
+          },
+          {
+            "target": "section[aria-label=\"Blood test — fasting needed\"] > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 mt-0.5 font-medium\">Clinic visit</p>"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-week\"] > ul > li:nth-child(2) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 mt-0.5 font-medium\">Clinic visit</p>"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-week\"] > ul > li:nth-child(3) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 mt-0.5 font-medium\">Telephone — no travel needed</p>"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-coming\"] > ul > li:nth-child(1) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 mt-0.5 font-medium\">Clinic visit</p>"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-coming\"] > ul > li:nth-child(2) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 mt-0.5 font-medium\">Clinic visit</p>"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-coming\"] > ul > li:nth-child(3) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .items-start.gap-3.flex:nth-child(2) > .min-w-0 > .font-medium.text-neutral-400.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 mt-0.5 font-medium\">Clinic visit</p>"
+          },
+          {
+            "target": ".pb-2",
+            "html": "<p class=\"text-sm text-neutral-400 text-center pb-2\">Your caregiver can add or update appointments for you.<br>CareConnect never gives medical advice.</p>"
+          },
+          {
+            "target": ".max-w-none > p:nth-child(1)",
+            "html": "<p>CareConnect © 2026 — Compassionate care, every day.</p>"
+          },
+          {
+            "target": ".max-w-none > p:nth-child(2)",
+            "html": "<p>Need help? <a href=\"/app/contacts\" class=\"text-calm-600 font-medium\">View contacts</a></p>"
+          }
+        ]
+      },
+      {
+        "id": "heading-order",
+        "impact": "moderate",
+        "help": "Heading levels should only increase by one",
+        "nodes": [
+          {
+            "target": "section[aria-labelledby=\"group-today\"] > ul > li:nth-child(1) > .border-neutral-300.shadow-card.p-6 > .mb-4.gap-4.justify-between > h3",
+            "html": "<h3 class=\"font-semibold text-neutral-800 leading-tight\">Blood pressure check — Dr. Sharma</h3>"
+          }
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".px-6",
+            "html": "<a href=\"tel:07700900456\" class=\"inline-flex items-ce...\" aria-label=\"Call your caregiver:...\">"
+          },
+          {
+            "target": "section[aria-label=\"Blood test — fasting needed\"] > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\\:bg-calm-100.hover\\:border-calm-400.bg-calm-50",
+            "html": "<button class=\"inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-week\"] > ul > li:nth-child(2) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\\:bg-calm-100.hover\\:border-calm-400.bg-calm-50",
+            "html": "<button class=\"inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-week\"] > ul > li:nth-child(3) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\\:bg-calm-100.hover\\:border-calm-400.bg-calm-50",
+            "html": "<button class=\"inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-coming\"] > ul > li:nth-child(1) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\\:bg-calm-100.hover\\:border-calm-400.bg-calm-50",
+            "html": "<button class=\"inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-coming\"] > ul > li:nth-child(2) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\\:bg-calm-100.hover\\:border-calm-400.bg-calm-50",
+            "html": "<button class=\"inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover"
+          },
+          {
+            "target": "section[aria-labelledby=\"group-coming\"] > ul > li:nth-child(3) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-4 > .pt-3.border-t.border-neutral-100 > .ml-auto > .hover\\:bg-calm-100.hover\\:border-calm-400.bg-calm-50",
+            "html": "<button class=\"inline-flex items-center gap-2 text-sm font-semibold text-calm-700 bg-calm-50 border-2 border-calm-300 rounded-lg px-3 py-2 min-h-[2.75rem] hover"
+          }
+        ]
+      }
+    ],
+    "passes": 39
+  },
+  {
+    "id": "desktop-medications",
+    "page": "Medicines",
+    "breakpoint": "desktop 1280px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": "li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .line-through.text-neutral-400.text-lg",
+            "html": "<p class=\"font-bold text-lg leading-tight line-through text-neutral-400\">Amlodipine</p>"
+          },
+          {
+            "target": "li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .mt-0\\.5.text-neutral-600.text-sm",
+            "html": "<p class=\"text-neutral-600 text-sm mt-0.5\">5 mg — 1 tablet</p>"
+          },
+          {
+            "target": "li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .flex-wrap.mt-2.gap-2 > .badge.badge-calm.text-xs",
+            "html": "<span class=\"badge badge-calm text-xs\">8:30 am</span>"
+          },
+          {
+            "target": "li:nth-child(1) > .opacity-60 > .flex-1.min-w-0 > .italic.mt-2.text-neutral-500",
+            "html": "<p class=\"text-sm text-neutral-500 mt-2 italic\">Take with food.</p>"
+          },
+          {
+            "target": "li:nth-child(3) > .opacity-60 > .flex-1.min-w-0 > .line-through.text-neutral-400.text-lg",
+            "html": "<p class=\"font-bold text-lg leading-tight line-through text-neutral-400\">Sertraline</p>"
+          },
+          {
+            "target": "li:nth-child(3) > .opacity-60 > .flex-1.min-w-0 > .mt-0\\.5.text-neutral-600.text-sm",
+            "html": "<p class=\"text-neutral-600 text-sm mt-0.5\">50 mg — 1 tablet</p>"
+          },
+          {
+            "target": "li:nth-child(3) > .opacity-60 > .flex-1.min-w-0 > .flex-wrap.mt-2.gap-2 > .badge.badge-calm.text-xs",
+            "html": "<span class=\"badge badge-calm text-xs\">8:30 am</span>"
+          },
+          {
+            "target": "li:nth-child(3) > .opacity-60 > .flex-1.min-w-0 > .italic.mt-2.text-neutral-500",
+            "html": "<p class=\"text-sm text-neutral-500 mt-2 italic\">Take with or without food.</p>"
+          },
+          {
+            "target": ".text-neutral-400.text-center.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 text-center\">Always take medicines as prescribed by your doctor. If unsure, ask your carer.</p>"
+          },
+          {
+            "target": ".max-w-none > p:nth-child(1)",
+            "html": "<p>CareConnect © 2026 — Compassionate care, every day.</p>"
+          },
+          {
+            "target": ".max-w-none > p:nth-child(2)",
+            "html": "<p>Need help? <a href=\"/app/contacts\" class=\"text-calm-600 font-medium\">View contacts</a></p>"
+          }
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".rounded-xl",
+            "html": "<a href=\"tel:07700900456\" class=\"inline-flex items-ce...\" aria-label=\"Call your caregiver:...\">"
+          }
+        ]
+      }
+    ],
+    "passes": 37
+  },
+  {
+    "id": "desktop-memories",
+    "page": "Memories",
+    "breakpoint": "desktop 1280px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": ".max-w-none > p:nth-child(1)",
+            "html": "<p>CareConnect © 2026 — Compassionate care, every day.</p>"
+          },
+          {
+            "target": ".max-w-none > p:nth-child(2)",
+            "html": "<p>Need help? <a href=\"/app/contacts\" class=\"text-calm-600 font-medium\">View contacts</a></p>"
+          }
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".rounded-xl",
+            "html": "<a href=\"tel:07700900456\" class=\"inline-flex items-ce...\" aria-label=\"Call your caregiver:...\">"
+          }
+        ]
+      }
+    ],
+    "passes": 40
+  },
+  {
+    "id": "desktop-contacts",
+    "page": "Contacts",
+    "breakpoint": "desktop 1280px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": "p:nth-child(1)",
+            "html": "<p>CareConnect © 2026 — Compassionate care, every day.</p>"
+          },
+          {
+            "target": ".max-w-none > p:nth-child(2)",
+            "html": "<p>Need help? <a href=\"/app/contacts\" class=\"text-calm-600 font-medium\">View contacts</a></p>"
+          }
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".rounded-xl",
+            "html": "<a href=\"tel:07700900456\" class=\"inline-flex items-ce...\" aria-label=\"Call your caregiver:...\">"
+          }
+        ]
+      }
+    ],
+    "passes": 38
+  },
+  {
+    "id": "desktop-dashboard",
+    "page": "Caregiver dashboard",
+    "breakpoint": "desktop 1280px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": ".mt-1.text-neutral-400.text-sm",
+            "html": "<p class=\"text-sm text-neutral-400 mt-1\">Activity appears here when Margaret takes medications or checks in.</p>"
+          },
+          {
+            "target": ".pb-2",
+            "html": "<p class=\"text-xs text-neutral-400 text-center pb-2\">Data refreshes when you return to this tab. Last seen adherence reflects Margaret's most recent actions.</p"
+          },
+          {
+            "target": ".max-w-none > p:nth-child(1)",
+            "html": "<p>CareConnect © 2026 — Compassionate care, every day.</p>"
+          },
+          {
+            "target": ".max-w-none > p:nth-child(2)",
+            "html": "<p>Need help? <a href=\"/app/contacts\" class=\"text-calm-600 font-medium\">View contacts</a></p>"
+          }
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": "a[aria-label=\"Manage medications\"]",
+            "html": "<a class=\"flex items-center gap-4 bg-white rounded-xl border-2 border-neutral-300 shadow-card px-5 py-4 no-underline group hover:border-calm-400 hover:shadow-ca"
+          },
+          {
+            "target": "a[aria-label=\"Manage appointments\"]",
+            "html": "<a class=\"flex items-center gap-4 bg-white rounded-xl border-2 border-neutral-300 shadow-card px-5 py-4 no-underline group hover:border-calm-400 hover:shadow-ca"
+          },
+          {
+            "target": "a[aria-label=\"View caregiver notes\"]",
+            "html": "<a class=\"flex items-center gap-4 bg-white rounded-xl border-2 border-neutral-300 shadow-card px-5 py-4 no-underline group hover:border-calm-400 hover:shadow-ca"
+          },
+          {
+            "target": "a[aria-label=\"View full activity log\"]",
+            "html": "<a class=\"flex items-center gap-4 bg-white rounded-xl border-2 border-neutral-300 shadow-card px-5 py-4 no-underline group hover:border-calm-400 hover:shadow-ca"
+          },
+          {
+            "target": ".w-full[aria-label=\"Switch to care recipient role\"]",
+            "html": "<button class=\"w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-500 hover:text-calm-600 hover:bg-calm-50 transition-colo"
+          }
+        ]
+      }
+    ],
+    "passes": 39
+  },
+  {
+    "id": "desktop-manage-meds",
+    "page": "Manage medications",
+    "breakpoint": "desktop 1280px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": "p:nth-child(1)",
+            "html": "<p>CareConnect © 2026 — Compassionate care, every day.</p>"
+          },
+          {
+            "target": ".max-w-none > p:nth-child(2)",
+            "html": "<p>Need help? <a href=\"/app/contacts\" class=\"text-calm-600 font-medium\">View contacts</a></p>"
+          }
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".hover\\:bg-calm-700",
+            "html": "<button class=\"inline-flex items-center gap-2 font-bold rounded-xl px-5 py-3 min-h-[2.75rem] text-base bg-calm-600 text-white border-2 border-calm-600 hover:bg-"
+          },
+          {
+            "target": ".w-full.hover\\:text-calm-600[aria-label=\"Switch to care recipient role\"]",
+            "html": "<button class=\"w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-500 hover:text-calm-600 hover:bg-calm-50 transition-colo"
+          }
+        ]
+      }
+    ],
+    "passes": 39
+  },
+  {
+    "id": "desktop-manage-appts",
+    "page": "Manage appointments",
+    "breakpoint": "desktop 1280px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": "li:nth-child(1) > .border-calm-300.border-neutral-300.shadow-card > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400",
+            "html": "<span class=\"text-neutral-400\"> — 12 Greenfield Road, Westfield</span>"
+          },
+          {
+            "target": "section[aria-label=\"Heart checkup — Dr. Lee\"] > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400",
+            "html": "<span class=\"text-neutral-400\"> — 45 Hospital Way, Westfield</span>"
+          },
+          {
+            "target": "section[aria-label=\"Blood test — fasting needed\"] > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400",
+            "html": "<span class=\"text-neutral-400\"> — 12 Greenfield Road, Westfield</span>"
+          },
+          {
+            "target": "li:nth-child(4) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400",
+            "html": "<span class=\"text-neutral-400\"> — 8 Meadow Lane, Westfield</span>"
+          },
+          {
+            "target": "li:nth-child(6) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400",
+            "html": "<span class=\"text-neutral-400\"> — 3 Riverside Walk, Westfield</span>"
+          },
+          {
+            "target": "li:nth-child(7) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400",
+            "html": "<span class=\"text-neutral-400\"> — 22 High Street, Westfield</span>"
+          },
+          {
+            "target": "li:nth-child(8) > .border-neutral-300.shadow-card.p-6 > div:nth-child(2) > .space-y-3 > .text-neutral-600.gap-2.text-sm:nth-child(2) > span > .text-neutral-400",
+            "html": "<span class=\"text-neutral-400\"> — 12 Greenfield Road, Westfield</span>"
+          },
+          {
+            "target": "p:nth-child(1)",
+            "html": "<p>CareConnect © 2026 — Compassionate care, every day.</p>"
+          },
+          {
+            "target": ".max-w-none > p:nth-child(2)",
+            "html": "<p>Need help? <a href=\"/app/contacts\" class=\"text-calm-600 font-medium\">View contacts</a></p>"
+          }
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".hover\\:bg-calm-700",
+            "html": "<button class=\"inline-flex items-center gap-2 font-bold rounded-xl px-5 py-3 min-h-[2.75rem] text-base bg-calm-600 text-white border-2 border-calm-600 hover:bg-"
+          },
+          {
+            "target": ".w-full.hover\\:text-calm-600[aria-label=\"Switch to care recipient role\"]",
+            "html": "<button class=\"w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-500 hover:text-calm-600 hover:bg-calm-50 transition-colo"
+          }
+        ]
+      }
+    ],
+    "passes": 39
+  },
+  {
+    "id": "desktop-activity",
+    "page": "Activity log",
+    "breakpoint": "desktop 1280px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": "p:nth-child(1)",
+            "html": "<p>CareConnect © 2026 — Compassionate care, every day.</p>"
+          },
+          {
+            "target": ".max-w-none > p:nth-child(2)",
+            "html": "<p>Need help? <a href=\"/app/contacts\" class=\"text-calm-600 font-medium\">View contacts</a></p>"
+          }
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".w-full[aria-label=\"Switch to care recipient role\"]",
+            "html": "<button class=\"w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-500 hover:text-calm-600 hover:bg-calm-50 transition-colo"
+          }
+        ]
+      }
+    ],
+    "passes": 39
+  },
+  {
+    "id": "desktop-notes",
+    "page": "Caregiver notes",
+    "breakpoint": "desktop 1280px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": "p:nth-child(1)",
+            "html": "<p>CareConnect © 2026 — Compassionate care, every day.</p>"
+          },
+          {
+            "target": ".max-w-none > p:nth-child(2)",
+            "html": "<p>Need help? <a href=\"/app/contacts\" class=\"text-calm-600 font-medium\">View contacts</a></p>"
+          }
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".w-full[aria-label=\"Switch to care recipient role\"]",
+            "html": "<button class=\"w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-500 hover:text-calm-600 hover:bg-calm-50 transition-colo"
+          }
+        ]
+      }
+    ],
+    "passes": 37
+  },
+  {
+    "id": "desktop-signin-errors",
+    "page": "Sign in — errors showing",
+    "breakpoint": "desktop 1280px",
+    "violations": [],
+    "passes": 38
+  },
+  {
+    "id": "desktop-chatbot",
+    "page": "Landing — assistant open",
+    "breakpoint": "desktop 1280px",
+    "violations": [
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".border-white",
+            "html": "<a class=\"inline-flex items-center justify-center gap-2 font-bold rounded-lg px-7 py-4 min-h-[3rem] text-lg bg-white text-calm-700 border-2 border-white hover:b"
+          },
+          {
+            "target": ".bg-transparent",
+            "html": "<a class=\"inline-flex items-ce...\" aria-label=\"Sign in to CareConne...\" href=\"/signin\" data-discover=\"true\">"
+          }
+        ]
+      }
+    ],
+    "passes": 44
+  },
+  {
+    "id": "desktop-dialog",
+    "page": "Manage medications — confirm dialog",
+    "breakpoint": "desktop 1280px",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": "p:nth-child(1)",
+            "html": "<p>CareConnect © 2026 — Compassionate care, every day.</p>"
+          },
+          {
+            "target": ".max-w-none > p:nth-child(2)",
+            "html": "<p>Need help? <a href=\"/app/contacts\" class=\"text-calm-600 font-medium\">View contacts</a></p>"
+          }
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "help": "Elements must have their visible text as part of their accessible name",
+        "nodes": [
+          {
+            "target": ".hover\\:bg-calm-700",
+            "html": "<button class=\"inline-flex items-center gap-2 font-bold rounded-xl px-5 py-3 min-h-[2.75rem] text-base bg-calm-600 text-white border-2 border-calm-600 hover:bg-"
+          },
+          {
+            "target": ".w-full.hover\\:text-calm-600[aria-label=\"Switch to care recipient role\"]",
+            "html": "<button class=\"w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-500 hover:text-calm-600 hover:bg-calm-50 transition-colo"
+          }
+        ]
+      }
+    ],
+    "passes": 41
+  }
+]

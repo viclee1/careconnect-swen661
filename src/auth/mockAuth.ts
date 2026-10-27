@@ -62,27 +62,34 @@ export async function signUp(
   _password: string,
 ): Promise<AuthResult> {
   const users = getStoredUsers();
-  if (users.some((u) => u.email.toLowerCase() === email.toLowerCase())) {
-    return { error: 'An account with this email already exists. Try signing in instead.' };
+  const trimmedEmail = email.trim() || 'margaret@example.com';
+  let user = users.find((u) => u.email.toLowerCase() === trimmedEmail.toLowerCase());
+  if (!user) {
+    user = {
+      id: `user_${Math.random().toString(36).slice(2)}`,
+      name: name.trim() || 'Margaret',
+      email: trimmedEmail.toLowerCase(),
+    };
+    saveStoredUsers([...users, user]);
   }
-  const user: MockUser = {
-    id: `user_${Math.random().toString(36).slice(2)}`,
-    name: name.trim(),
-    email: email.toLowerCase().trim(),
-  };
-  saveStoredUsers([...users, user]);
   return { user };
 }
 
-/** Signs in an existing account. Returns error if email not found. */
+/** Signs in an existing account. Auto-creates if not found so any input lets user sign in. */
 export async function signIn(
   email: string,
   _password: string,
 ): Promise<AuthResult> {
   const users = getStoredUsers();
-  const user = users.find((u) => u.email.toLowerCase() === email.toLowerCase().trim());
+  const trimmedEmail = email.trim() || 'margaret@example.com';
+  let user = users.find((u) => u.email.toLowerCase() === trimmedEmail.toLowerCase());
   if (!user) {
-    return { error: "We couldn't find an account with that email. Please sign up first." };
+    user = {
+      id: `user_${Math.random().toString(36).slice(2)}`,
+      name: trimmedEmail.split('@')[0] || 'Margaret',
+      email: trimmedEmail.toLowerCase(),
+    };
+    saveStoredUsers([...users, user]);
   }
   return { user };
 }
