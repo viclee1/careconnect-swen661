@@ -72,6 +72,13 @@ const sw = await page.evaluate(async () => {
 });
 check(sw.active && sw.scope === BASE + '/', 'service worker active', sw.script);
 
+// Chrome's own installability check (what decides whether "Install" is offered).
+const cdp = await context.newCDPSession(page);
+const { installabilityErrors } = await cdp.send('Page.getInstallabilityErrors');
+const { errors: manifestErrors } = await cdp.send('Page.getAppManifest');
+check(installabilityErrors.length === 0, 'Chromium: installable', JSON.stringify(installabilityErrors));
+check(manifestErrors.length === 0, 'Chromium: manifest has no errors', JSON.stringify(manifestErrors));
+
 // Sign in (mock session), then reload so the SW controls the page and caches the app.
 await page.evaluate((s) => localStorage.setItem('careconnect_session', JSON.stringify(s)), SESSION);
 await page.goto(BASE + '/app', { waitUntil: 'networkidle' });

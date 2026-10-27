@@ -653,7 +653,11 @@ Assignment 11 write-ups: [team overview](docs/web/week11/README.md) · [Contacts
 npm run build       # outputs to /dist
 ```
 
-Deploy `/dist` to Netlify or Vercel. Configure the assistant's Supabase Edge Function and set `ANTHROPIC_API_KEY` in the host's environment settings — never client-side.
+**Live application:** <https://careconnect-swen661.vercel.app/> — deployed on Vercel (`main` is production; every branch gets a preview). [`vercel.json`](vercel.json) rewrites client-side routes to `index.html`. The production PWA check (manifest, service worker, offline, installability), with screenshots of the live site, is in [`docs/web/week11/production/`](docs/web/week11/production/README.md); re-run it with `node scripts/verify-production.mjs`.
+
+![CareConnect live on Vercel](docs/web/week11/production/01-landing-live.png)
+
+Configure the assistant's Supabase Edge Function and set `ANTHROPIC_API_KEY` in the host's environment settings — never client-side.
 
 Windows desktop artifacts are produced by Electron. Members without a native Windows install should build through GitHub Actions on a `windows-latest` runner and treat CI as the authoritative build environment.
 
