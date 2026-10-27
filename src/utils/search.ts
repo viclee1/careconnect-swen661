@@ -23,7 +23,8 @@ export function filterContacts(contacts: Contact[], query: string): Contact[] {
   );
 }
 
-function normalise(value: string): string {
+/** Lower case, trimmed, accents removed — the form every search compares. */
+export function normalise(value: string): string {
   return value
     .trim()
     .toLowerCase()

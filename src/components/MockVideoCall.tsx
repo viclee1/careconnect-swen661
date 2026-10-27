@@ -1,17 +1,29 @@
 import { useState } from 'react';
 import { Volume2, Mic, MicOff, Pause, Play, Captions, Eye, Bell } from 'lucide-react';
 
+import { useSettings } from '../context/settings';
+import { captionColors, captionFontSize } from '../models/accessibilitySettings';
+
+/**
+ * The simulated incoming video call on Home. Captions, volume and balance are
+ * the ones chosen in Accessibility Settings, and changing them here changes
+ * them there too — one set of preferences for the whole app.
+ */
 export default function MockVideoCall({ onClose }: { onClose: () => void }) {
   const [callState, setCallState] = useState<'incoming' | 'active'>('incoming');
   const [isMuted, setIsMuted] = useState(false);
   const [isAudioPaused, setIsAudioPaused] = useState(false);
-  const [captionsVisible, setCaptionsVisible] = useState(true);
-  const [volume, setVolume] = useState(80);
-  const [balance, setBalance] = useState(0);
+  const { settings, update } = useSettings();
+  const captionsVisible = settings.captionsEnabled;
+  const setCaptionsVisible = (on: boolean) => update({ captionsEnabled: on });
+  const volume = Math.round(settings.alertVolume * 100);
+  const setVolume = (percent: number) => update({ alertVolume: percent / 100 });
+  const balance = settings.audioBalance;
+  const setBalance = (value: number) => update({ audioBalance: value });
 
   if (callState === 'incoming') {
     return (
-      <div className="fixed inset-0 z-50 bg-neutral-900/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn" role="dialog" aria-label="Incoming video call alert">
+      <div className="fixed inset-0 z-50 bg-neutral-900/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn" role="dialog" aria-modal="true" aria-label="Incoming video call alert">
         <div className="bg-white rounded-2xl max-w-md w-full p-8 shadow-2xl border-4 border-calm-600 text-center space-y-6">
           {/* Avatar with glowing ring */}
           <div className="w-24 h-24 mx-auto rounded-full bg-calm-100 border-4 border-calm-500 flex items-center justify-center text-4xl shadow-md animate-pulse">
@@ -36,7 +48,11 @@ export default function MockVideoCall({ onClose }: { onClose: () => void }) {
             </div>
             <div className="flex items-center gap-2 text-neutral-700">
               <Captions className="w-4 h-4 text-sky-600 flex-shrink-0" />
-              <span>Live captions will be on during the call</span>
+              <span>
+                {captionsVisible
+                  ? 'Live captions will be on during the call'
+                  : 'Captions are off — you can turn them on during the call'}
+              </span>
             </div>
           </div>
 
@@ -93,7 +109,10 @@ export default function MockVideoCall({ onClose }: { onClose: () => void }) {
               <span className="bg-sky-500/30 text-sky-300 px-2.5 py-1 rounded text-xs font-bold border border-sky-500/40">
                 [CC LIVE]
               </span>
-              <span className="text-lg font-medium tracking-wide">
+              <span
+                className="font-medium tracking-wide"
+                style={{ fontSize: `${captionFontSize(settings)}px`, color: captionColors[settings.captionColor].hex }}
+              >
                 "Hi Mum! Can you hear me? You're looking well today."
               </span>
             </div>

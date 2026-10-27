@@ -83,7 +83,7 @@ export default function AccessibilitySettings() {
   return (
     <div className="space-y-5 page-container max-w-4xl">
       <div>
-        <h1 className="text-2xl font-bold text-neutral-800">Accessibility Settings</h1>
+        <h1 className="text-2xl md:text-3xl font-normal text-neutral-800">Accessibility Settings</h1>
         <p className="text-neutral-600 mt-1">Adjust how CareConnect alerts and informs you</p>
       </div>
 

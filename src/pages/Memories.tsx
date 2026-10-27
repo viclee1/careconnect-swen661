@@ -18,7 +18,7 @@ import {
   type MemoryFilter,
 } from '../models/memory';
 
-const gridClass = 'grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 list-none p-0 m-0';
+const listClass = 'list-none p-0 m-0 space-y-3';
 
 /**
  * The Memories screen: people, places and moments that matter to the user,
@@ -96,10 +96,10 @@ export default function Memories() {
     ));
 
   return (
-    <div className="space-y-6 page-container">
+    <div className="space-y-5 max-w-4xl mx-auto">
       <PageHeader
         title="Memories"
-        subtitle="People, places and moments that matter to you"
+        subtitle="Your special moments"
         action={
           <button
             ref={addButtonRef}
@@ -107,7 +107,7 @@ export default function Memories() {
             onClick={() => (formOpen ? closeForm() : openForm())}
             aria-expanded={formOpen}
             aria-controls="add-memory-form"
-            className="inline-flex items-center justify-center gap-2 min-h-[2.75rem] px-5 py-3 rounded-lg border-2 border-calm-600 bg-calm-600 font-semibold text-white hover:bg-calm-700 hover:border-calm-700 whitespace-nowrap"
+            className="inline-flex items-center justify-center gap-2 min-h-[2.75rem] px-4 py-2 rounded-lg bg-calm-800 text-white hover:bg-calm-900 whitespace-nowrap"
           >
             <Plus className="w-5 h-5" aria-hidden="true" />
             Add a memory
@@ -130,12 +130,12 @@ export default function Memories() {
         <section aria-labelledby="memories-pinned">
           <h2
             id="memories-pinned"
-            className="flex items-center gap-2 text-sm font-bold text-neutral-600 uppercase tracking-wider mb-3"
+            className="flex items-center gap-2 text-sm font-semibold text-neutral-600 uppercase tracking-wider mb-2"
           >
             <Pin className="w-4 h-4" aria-hidden="true" />
             Pinned
           </h2>
-          <ul className={gridClass} role="list">
+          <ul className={listClass} role="list">
             {renderCards(pinned)}
           </ul>
         </section>
@@ -143,10 +143,10 @@ export default function Memories() {
 
       {rest.length > 0 && (
         <section aria-labelledby="memories-more">
-          <h2 id="memories-more" className="text-sm font-bold text-neutral-600 uppercase tracking-wider mb-3">
+          <h2 id="memories-more" className="text-sm font-semibold text-neutral-600 uppercase tracking-wider mb-2">
             {pinned.length > 0 ? 'More memories' : 'Your memories'}
           </h2>
-          <ul className={gridClass} role="list">
+          <ul className={listClass} role="list">
             {renderCards(rest)}
           </ul>
         </section>

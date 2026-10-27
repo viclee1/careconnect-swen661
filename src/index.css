@@ -15,12 +15,12 @@
     scroll-behavior: smooth;
   }
 
-  /* The header is sticky from 768px (md); keep focused and scrolled-to
+  /* The header is sticky at every width; keep focused and scrolled-to
      content clear of it. --header-height is measured in Layout.tsx. */
-  @media (min-width: 768px) {
-    html {
-      scroll-padding-top: calc(var(--header-height, 0px) + 1rem);
-    }
+  html {
+    scroll-padding-top: calc(var(--header-height, 0px) + 1rem);
+    /* ...and clear of the sticky status bar along the foot. */
+    scroll-padding-bottom: 3.5rem;
   }
 
   /* ── Horizontal-overflow guard ───────────────────────────────────────────
@@ -241,6 +241,16 @@
     animation: pageEnter 220ms ease forwards;
   }
 
+  /* The phone/tablet navigation drawer slides in from the left. */
+  .drawer-enter {
+    animation: drawerEnter 200ms ease-out;
+  }
+
+  @keyframes drawerEnter {
+    from { transform: translateX(-100%); }
+    to   { transform: translateX(0); }
+  }
+
   @keyframes pageEnter {
     from { opacity: 0; transform: translateY(6px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -301,4 +311,37 @@
 @media (forced-colors: active) {
   .medicine-progress::-webkit-progress-value { background-color: Highlight; }
   .medicine-progress::-moz-progress-bar { background-color: Highlight; }
+}
+
+/* ── High contrast (the header's ◐ button, useHighContrast) ──────────────────
+   White surfaces, near-black secondary text, dark borders and a black focus
+   ring. Utilities are overridden here rather than re-themed, so every screen
+   — the team's and Victor's — follows without changes of its own. */
+html.high-contrast body,
+html.high-contrast .bg-neutral-50,
+html.high-contrast .bg-neutral-100 {
+  background-color: #ffffff !important;
+}
+html.high-contrast .text-neutral-400,
+html.high-contrast .text-neutral-500,
+html.high-contrast .text-neutral-600,
+html.high-contrast .text-neutral-700 {
+  color: #111720 !important;
+}
+html.high-contrast .text-calm-500,
+html.high-contrast .text-calm-600,
+html.high-contrast .text-calm-700 {
+  color: #062738 !important;
+}
+html.high-contrast .border-neutral-100,
+html.high-contrast .border-neutral-200,
+html.high-contrast .border-neutral-300 {
+  border-color: #303845 !important;
+}
+html.high-contrast ::placeholder {
+  color: #303845 !important;
+}
+html.high-contrast *:focus-visible {
+  outline: 4px solid #000000 !important;
+  outline-offset: 3px;
 }

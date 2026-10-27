@@ -20,9 +20,10 @@ const categoryIcon: Record<MemoryCategory, LucideIcon> = {
 };
 
 /**
- * One memory: photo, category, title, when, the story (cut to three lines
- * behind "Read more" when long), then Pin and, for memories the user added,
- * Remove behind a confirmation.
+ * One memory as a row of the design's list: a small photo (or the category's
+ * icon), title, when, the story (cut to two lines behind "Read more" when
+ * long), then Pin and, for memories the user added, Remove behind a
+ * confirmation.
  */
 export default function MemoryCard({
   memory,
@@ -45,56 +46,62 @@ export default function MemoryCard({
   return (
     <article
       aria-labelledby={headingId}
-      className="h-full flex flex-col bg-white rounded-card shadow-card border border-neutral-200 overflow-hidden"
+      className="bg-white rounded-xl p-4 flex items-start gap-4"
     >
-      {memory.imageUrl && (
-        // A fixed 16:9 box: every card's photo is the same height and the page
+      {memory.imageUrl ? (
+        // A fixed square: every row's picture is the same size and the list
         // does not jump as photos arrive (no layout shift).
-        <div className="w-full aspect-[16/9] overflow-hidden bg-neutral-100">
-          <img
-            src={memory.imageUrl}
-            srcSet={memory.imageSrcSet}
-            sizes="(min-width: 1024px) 360px, (min-width: 768px) 50vw, 100vw"
-            alt={memory.imageAlt ?? ''}
-            width={480}
-            height={270}
-            loading="lazy"
-            decoding="async"
-            className="w-full h-full object-cover object-center"
-          />
-        </div>
+        <img
+          src={memory.imageUrl}
+          srcSet={memory.imageSrcSet}
+          sizes="4.5rem"
+          alt={memory.imageAlt ?? ''}
+          width={72}
+          height={72}
+          loading="lazy"
+          decoding="async"
+          className="w-14 h-14 md:w-[4.5rem] md:h-[4.5rem] rounded-xl object-cover flex-shrink-0 bg-neutral-100"
+        />
+      ) : (
+        <span
+          className="w-14 h-14 md:w-[4.5rem] md:h-[4.5rem] rounded-xl bg-calm-50 flex items-center justify-center flex-shrink-0"
+          aria-hidden="true"
+        >
+          <Icon className="w-6 h-6 text-calm-700" />
+        </span>
       )}
 
-      <div className="flex-1 flex flex-col p-5 gap-3">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="badge badge-calm text-xs">
-            <Icon className="w-3 h-3" aria-hidden="true" />
-            {categoryLabel[memory.category]}
-          </span>
-          {memory.pinned && (
-            <span className="badge badge-neutral text-xs">
-              <Pin className="w-3 h-3" aria-hidden="true" />
-              Pinned
-            </span>
-          )}
-        </div>
-
-        <div>
+      <div className="flex-1 min-w-0 space-y-1">
+        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
           {/* tabIndex -1: focus lands here after the memory is saved, so a
               screen reader announces what was just added. */}
-          <h3 id={headingId} tabIndex={-1} className="text-lg font-bold text-neutral-800 leading-tight">
+          <h3 id={headingId} tabIndex={-1} className="text-lg font-normal text-neutral-800 leading-tight m-0">
             {memory.title}
           </h3>
-          {memory.when && <p className="text-sm font-medium text-neutral-600 mt-1">{memory.when}</p>}
+          <span className="inline-flex items-center gap-1 text-sm text-neutral-600">
+            <Icon className="w-3.5 h-3.5" aria-hidden="true" />
+            {categoryLabel[memory.category]}
+            {memory.pinned && (
+              <>
+                <span aria-hidden="true"> · </span>
+                <Pin className="w-3.5 h-3.5" aria-hidden="true" />
+                Pinned
+              </>
+            )}
+          </span>
         </div>
+        {memory.when && <p className="text-sm text-calm-700 m-0">{memory.when}</p>}
 
-        <div>
-          <p
-            id={bodyId}
-            className={['text-neutral-700 text-base leading-relaxed', long && !expanded ? 'line-clamp-3' : ''].join(' ')}
-          >
-            {memory.body}
-          </p>
+        <p
+          id={bodyId}
+          className={['text-neutral-700 text-base leading-relaxed m-0', long && !expanded ? 'line-clamp-2' : ''].join(' ')}
+        >
+          {memory.body}
+        </p>
+
+        {/* Each button's name starts with its printed words (WCAG 2.5.3) and
+            adds the memory's title, so "Pin to top" is not heard six times. */}
+        <div className="flex flex-wrap items-center gap-x-1 gap-y-1 pt-1">
           {long && (
             <button
               type="button"
@@ -102,22 +109,17 @@ export default function MemoryCard({
               aria-expanded={expanded}
               aria-controls={bodyId}
               aria-label={`${expanded ? 'Show less' : 'Read more'} about ${memory.title}`}
-              className="mt-1 min-h-[2.75rem] text-base font-semibold text-calm-700 hover:text-calm-800 underline underline-offset-2"
+              className="min-h-[2.75rem] px-2 text-base text-calm-700 hover:text-calm-800 underline underline-offset-2"
             >
               {expanded ? 'Show less' : 'Read more'}
             </button>
           )}
-        </div>
-
-        {/* Each button's name starts with its printed words (WCAG 2.5.3) and
-            adds the memory's title, so "Pin to top" is not heard six times. */}
-        <div className="mt-auto flex flex-wrap gap-2 pt-3 border-t border-neutral-200">
           <button
             id={memoryPinId(memory.id)}
             type="button"
             onClick={onTogglePinned}
             aria-label={`${memory.pinned ? 'Unpin' : 'Pin to top'}: ${memory.title}`}
-            className="inline-flex items-center gap-2 min-h-[2.75rem] px-3 rounded-lg border-2 border-neutral-400 bg-white text-neutral-800 font-semibold hover:bg-neutral-50"
+            className="inline-flex items-center gap-1.5 min-h-[2.75rem] px-2 rounded-lg text-base text-neutral-700 hover:bg-neutral-100"
           >
             <PinIcon className="w-4 h-4" aria-hidden="true" />
             {memory.pinned ? 'Unpin' : 'Pin to top'}
@@ -129,7 +131,7 @@ export default function MemoryCard({
                 type="button"
                 onClick={() => setConfirming(true)}
                 aria-label={`Remove: ${memory.title}`}
-                className="inline-flex items-center gap-2 min-h-[2.75rem] px-3 rounded-lg border-2 border-alert-600 bg-white text-alert-700 font-semibold hover:bg-alert-50"
+                className="inline-flex items-center gap-1.5 min-h-[2.75rem] px-2 rounded-lg text-base text-alert-700 hover:bg-alert-50"
               >
                 <Trash2 className="w-4 h-4" aria-hidden="true" />
                 Remove

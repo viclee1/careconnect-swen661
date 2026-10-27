@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Pill, Calendar, Video, Heart } from 'lucide-react';
 
+import AppointmentBanner from '../components/AppointmentBanner';
+
 interface MyDayTask {
   id: string;
   title: string;
@@ -121,10 +123,12 @@ export default function Schedule() {
   });
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
+    <div className="space-y-6">
+      <AppointmentBanner />
+      <div className="space-y-6 max-w-4xl mx-auto">
       {/* Page Title & Subtitle */}
       <div className="space-y-2">
-        <h1 className="text-3xl font-extrabold text-neutral-900">My Day</h1>
+        <h1 className="text-2xl md:text-3xl font-normal text-neutral-800">My Day</h1>
         <p className="text-neutral-600 text-base font-medium">
           Everything to do — {todayDateStr}
         </p>
@@ -189,14 +193,14 @@ export default function Schedule() {
                       {task.category}
                     </span>
                   </div>
-                  <p className={`text-sm mt-0.5 m-0 ${isDone ? 'text-neutral-400' : 'text-neutral-600'}`}>
+                  <p className={`text-sm mt-0.5 m-0 ${isDone ? 'text-neutral-500' : 'text-neutral-600'}`}>
                     {task.description}
                   </p>
                 </div>
 
                 {/* Time & Check */}
                 <div className="flex items-center gap-4 flex-shrink-0">
-                  <span className={`text-sm font-bold tabular-nums ${isDone ? 'text-neutral-400' : 'text-calm-700'}`}>
+                  <span className={`text-sm font-bold tabular-nums ${isDone ? 'text-neutral-500' : 'text-calm-700'}`}>
                     {task.time}
                   </span>
                   <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-colors ${
@@ -212,6 +216,7 @@ export default function Schedule() {
           );
         })}
       </ul>
+      </div>
     </div>
   );
 }

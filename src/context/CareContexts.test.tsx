@@ -33,7 +33,7 @@ describe('Appointments, Medicines and Memories contexts', () => {
     expect(result.current.isTaken('nope')).toBe(false);
     act(() => result.current.setTaken('nope', true));
     expect(appendActivityEvent).not.toHaveBeenCalled();
-    expect(result.current.progress.taken).toBe(2);
+    expect(result.current.progress.taken).toBe(1);
   });
 
   it('keeps working when storage refuses writes', () => {

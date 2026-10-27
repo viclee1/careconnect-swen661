@@ -20,23 +20,23 @@ export default function AppointmentGroup({
   children: ReactNode;
 }) {
   return (
-    <section aria-labelledby={id} className="space-y-4">
-      <div className="flex items-center gap-3 flex-wrap">
+    <section aria-labelledby={id} className="space-y-2">
+      <div className="flex items-center gap-2 flex-wrap">
         <h2
           id={id}
           className={
             highlight
-              ? 'm-0 inline-flex items-center gap-1.5 bg-calm-700 text-white text-sm font-bold px-4 py-1.5 rounded-pill uppercase tracking-wide'
-              : 'm-0 text-sm font-bold text-neutral-600 uppercase tracking-widest'
+              ? 'm-0 inline-flex items-center gap-1.5 bg-calm-800 text-white text-sm font-semibold px-3 py-1 rounded-pill uppercase tracking-wide'
+              : 'm-0 text-sm font-semibold text-neutral-600 uppercase tracking-wider'
           }
         >
           {highlight && <CalendarDays className="w-4 h-4" aria-hidden="true" />}
           {label}
         </h2>
-        {sub && <span className="text-base font-medium text-neutral-700">{sub}</span>}
+        {sub && <span className="text-sm text-neutral-600">{sub}</span>}
         <span className="flex-1 h-px bg-neutral-200 min-w-[2rem]" aria-hidden="true" />
       </div>
-      <ul className="card-grid" role="list">
+      <ul className="list-none p-0 m-0 space-y-2" role="list">
         {children}
       </ul>
     </section>

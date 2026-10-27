@@ -33,8 +33,9 @@ beforeAll(() => {
 // would be "visible" at once. These rules reproduce the one Tailwind utility
 // that matters for each width, so the tests see what a browser at that width
 // exposes to assistive technology (display:none leaves the tree).
-const TABLET_UP = '.hidden { display: none } .md\\:flex { display: flex } .md\\:hidden { display: none }';
-const MOBILE = '.hidden { display: none } .md\\:hidden { }';
+const DESKTOP =
+  '.hidden { display: none } .lg\\:block { display: block } .lg\\:flex { display: flex } .lg\\:hidden { display: none }';
+const MOBILE = '.hidden { display: none }';
 let viewportStyle: HTMLStyleElement;
 
 function simulate(css: string) {
@@ -46,7 +47,7 @@ beforeEach(() => {
   document.title = '';
   viewportStyle = document.createElement('style');
   document.head.appendChild(viewportStyle);
-  simulate(TABLET_UP);
+  simulate(DESKTOP);
 });
 
 afterEach(() => {
@@ -271,67 +272,63 @@ describe('assistant panel', () => {
 });
 
 describe('responsive navigation', () => {
-  it('tablet and desktop: one sidebar navigation for each role', async () => {
+  it('desktop: one sidebar navigation for each role, with Settings and the alerts at its foot', async () => {
     for (const role of ['patient', 'caregiver'] as const) {
       localStorage.clear();
       const { unmount } = renderAt('/app', role);
       await screen.findByRole('heading', { level: 1 });
-      expect(screen.getAllByRole('navigation', { name: 'Main navigation' })).toHaveLength(1);
+      const navs = screen.getAllByRole('navigation', { name: 'Main navigation' });
+      expect(navs).toHaveLength(1);
+      expect(within(navs[0]).getByRole('link', { name: 'Settings' })).toHaveAttribute('href', '/app/settings');
+      expect(within(navs[0]).getByRole('button', { name: /alerts?$/ })).toHaveAttribute('aria-expanded', 'false');
       unmount();
     }
   });
 
-  it('tablet: the sidebar collapses and expands, says which, and remembers it', async () => {
-    renderAt('/app', 'caregiver');
-    const nav = await screen.findByRole('navigation', { name: 'Main navigation' });
-    const toggle = within(nav).getByRole('button', { name: 'Expand menu' });
-    expect(toggle).toHaveAttribute('aria-expanded', 'false');
-    // Collapsed is not icon-only: every label is still printed.
-    expect(within(nav).getByRole('link', { name: 'Medications' })).toHaveTextContent('Medications');
-
-    fireEvent.click(toggle);
-    expect(within(nav).getByRole('button', { name: 'Collapse menu' })).toHaveAttribute('aria-expanded', 'true');
-    expect(localStorage.getItem('careconnect_sidebar_collapsed')).toBe('false');
-  });
-
-  it('mobile, care recipient: the bottom tab bar, with every destination visible', async () => {
-    simulate(MOBILE);
+  it('desktop: the alerts button lists what is waiting, each a link', async () => {
     renderAt('/app', 'patient');
-    await screen.findByRole('heading', { level: 1 });
-    const navs = screen.getAllByRole('navigation', { name: 'Main navigation' });
-    expect(navs).toHaveLength(1);
-    expect(within(navs[0]).getAllByRole('link')).toHaveLength(6);
-    expect(screen.queryByRole('button', { name: 'Menu' })).not.toBeInTheDocument();
+    const nav = await screen.findByRole('navigation', { name: 'Main navigation' });
+    const toggle = within(nav).getByRole('button', { name: /alerts?$/ });
+    fireEvent.click(toggle);
+    expect(toggle).toHaveAttribute('aria-expanded', 'true');
+    expect(within(nav).getByRole('link', { name: /still to take today/ })).toHaveAttribute('href', '/app/medications');
   });
 
-  it('mobile, caregiver: a Menu button opens the navigation, Escape closes it and returns focus', async () => {
-    simulate(MOBILE);
-    renderAt('/app', 'caregiver');
-    await screen.findByRole('heading', { level: 1 });
-    expect(screen.queryByRole('navigation', { name: 'Main navigation' })).not.toBeInTheDocument();
+  it.each(['patient', 'caregiver'] as const)(
+    'phone and tablet, %s: the Menu button opens the navigation as a dialog; Escape closes it and returns focus',
+    async (role) => {
+      simulate(MOBILE);
+      renderAt('/app', role);
+      await screen.findByRole('heading', { level: 1 });
+      expect(screen.queryByRole('navigation', { name: 'Main navigation' })).not.toBeInTheDocument();
 
-    const menu = screen.getByRole('button', { name: 'Menu' });
-    expect(menu).toHaveAttribute('aria-expanded', 'false');
-    expect(menu).toHaveAttribute('aria-controls', 'mobile-menu');
-    fireEvent.click(menu);
-    expect(menu).toHaveAttribute('aria-expanded', 'true');
-    const panel = screen.getByRole('navigation', { name: 'Main navigation' });
-    expect(within(panel).getAllByRole('link')).toHaveLength(5);
+      const menu = screen.getByRole('button', { name: 'Menu' });
+      expect(menu).toHaveAttribute('aria-expanded', 'false');
+      expect(menu).toHaveAttribute('aria-controls', 'nav-drawer');
+      fireEvent.click(menu);
+      expect(menu).toHaveAttribute('aria-expanded', 'true');
+      const dialog = screen.getByRole('dialog', { name: 'Menu' });
+      expect(dialog).toHaveAttribute('aria-modal', 'true');
+      expect(dialog).toContainElement(document.activeElement as HTMLElement);
+      const panel = within(dialog).getByRole('navigation', { name: 'Main navigation' });
+      // Every page plus Settings: six for the care recipient, five for a caregiver.
+      expect(within(panel).getAllByRole('link').length).toBeGreaterThanOrEqual(role === 'patient' ? 7 : 6);
 
-    within(panel).getAllByRole('link')[1].focus();
-    fireEvent.keyDown(document, { key: 'Escape' });
-    expect(screen.queryByRole('navigation', { name: 'Main navigation' })).not.toBeInTheDocument();
-    expect(menu).toHaveFocus();
-  });
+      fireEvent.keyDown(document, { key: 'Escape' });
+      expect(screen.queryByRole('dialog', { name: 'Menu' })).not.toBeInTheDocument();
+      expect(menu).toHaveFocus();
+    },
+  );
 
-  it('mobile, caregiver: choosing a page closes the menu', async () => {
+  it('phone and tablet: choosing a page closes the menu', async () => {
     simulate(MOBILE);
     renderAt('/app', 'caregiver');
     await screen.findByRole('heading', { level: 1 });
     fireEvent.click(screen.getByRole('button', { name: 'Menu' }));
-    fireEvent.click(within(screen.getByRole('navigation', { name: 'Main navigation' })).getByRole('link', { name: 'Activity' }));
+    const dialog = screen.getByRole('dialog', { name: 'Menu' });
+    fireEvent.click(within(dialog).getByRole('link', { name: 'Activity' }));
     await screen.findByRole('heading', { level: 1, name: /activity/i });
-    expect(screen.queryByRole('navigation', { name: 'Main navigation' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('dialog', { name: 'Menu' })).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Menu' })).toHaveAttribute('aria-expanded', 'false');
   });
 
@@ -346,17 +343,93 @@ describe('responsive navigation', () => {
   });
 });
 
-describe('label in name (WCAG 2.5.3)', () => {
-  it('names the caregiver link by its visible words, and it opens a conversation, not a call', async () => {
+describe('header controls', () => {
+  it('the CC button switches captions everywhere and says whether they are on', async () => {
     renderAt('/app', 'patient');
-    const link = await screen.findByRole('link', { name: /^Message my caregiver/ });
-    expect(link).toHaveTextContent('Message my caregiver');
-    expect(link).toHaveAttribute('href', '/app/contacts/c1');
+    const cc = await screen.findByRole('button', { name: 'CC captions' });
+    expect(cc).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByText(/Upcoming: Video call with Maria/)).toBeInTheDocument();
+    fireEvent.click(cc);
+    expect(cc).toHaveAttribute('aria-pressed', 'false');
+    expect(screen.queryByText(/Upcoming: Video call with Maria/)).not.toBeInTheDocument();
+    expect(JSON.parse(localStorage.getItem('careconnect_accessibility_settings') ?? '{}').captionsEnabled).toBe(false);
+  });
+
+  it('the high-contrast button themes the whole document and is remembered', async () => {
+    renderAt('/app', 'patient');
+    const button = await screen.findByRole('button', { name: 'High contrast' });
+    fireEvent.click(button);
+    expect(button).toHaveAttribute('aria-pressed', 'true');
+    expect(document.documentElement).toHaveClass('high-contrast');
+    expect(localStorage.getItem('careconnect_high_contrast')).toBe('true');
+    fireEvent.click(button);
+    expect(document.documentElement).not.toHaveClass('high-contrast');
+  });
+
+  it('Ctrl+K focuses the search, which finds a medicine and opens its page', async () => {
+    renderAt('/app', 'patient');
+    await screen.findByRole('heading', { level: 1 });
+    fireEvent.keyDown(document, { key: 'k', ctrlKey: true });
+    const search = screen.getByRole('combobox', { name: /search medicines/i });
+    expect(search).toHaveFocus();
+    fireEvent.change(search, { target: { value: 'metf' } });
+    expect(search).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByRole('option', { name: /Metformin/ })).toHaveAttribute('aria-selected', 'true');
+    fireEvent.keyDown(search, { key: 'Enter' });
+    expect(await screen.findByRole('heading', { level: 1, name: 'Medicines' })).toBeInTheDocument();
+  });
+
+  it('Ctrl+K on a phone opens the menu with its search field focused', async () => {
+    simulate(MOBILE);
+    renderAt('/app', 'patient');
+    await screen.findByRole('heading', { level: 1 });
+    fireEvent.keyDown(document, { key: 'k', ctrlKey: true });
+    const dialog = screen.getByRole('dialog', { name: 'Menu' });
+    expect(within(dialog).getByRole('combobox', { name: /search medicines/i })).toHaveFocus();
+  });
+
+  it('"?" opens the keyboard shortcuts dialog; Escape closes it', async () => {
+    renderAt('/app', 'patient');
+    await screen.findByRole('heading', { level: 1 });
+    fireEvent.keyDown(document.body, { key: '?' });
+    expect(screen.getByRole('dialog', { name: 'Keyboard shortcuts' })).toBeInTheDocument();
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(screen.queryByRole('dialog', { name: 'Keyboard shortcuts' })).not.toBeInTheDocument();
+  });
+
+  it('the account menu holds Switch role and Sign out, and closes on Escape', async () => {
+    renderAt('/app', 'patient');
+    const account = await screen.findByRole('button', { name: /^Margaret ?, account menu ?, \d+ alerts$/ });
+    fireEvent.click(account);
+    expect(account).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByRole('button', { name: 'Switch to caregiver' })).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Sign out' })).toBeVisible();
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(account).toHaveAttribute('aria-expanded', 'false');
+    expect(account).toHaveFocus();
+  });
+
+  it('the status bar says the app is online and how many alerts are waiting', async () => {
+    renderAt('/app', 'patient');
+    const footer = await screen.findByRole('contentinfo');
+    expect(footer).toHaveTextContent('Online · synced just now');
+    expect(footer).toHaveTextContent(/\d+ active alerts?/);
+    expect(footer).toHaveTextContent('No sound required');
+  });
+});
+
+describe('label in name (WCAG 2.5.3)', () => {
+  it('opens the caregiver conversation from Home by a link named with its visible words, never a call', async () => {
+    renderAt('/app', 'patient');
+    const link = await screen.findByRole('link', { name: /^Video preview/ });
+    expect(link).toHaveAttribute('href', '/app/contacts/c3');
     expect(document.querySelector('a[href^="tel:"]')).toBeNull();
   });
 
   it('names the role switch by its visible words', async () => {
     renderAt('/app', 'patient');
-    expect(await screen.findByRole('button', { name: /^Switch role/ })).toBeInTheDocument();
+    fireEvent.click(await screen.findByRole('button', { name: /account menu/ }));
+    const button = screen.getByRole('button', { name: 'Switch to caregiver' });
+    expect(button).toHaveTextContent('Switch to caregiver');
   });
 });

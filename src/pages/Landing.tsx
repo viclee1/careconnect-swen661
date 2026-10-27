@@ -57,8 +57,8 @@ export default function Landing() {
                 Fully accessible — no sound required
               </div>
 
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight text-white">
-                Your daily companion for calm, confident care.
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-normal leading-tight text-white">
+                Your daily companion for <span className="text-calm-200">calm, confident</span> care.
               </h1>
 
               <p className="text-base sm:text-lg md:text-xl text-white opacity-90 max-w-lg leading-relaxed">

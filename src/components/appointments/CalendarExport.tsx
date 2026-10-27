@@ -42,7 +42,7 @@ export default function CalendarExport({ appointments }: { appointments: Appoint
 
   return (
     <div className="space-y-3">
-      <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-4">
+      <div className="flex flex-col gap-2">
         <button
           ref={buttonRef}
           type="button"

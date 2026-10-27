@@ -1,7 +1,10 @@
 import { useState } from 'react';
-import { Calendar, Pill, Video, Bell } from 'lucide-react';
+import { CalendarDays, Captions, Pause, Phone, Pill, Video } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { AppView } from '../types';
+import { useAuth } from '../auth/AuthContext';
+import AppointmentBanner from '../components/AppointmentBanner';
+import CaptionStrip from '../components/CaptionStrip';
 import MockVideoCall from '../components/MockVideoCall';
 
 interface HomeProps {
@@ -9,8 +12,8 @@ interface HomeProps {
 }
 
 export default function Home({ view: _view }: HomeProps) {
-  const [bannerDismissed, setBannerDismissed] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
+  const { user } = useAuth();
+  const firstName = user?.name?.split(' ')[0] || 'there';
   const [callSimulated, setCallSimulated] = useState(false);
 
   // Read tasks from localStorage to sync live progress with Schedule page
@@ -37,158 +40,132 @@ export default function Home({ view: _view }: HomeProps) {
   const percentage = Math.round((doneCount / totalCount) * 100);
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
+    <div className="space-y-6">
       {/* Simulate Incoming Call / Fake Video Call Modal */}
       {callSimulated && <MockVideoCall onClose={() => setCallSimulated(false)} />}
 
-      {/* Top Appointment Banner */}
-      {!bannerDismissed && (
-        <div className="rounded-xl border-2 border-[#0f5272] bg-[#edf6fa] p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-sm">
-          <div className="flex items-start gap-3">
-            <span className="w-10 h-10 rounded-lg bg-calm-600 text-white flex items-center justify-center flex-shrink-0">
-              <Calendar className="w-5 h-5" />
-            </span>
-            <div>
-              <strong className="block text-base font-bold text-neutral-900">Upcoming appointment</strong>
-              <p className="text-sm text-neutral-700 m-0">
-                Blood pressure check with Dr. Sharma today at 10:30 am — Greenfield Surgery
-              </p>
-              <span className="text-xs text-neutral-500 mt-1 block">Today at 10:30 am</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 self-end md:self-center">
-            <button
-              type="button"
-              onClick={() => setIsPaused(!isPaused)}
-              className="px-3 py-2 bg-white border border-neutral-300 rounded-lg text-sm font-semibold text-neutral-800 hover:bg-neutral-50 cursor-pointer"
-            >
-              {isPaused ? '▶ Resume' : '|| Pause'}
-            </button>
-            <button
-              type="button"
-              onClick={() => setBannerDismissed(true)}
-              className="px-4 py-2 bg-calm-700 text-white rounded-lg text-sm font-bold hover:bg-calm-800 cursor-pointer"
-            >
-              OK
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Closed Captions Banner */}
-      <div className="bg-[#1e293b] text-white rounded-xl px-4 py-3 flex items-center gap-3 text-sm font-medium shadow-sm">
-        <span className="bg-[#334155] px-2 py-0.5 rounded text-xs font-bold">
-          [CC]
-        </span>
-        <span>Upcoming: Video call with Maria at 3:00 PM — your daughter will call you.</span>
+      {/* Visual alert and its caption, full width as in the design */}
+      <div className="space-y-1">
+        <AppointmentBanner />
+        <CaptionStrip>Upcoming: Video call with Maria at 3:00 PM — your daughter will call you.</CaptionStrip>
       </div>
 
-      {/* Greeting & Progress Header linked to Scheduling Page */}
-      <Link
-        to="/app/schedule"
-        className="block no-underline group space-y-3 bg-white border-2 border-neutral-200 hover:border-calm-500 rounded-2xl p-6 shadow-sm transition-all cursor-pointer"
-        aria-label={`View My Day schedule: ${doneCount} of ${totalCount} things done`}
-      >
-        <h1 className="text-3xl font-extrabold text-neutral-900 group-hover:text-calm-700 transition-colors">
-          Here's your day, Margaret
-        </h1>
-        <div className="flex items-center justify-between text-base font-semibold text-neutral-700">
-          <span>{doneCount} of {totalCount} things done today</span>
-          <span className="text-calm-700 font-bold group-hover:underline flex items-center gap-1">
-            View My Day →
-          </span>
-        </div>
-
-        <div className="w-full bg-neutral-200 h-3 rounded-full overflow-hidden border border-neutral-300">
+      <div className="max-w-4xl mx-auto space-y-6">
+        {/* Greeting & progress, linked to My Day */}
+        <section aria-labelledby="home-title" className="space-y-2">
+          <h1 id="home-title" className="text-2xl md:text-3xl font-normal text-neutral-800 m-0">
+            Here's your day, {firstName}
+          </h1>
+          <p className="text-base text-neutral-600 m-0 flex flex-wrap items-baseline justify-between gap-2">
+            <span>
+              {doneCount} of {totalCount} things done today
+            </span>
+            <Link to="/app/schedule" className="text-calm-700 font-medium">
+              View My Day →
+            </Link>
+          </p>
           <div
-            className="bg-calm-700 h-full rounded-full transition-all duration-300"
-            style={{ width: `${percentage}%` }}
-          />
-        </div>
-      </Link>
-
-      {/* NEXT THING TO DO Featured Card */}
-      <section className="bg-white border-2 border-neutral-900 rounded-2xl p-6 shadow-md space-y-6">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-extrabold tracking-wider text-neutral-500 uppercase">
-            NEXT THING TO DO
-          </span>
-          <span className="px-3 py-1 bg-sky-100 text-sky-800 border border-sky-300 rounded-full text-xs font-semibold">
-            Coming up
-          </span>
-        </div>
-
-        <div className="flex items-start gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-calm-100 text-calm-800 flex items-center justify-center flex-shrink-0">
-            <Video className="w-7 h-7" />
-          </div>
-          <div>
-            <span className="text-sm font-semibold text-neutral-500">Appointment 3:00 pm</span>
-            <h2 className="text-2xl font-extrabold text-neutral-900 mt-0.5 mb-1">
-              Video call with Maria
-            </h2>
-            <p className="text-neutral-600 text-base m-0">Your daughter — she will call you</p>
-          </div>
-        </div>
-
-        <div className="space-y-3">
-          <Link
-            to="/app/contacts/c1"
-            className="w-full flex items-center justify-between px-6 py-4 bg-calm-700 hover:bg-calm-800 text-white rounded-xl font-bold text-lg transition-colors no-underline shadow-sm"
+            className="w-full bg-neutral-200 h-2.5 rounded-full overflow-hidden"
+            role="progressbar"
+            aria-label="Things done today"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={percentage}
+            aria-valuetext={`${doneCount} of ${totalCount} done`}
           >
-            <div className="flex items-center gap-3">
-              <Video className="w-5 h-5" />
-              <span>Video preview — 3:00 pm</span>
+            <div className="bg-calm-700 h-full rounded-full transition-all duration-300" style={{ width: `${percentage}%` }} />
+          </div>
+        </section>
+
+        {/* NEXT THING TO DO */}
+        <section
+          aria-labelledby="next-title"
+          className="bg-white border-2 border-calm-700 rounded-2xl p-4 md:p-5 space-y-4"
+        >
+          <div className="flex items-center justify-between gap-3">
+            <span className="text-sm tracking-wider text-neutral-600 uppercase">Next thing to do</span>
+            <span className="px-3 py-1 bg-calm-50 text-calm-700 rounded-pill text-sm">Coming up</span>
+          </div>
+
+          <div className="flex items-start gap-4">
+            <span className="w-14 h-14 rounded-xl bg-calm-50 text-calm-800 flex items-center justify-center flex-shrink-0" aria-hidden="true">
+              <Phone className="w-6 h-6" />
+            </span>
+            <div>
+              <p className="text-sm text-neutral-600 m-0">
+                Appointment <span className="text-calm-700">3:00 pm</span>
+              </p>
+              <h2 id="next-title" className="text-xl md:text-2xl font-normal text-neutral-800 m-0">
+                Video call with Maria
+              </h2>
+              <p className="text-neutral-600 text-base m-0">Your daughter — she will call you</p>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="bg-white/20 px-2 py-0.5 rounded text-xs font-semibold">|| Controls</span>
-              <span className="bg-white/20 px-2 py-0.5 rounded text-xs font-semibold">CC</span>
-            </div>
+          </div>
+
+          <Link
+            to="/app/contacts/c3"
+            className="w-full min-h-[5.5rem] flex flex-col items-center justify-center gap-2 px-4 py-4 bg-calm-800 hover:bg-calm-900 text-white rounded-xl no-underline relative"
+          >
+            <span className="flex items-center gap-2 text-base">
+              <Video className="w-5 h-5" aria-hidden="true" />
+              Video preview — 3:00 pm
+            </span>
+            <span className="md:absolute md:right-3 md:bottom-3 flex items-center gap-1.5 text-sm" aria-hidden="true">
+              <span className="bg-neutral-900 px-2 py-0.5 rounded flex items-center gap-1">
+                <Pause className="w-3.5 h-3.5" /> Controls
+              </span>
+              <span className="bg-neutral-900 px-2 py-0.5 rounded flex items-center gap-1">
+                <Captions className="w-3.5 h-3.5" /> CC
+              </span>
+            </span>
           </Link>
 
           <button
             type="button"
             onClick={() => setCallSimulated(true)}
-            className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-white border-2 border-neutral-900 hover:bg-neutral-50 text-neutral-900 rounded-xl font-bold text-lg transition-colors cursor-pointer"
+            className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-calm-800 hover:bg-calm-900 text-white rounded-xl text-lg transition-colors"
           >
-            <Bell className="w-5 h-5 text-calm-700" />
-            <span>Simulate incoming call</span>
+            <Video className="w-5 h-5" aria-hidden="true" />
+            Simulate incoming call
           </button>
-        </div>
-      </section>
+        </section>
 
-      {/* Later Today Section */}
-      <section className="space-y-4">
-        <h2 className="text-xl font-bold text-neutral-900">Later today</h2>
+        {/* Later today */}
+        <section aria-labelledby="later-title" className="space-y-3">
+          <h2 id="later-title" className="text-xl font-normal text-neutral-800 m-0">
+            Later today
+          </h2>
 
-        <div className="bg-white border border-neutral-200 rounded-xl p-5 flex items-center gap-4 shadow-sm">
-          <div className="w-12 h-12 rounded-full bg-yellow-100 text-yellow-800 flex items-center justify-center flex-shrink-0">
-            <Pill className="w-6 h-6" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <strong className="block text-lg font-bold text-neutral-900">Atorvastatin</strong>
-            <p className="text-sm text-neutral-600 m-0">20 mg — 1 tablet</p>
-          </div>
-          <span className="px-3 py-1 bg-yellow-100 text-yellow-800 border border-yellow-300 rounded-lg text-xs font-semibold">
-            Medication
-          </span>
-          <time className="text-base font-bold text-neutral-700 tabular-nums">8:00 pm</time>
-        </div>
-
-        <div className="bg-white border border-neutral-200 rounded-xl p-5 flex items-center gap-4 shadow-sm">
-          <div className="w-12 h-12 rounded-full bg-sky-100 text-sky-800 flex items-center justify-center flex-shrink-0">
-            <Calendar className="w-6 h-6" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <strong className="block text-lg font-bold text-neutral-900">Blood pressure check</strong>
-            <p className="text-sm text-neutral-600 m-0">Greenfield Surgery — Dr. Sharma</p>
-          </div>
-          <span className="px-3 py-1 bg-sky-100 text-sky-800 border border-sky-300 rounded-lg text-xs font-semibold">
-            Today
-          </span>
-          <time className="text-base font-bold text-neutral-700 tabular-nums">10:30 am</time>
-        </div>
-      </section>
+          <ul role="list" className="list-none p-0 m-0 space-y-3">
+            <li className="bg-white rounded-xl p-4 flex items-center gap-4">
+              <span className="w-12 h-12 rounded-xl bg-warning-50 text-warning-700 flex items-center justify-center flex-shrink-0" aria-hidden="true">
+                <Pill className="w-6 h-6" />
+              </span>
+              <div className="flex-1 min-w-0">
+                <p className="text-base text-neutral-800 m-0">Atorvastatin</p>
+                <p className="text-sm text-neutral-600 m-0">20 mg — 1 tablet</p>
+              </div>
+              <div className="text-right flex-shrink-0">
+                <span className="inline-block px-2.5 py-0.5 bg-warning-50 text-warning-700 rounded-pill text-sm">Medication</span>
+                <p className="text-sm text-calm-700 m-0 mt-1 tabular-nums">8:00 pm</p>
+              </div>
+            </li>
+            <li className="bg-white rounded-xl p-4 flex items-center gap-4">
+              <span className="w-12 h-12 rounded-xl bg-calm-50 text-calm-700 flex items-center justify-center flex-shrink-0" aria-hidden="true">
+                <CalendarDays className="w-6 h-6" />
+              </span>
+              <div className="flex-1 min-w-0">
+                <p className="text-base text-neutral-800 m-0">Blood pressure check</p>
+                <p className="text-sm text-neutral-600 m-0">Greenfield Surgery — Dr. Sharma</p>
+              </div>
+              <div className="text-right flex-shrink-0">
+                <span className="inline-block px-2.5 py-0.5 bg-calm-50 text-calm-700 rounded-pill text-sm">Today</span>
+                <p className="text-sm text-calm-700 m-0 mt-1 tabular-nums">10:30 am</p>
+              </div>
+            </li>
+          </ul>
+        </section>
+      </div>
     </div>
   );
 }

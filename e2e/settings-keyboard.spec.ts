@@ -90,9 +90,10 @@ test.describe('Responsive navigation', () => {
   test('Settings is reachable at every width', async ({ page, isMobile }) => {
     await signInAsPatient(page, '/app');
     if (isMobile) {
-      // The bottom bar holds six tabs; Settings lives in the header instead.
-      await expect(page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Settings' })).toHaveCount(0);
-      await page.getByRole('banner').getByRole('link', { name: 'Settings' }).click();
+      // Phones: the Menu button opens the navigation drawer, Settings at its foot.
+      await expect(page.getByRole('navigation', { name: 'Main navigation' })).toHaveCount(0);
+      await page.getByRole('button', { name: 'Menu', exact: true }).click();
+      await page.getByRole('dialog', { name: 'Menu' }).getByRole('link', { name: 'Settings' }).click();
     } else {
       await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Settings' }).click();
     }

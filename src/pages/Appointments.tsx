@@ -1,22 +1,25 @@
 import { useMemo, useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 
+import AppointmentBanner from '../components/AppointmentBanner';
 import PageHeader from '../components/PageHeader';
-import AppointmentCard from '../components/appointments/AppointmentCard';
+import AppointmentDetail from '../components/appointments/AppointmentDetail';
 import AppointmentGroup from '../components/appointments/AppointmentGroup';
+import AppointmentRow from '../components/appointments/AppointmentRow';
 import CalendarExport from '../components/appointments/CalendarExport';
 import { useAppointments } from '../context/appointments';
 import { groupAppointments, upcomingCount, type Appointment } from '../models/appointment';
 import { formatLongDate, localISODate } from '../utils/dates';
 
 /**
- * The Appointments screen: upcoming visits grouped into Today, Later this week
- * and Coming up, each with where it is, who is taking the user, directions and
- * a My Day checkbox. Export to calendar saves them all as an .ics file with
- * silent, on-screen reminders.
+ * The Appointments screen, laid out as the web design: upcoming visits in a
+ * list on the left, grouped into Today, Later this week and Coming up, and
+ * the chosen visit in detail on the right — where it is, who is taking the
+ * user, directions and the My Day checkbox. On a phone the detail follows the
+ * list. Export to calendar saves every visit as an .ics file with silent,
+ * on-screen reminders.
  *
- * One column on a phone, two from 768px. Everything is read from this device,
- * so the screen works with no connection.
+ * Everything is read from this device, so the screen works with no connection.
  */
 export default function Appointments() {
   const { appointments, isInMyDay, setInMyDay } = useAppointments();
@@ -24,52 +27,29 @@ export default function Appointments() {
   const groups = useMemo(() => groupAppointments(appointments, today), [appointments, today]);
   const count = upcomingCount(groups);
   const upcoming = [...groups.today, ...groups.thisWeek, ...groups.comingUp];
+  const [selectedId, setSelectedId] = useState(() => upcoming[0]?.id);
+  const selected = upcoming.find((a) => a.id === selectedId) ?? upcoming[0];
 
-  const renderCards = (list: Appointment[], isToday: boolean) =>
+  const renderRows = (list: Appointment[], isToday: boolean) =>
     list.map((appointment) => (
       <li key={appointment.id}>
-        <AppointmentCard
+        <AppointmentRow
           appointment={appointment}
           isToday={isToday}
-          inMyDay={isInMyDay(appointment.id)}
-          onMyDayChange={(inMyDay) => setInMyDay(appointment.id, inMyDay)}
+          selected={appointment.id === selected?.id}
+          onSelect={() => setSelectedId(appointment.id)}
         />
       </li>
     ));
 
   return (
-    <div className="space-y-8 page-container">
-      <PageHeader
-        title="My Appointments"
-        subtitle={
-          count === 0
-            ? 'Upcoming visits, tests and calls'
-            : `${count} upcoming visit${count === 1 ? '' : 's'}, tests and calls included`
-        }
-      />
+    <div className="space-y-5">
+      <PageHeader title="My Appointments" subtitle="Upcoming visits, tests, and calls" />
 
-      {count > 0 && <CalendarExport appointments={upcoming} />}
+      <AppointmentBanner />
 
-      {groups.today.length > 0 && (
-        <AppointmentGroup id="group-today" label="Today" sub={formatLongDate(today)} highlight>
-          {renderCards(groups.today, true)}
-        </AppointmentGroup>
-      )}
-
-      {groups.thisWeek.length > 0 && (
-        <AppointmentGroup id="group-week" label="Later this week">
-          {renderCards(groups.thisWeek, false)}
-        </AppointmentGroup>
-      )}
-
-      {groups.comingUp.length > 0 && (
-        <AppointmentGroup id="group-coming" label="Coming up">
-          {renderCards(groups.comingUp, false)}
-        </AppointmentGroup>
-      )}
-
-      {count === 0 ? (
-        <div className="bg-white rounded-xl border-2 border-neutral-300 shadow-card p-10 text-center space-y-3">
+      {count === 0 || !selected ? (
+        <div className="bg-white rounded-xl border-2 border-neutral-300 p-10 text-center space-y-3">
           <span
             className="inline-flex w-16 h-16 rounded-full bg-success-100 items-center justify-center mx-auto"
             aria-hidden="true"
@@ -82,11 +62,43 @@ export default function Appointments() {
           </p>
         </div>
       ) : (
-        <p className="text-sm text-neutral-600 text-center pb-2">
-          Your caregiver can add or change appointments for you. CareConnect never gives medical
-          advice.
-        </p>
+        <div className="grid gap-5 md:grid-cols-[minmax(15rem,18rem)_1fr] lg:gap-6">
+          <div className="space-y-5">
+            <p className="sr-only">
+              {count} upcoming visit{count === 1 ? '' : 's'}. Choose one to see the details.
+            </p>
+            {groups.today.length > 0 && (
+              <AppointmentGroup id="group-today" label="Today" sub={formatLongDate(today)} highlight>
+                {renderRows(groups.today, true)}
+              </AppointmentGroup>
+            )}
+            {groups.thisWeek.length > 0 && (
+              <AppointmentGroup id="group-week" label="Later this week">
+                {renderRows(groups.thisWeek, false)}
+              </AppointmentGroup>
+            )}
+            {groups.comingUp.length > 0 && (
+              <AppointmentGroup id="group-coming" label="Coming up">
+                {renderRows(groups.comingUp, false)}
+              </AppointmentGroup>
+            )}
+            <CalendarExport appointments={upcoming} />
+          </div>
+
+          <div className="md:border-l md:border-neutral-200 md:pl-6">
+            <AppointmentDetail
+              appointment={selected}
+              isToday={selected.date === today}
+              inMyDay={isInMyDay(selected.id)}
+              onMyDayChange={(inMyDay) => setInMyDay(selected.id, inMyDay)}
+            />
+          </div>
+        </div>
       )}
+
+      <p className="text-sm text-neutral-600 text-center pb-2">
+        Your caregiver can add or change appointments for you. CareConnect never gives medical advice.
+      </p>
     </div>
   );
 }

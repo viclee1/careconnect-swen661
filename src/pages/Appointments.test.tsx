@@ -36,24 +36,35 @@ beforeEach(() => {
 afterEach(() => jest.restoreAllMocks());
 
 describe('Appointments page', () => {
-  it('groups the visits under Today, Later this week and Coming up headings', () => {
+  it('lists the visits under Today, Later this week and Coming up, and shows the first in detail', () => {
     renderPage();
     expect(screen.getByRole('heading', { level: 1, name: 'My Appointments' })).toBeInTheDocument();
-    expect(screen.getByText('8 upcoming visits, tests and calls included')).toBeInTheDocument();
+    expect(screen.getByText('8 upcoming visits. Choose one to see the details.')).toBeInTheDocument();
 
     const today = screen.getByRole('region', { name: /today/i });
-    expect(within(today).getAllByRole('article')).toHaveLength(2);
-    expect(within(today).getByRole('heading', { level: 3, name: 'Blood pressure check — Dr. Sharma' })).toBeInTheDocument();
-    expect(within(today).getAllByText('Today', { selector: '.badge' })).toHaveLength(2);
+    expect(within(today).getAllByRole('button')).toHaveLength(2);
+    expect(within(screen.getByRole('region', { name: 'Later this week' })).getAllByRole('button')).toHaveLength(3);
+    expect(within(screen.getByRole('region', { name: 'Coming up' })).getAllByRole('button')).toHaveLength(3);
 
-    expect(within(screen.getByRole('region', { name: 'Later this week' })).getAllByRole('article')).toHaveLength(3);
-    expect(within(screen.getByRole('region', { name: 'Coming up' })).getAllByRole('article')).toHaveLength(3);
+    expect(within(today).getByRole('button', { name: /^Blood pressure check — Dr. Sharma/ })).toHaveAttribute(
+      'aria-current',
+      'true',
+    );
+    expect(screen.getByRole('article', { name: 'Blood pressure check — Dr. Sharma' })).toHaveTextContent('Clinic visit');
+  });
+
+  it('choosing a visit in the list shows it in the detail panel', async () => {
+    const user = userEvent.setup();
+    renderPage();
+    await user.click(screen.getByRole('button', { name: /^Memory clinic follow-up/ }));
+    expect(screen.getByRole('button', { name: /^Memory clinic follow-up/ })).toHaveAttribute('aria-current', 'true');
+    expect(screen.getByRole('article', { name: 'Memory clinic follow-up — Dr. Patel' })).toBeInTheDocument();
   });
 
   it('writes the date and time in full words in a machine-readable <time>', () => {
     store([visit({ date: '2030-06-06', time: '14:30' })]);
     renderPage();
-    const time = screen.getByText('Thursday, 6 June — 2:30 pm');
+    const time = within(screen.getByRole('article')).getByText('Thursday, 6 June — 2:30 pm');
     expect(time.tagName).toBe('TIME');
     expect(time).toHaveAttribute('datetime', '2030-06-06T14:30');
   });
@@ -78,8 +89,10 @@ describe('Appointments page', () => {
     expect(link.getAttribute('href')).toContain('google.com/maps/search');
   });
 
-  it('shows “No travel needed” instead of directions for a telephone visit', () => {
+  it('shows “No travel needed” instead of directions for a telephone visit', async () => {
+    const user = userEvent.setup();
     renderPage();
+    await user.click(screen.getByRole('button', { name: /^GP telephone review/ }));
     const card = screen.getByRole('article', { name: 'GP telephone review — Dr. Sharma' });
     expect(within(card).queryByRole('link')).not.toBeInTheDocument();
     expect(within(card).getByText('No travel needed')).toBeInTheDocument();
@@ -89,6 +102,7 @@ describe('Appointments page', () => {
   it('adds a visit to My Day with a checkbox, keeps focus on it and saves the choice', async () => {
     const user = userEvent.setup();
     renderPage();
+    await user.click(screen.getByRole('button', { name: /^Blood test — fasting needed/ }));
     const box = screen.getByRole('checkbox', { name: /blood test — fasting needed/i });
     expect(box).not.toBeChecked();
 
@@ -103,11 +117,14 @@ describe('Appointments page', () => {
     expect(JSON.parse(localStorage.getItem(MY_DAY_KEY) ?? '{}')).toEqual({ a3: false });
   });
 
-  it('starts with the caregiver’s My Day choices ticked, and remembers the user’s', () => {
+  it('starts with the caregiver’s My Day choices ticked, and remembers the user’s', async () => {
+    const user = userEvent.setup();
     localStorage.setItem(MY_DAY_KEY, JSON.stringify({ a1: false, a4: true }));
     renderPage();
     expect(screen.getByRole('checkbox', { name: /blood pressure check/i })).not.toBeChecked();
+    await user.click(screen.getByRole('button', { name: /^Heart checkup/ }));
     expect(screen.getByRole('checkbox', { name: /heart checkup/i })).toBeChecked();
+    await user.click(screen.getByRole('button', { name: /^Memory clinic/ }));
     expect(screen.getByRole('checkbox', { name: /memory clinic/i })).toBeChecked();
   });
 

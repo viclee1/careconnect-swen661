@@ -22,6 +22,8 @@ export interface Medication {
   dosage: string;
   times: string[];     // ["08:00", "20:00"]
   instructions?: string;
+  /** What the medicine is for, in plain words. */
+  purpose?: string;
   colour: string;      // Tailwind bg class for pill visualisation
   taken: Record<string, boolean>; // date "YYYY-MM-DD" → taken?
 }

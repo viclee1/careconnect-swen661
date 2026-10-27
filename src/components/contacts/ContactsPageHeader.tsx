@@ -18,7 +18,7 @@ export default function ContactsPageHeader({
   return (
     <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
       <div>
-        <h1 className="text-2xl font-bold text-neutral-800">{title}</h1>
+        <h1 className="text-2xl md:text-3xl font-normal text-neutral-800">{title}</h1>
         <p className="text-neutral-600 mt-1">{subtitle}</p>
       </div>
       {action && <div className="[&>*]:w-full md:[&>*]:w-auto">{action}</div>}

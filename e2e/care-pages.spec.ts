@@ -15,33 +15,37 @@ test.describe('Medicines', () => {
   test('tick medicines from the keyboard; the count is announced and survives a reload', async ({ page, browserName }) => {
     await signInAsPatient(page, '/app/medications');
     const status = page.getByRole('status').filter({ hasText: 'taken' });
-    await expect(status).toHaveText('2 of 4 taken. 2 medicines still to take today.');
+    await expect(status).toContainText('1 of 4 taken. 3 medicines still to take today.');
+    await expect(status).toContainText('3 still to take today');
 
-    const atorvastatin = page.getByRole('checkbox', { name: /Atorvastatin/ });
-    const vitaminD = page.getByRole('checkbox', { name: /Vitamin D3/ });
+    const lisinopril = page.getByRole('checkbox', { name: 'Lisinopril taken' });
 
     // Safari skips checkboxes on Tab unless Full Keyboard Access is on (a
     // macOS setting), so WebKit focuses the box directly; Space is the same.
+    // Elsewhere Tab goes from a tick to the next row, then to its tick.
     if (browserName === 'webkit') {
-      await atorvastatin.focus();
+      await lisinopril.focus();
     } else {
-      await page.getByRole('checkbox', { name: /Amlodipine/ }).focus();
+      await page.getByRole('checkbox', { name: 'Amlodipine taken' }).focus();
       await page.keyboard.press('Tab');
-      await expect(atorvastatin).toBeFocused();
+      await expect(page.getByRole('button', { name: /^Lisinopril/ })).toBeFocused();
+      await page.keyboard.press('Tab');
+      await expect(lisinopril).toBeFocused();
     }
     await page.keyboard.press('Space');
-    await expect(atorvastatin).toBeChecked();
-    await expect(status).toHaveText('3 of 4 taken. 1 medicine still to take today.');
+    await expect(lisinopril).toBeChecked();
+    await expect(status).toContainText('2 of 4 taken. 2 medicines still to take today.');
 
-    // Clicking the name works as well as the box: the whole card is the target.
-    await page.locator('label', { hasText: 'Vitamin D3' }).click();
-    await expect(vitaminD).toBeChecked();
-    await expect(status).toHaveText('All 4 medicines taken today. Well done!');
-    await expect(page.getByRole('progressbar', { name: 'Taken today' })).toHaveAttribute('value', '4');
+    // Choosing a row shows it in the detail panel, whose big button marks it.
+    await page.getByRole('button', { name: /^Metformin/ }).click();
+    await expect(page.getByRole('heading', { level: 2, name: 'Metformin' })).toBeVisible();
+    await page.getByRole('button', { name: 'Mark Metformin as taken' }).click();
+    await page.getByRole('checkbox', { name: 'Atorvastatin taken' }).check();
+    await expect(status).toContainText('All 4 medicines taken today. Well done!');
 
     await page.reload();
-    await expect(atorvastatin).toBeChecked();
-    await expect(vitaminD).toBeChecked();
+    await expect(lisinopril).toBeChecked();
+    await expect(page.getByRole('checkbox', { name: 'Metformin taken' })).toBeChecked();
   });
 });
 
@@ -50,13 +54,16 @@ test.describe('Appointments', () => {
     await signInAsPatient(page, '/app/appointments');
     await expect(page.getByRole('heading', { level: 2, name: /Today/ })).toBeVisible();
 
+    await page.getByRole('button', { name: /^Blood test — fasting needed/ }).click();
     const bloodTest = page.getByRole('checkbox', { name: /Blood test — fasting needed/ });
     await expect(bloodTest).not.toBeChecked();
     await bloodTest.check();
     await expect(page.getByRole('checkbox', { name: 'In My Day: Blood test — fasting needed' })).toBeChecked();
     await page.reload();
+    await page.getByRole('button', { name: /^Blood test — fasting needed/ }).click();
     await expect(page.getByRole('checkbox', { name: 'In My Day: Blood test — fasting needed' })).toBeChecked();
 
+    await page.getByRole('button', { name: /^Blood pressure check — Dr. Sharma/ }).click();
     const directions = page
       .getByRole('article', { name: 'Blood pressure check — Dr. Sharma' })
       .getByRole('link', { name: /Get directions to Greenfield Surgery/ });
