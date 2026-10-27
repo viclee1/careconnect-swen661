@@ -112,7 +112,7 @@ accessibility audit below. They have no page-specific Jest suites yet.
 | Check | Result | Evidence |
 |:--|:--|:--|
 | Jest (unit, component, accessibility) | **375 tests in 29 suites, all passing** | [summary with coverage](victor/screenshots/testing/02-jest-all-summary.png) · [Victor's 19 suites](victor/screenshots/testing/01-jest-victor-suites.png) · [Upneet's 9 suites](upneet/screenshots/testing/01-jest-upneet-suites.png) |
-| Coverage (`npm run test:coverage`, 75% threshold) | **95.82% statements, 91.14% branches, 94.1% functions, 96.44% lines** | [`coverage/lcov-report/index.html`](../../../coverage/lcov-report/index.html) · [screenshot](victor/screenshots/testing/04-coverage-report.png) |
+| Coverage (`npm run test:coverage`, 75% threshold) | **95.82% statements, 91.25% branches, 94.1% functions, 96.44% lines** | [`coverage/lcov-report/index.html`](../../../coverage/lcov-report/index.html) · [screenshot](victor/screenshots/testing/04-coverage-report.png) |
 | Playwright (Chromium, WebKit, mobile Safari) | **58 passed, 7 skipped by design, 1 failed** (see known issues) | [run](victor/screenshots/testing/03-playwright-run.png) · [HTML report](victor/screenshots/testing/05-playwright-html-report.png) |
 | Accessibility audit (`npm run a11y:web`) | **64 scans, 0 violations; 53/53 keyboard and structure checks** over 17 routes and the shell's interactive states at 375, 820 and 1280 px | [`../accessibility/audit/report.html`](../accessibility/audit/report.html) |
 | Lint, typecheck, build | 0 errors; clean; builds | — |

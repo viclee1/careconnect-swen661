@@ -435,7 +435,7 @@ any of them drops below that.
 
 | Measured scope | Statements | Branches | Functions | Lines |
 |:--|--:|--:|--:|--:|
-| **All measured files** (the whole team's, now including the app shell) | **95.82%** | **91.14%** | **94.1%** | **96.44%** |
+| **All measured files** (the whole team's, now including the app shell) | **95.82%** | **91.25%** | **94.1%** | **96.44%** |
 | Appointments.tsx | 100% | 100% | 100% | 100% |
 | Medications.tsx | 100% | 100% | 100% | 100% |
 | Memories.tsx | 100% | 96.4% | 100% | 100% |

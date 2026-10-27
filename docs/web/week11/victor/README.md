@@ -493,8 +493,15 @@ request. It uploads the coverage and Playwright reports as artifacts.
 
 | What | Where |
 |:--|:--|
-| Test files | `src/**/*.test.ts(x)`, `src/models/__tests__`, `src/utils/__tests__`, `e2e/` |
-| Shared render helper | `src/test-utils/renderWithProviders.tsx` |
+| Unit tests (Jest), mine | [`src/models/__tests__/`](../../../../src/models/__tests__): `contact`, `message`, `accessibilitySettings`, `vibrationPattern`, `flashCue`; [`src/utils/__tests__/`](../../../../src/utils/__tests__): `search`, `validators`, `formatters`, `captions`, `notifications` |
+| Component tests (React Testing Library), mine | [`src/pages/Contacts.test.tsx`](../../../../src/pages/Contacts.test.tsx), [`MessageThread.test.tsx`](../../../../src/pages/MessageThread.test.tsx), [`AccessibilitySettings.test.tsx`](../../../../src/pages/AccessibilitySettings.test.tsx), [`PlaceholderPage.test.tsx`](../../../../src/pages/PlaceholderPage.test.tsx), [`src/context/MessagesContext.test.tsx`](../../../../src/context/MessagesContext.test.tsx), [`SettingsContext.test.tsx`](../../../../src/context/SettingsContext.test.tsx), [`src/hooks/*.test.ts`](../../../../src/hooks) |
+| Team suites | [`src/accessibility.test.tsx`](../../../../src/accessibility.test.tsx) (axe, landmarks, app shell); Upneet's `appointment`, `medicine`, `memory`, `calendar`, `dates`, `Appointments`, `Medications`, `Memories` and `CareContexts` tests |
+| End-to-end tests (Playwright) | [`e2e/contacts-messaging.spec.ts`](../../../../e2e/contacts-messaging.spec.ts) and [`e2e/settings-keyboard.spec.ts`](../../../../e2e/settings-keyboard.spec.ts) (mine), [`e2e/care-pages.spec.ts`](../../../../e2e/care-pages.spec.ts) (Upneet's), [`e2e/branch-placeholders.spec.ts`](../../../../e2e/branch-placeholders.spec.ts), shared sign-in in [`e2e/helpers.ts`](../../../../e2e/helpers.ts) |
+| Configuration | [`jest.config.cjs`](../../../../jest.config.cjs) (jsdom, ts-jest, coverage allow-list, 75% threshold), [`src/setupTests.ts`](../../../../src/setupTests.ts) (jest-dom, jest-axe), [`playwright.config.ts`](../../../../playwright.config.ts) (four browser projects, production build) |
+| Shared render helper | [`src/test-utils/renderWithProviders.tsx`](../../../../src/test-utils/renderWithProviders.tsx) |
+| Coverage report | [`coverage/lcov-report/index.html`](../../../../coverage/lcov-report/index.html) (HTML, committed), [`coverage/lcov.info`](../../../../coverage/lcov.info) (for Coverage Gutters or `genhtml`) |
+| Playwright report | Generated in `playwright-report/` by `npm run test:e2e` (gitignored, opened with `npm run test:e2e:report`); CI uploads it as an artifact |
+| How to run | [§6](#6-project-links-and-running-instructions-for-my-part) |
 | Screenshot scripts | `scripts/week11-victor-evidence.mjs` (screens, shell, keyboard) and `scripts/week11-testing-evidence.mjs` (these test screenshots, from real runs) |
 
 ---
@@ -511,7 +518,7 @@ makes the run fail if any of them drops below that.
 
 | Measured scope | Statements | Branches | Functions | Lines |
 |:--|--:|--:|--:|--:|
-| **All measured files** (Victor's, Upneet's and the app shell) | **95.82%** | **91.14%** | **94.1%** | **96.44%** |
+| **All measured files** (Victor's, Upneet's and the app shell) | **95.82%** | **91.25%** | **94.1%** | **96.44%** |
 | Contacts.tsx | 100% | 87.5% | 100% | 100% |
 | MessageThread.tsx | 100% | 92.3% | 100% | 100% |
 | PlaceholderPage.tsx | 95.7% | 92.3% | 100% | 100% |
@@ -532,16 +539,41 @@ above the 75% threshold on lines; the lowest are `StatusBar`'s resize
 measurement and `useFocusTrap`'s Tab-wrapping branches, which need real
 layout and are exercised by Playwright instead.
 
-**Exclusions and why.**
-- `src/**/__tests__/**` and `*.test.*`: test code is not measured.
-- `src/data/contactsData.ts` and `messagesData.ts`: static seed data with no
-  branches to test.
-- `src/test-utils/`: a test helper.
-- Apart from the shell measurements above, the only uncovered lines in my files are the `getServerSnapshot` fallbacks
-  in `useOnlineStatus` and `useMediaQuery`, which run only during server-side
-  rendering (this app renders in the browser only), and
-  `useLocalStorageState`'s default `revive` callback, which the providers
-  always replace with their own.
+**Exclusions and why.** `collectCoverageFrom` is an allow-list: it names the
+Assignment 11 screens (mine and Upneet's), the app shell, and the models,
+contexts, hooks and utilities behind them. Everything else in `src/` is left
+out on purpose, for these reasons:
+
+| Left out | Files | Why |
+|:--|:--|:--|
+| Test code | `**/__tests__/**`, `*.test.*`, `src/lib/__mocks__/`, `src/test-utils/`, `src/setupTests.ts` | Tests and test helpers are not product code |
+| Seed data | `src/data/` (`contactsData`, `messagesData`, `appointmentsData`, `mockData`, the `*Store.ts` demo stores) | Static demo records with almost no logic; the rules that use them are in `src/models/` and are measured |
+| Browser bootstrap | `src/main.tsx`, `src/pwa/registerSW.ts`, `src/lib/env.ts`, `src/vite-env.d.ts`, `src/branchScope.ts`, `src/components/index.ts` | Entry point, service-worker registration, `import.meta.env` (Jest cannot parse it, so it is replaced by a mock) and re-exports. They only run in a real browser and are exercised by the Playwright tests against the production build |
+| Screens not assigned to Upneet or me this week | Justin's `Landing`, `SignIn`, `SignUp`, `Home`, `Schedule` (My Day); the base app's `RoleChooser`, `CaregiverDashboard`, `ManageMedications`, `ManageAppointments`, `ActivityLog`, `Caregiver` (Notes); `auth/`, `ProtectedRoute`, `AppContext` | These are outside the screens this report covers. Each route is still rendered by the team accessibility suite (axe, landmarks, title) and by the axe audit, but there are no page-specific suites for them yet ([team known issues](../README.md#known-issues)) |
+| Shared kit not owned by this assignment | `Button`, `Card`, `Field`, `Banner`, `ConfirmDialog`, `BigActionTile`, `MockVideoCall`, `ChatBot`, `InstallPrompt` | Measured indirectly wherever a measured screen uses them; `InstallPrompt` needs the browser's `beforeinstallprompt` event and `ChatBot` is not mounted on the new pages |
+
+So that nothing is hidden, the same 375 tests were also run with **every**
+file in `src/` measured (only test code removed). Across the whole web app
+the result is **79.7% statements, 69.3% branches, 74.2% functions and 81.2%
+lines**. The gap from the measured scope is almost all in the unassigned
+caregiver pages (`ManageAppointments` 10.5% lines, `Caregiver` 13.2%,
+`ManageMedications` 26.1%), Justin's `SignUp` and `SignIn`, which have no
+page suites yet, and the bootstrap files above (0%, browser only). To
+reproduce it, override the allow-list:
+
+```bash
+npx jest --coverage --collectCoverageFrom='src/**/*.{ts,tsx}' \
+  --collectCoverageFrom='!src/**/*.test.*' --collectCoverageFrom='!src/**/__tests__/**' \
+  --collectCoverageFrom='!src/**/__mocks__/**' --collectCoverageFrom='!src/**/*.d.ts' \
+  --coverageDirectory=/tmp/careconnect-full-coverage
+```
+
+**Uncovered lines inside the measured scope.** Apart from the shell
+measurements above, the only uncovered lines in my files are the
+`getServerSnapshot` fallbacks in `useOnlineStatus` and `useMediaQuery`, which
+run only during server-side rendering (this app renders in the browser
+only), and `useLocalStorageState`'s default `revive` callback, which the
+providers always replace with their own.
 
 ---
 

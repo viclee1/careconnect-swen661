@@ -588,7 +588,7 @@ Timestamped log of taken/skipped doses and check-ins.
 
 - **Static checks** — ESLint (`npm run lint`) and TypeScript strict mode (`npm run typecheck`). Both must pass before a pull request merges.
 - **Playwright** — used by the screenshot scripts, the accessibility audit (`npm run a11y:web`), the `verify-pwa` / `verify-responsive` helpers and the end-to-end tests.
-- **Unit & component tests** — Jest + React Testing Library + `user-event` + jest-axe (`npm test`). `npm run test:coverage` writes `coverage/lcov-report/index.html` (committed) and fails below **75%** on statements, branches, functions or lines. The web suite has **375 tests in 29 suites, all passing**, at **95.8% statements / 91.1% branches / 94.1% functions / 96.4% lines** over the measured files (every Assignment 11 screen, the app shell, and their models, contexts, hooks and utilities). Each client has its own suite — see the [Flutter](#flutter-mobile-client), [React Native](#react-native-mobile-client) and [Electron](#electron-desktop-client) sections.
+- **Unit & component tests** — Jest + React Testing Library + `user-event` + jest-axe (`npm test`). `npm run test:coverage` writes `coverage/lcov-report/index.html` (committed) and fails below **75%** on statements, branches, functions or lines. The web suite has **375 tests in 29 suites, all passing**, at **95.8% statements / 91.3% branches / 94.1% functions / 96.4% lines** over the measured files (every Assignment 11 screen, the app shell, and their models, contexts, hooks and utilities). Each client has its own suite — see the [Flutter](#flutter-mobile-client), [React Native](#react-native-mobile-client) and [Electron](#electron-desktop-client) sections.
 - **End-to-end** — Playwright (`npm run test:e2e`) against the production build (`vite preview`, service worker active) in Chromium, Firefox, WebKit and mobile Safari at 375px. Specs in [`e2e/`](e2e): medicines by keyboard, appointments (My Day and calendar export read back from the real file), memories (form errors, save, pin, remove, filter), the memory book offline, every care page at every width with axe; contacts → conversation → send → reload, silent alert, captioned calls and video messages, quick replies, offline queueing and offline launch, keyboard-only settings, flash previews, and Settings reachable at every width. Latest local run (Chromium, WebKit, mobile Safari): **58 passed, 7 skipped by design, 1 failed** — see [known issues](#known-issues-and-limitations-web). Run `npx playwright install chromium firefox webkit` once first; `npm run test:e2e:report` opens the HTML report.
 - **Accessibility audit** — `npm run a11y:web`: 17 routes and the shell's interactive states at three widths, **64 scans, 0 violations, 53/53 keyboard and structure checks**.
 - **CI** — [`.github/workflows/web-tests.yml`](.github/workflows/web-tests.yml) runs lint, typecheck, coverage and every Playwright project (Firefox included) on each pull request.
@@ -712,7 +712,7 @@ npm run lint && npm run typecheck
 
 ### Link to test coverage report
 
-[`coverage/lcov-report/index.html`](coverage/lcov-report/index.html) (committed): **95.82% statements, 91.14% branches, 94.1% functions, 96.44% lines** over the measured files listed in `jest.config.cjs`.
+[`coverage/lcov-report/index.html`](coverage/lcov-report/index.html) (committed): **95.82% statements, 91.25% branches, 94.1% functions, 96.44% lines** over the measured files listed in `jest.config.cjs`.
 
 ### Known issues and limitations (web)
 
