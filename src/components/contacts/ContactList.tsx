@@ -73,7 +73,7 @@ export default function ContactList({ selectedId }: { selectedId?: string }) {
                 setQuery('');
               }
             }}
-            className="block w-full rounded-xl border-2 border-neutral-400 bg-white pl-11 pr-4 py-2.5 text-base text-neutral-800 placeholder:text-neutral-500 hover:border-neutral-500 focus:border-calm-600 focus:outline-none"
+            className="block w-full rounded-xl border-2 border-neutral-400 bg-white pl-11 pr-4 py-2.5 text-base text-neutral-800 placeholder:text-neutral-500 hover:border-neutral-500 focus:border-calm-600"
           />
         </div>
         <p id={hintId} className="text-sm text-neutral-600 mt-1">

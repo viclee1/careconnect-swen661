@@ -199,6 +199,18 @@ describe('forms', () => {
     expect(email).toHaveAccessibleDescription(/email/i);
     expect(screen.getAllByRole('alert').length).toBeGreaterThan(0);
   });
+
+  it('moves focus to the first field to fix after a refused submit, not before', async () => {
+    renderSignIn();
+    const email = screen.getByLabelText(/email address/i);
+    expect(email).not.toHaveFocus();
+    fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
+    await waitFor(() => expect(email).toHaveFocus());
+
+    fireEvent.change(email, { target: { value: 'margaret@example.com' } });
+    fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
+    await waitFor(() => expect(screen.getByLabelText(/password/i)).toHaveFocus());
+  });
 });
 
 describe('modal dialog', () => {

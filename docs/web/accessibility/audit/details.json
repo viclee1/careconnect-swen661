@@ -144,7 +144,7 @@
     "page": "Caregiver — Menu drawer open",
     "breakpoint": "mobile 375px",
     "violations": [],
-    "passes": 45
+    "passes": 44
   },
   {
     "id": "tablet-landing",

@@ -51,7 +51,7 @@ through sound must also be communicated visually or in text*.
 | Reusable components | `ContactList`, `ContactRow`, `ContactAvatar`, `ContactsPageHeader`, `ContactsTwoPane`, `Conversation` (used by both pages), `MessageBubble`, `CaptionedVideo`, `MessageComposer`, `QuickReplies`, `NotifyButton`, `VideoCallButton`, `VisualFlash` (now with a colour per alert type), `SettingsSection`, `SettingsSwitchRow`, `SettingsSliderRow`, `SegmentedChoice`, `FlashCueRow`, `SettingIcon` and `VibrationPatternRow`, plus the team's existing `Banner`, `Button` and `ConfirmDialog`. |
 | Form handling and validation | The message form is a real `<form>` with a labelled `<textarea>`. Ctrl/⌘+Enter or the Send button submits it. An empty message, or one over 500 characters, is refused with a written reason (`role="alert"`, linked to the field with `aria-describedby`, and the field gets `aria-invalid`). Focus returns to the field. A live counter shows the characters left. |
 | Offline functionality | Conversations and settings are kept in localStorage, so nothing is fetched and both screens work with no connection. A message written offline is **kept, marked "Sending" in words, and sent automatically when the connection returns**. A banner explains this while offline. The team's service worker serves the app shell and the cached lazy chunks, so the screens also open from cold while offline. This is verified by an E2E test. |
-| PWA | Uses the team's manifest and service worker. My screens add the offline behaviour above. |
+| PWA | Uses the team's manifest and service worker. My screens add the offline behaviour above. The PWA evidence (installability, a real install, offline use, browser support) is in [`../pwa/README.md`](../pwa/README.md). |
 
 ### The app shell, aligned to the Figma design
 
@@ -286,7 +286,10 @@ click elsewhere closes the menu. The Sign out dialog traps focus and returns
 it to the button that opened it.
 
 **Visible focus.** The team's 3 px `calm-600` outline is applied to every
-focused element. The two custom-styled controls carry it explicitly: the
+focused element. (Until 27 October the contact search and the message field
+— like the team's shared `Field` — carried `focus:outline-none`, which
+overrode that ring and left only a darker border; it was removed, so text
+fields show the ring too. See the [accessibility write-up](../accessibility/README.md#5-visible-focus).) The two custom-styled controls carry it explicitly: the
 switch track (`peer-focus-visible:outline`) and the selected radio segment
 (`has-[:focus-visible]:outline`, drawn inside the segment so it stays clear of
 its neighbours). The alert overlay is `pointer-events: none`, so it can never
@@ -318,6 +321,20 @@ The screenshots below were captured from real key presses by
 | ![Sent](screenshots/keyboard/05-ctrl-enter-sent.png) Ctrl+Enter sent it; focus stays in the field | ![Switch focus](screenshots/keyboard/06-switch-focus.png) Focus ring on a switch |
 | ![Radio arrows](screenshots/keyboard/07-radio-arrow-keys.png) ArrowRight selects "Large"; the preview updates | ![Dialog](screenshots/keyboard/08-sign-out-dialog.png) Enter on Sign out opens the confirmation dialog |
 | ![Escape](screenshots/keyboard/09-dialog-escape-returns-focus.png) Escape closes it; focus is back on Sign out | |
+
+The app shell, from real key presses too (described in the
+[accessibility write-up](../accessibility/README.md#7-keyboard-testing-results)):
+[skip link first](screenshots/keyboard/10-skip-link-first-tab.png) ·
+[Tab to search](screenshots/keyboard/11-header-search-focus.png) ·
+[↓ through matches](screenshots/keyboard/12-search-arrow-keys.png) ·
+[account menu by keyboard](screenshots/keyboard/13-account-menu-tab.png) ·
+[Escape returns focus to the avatar](screenshots/keyboard/14-account-menu-escape-returns-focus.png) ·
+[shortcuts dialog](screenshots/keyboard/15-shortcuts-dialog-focus.png) ·
+[high-contrast focus ring](screenshots/keyboard/16-high-contrast-focus-ring.png) ·
+[phone: Menu drawer opens with focus inside](screenshots/keyboard/17-menu-drawer-opens-focus-inside.png) ·
+[Tab to a page](screenshots/keyboard/18-menu-drawer-tab-to-a-page.png) ·
+[Escape returns focus to Menu](screenshots/keyboard/19-menu-drawer-escape-returns-focus.png) ·
+[a refused sign-in focuses the field to fix](screenshots/keyboard/20-sign-in-error-focuses-field.png).
 
 One browser difference: **Safari on macOS skips form controls on Tab** unless
 Full Keyboard Access is turned on in System Settings. This is a platform
@@ -392,7 +409,7 @@ it('queues messages written offline and sends them when the connection returns',
 });
 ```
 
-The team suite `src/accessibility.test.tsx` (77 tests) also holds the
+The team suite `src/accessibility.test.tsx` (78 tests) also holds the
 app-shell tests I wrote with the Figma rebuild: one sidebar per role with
 Settings and the alerts at its foot, the alerts list, the Menu drawer as a
 modal dialog for both roles (focus in, Escape returns it), choosing a page
@@ -403,10 +420,10 @@ a phone), the keyboard button opening the shortcuts dialog (and "?" not doing so
 bar, and axe at phone width on every route.
 
 ![Jest results for Victor's suites: 195 tests in 19 suites, all passing](screenshots/testing/01-jest-victor-suites.png)
-![Whole web app: 375 tests in 29 suites, all passing, with coverage](screenshots/testing/02-jest-all-summary.png)
+![Whole web app: 376 tests in 29 suites, all passing, with coverage](screenshots/testing/02-jest-all-summary.png)
 
 The first screenshot lists my 19 suites (195 tests). The whole web app runs
-**375 Jest tests in 29 suites, all passing**. (Before the merge this branch
+**376 Jest tests in 29 suites, all passing**. (Before the merge this branch
 ran 516; the difference is the older Appointments, Medicines and Memories
 page tests, which Upneet replaced with his own smaller suites.)
 
@@ -511,7 +528,7 @@ makes the run fail if any of them drops below that.
 
 | Measured scope | Statements | Branches | Functions | Lines |
 |:--|--:|--:|--:|--:|
-| **All measured files** (Victor's, Upneet's and the app shell) | **95.82%** | **91.14%** | **94.1%** | **96.44%** |
+| **All measured files** (Victor's, Upneet's and the app shell) | **95.82%** | **91.25%** | **94.1%** | **96.44%** |
 | Contacts.tsx | 100% | 87.5% | 100% | 100% |
 | MessageThread.tsx | 100% | 92.3% | 100% | 100% |
 | PlaceholderPage.tsx | 95.7% | 92.3% | 100% | 100% |

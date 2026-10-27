@@ -1,4 +1,4 @@
-import { useState, useId } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Heart, LogIn } from 'lucide-react';
 import { Field } from '../components';
@@ -30,7 +30,10 @@ export default function SignIn() {
     setGlobalError('');
     const next = validate();
     setErrors(next);
-    if (Object.keys(next).length > 0) return;
+    if (Object.keys(next).length > 0) {
+      setFocusFirstError(true);
+      return;
+    }
 
     setSubmitting(true);
     const result = await signIn(email, password);
@@ -44,6 +47,17 @@ export default function SignIn() {
   }
 
   const hasFieldErrors = Object.keys(errors).length > 0;
+
+  // After a refused submit, move focus to the first field to fix, once the
+  // errors have rendered: the summary is announced, and typing can start at
+  // once (WCAG 3.3.1). Never on first load.
+  const formRef = useRef<HTMLFormElement>(null);
+  const [focusFirstError, setFocusFirstError] = useState(false);
+  useEffect(() => {
+    if (!focusFirstError) return;
+    formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+    setFocusFirstError(false);
+  }, [focusFirstError]);
 
   return (
     <div className="min-h-screen bg-neutral-50 flex flex-col">
@@ -99,6 +113,7 @@ export default function SignIn() {
 
             {/* Form */}
             <form
+              ref={formRef}
               noValidate
               onSubmit={handleSubmit}
               aria-describedby={hasFieldErrors || globalError ? errorSummaryId : undefined}

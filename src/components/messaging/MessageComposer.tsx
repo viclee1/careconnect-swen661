@@ -95,7 +95,7 @@ const MessageComposer = forwardRef<
             // Two lines tall on phones, where "Message Maria…" wraps at the
             // base 18px size rather than being cut off; one line from 768px.
             'flex-1 min-w-0 min-h-[4.75rem] md:min-h-touch rounded-xl border-2 bg-white px-3 md:px-4 py-2.5 text-base text-neutral-800',
-            'placeholder:text-neutral-500 resize-y focus:outline-none',
+            'placeholder:text-neutral-500 resize-y',
             error ? 'border-alert-500' : 'border-neutral-400 hover:border-neutral-500 focus:border-calm-600',
           ].join(' ')}
         />

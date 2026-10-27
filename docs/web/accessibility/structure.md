@@ -420,7 +420,7 @@ Named regions inside main: “Margaret's status today”, “Alerts”, “Recen
 ```
 h1  Dashboard
   h2  Margaret's status today
-  h2  Alerts3
+  h2  Alerts5
   h2  Recent activity
   h2  Quick links
 ```
@@ -431,7 +431,7 @@ h1  Dashboard
 
 **Links (13):** “Skip to main content” · “CareConnect” (named “CareConnect — go to home”) · “View all activity” · “Manage medications1/4 taken today” · “Manage appointments3 in the next 24 h” · “Caregiver notesDaily observations log” · “Full activity logNo events yet today” · “Dashboard” · “Medications” · “Appointments” · “Activity” · “Notes” · “Settings”
 
-**Live regions:** status · region/polite “Alerts3Appointment todayBlood pressure check — Dr. Sharma at”
+**Live regions:** status · region/polite “Alerts5Lisinopril — overdue10 mg — 1 tablet was due at 9:00 ”
 
 ---
 

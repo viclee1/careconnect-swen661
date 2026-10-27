@@ -7,7 +7,7 @@
     "wcag21aa",
     "best-practice"
   ],
-  "date": "2026-10-27T05:08:41.115Z",
+  "date": "2026-10-27T21:57:37.467Z",
   "scans": 64,
   "violations": 0,
   "checks": {
@@ -160,7 +160,7 @@
       "page": "Caregiver — Menu drawer open",
       "breakpoint": "mobile 375px",
       "violations": 0,
-      "passes": 45
+      "passes": 44
     },
     {
       "id": "tablet-landing",

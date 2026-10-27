@@ -47,7 +47,7 @@ and **Sign out**. Data is mock data kept in
 
 | Command | Does |
 |:--|:--|
-| `npm test` | Jest + React Testing Library — 375 tests in 29 suites |
+| `npm test` | Jest + React Testing Library — 376 tests in 29 suites |
 | `npm run test:e2e` | Playwright against the production build (Chromium, Firefox, WebKit, mobile Safari) |
 | `npm run typecheck`, `npm run lint` | TypeScript and ESLint |
 | `npm run a11y:web` | axe-core and keyboard checks at 375 / 820 / 1280px (needs `npm run dev -- --port 5180` running, and `npx playwright install chromium` once) |

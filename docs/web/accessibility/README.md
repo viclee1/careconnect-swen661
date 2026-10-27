@@ -25,7 +25,7 @@ claim.
 | Automated audit — 64 scans, 0 violations, 53/53 keyboard & structure checks (Week 11) | [`audit/axe-results.png`](audit/axe-results.png), [`audit/report.html`](audit/report.html) |
 | Audit before the fixes — 71 violations, 5 failed checks | [`audit-before/`](audit-before) |
 | Landmarks, heading outline, links and fields of every page, at every breakpoint | [`structure.md`](structure.md) |
-| Accessibility tests (77) | [`src/accessibility.test.tsx`](../../../src/accessibility.test.tsx) |
+| Accessibility tests (78) | [`src/accessibility.test.tsx`](../../../src/accessibility.test.tsx) |
 | Earlier project-wide notes (WCAG map, memory-loss design) | [`ACCESSIBILITY.md`](../../../ACCESSIBILITY.md) |
 
 ---
@@ -486,9 +486,10 @@ and 44 keyboard and structure checks.
 | Gap | Plan |
 |:--|:--|
 | The page behind the modal dialog is not `inert`; `aria-modal` relies on the screen reader honouring it | Set `inert` on the app root while a dialog is open |
-| Each field error is also `role="alert"`, so submitting a form with four errors announces five times | Keep the summary as the only alert; field errors are read through `aria-describedby` when focused; move focus to the first invalid field |
+| Each field error is also `role="alert"`, so submitting a form with four errors announces five times | Keep the summary as the only alert; field errors are read through `aria-describedby` when focused. *Moving focus to the first invalid field is done (Week 11: Sign in, Sign up, Add a memory)* |
 | Done toggles (My Day, Medicines) change their label with the state ("Mark Breakfast as done" ↔ "…as not done") **and** set `aria-pressed`, so a screen reader hears "Mark Breakfast as not done, toggle button, pressed" — two state signals that read as contradictory | Keep `aria-pressed` and give the button a fixed name ("Breakfast done"), as the WAI-ARIA toggle-button pattern advises |
 | ~~The app footer (`contentinfo`) is hidden below 1024px~~ | Resolved in Week 11: the status bar is shown at every width |
+| ~~Text fields had no focus ring~~ | Resolved in Week 11: `focus:outline-none` on `Field` and five other text inputs overrode the global ring; removed |
 | On Contacts, "/" is a single-character shortcut that cannot be turned off (WCAG 2.1.4) | Make it work only while the contact list has focus, or add an off switch in Accessibility Settings |
 | No manual screen-reader pass on the web app yet | VoiceOver (Safari, macOS and iOS) and NVDA (Chrome/Firefox, Windows) through the main flows before the next submission |
 | Tooltips and tabs are in the Part 1 design system but not built | No Figma frame uses them; build to the patterns in §7 if one does. Menus (account, Quick replies) and a combobox (search) are built |

@@ -61,7 +61,7 @@ state, ported the missing features, and added the ones a website needs.
 | Reusable components | `PageHeader`, `AppointmentRow`, `AppointmentDetail`, `AppointmentGroup`, `CalendarExport`, `MedicineProgress`, `MedicineRow`, `MedicineDetail`, `MemoryCard`, `MemoryFilters` and `AddMemoryForm`, plus the team's `Banner`, `Field`, `ConfirmDialog`, `AppointmentBanner` and `CaptionStrip`. |
 | Form handling and validation | **Add a memory** is a real `<form noValidate>`. Errors are checked on Save, not while typing: the name is required (up to 60 characters), "when" is optional (up to 40), the kind is required, and the story must be 10 to 500 characters. Each error is a plain sentence printed under its field (`role="alert"`), linked with `aria-describedby`, and the field gets `aria-invalid`. **Focus moves to the first field to fix.** After the first Save, each error clears as soon as its field is put right. A live hint counts the characters left. |
 | Offline functionality | Everything is read from the device. My Day choices, medicine ticks and the memory book are saved in localStorage. The memory photos were moved from an external photo site to **same-origin WebP files** in `public/memories/`, which the team's service worker caches, so the memory book, **photos included**, opens with no connection. This is verified by an E2E test. |
-| PWA | Uses the team's manifest and service worker. My screens add the offline behaviour above. |
+| PWA | Uses the team's manifest and service worker. My screens add the offline behaviour above. The PWA evidence (installability, a real install, offline use including the memory photos, browser support) is in [`../pwa/README.md`](../pwa/README.md). |
 
 ### Matching the desktop and mobile apps
 
@@ -350,9 +350,9 @@ it('refuses an empty form, explains each problem and focuses the first', async (
 ```
 
 ![Jest results for Upneet's suites: 103 tests in 9 suites, all passing](screenshots/testing/01-jest-upneet-suites.png)
-![Whole web app: 375 tests in 29 suites, all passing](screenshots/testing/02-jest-all-summary.png)
+![Whole web app: 376 tests in 29 suites, all passing](screenshots/testing/02-jest-all-summary.png)
 
-The whole web app runs **375 Jest tests in 29 suites, all passing**.
+The whole web app runs **376 Jest tests in 29 suites, all passing**.
 
 ### End-to-end tests (Playwright): 4 critical flows
 
@@ -435,7 +435,7 @@ any of them drops below that.
 
 | Measured scope | Statements | Branches | Functions | Lines |
 |:--|--:|--:|--:|--:|
-| **All measured files** (the whole team's, now including the app shell) | **95.82%** | **91.14%** | **94.1%** | **96.44%** |
+| **All measured files** (the whole team's, now including the app shell) | **95.82%** | **91.25%** | **94.1%** | **96.44%** |
 | Appointments.tsx | 100% | 100% | 100% | 100% |
 | Medications.tsx | 100% | 100% | 100% | 100% |
 | Memories.tsx | 100% | 96.4% | 100% | 100% |

@@ -11,6 +11,8 @@ explains how the pieces fit together and where each member's evidence is.
 | [Victor Lee](victor/README.md) | Contacts, Conversation (messaging), Accessibility Settings, and the app shell (header, sidebar, Menu drawer, search, account menu, status bar) |
 | [Upneet Bir](upneet/README.md) | Appointments, Medicines, Memories |
 | Justin Zhang (this page, [below](#justins-screens)) | Landing, Sign in, Sign up, Home, My Day |
+| [PWA features and evidence](pwa/README.md) | Manifest, service worker, offline use, the install banner, installability and a real install, and installing in each browser |
+| [Accessibility implementation](accessibility/README.md) | The whole app: semantic HTML, names, ARIA, keyboard operation, visible focus, focus management, keyboard testing with screenshots |
 
 Every screenshot linked from these pages was regenerated on 27 October 2026
 from the merged app, with the browser clock fixed at 9:45 am so the demo data
@@ -111,8 +113,8 @@ accessibility audit below. They have no page-specific Jest suites yet.
 
 | Check | Result | Evidence |
 |:--|:--|:--|
-| Jest (unit, component, accessibility) | **375 tests in 29 suites, all passing** | [summary with coverage](victor/screenshots/testing/02-jest-all-summary.png) · [Victor's 19 suites](victor/screenshots/testing/01-jest-victor-suites.png) · [Upneet's 9 suites](upneet/screenshots/testing/01-jest-upneet-suites.png) |
-| Coverage (`npm run test:coverage`, 75% threshold) | **95.82% statements, 91.14% branches, 94.1% functions, 96.44% lines** | [`coverage/lcov-report/index.html`](../../../coverage/lcov-report/index.html) · [screenshot](victor/screenshots/testing/04-coverage-report.png) |
+| Jest (unit, component, accessibility) | **376 tests in 29 suites, all passing** | [summary with coverage](victor/screenshots/testing/02-jest-all-summary.png) · [Victor's 19 suites](victor/screenshots/testing/01-jest-victor-suites.png) · [Upneet's 9 suites](upneet/screenshots/testing/01-jest-upneet-suites.png) |
+| Coverage (`npm run test:coverage`, 75% threshold) | **95.82% statements, 91.25% branches, 94.1% functions, 96.44% lines** | [`coverage/lcov-report/index.html`](../../../coverage/lcov-report/index.html) · [screenshot](victor/screenshots/testing/04-coverage-report.png) |
 | Playwright (Chromium, WebKit, mobile Safari) | **58 passed, 7 skipped by design, 1 failed** (see known issues) | [run](victor/screenshots/testing/03-playwright-run.png) · [HTML report](victor/screenshots/testing/05-playwright-html-report.png) |
 | Accessibility audit (`npm run a11y:web`) | **64 scans, 0 violations; 53/53 keyboard and structure checks** over 17 routes and the shell's interactive states at 375, 820 and 1280 px | [`../accessibility/audit/report.html`](../accessibility/audit/report.html) |
 | Lint, typecheck, build | 0 errors; clean; builds | — |
@@ -135,6 +137,16 @@ runs all four browser projects on Ubuntu.
 - *A single-key shortcut.* "?" opened the keyboard shortcuts dialog; a
   single-character shortcut that cannot be turned off fails WCAG 2.1.4, so
   it was removed (the header's keyboard button opens the dialog).
+- *Invisible focus on text fields.* Six text-field styles, including the
+  shared `Field` component, had `focus:outline-none`, which overrode the
+  app's focus ring; focus was only a slightly darker border. Removed — every
+  text field now shows the 3 px ring.
+- *Form errors left focus on the button.* Sign in and Sign up now move focus
+  to the first field to fix after a refused submit, as Add a memory already
+  did (tested).
+- *PWA details.* The manifest shortcut still said "Today's schedule"; it is
+  "My Day". The install banner overlapped the new status bar; it now sits
+  above it.
 
 ---
 

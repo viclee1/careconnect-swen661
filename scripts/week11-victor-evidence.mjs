@@ -230,5 +230,66 @@ for (const [bp, w, h] of widths) {
   await ctx.close();
 }
 
+// ── Keyboard: the app shell, sign-in form (real key presses) ─────────────────
+{
+  // Skip link: the first Tab on any page.
+  const { ctx, page } = await open(1440, 900, '/app');
+  await page.keyboard.press('Tab');
+  await shot(page, 'keyboard/10-skip-link-first-tab');
+  // Tab through the header: Search (after the logo).
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Tab');
+  await shot(page, 'keyboard/11-header-search-focus');
+  await page.keyboard.type('metf');
+  await page.keyboard.press('ArrowDown');
+  await shot(page, 'keyboard/12-search-arrow-keys');
+  await page.keyboard.press('Escape');
+  // On to the avatar: CC → high contrast → shortcuts → avatar.
+  for (let i = 0; i < 4; i += 1) await page.keyboard.press('Tab');
+  await page.keyboard.press('Enter');
+  await page.keyboard.press('Tab');
+  await shot(page, 'keyboard/13-account-menu-tab');
+  await page.keyboard.press('Escape');
+  await shot(page, 'keyboard/14-account-menu-escape-returns-focus');
+  await page.keyboard.press('Shift+Tab');
+  await page.keyboard.press('Enter');
+  await page.getByRole('dialog', { name: 'Keyboard shortcuts' }).waitFor();
+  await shot(page, 'keyboard/15-shortcuts-dialog-focus');
+  await page.keyboard.press('Escape');
+  await page.keyboard.press('Shift+Tab');
+  await page.keyboard.press('Space');
+  await page.keyboard.press('Tab');
+  await shot(page, 'keyboard/16-high-contrast-focus-ring');
+  await ctx.close();
+}
+{
+  // Phone width: the Menu drawer.
+  const { ctx, page } = await open(375, 812, '/app');
+  await page.keyboard.press('Tab'); // skip link
+  await page.keyboard.press('Tab'); // Menu
+  await page.keyboard.press('Enter');
+  await page.locator('#nav-drawer').waitFor();
+  await shot(page, 'keyboard/17-menu-drawer-opens-focus-inside');
+  for (let i = 0; i < 4; i += 1) await page.keyboard.press('Tab');
+  await shot(page, 'keyboard/18-menu-drawer-tab-to-a-page');
+  await page.keyboard.press('Escape');
+  await shot(page, 'keyboard/19-menu-drawer-escape-returns-focus');
+  await ctx.close();
+}
+{
+  // Sign in: a refused submit focuses the first field to fix. (Phone-ish
+  // width, so the form fills the image.)
+  const ctx = await browser.newContext({ viewport: { width: 600, height: 760 }, reducedMotion: 'reduce' });
+  const page = await ctx.newPage();
+  await page.clock.setFixedTime(demoTime);
+  await page.goto(`${base}/signin`);
+  await page.locator('h1').first().waitFor();
+  await page.getByRole('button', { name: /sign in/i }).focus();
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(200);
+  await shot(page, 'keyboard/20-sign-in-error-focuses-field');
+  await ctx.close();
+}
+
 await browser.close();
 console.log('done');

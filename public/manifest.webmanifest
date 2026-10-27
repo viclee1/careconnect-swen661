@@ -47,9 +47,9 @@
   ],
   "shortcuts": [
     {
-      "name": "Today's schedule",
-      "short_name": "Today",
-      "description": "See what's happening today",
+      "name": "My Day",
+      "short_name": "My Day",
+      "description": "See everything to do today",
       "url": "/app/schedule"
     },
     {

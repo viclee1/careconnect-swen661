@@ -114,7 +114,7 @@ export default function InstallPrompt() {
       aria-labelledby="install-prompt-title"
       aria-live="polite"
       onKeyDown={onKeyDown}
-      className="fixed inset-x-0 bottom-20 lg:bottom-6 z-50 px-4 pointer-events-none"
+      className="fixed inset-x-0 bottom-16 z-50 px-4 pointer-events-none"
     >
       <div className="pointer-events-auto mx-auto max-w-md bg-white border-2 border-calm-200 rounded-card shadow-card-hover p-4 flex items-start gap-3">
         <span
