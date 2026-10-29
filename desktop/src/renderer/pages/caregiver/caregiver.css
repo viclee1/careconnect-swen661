@@ -1,0 +1,195 @@
+/* The caregiver's pages. Built from the shared tokens and the card, field and
+   button styles in index.css and carePages.css; only what they lack is here. */
+
+.care-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.care-form {
+  padding: 1.25rem;
+  border: 2px solid var(--control-border);
+  border-radius: var(--radius);
+  background: #ffffff;
+}
+
+.care-form__heading {
+  margin: 0 0 1rem;
+  font-size: 1.25rem;
+}
+
+.care-form__actions,
+.care-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.care-card__actions {
+  margin-top: 0.75rem;
+}
+
+.care-card__question {
+  font-weight: 600;
+  color: var(--error-text);
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%;
+  padding: 1.125rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--secondary-light);
+}
+
+.stat-card__label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.stat-card__value {
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+.stat-card__action {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+/* A button in a .stack keeps its own width rather than spanning the column. */
+.care-inline-btn {
+  align-self: flex-start;
+}
+
+.care-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.activity-row,
+.note-card {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: #ffffff;
+}
+
+.activity-row__text,
+.note-card__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.activity-row__label,
+.note-card__text {
+  margin: 0;
+  font-weight: 600;
+}
+
+.activity-row__kind,
+.note-card__meta {
+  margin: 0.25rem 0 0;
+  font-size: 0.9375rem;
+  color: var(--secondary-dark);
+}
+
+.activity-row__time {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* .badge in index.css loads after this file, so these qualify it to win. */
+.note-card .badge {
+  align-self: flex-start;
+}
+
+.badge.priority-badge--urgent {
+  color: var(--error-text);
+  background: var(--error-fill);
+}
+
+.badge.priority-badge--note {
+  color: var(--warning-text);
+  background: var(--warning-fill);
+}
+
+.priority-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.priority-choices legend {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.priority-choices label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: var(--min-target);
+}
+
+.role-choices {
+  display: grid;
+  gap: 1rem;
+}
+
+.role-choice {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 1.25rem;
+  border: 2px solid var(--control-border);
+  border-radius: var(--radius);
+  background: #ffffff;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.role-choice:hover {
+  border-color: var(--primary-dark);
+}
+
+.role-choice__text strong {
+  display: block;
+  font-size: 1.125rem;
+}
+
+.role-choice__text span {
+  color: var(--secondary-dark);
+}

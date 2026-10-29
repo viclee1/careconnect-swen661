@@ -1,5 +1,6 @@
 import {
   Accessibility,
+  Activity,
   ArrowLeft,
   BellRing,
   Calendar,
@@ -18,9 +19,13 @@ import {
   Images,
   Info,
   Keyboard,
+  LayoutDashboard,
   LogOut,
   MessageSquare,
+  NotebookPen,
+  Pencil,
   Pill,
+  Plus,
   Printer,
   RefreshCw,
   Search,
@@ -29,6 +34,7 @@ import {
   Star,
   Stethoscope,
   Sun,
+  Trash2,
   TriangleAlert,
   User,
   UserX,
@@ -88,6 +94,12 @@ const icons = {
   volume: Volume2,
   warning: TriangleAlert,
   notify: Vibrate,
+  dashboard: LayoutDashboard,
+  activity: Activity,
+  notes: NotebookPen,
+  add: Plus,
+  edit: Pencil,
+  remove: Trash2,
 } satisfies Record<string, LucideIcon>;
 
 export type IconName = keyof typeof icons;

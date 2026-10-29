@@ -11,6 +11,24 @@ const renderAuth = () => renderHook(() => useAuth(), { wrapper });
 describe('AuthProvider', () => {
   beforeEach(() => localStorage.clear());
 
+  it('remembers the chosen role, ignores a corrupt one, and forgets it on sign out', async () => {
+    localStorage.setItem('careconnect_desktop_role', 'admin');
+    const { result } = renderAuth();
+    expect(result.current.role).toBeNull();
+
+    await act(async () => {
+      await result.current.signIn('joyce@example.com', 'pw');
+      result.current.setRole('caregiver');
+    });
+    expect(result.current.role).toBe('caregiver');
+    expect(localStorage.getItem('careconnect_desktop_role')).toBe('caregiver');
+    expect(renderAuth().result.current.role).toBe('caregiver');
+
+    act(() => result.current.signOut());
+    expect(result.current.role).toBeNull();
+    expect(localStorage.getItem('careconnect_desktop_role')).toBeNull();
+  });
+
   it('starts signed out', () => {
     const { result } = renderAuth();
     expect(result.current.isSignedIn).toBe(false);

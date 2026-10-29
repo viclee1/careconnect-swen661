@@ -1,4 +1,4 @@
-import type { Appointment } from '../models/appointment';
+import type { Appointment, AppointmentInput } from '../models/appointment';
 import { mockAppointments } from './mockAppointments';
 
 /**
@@ -10,15 +10,34 @@ import { mockAppointments } from './mockAppointments';
  */
 export interface AppointmentRepository {
   fetchAppointments(): Promise<Appointment[]>;
+  /** The caregiver's edits. Each resolves once the change is stored. */
+  addAppointment(input: AppointmentInput): Promise<Appointment>;
+  updateAppointment(id: string, input: AppointmentInput): Promise<void>;
+  removeAppointment(id: string): Promise<void>;
 }
 
 /** In-memory implementation backed by the design's seed data. */
 export function createMockAppointmentRepository(
   seed: Appointment[] = mockAppointments,
 ): AppointmentRepository {
+  let appointments = seed.map((appointment) => ({ ...appointment }));
+  let nextId = appointments.length + 1;
   return {
     async fetchAppointments() {
-      return seed;
+      return appointments;
+    },
+    async addAppointment(input) {
+      const appointment: Appointment = { id: `appt-added-${nextId++}`, ...input };
+      appointments = [...appointments, appointment];
+      return appointment;
+    },
+    async updateAppointment(id, input) {
+      appointments = appointments.map((appointment) =>
+        appointment.id === id ? { ...appointment, ...input } : appointment,
+      );
+    },
+    async removeAppointment(id) {
+      appointments = appointments.filter((appointment) => appointment.id !== id);
     },
   };
 }
@@ -32,11 +51,13 @@ export function createFlakyAppointmentRepository(
   seed: Appointment[] = mockAppointments,
 ): AppointmentRepository {
   let attempts = 0;
+  const store = createMockAppointmentRepository(seed);
   return {
+    ...store,
     async fetchAppointments() {
       attempts += 1;
       if (attempts <= failures) throw new Error('offline');
-      return seed;
+      return store.fetchAppointments();
     },
   };
 }

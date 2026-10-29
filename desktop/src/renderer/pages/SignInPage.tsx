@@ -62,7 +62,7 @@ export function SignInPage({ onShowShortcuts }: { onShowShortcuts?: () => void }
       return;
     }
 
-    navigate({ name: 'Home' });
+    navigate({ name: 'RoleChooser' });
   }
 
   const hasErrors = Object.keys(errors).length > 0 || Boolean(globalError);

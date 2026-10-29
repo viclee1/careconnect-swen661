@@ -7,7 +7,7 @@ import {
   type ReactNode,
 } from 'react';
 
-import type { AppDestination } from './destinations';
+import type { AppDestination, CaregiverDestination } from './destinations';
 
 /**
  * Every page and its parameters in one place.
@@ -16,7 +16,9 @@ import type { AppDestination } from './destinations';
  */
 export type Route =
   | { name: AppDestination }
+  | { name: CaregiverDestination }
   | { name: 'Splash' }
+  | { name: 'RoleChooser' }
   | { name: 'SignIn' }
   | { name: 'SignUp' }
   | { name: 'MessageThread'; contactId: string }
@@ -32,7 +34,7 @@ export interface NavigationValue {
   back: () => void;
   canGoBack: boolean;
   /** The top-level page the sidebar should mark as current. */
-  activeDestination: AppDestination;
+  activeDestination: AppDestination | CaregiverDestination;
   isPublic: boolean;
 }
 
@@ -93,14 +95,26 @@ const topLevelNames: RouteName[] = [
   'Medicines',
   'Memories',
   'Contacts',
+  'Dashboard',
+  'ManageMedicines',
+  'ManageAppointments',
+  'Activity',
+  'Notes',
 ];
 
-export function isTopLevel(route: Route): route is { name: AppDestination } {
+export function isTopLevel(
+  route: Route,
+): route is { name: AppDestination } | { name: CaregiverDestination } {
   return topLevelNames.includes(route.name);
 }
 
 export function isPublicRoute(route: Route): boolean {
-  return route.name === 'Splash' || route.name === 'SignIn' || route.name === 'SignUp';
+  return (
+    route.name === 'Splash' ||
+    route.name === 'SignIn' ||
+    route.name === 'SignUp' ||
+    route.name === 'RoleChooser'
+  );
 }
 
 function isSameRoute(a: Route | undefined, b: Route): boolean {
@@ -114,7 +128,7 @@ function isSameRoute(a: Route | undefined, b: Route): boolean {
 /**
  * Which sidebar entry to mark as current.
  */
-function destinationOf(history: Route[]): AppDestination {
+function destinationOf(history: Route[]): AppDestination | CaregiverDestination {
   for (let i = history.length - 1; i >= 0; i -= 1) {
     const entry = history[i];
     if (isTopLevel(entry)) return entry.name;

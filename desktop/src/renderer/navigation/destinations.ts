@@ -53,6 +53,34 @@ export const destinations: NavEntry[] = [
   },
 ];
 
+/** The caregiver's top-level pages. */
+export type CaregiverDestination =
+  | 'Dashboard'
+  | 'ManageMedicines'
+  | 'ManageAppointments'
+  | 'Activity'
+  | 'Notes';
+
+export interface CaregiverNavEntry {
+  destination: CaregiverDestination;
+  icon: IconName;
+  label: string;
+}
+
+/**
+ * The caregiver's sidebar, in the web client's order. Only the Dashboard has a
+ * shortcut — Ctrl + 1, the same key as the care recipient's Home — because the
+ * native menu names the care recipient's pages and its other accelerators
+ * belong to them.
+ */
+export const caregiverDestinations: CaregiverNavEntry[] = [
+  { destination: 'Dashboard', icon: 'dashboard', label: 'Dashboard' },
+  { destination: 'ManageMedicines', icon: 'medicines', label: 'Medicines' },
+  { destination: 'ManageAppointments', icon: 'appointments', label: 'Appointments' },
+  { destination: 'Activity', icon: 'activity', label: 'Activity' },
+  { destination: 'Notes', icon: 'notes', label: 'Notes' },
+];
+
 /** Maps a navigation menu command back to the destination it opens. */
 export const destinationForCommand: Partial<Record<MenuCommand, AppDestination>> =
   Object.fromEntries(destinations.map((entry) => [entry.command, entry.destination]));

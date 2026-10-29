@@ -5,9 +5,15 @@ export interface User {
   email: string;
 }
 
+/** Who is using the app: the person cared for, or someone caring for them. */
+export type Role = 'patient' | 'caregiver';
+
 export interface AuthValue {
   user: User | null;
   isSignedIn: boolean;
+  /** Null until chosen after signing in. */
+  role: Role | null;
+  setRole: (role: Role) => void;
   signIn: (email: string, password: string) => Promise<{ error?: string }>;
   signUp: (name: string, email: string, password: string) => Promise<{ error?: string }>;
   signOut: () => void;
@@ -16,6 +22,7 @@ export interface AuthValue {
 const AuthContext = createContext<AuthValue | null>(null);
 
 const STORAGE_KEY = 'careconnect_desktop_user';
+const ROLE_KEY = 'careconnect_desktop_role';
 const DEFAULT_USER_NAME = 'Margaret Whitfield';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -27,6 +34,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return null;
     }
   });
+
+  const [role, setRoleState] = useState<Role | null>(() => {
+    try {
+      const stored = localStorage.getItem(ROLE_KEY);
+      return stored === 'patient' || stored === 'caregiver' ? stored : null;
+    } catch {
+      return null;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      if (role) {
+        localStorage.setItem(ROLE_KEY, role);
+      } else {
+        localStorage.removeItem(ROLE_KEY);
+      }
+    } catch {
+      // Ignore storage errors
+    }
+  }, [role]);
 
   useEffect(() => {
     try {
@@ -68,6 +96,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signOut = useCallback(() => {
     setUser(null);
+    setRoleState(null);
+  }, []);
+
+  const setRole = useCallback((next: Role) => {
+    setRoleState(next);
   }, []);
 
   return (
@@ -75,6 +108,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       value={{
         user,
         isSignedIn: Boolean(user),
+        role,
+        setRole,
         signIn,
         signUp,
         signOut,

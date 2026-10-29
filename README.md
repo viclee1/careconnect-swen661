@@ -113,7 +113,7 @@ Instructor-assigned hearing-impairment constraints, mapped to WCAG 2.2:
 | Mobile — Android and iOS | React Native + Expo | `mobile/` | Every care recipient screen built; release APK in `apk-submission/`; linted, typechecked and tested in CI. See [React Native mobile client](#react-native-mobile-client) |
 | Desktop — Windows, macOS, Linux | Electron + React | `desktop/` | All eleven pages ported; CI tests the app and packages the Windows `.exe`, macOS `.dmg` and Linux `.AppImage`/`.deb` installers. See [Electron desktop client](#electron-desktop-client) |
 
-**Platform scope.** Every client carries the same care recipient screens: Welcome, Sign In, Sign Up, Home, My Day, Appointments, Medicines, Memories, Contacts, Messaging and Accessibility Settings. The caregiver role — role chooser, caregiver dashboard, activity log, and managing medications and appointments — is web-only.
+**Platform scope.** Every client carries the same care recipient screens: Welcome, Sign In, Sign Up, Home, My Day, Appointments, Medicines, Memories, Contacts, Messaging and Accessibility Settings. The caregiver role — role chooser, dashboard, managing medicines and appointments, activity log and care notes — is on the web and desktop clients; React Native and Flutter are next.
 
 ---
 
@@ -319,7 +319,7 @@ careconnect-swen661/
 │   ├── src/main/                    # main process — window, native menu, IPC, notifications, persistence
 │   ├── src/shared/                  # imported by both processes — IPC contract, shortcut table
 │   ├── src/renderer/                # the React app — pages, state, models, data, components
-│   ├── src/**/__tests__/            # 498 tests — models, main process, IPC, pages, keyboard, a11y
+│   ├── src/**/__tests__/            # 523 tests — models, main process, IPC, pages, keyboard, a11y, caregiver
 │   ├── coverage/                    # lcov-report + lcov.info (generated locally, gitignored)
 │   ├── docs/testing/                # committed copy of the HTML coverage report + lcov.info
 │   ├── release/                     # installers (generated locally, gitignored)
@@ -591,7 +591,7 @@ Timestamped log of taken/skipped doses and check-ins.
   | Client | Tests | Statements | Branches | Functions | Lines | HTML report |
   |:--|--:|--:|--:|--:|--:|:--|
   | Web (React) | 434 | 94.7% | 88.3% | 93.8% | 95.7% | [`coverage/lcov-report/`](coverage/lcov-report/index.html) |
-  | Desktop (Electron) | 498 | 96.8% | 90.0% | 95.7% | 98.1% | [`desktop/docs/testing/coverage-html/`](desktop/docs/testing/coverage-html/index.html) |
+  | Desktop (Electron) | 523 | 97.1% | 91.6% | 96.1% | 98.2% | [`desktop/docs/testing/coverage-html/`](desktop/docs/testing/coverage-html/index.html) |
   | React Native | 286 | 96.9% | 88.1% | 94.3% | 97.0% | [`mobile/docs/testing/coverage-html/`](mobile/docs/testing/coverage-html/index.html) |
   | Flutter | 234 | — | — | — | 98.9% | [`flutter/docs/testing/coverage-html/`](flutter/docs/testing/coverage-html/index.html) |
 
@@ -1019,7 +1019,7 @@ npm run typecheck        # three TypeScript projects: renderer, main, tests
 npm run test:coverage    # Jest + React Testing Library
 ```
 
-**498 tests across 39 suites, 96.8% statement coverage**, against an 85% floor on every measure that CI enforces. Assignment 9's accessibility testing report, WCAG 2.1 AA conformance table and desktop VPAT are in [`docs/accessibility/`](docs/accessibility/README.md). The report is written to `desktop/coverage/lcov-report/index.html`, with a copy committed at [`desktop/docs/testing/coverage-html/index.html`](desktop/docs/testing/coverage-html/index.html); the submitted screenshot is [`docs/screenshots/desktop/coverage.png`](docs/screenshots/desktop/coverage.png).
+**523 tests across 41 suites, 97.1% statement coverage**, against an 85% floor on every measure that CI enforces. Assignment 9's accessibility testing report, WCAG 2.1 AA conformance table and desktop VPAT are in [`docs/accessibility/`](docs/accessibility/README.md). The report is written to `desktop/coverage/lcov-report/index.html`, with a copy committed at [`desktop/docs/testing/coverage-html/index.html`](desktop/docs/testing/coverage-html/index.html); the submitted screenshot is [`docs/screenshots/desktop/coverage.png`](docs/screenshots/desktop/coverage.png).
 
 | Area | What is covered |
 |:-----|:----------------|
