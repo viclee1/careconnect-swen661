@@ -84,13 +84,17 @@
   h4 { @apply text-lg; }
   h5, h6 { @apply text-base; }
 
+  /* Colours via theme(), not @apply: @apply text-calm-600 would also copy the
+     high-contrast override of .text-calm-600 below onto every link, as
+     `html.high-contrast a`, which outranks .text-white on dark buttons. */
   a {
-    @apply text-calm-600 underline underline-offset-2;
+    color: theme('colors.calm.600');
+    @apply underline underline-offset-2;
     text-decoration-thickness: 1px;
   }
 
   a:hover {
-    @apply text-calm-700;
+    color: theme('colors.calm.700');
     text-decoration-thickness: 2px;
   }
 
@@ -337,6 +341,35 @@ html.high-contrast .border-neutral-100,
 html.high-contrast .border-neutral-200,
 html.high-contrast .border-neutral-300 {
   border-color: #303845 !important;
+}
+/* Plain links darken too. :where() keeps this at element specificity, so a
+   link's own colour utility (text-white on a dark button) still wins. */
+:where(html.high-contrast) a,
+:where(html.high-contrast) a:hover {
+  color: #062738;
+}
+/* The last few pairs below 7:1 (WCAG 1.4.6 AAA), taken to it. */
+html.high-contrast .text-warning-700 {
+  color: #503800 !important;
+}
+html.high-contrast .bg-calm-600 {
+  background-color: #0f5070 !important;
+}
+html.high-contrast .text-warm-700 {
+  color: #573b04 !important;
+}
+html.high-contrast .text-success-600,
+html.high-contrast .text-success-700 {
+  color: #04402c !important;
+}
+/* The darkened text above is !important, so a state variant that turns the
+   same element white on a dark fill needs to be, too. */
+html.high-contrast .peer:checked ~ .peer-checked\:text-white {
+  color: #ffffff !important;
+}
+/* Landing's translucent hero badge: solid instead, for 7:1. */
+html.high-contrast .bg-white\/15 {
+  background-color: #0b3d56 !important;
 }
 html.high-contrast ::placeholder {
   color: #303845 !important;

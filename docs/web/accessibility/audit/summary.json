@@ -7,11 +7,20 @@
     "wcag21aa",
     "best-practice"
   ],
-  "date": "2026-10-27T05:08:41.115Z",
-  "scans": 64,
+  "highContrastTags": [
+    "wcag2a",
+    "wcag2aa",
+    "wcag21a",
+    "wcag21aa",
+    "best-practice",
+    "wcag2aaa",
+    "wcag21aaa"
+  ],
+  "date": "2026-10-29T17:28:28.177Z",
+  "scans": 115,
   "violations": 0,
   "checks": {
-    "total": 53,
+    "total": 104,
     "failed": 0
   },
   "results": [
@@ -462,6 +471,363 @@
       "breakpoint": "desktop 1280px",
       "violations": 0,
       "passes": 45
+    },
+    {
+      "id": "mobile-hc-landing",
+      "page": "Landing — high contrast",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 35
+    },
+    {
+      "id": "mobile-hc-signin",
+      "page": "Sign in — high contrast",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 40
+    },
+    {
+      "id": "mobile-hc-signup",
+      "page": "Sign up — high contrast",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 40
+    },
+    {
+      "id": "mobile-hc-role",
+      "page": "Role chooser — high contrast",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 34
+    },
+    {
+      "id": "mobile-hc-today",
+      "page": "Home (patient) — high contrast",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 41
+    },
+    {
+      "id": "mobile-hc-schedule",
+      "page": "My Day — high contrast",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 41
+    },
+    {
+      "id": "mobile-hc-appointments",
+      "page": "Appointments — high contrast",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 43
+    },
+    {
+      "id": "mobile-hc-medications",
+      "page": "Medicines — high contrast",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 45
+    },
+    {
+      "id": "mobile-hc-memories",
+      "page": "Memories — high contrast",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 45
+    },
+    {
+      "id": "mobile-hc-contacts",
+      "page": "Contacts — high contrast",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 43
+    },
+    {
+      "id": "mobile-hc-conversation",
+      "page": "Conversation — high contrast",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 44
+    },
+    {
+      "id": "mobile-hc-settings",
+      "page": "Accessibility Settings — high contrast",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 42
+    },
+    {
+      "id": "mobile-hc-dashboard",
+      "page": "Caregiver dashboard — high contrast",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 39
+    },
+    {
+      "id": "mobile-hc-manage-meds",
+      "page": "Manage medications — high contrast",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 40
+    },
+    {
+      "id": "mobile-hc-manage-appts",
+      "page": "Manage appointments — high contrast",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 40
+    },
+    {
+      "id": "mobile-hc-activity",
+      "page": "Activity log — high contrast",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 40
+    },
+    {
+      "id": "mobile-hc-notes",
+      "page": "Caregiver notes — high contrast",
+      "breakpoint": "mobile 375px",
+      "violations": 0,
+      "passes": 39
+    },
+    {
+      "id": "tablet-hc-landing",
+      "page": "Landing — high contrast",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 35
+    },
+    {
+      "id": "tablet-hc-signin",
+      "page": "Sign in — high contrast",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 40
+    },
+    {
+      "id": "tablet-hc-signup",
+      "page": "Sign up — high contrast",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 40
+    },
+    {
+      "id": "tablet-hc-role",
+      "page": "Role chooser — high contrast",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 34
+    },
+    {
+      "id": "tablet-hc-today",
+      "page": "Home (patient) — high contrast",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 41
+    },
+    {
+      "id": "tablet-hc-schedule",
+      "page": "My Day — high contrast",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 41
+    },
+    {
+      "id": "tablet-hc-appointments",
+      "page": "Appointments — high contrast",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 43
+    },
+    {
+      "id": "tablet-hc-medications",
+      "page": "Medicines — high contrast",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 45
+    },
+    {
+      "id": "tablet-hc-memories",
+      "page": "Memories — high contrast",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 45
+    },
+    {
+      "id": "tablet-hc-contacts",
+      "page": "Contacts — high contrast",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 43
+    },
+    {
+      "id": "tablet-hc-conversation",
+      "page": "Conversation — high contrast",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 44
+    },
+    {
+      "id": "tablet-hc-settings",
+      "page": "Accessibility Settings — high contrast",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 42
+    },
+    {
+      "id": "tablet-hc-dashboard",
+      "page": "Caregiver dashboard — high contrast",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 39
+    },
+    {
+      "id": "tablet-hc-manage-meds",
+      "page": "Manage medications — high contrast",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 40
+    },
+    {
+      "id": "tablet-hc-manage-appts",
+      "page": "Manage appointments — high contrast",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 40
+    },
+    {
+      "id": "tablet-hc-activity",
+      "page": "Activity log — high contrast",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 40
+    },
+    {
+      "id": "tablet-hc-notes",
+      "page": "Caregiver notes — high contrast",
+      "breakpoint": "tablet 820px",
+      "violations": 0,
+      "passes": 39
+    },
+    {
+      "id": "desktop-hc-landing",
+      "page": "Landing — high contrast",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 35
+    },
+    {
+      "id": "desktop-hc-signin",
+      "page": "Sign in — high contrast",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 40
+    },
+    {
+      "id": "desktop-hc-signup",
+      "page": "Sign up — high contrast",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 40
+    },
+    {
+      "id": "desktop-hc-role",
+      "page": "Role chooser — high contrast",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 34
+    },
+    {
+      "id": "desktop-hc-today",
+      "page": "Home (patient) — high contrast",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 45
+    },
+    {
+      "id": "desktop-hc-schedule",
+      "page": "My Day — high contrast",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 45
+    },
+    {
+      "id": "desktop-hc-appointments",
+      "page": "Appointments — high contrast",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 44
+    },
+    {
+      "id": "desktop-hc-medications",
+      "page": "Medicines — high contrast",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 46
+    },
+    {
+      "id": "desktop-hc-memories",
+      "page": "Memories — high contrast",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 46
+    },
+    {
+      "id": "desktop-hc-contacts",
+      "page": "Contacts — high contrast",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 46
+    },
+    {
+      "id": "desktop-hc-conversation",
+      "page": "Conversation — high contrast",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 46
+    },
+    {
+      "id": "desktop-hc-settings",
+      "page": "Accessibility Settings — high contrast",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 45
+    },
+    {
+      "id": "desktop-hc-dashboard",
+      "page": "Caregiver dashboard — high contrast",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 44
+    },
+    {
+      "id": "desktop-hc-manage-meds",
+      "page": "Manage medications — high contrast",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 44
+    },
+    {
+      "id": "desktop-hc-manage-appts",
+      "page": "Manage appointments — high contrast",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 44
+    },
+    {
+      "id": "desktop-hc-activity",
+      "page": "Activity log — high contrast",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 45
+    },
+    {
+      "id": "desktop-hc-notes",
+      "page": "Caregiver notes — high contrast",
+      "breakpoint": "desktop 1280px",
+      "violations": 0,
+      "passes": 44
     }
   ],
   "checkResults": [
@@ -727,6 +1093,261 @@
     },
     {
       "name": "Caregiver notes: no horizontal scroll at 320px",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Landing (mobile): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Sign in (mobile): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Sign up (mobile): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Role chooser (mobile): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Home (patient) (mobile): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "My Day (mobile): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Appointments (mobile): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Medicines (mobile): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Memories (mobile): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Contacts (mobile): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Conversation (mobile): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Accessibility Settings (mobile): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Caregiver dashboard (mobile): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Manage medications (mobile): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Manage appointments (mobile): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Activity log (mobile): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Caregiver notes (mobile): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Landing (tablet): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Sign in (tablet): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Sign up (tablet): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Role chooser (tablet): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Home (patient) (tablet): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "My Day (tablet): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Appointments (tablet): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Medicines (tablet): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Memories (tablet): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Contacts (tablet): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Conversation (tablet): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Accessibility Settings (tablet): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Caregiver dashboard (tablet): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Manage medications (tablet): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Manage appointments (tablet): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Activity log (tablet): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Caregiver notes (tablet): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Landing (desktop): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Sign in (desktop): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Sign up (desktop): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Role chooser (desktop): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Home (patient) (desktop): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "My Day (desktop): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Appointments (desktop): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Medicines (desktop): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Memories (desktop): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Contacts (desktop): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Conversation (desktop): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Accessibility Settings (desktop): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Caregiver dashboard (desktop): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Manage medications (desktop): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Manage appointments (desktop): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Activity log (desktop): high contrast applied",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "name": "Caregiver notes (desktop): high contrast applied",
       "pass": true,
       "note": ""
     }

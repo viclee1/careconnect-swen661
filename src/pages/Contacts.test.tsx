@@ -79,11 +79,14 @@ describe('Contacts', () => {
     expect(screen.getAllByRole('link')).toHaveLength(5);
   });
 
-  it('jumps to the search box when "/" is pressed outside a field', async () => {
+  it('jumps to the search box when "/" is pressed in the list, and only there', async () => {
     const user = userEvent.setup();
     renderContacts();
     const search = screen.getByRole('searchbox', { name: 'Find a contact' });
+    // Page-wide, "/" does nothing (WCAG 2.1.4: single-key shortcuts only on focus).
+    await user.keyboard('/');
     expect(search).not.toHaveFocus();
+    screen.getByTestId('contact-c3').focus();
     await user.keyboard('/');
     expect(search).toHaveFocus();
     // Typed inside the field, "/" is just a character.

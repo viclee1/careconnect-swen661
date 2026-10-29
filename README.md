@@ -584,7 +584,7 @@ Timestamped log of taken/skipped doses and check-ins.
 - **Playwright** — used by the screenshot scripts, the accessibility audit (`npm run a11y:web`), the `verify-pwa` / `verify-responsive` helpers and the end-to-end tests.
 - **Unit & component tests** — Jest + React Testing Library + `user-event` + jest-axe (`npm test`). `npm run test:coverage` writes `coverage/lcov-report/index.html` (committed) and fails below **75%** on statements, branches, functions or lines. The web suite has **375 tests in 29 suites, all passing**, at **95.8% statements / 91.1% branches / 94.1% functions / 96.4% lines** over the measured files (every Assignment 11 screen, the app shell, and their models, contexts, hooks and utilities). Each client has its own suite — see the [Flutter](#flutter-mobile-client), [React Native](#react-native-mobile-client) and [Electron](#electron-desktop-client) sections.
 - **End-to-end** — Playwright (`npm run test:e2e`) against the production build (`vite preview`, service worker active) in Chromium, Firefox, WebKit and mobile Safari at 375px. Specs in [`e2e/`](e2e): medicines by keyboard, appointments (My Day and calendar export read back from the real file), memories (form errors, save, pin, remove, filter), the memory book offline, every care page at every width with axe; contacts → conversation → send → reload, silent alert, captioned calls and video messages, quick replies, offline queueing and offline launch, keyboard-only settings, flash previews, and Settings reachable at every width. Latest local run (Chromium, WebKit, mobile Safari, three repeats each): **59 passed, 7 skipped by design, none failed**. Run `npx playwright install chromium firefox webkit` once first; `npm run test:e2e:report` opens the HTML report.
-- **Accessibility audit** — `npm run a11y:web`: 17 routes and the shell's interactive states at three widths, **64 scans, 0 violations, 53/53 keyboard and structure checks**.
+- **Accessibility audit** — `npm run a11y:web`: 17 routes and the shell's interactive states at three widths, plus every route again in high-contrast mode with axe's AAA rules — **115 scans, 0 violations, 104/104 keyboard and structure checks**. `npm run a11y:lighthouse`: Lighthouse accessibility **100 on every route, mobile and desktop** ([summary](docs/web/accessibility/lighthouse/summary.md)). Beyond AA, four WCAG 2.1 AAA criteria are met — listed with their evidence in [the accessibility documentation](docs/web/accessibility/README.md#10-beyond-aa--wcag-21-aaa).
 - **CI** — one GitHub Actions workflow per client, each run on pull requests and pushes to `main` that touch it, and each uploading its coverage report as a build artifact:
   - [`web-tests.yml`](.github/workflows/web-tests.yml) — lint, typecheck, coverage and every Playwright project (Firefox included).
   - [`desktop-tests.yml`](.github/workflows/desktop-tests.yml) — lint, typecheck and coverage for the Electron client, then packages the unsigned installer on Windows, macOS and Linux runners and uploads each one.
@@ -595,7 +595,7 @@ Assignment 11 write-ups: [team overview](docs/web/week11/README.md) · [Contacts
 
 **Accessibility verification**
 
-- Automated: axe DevTools and WAVE (zero critical or serious issues), Lighthouse accessibility ≥ 95.
+- Automated: axe DevTools and WAVE (zero critical or serious issues), Lighthouse accessibility 100 on every route.
 - Manual: full keyboard traversal, visible focus on every interactive element, screen-reader pass with NVDA or VoiceOver.
 - Hearing-specific: captions present on every video, a text alternative for every audio item, no sound-only alert path anywhere, and pause/stop/volume control on any audio playing automatically for more than three seconds.
 
@@ -717,7 +717,6 @@ npm run lint && npm run typecheck
 - **Firefox cannot launch locally on macOS 27** (Playwright's Firefox build hangs at its sandbox). CI runs the Firefox project on Ubuntu.
 - **Home and My Day keep their own task list** rather than reading the medicines and appointments stores, so ticking a medicine on Medicines does not tick it on My Day.
 - **The Medicines reminder caption** names the next medicine still to come today, not an overdue one.
-- **"/" on Contacts** is a single-character shortcut that cannot be turned off (WCAG 2.1.4); the plan is in the [accessibility documentation](docs/web/accessibility/README.md#9-known-gaps-and-next-steps).
 - **The AI assistant** (`ChatBot.tsx`) is not mounted since the Week 11 Landing page; whether it returns is a team decision.
 - Data is mock data in `localStorage`; nothing is sent to a server.
 

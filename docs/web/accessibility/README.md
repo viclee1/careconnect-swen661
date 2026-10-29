@@ -2,7 +2,7 @@
 
 **SWEN 661 Team 2 (The Acuity Health Group) — Assignment 10, Part 2.**
 The React web app at the repository root (Vite, React Router 7, Tailwind), targeting
-**WCAG 2.1 Level AA** at the three web breakpoints: mobile 320–767px, tablet
+**WCAG 2.1 Level AA**, with four Level AAA criteria also met (§10), at the three web breakpoints: mobile 320–767px, tablet
 768–1023px, desktop 1024px and up.
 
 This document describes the semantic HTML, ARIA landmarks, skip links, form
@@ -22,7 +22,9 @@ claim.
 
 | Evidence | Where |
 |:--|:--|
-| Automated audit — 64 scans, 0 violations, 53/53 keyboard & structure checks (Week 11) | [`audit/axe-results.png`](audit/axe-results.png), [`audit/report.html`](audit/report.html) |
+| Automated audit — 115 scans, 0 violations, 104/104 keyboard & structure checks; every route also scanned in high-contrast mode with axe's AAA rules (29 October 2026) | [`audit/axe-results.png`](audit/axe-results.png), [`audit/report.html`](audit/report.html) |
+| Lighthouse accessibility — 100 on all 17 routes, mobile and desktop (34/34 runs) | [`lighthouse/summary.md`](lighthouse/summary.md) |
+| WCAG 2.1 AAA criteria met, with evidence | [§10](#10-beyond-aa--wcag-21-aaa) |
 | Audit before the fixes — 71 violations, 5 failed checks | [`audit-before/`](audit-before) |
 | Landmarks, heading outline, links and fields of every page, at every breakpoint | [`structure.md`](structure.md) |
 | Accessibility tests (77) | [`src/accessibility.test.tsx`](../../../src/accessibility.test.tsx) |
@@ -252,8 +254,9 @@ Every interaction uses native elements, so the keys are the ones users already k
 | Arrow keys | Native only: move within a `<select>`, move the caret in a field, scroll the page |
 
 Shortcuts use a modifier (Ctrl/⌘), so nothing fires when a speech-recognition
-user dictates text (WCAG 2.1.4). One exception remains: on Contacts, "/" jumps to
-"Find a contact" (not while typing in a field). It is listed in §9 with a plan.
+user dictates text (WCAG 2.1.4). The one single-key shortcut — "/" jumps to
+"Find a contact" — works only while focus is inside the contact list, and never
+while typing in a field, which 2.1.4 allows.
 The "?" shortcut that briefly opened the shortcuts dialog was removed for this
 reason; the header's keyboard button opens it instead.
 
@@ -481,6 +484,27 @@ and 44 keyboard and structure checks.
 
 ---
 
+**High-contrast and AAA re-run (29 October 2026)** — the audit now scans
+every route a second time at each breakpoint with the header's high-contrast
+mode on and axe's AAA rules added (51 more scans, 51 more checks that the mode
+applied): **115 scans, 0 violations; 104/104 checks**. It found that the mode
+itself broke AA, and those were fixed:
+
+| # | Defect | WCAG | Fix |
+|--:|:--|:--|:--|
+| 13 | In high contrast, white text on dark buttons turned near-black: the Home video-call button (1.34:1), its Controls and CC chips (1.16:1). Tailwind's `@apply text-calm-600` on `a` had copied the `.text-calm-600` override onto every link, outranking `text-white` | 1.4.3 | Link colours set with `theme()`; high-contrast links darkened by a `:where()` rule that a colour utility still beats |
+| 14 | In high contrast, the selected Memories filter turned dark-on-dark (1.77:1): the `!important` override beat `peer-checked:text-white` | 1.4.3 | The state variant is `!important` in high contrast too |
+| 15 | Landing, Sign in, Sign up and the role chooser ignored a stored high-contrast choice | 1.4.6 | They apply it (`StoredContrast` in `App.tsx`) |
+| 16 | "/" on Contacts was a page-wide single-key shortcut with no off switch | 2.1.4 | Active only while focus is in the contact list |
+
+Lighthouse (`npm run a11y:lighthouse`, `scripts/web-lighthouse.mjs`) scores the
+accessibility category **100 on all 17 routes, mobile and desktop** — 34 of 34
+runs; [`lighthouse/summary.md`](lighthouse/summary.md). New end-to-end tests
+(`e2e/high-contrast.spec.ts`) keep high contrast at AA and AAA contrast on
+every care-recipient screen in all four browser projects.
+
+---
+
 ## 9. Known gaps and next steps
 
 | Gap | Plan |
@@ -489,10 +513,35 @@ and 44 keyboard and structure checks.
 | Each field error is also `role="alert"`, so submitting a form with four errors announces five times | Keep the summary as the only alert; field errors are read through `aria-describedby` when focused; move focus to the first invalid field |
 | Done toggles (My Day, Medicines) change their label with the state ("Mark Breakfast as done" ↔ "…as not done") **and** set `aria-pressed`, so a screen reader hears "Mark Breakfast as not done, toggle button, pressed" — two state signals that read as contradictory | Keep `aria-pressed` and give the button a fixed name ("Breakfast done"), as the WAI-ARIA toggle-button pattern advises |
 | ~~The app footer (`contentinfo`) is hidden below 1024px~~ | Resolved in Week 11: the status bar is shown at every width |
-| On Contacts, "/" is a single-character shortcut that cannot be turned off (WCAG 2.1.4) | Make it work only while the contact list has focus, or add an off switch in Accessibility Settings |
+| ~~On Contacts, "/" is a single-character shortcut that cannot be turned off (WCAG 2.1.4)~~ | Resolved: "/" works only while focus is in the contact list |
+| Five links are under the 44 × 44px AAA target size (2.5.5; AA's 24px minimum is met): the logo link on Sign in/Sign up (219 × 41), Landing's Sign in and Sign up (38px tall), Home's "View My Day →" (32px) and the caregiver dashboard's "View all activity" (27px) | `min-h-[2.75rem]` on each — Justin Zhang's pages, and the caregiver dashboard. The app header's logo link was brought to 44px on 29 October |
+| The vibration-pattern preview lamp in Accessibility Settings blinks in time with the buzz — up to about 7 times a second for the "missed" pattern. Within 2.3.1 (Level A) by its size, but it rules out 2.3.2 Three Flashes (AAA), which has no size exception | Show the rhythm as a static bar diagram, or cap the lamp at 3 blinks a second |
 | No manual screen-reader pass on the web app yet | VoiceOver (Safari, macOS and iOS) and NVDA (Chrome/Firefox, Windows) through the main flows before the next submission |
 | Tooltips and tabs are in the Part 1 design system but not built | No Figma frame uses them; build to the patterns in §7 if one does. Menus (account, Quick replies) and a combobox (search) are built |
 | The sticky status bar can sit over the last line of a long page while scrolling | `scroll-padding-bottom` keeps focused elements clear of it (WCAG 2.4.11); content is never hidden at the end of the page |
+
+---
+
+## 10. Beyond AA — WCAG 2.1 AAA
+
+The web app conforms to WCAG 2.1 Level AA (§8), and these Level AAA success
+criteria are also met. Each is backed by a check that runs, not only by design.
+
+| AAA criterion | How CareConnect meets it | Evidence |
+|:--|:--|:--|
+| **1.4.6 Contrast (Enhanced)** — 7:1 text, 4.5:1 large text | The header's high-contrast switch (◐; in the Menu drawer below 1024px) darkens secondary text, links and status colours to at least 7:1. WCAG lets a page meet a criterion through a mechanism on the page, and the choice is remembered on every page, the sign-in screens included | `npm run a11y:web`: every route at 375/820/1280px with high contrast on and axe's `wcag2aaa` rules — 51 scans, 0 violations. `e2e/high-contrast.spec.ts` in Chromium, Firefox, WebKit and mobile Safari |
+| **2.4.10 Section Headings** | Every page has one `h1`, and each titled part — every `Card`, date group, Pinned/More in Memories — is a `<section>` with a heading, in order with no skipped levels | [`structure.md`](structure.md): the heading outline of every page at every breakpoint; axe `heading-order` passes everywhere |
+| **2.4.8 Location** | The current page is marked in the navigation (`aria-current="page"` and a visible bar), every page has its own `<title>`, and a route change moves focus to `<main>` | `useDocumentTitle`; the audit's keyboard checks ("Navigating with the keyboard moves focus to `<main>` and updates the title") |
+| **2.2.3 No Timing** | Nothing the user does is timed: no session timeout, no timed form, no auto-advancing content. The screen flash fades on its own, but it is an extra cue: its message stays written in the conversation | By design; reviewed against `setTimeout`/`setInterval` use (the clock, the caregiver dashboard refresh, caption playback and the flash/lamp previews only) |
+
+**Not claimed:** 2.5.5 Target Size — every button and form control is at
+least 44 × 44px (a base rule in `index.css`), and so is every link in the app
+shell, but five links on the public and dashboard pages are not yet (§9).
+2.3.2 Three Flashes — the vibration-pattern lamp blinks faster
+than 3 a second (§9). 1.2.6 Sign Language and 1.2.8 Media Alternative — the
+demo videos are captioned and transcribed (AA) but have no sign-language
+interpretation. 2.1.3 Keyboard (No Exception) is likely met, since nothing needs
+a pointer, but has not been tested path by path.
 
 ---
 
@@ -502,7 +551,8 @@ and 44 keyboard and structure checks.
 npm install
 npx playwright install chromium          # once
 npm run dev -- --port 5180               # terminal 1
-npm run a11y:web                         # terminal 2 — axe + keyboard checks → docs/web/accessibility/audit/
+npm run a11y:web                         # terminal 2 — axe + keyboard checks, incl. high contrast + AAA → docs/web/accessibility/audit/
+npm run a11y:lighthouse                  # Lighthouse accessibility, every route → docs/web/accessibility/lighthouse/ (against `npm run build && npm run preview -- --port 5180`)
 npm run a11y:structure                   # landmarks, headings, links → structure.md
 npm test                                 # includes src/accessibility.test.tsx
 ```
