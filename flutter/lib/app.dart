@@ -5,12 +5,18 @@ import 'package:provider/provider.dart';
 import 'core/routing/app_router.dart';
 import 'core/routing/routes.dart';
 import 'core/theme/app_theme.dart';
+import 'data/appointment_repository.dart';
 import 'data/contact_repository.dart';
 import 'data/daily_tasks_repository.dart';
+import 'data/medicine_repository.dart';
 import 'data/message_repository.dart';
 import 'data/settings_repository.dart';
+import 'models/caregiver.dart';
+import 'state/appointments_controller.dart';
+import 'state/caregiver_controller.dart';
 import 'state/contacts_controller.dart';
 import 'state/daily_tasks_controller.dart';
+import 'state/medicines_controller.dart';
 import 'state/messages_controller.dart';
 import 'state/settings_controller.dart';
 
@@ -26,6 +32,9 @@ class CareConnectApp extends StatefulWidget {
     required this.messageRepository,
     required this.settingsRepository,
     required this.dailyTasksRepository,
+    this.medicineRepository,
+    this.appointmentRepository,
+    this.initialRole = Role.patient,
     this.initialLocation = Routes.initial,
   });
 
@@ -33,6 +42,15 @@ class CareConnectApp extends StatefulWidget {
   final MessageRepository messageRepository;
   final SettingsRepository settingsRepository;
   final DailyTasksRepository dailyTasksRepository;
+
+  /// In memory with the shared seed doses when not given.
+  final MedicineRepository? medicineRepository;
+
+  /// In memory with the shared seed visits when not given.
+  final AppointmentRepository? appointmentRepository;
+
+  /// Who the session starts as; the role chooser sets it after sign-in.
+  final Role initialRole;
   final String initialLocation;
 
   @override
@@ -61,9 +79,25 @@ class _CareConnectAppState extends State<CareConnectApp> {
           create: (_) =>
               SettingsController(repository: widget.settingsRepository)..load(),
         ),
+        // Ahead of My Day and Medicines, so ticking one off reaches the log.
+        ChangeNotifierProvider<CaregiverController>(
+          create: (_) => CaregiverController(initialRole: widget.initialRole),
+        ),
         ChangeNotifierProvider<DailyTasksController>(
-          create: (_) => DailyTasksController(
+          create: (BuildContext context) => DailyTasksController(
             repository: widget.dailyTasksRepository,
+            record: context.read<CaregiverController>().record,
+          ),
+        ),
+        ChangeNotifierProvider<MedicinesController>(
+          create: (BuildContext context) => MedicinesController(
+            repository: widget.medicineRepository ?? InMemoryMedicineRepository(),
+            record: context.read<CaregiverController>().record,
+          ),
+        ),
+        ChangeNotifierProvider<AppointmentsController>(
+          create: (_) => AppointmentsController(
+            repository: widget.appointmentRepository ?? InMemoryAppointmentRepository(),
           ),
         ),
       ],

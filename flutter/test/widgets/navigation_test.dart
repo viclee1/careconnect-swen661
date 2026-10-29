@@ -56,8 +56,11 @@ void main() {
       await tester.pumpAndSettle();
 
       // The tab and the screen title both read Medicines; check the title.
-      expect(find.descendant(of: find.byType(AppBar), matching: find.text('Medicines')), findsOneWidget);
-      expect(find.text('Aspirin'), findsOneWidget);
+      expect(
+          find.descendant(
+              of: find.byType(AppBar), matching: find.text('Medicines')),
+          findsOneWidget);
+      expect(find.text('Amlodipine'), findsOneWidget);
       expect(find.byType(ContactCard), findsNothing);
 
       await tester.tap(find.text('Contacts').last);
@@ -202,6 +205,31 @@ void main() {
       expect(Routes.threadPath('c1'), '/contacts/c1');
       expect(Routes.initial, Routes.welcome);
       expect(Routes.messageThread, '/contacts/:contactId');
+    });
+  });
+
+  group('Tablet sidebar', () {
+    testWidgets(
+        'every destination reaches a screen reader, the current one marked', (
+      WidgetTester tester,
+    ) async {
+      // Regression: the routed page used to block the sidebar's semantics, so
+      // on a tablet TalkBack and VoiceOver could not find the navigation at all.
+      useTabletSurface(tester);
+      await pumpApp(tester);
+
+      expect(find.bySemanticsLabel('Contacts, current screen'), findsOneWidget);
+      for (final String label in <String>[
+        'Home',
+        'My Day',
+        'Appointments',
+        'Medicines',
+        'Memories',
+        'Settings'
+      ]) {
+        expect(find.bySemanticsLabel('Go to $label'), findsOneWidget,
+            reason: label);
+      }
     });
   });
 }

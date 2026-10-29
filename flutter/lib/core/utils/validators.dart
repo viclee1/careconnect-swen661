@@ -33,4 +33,25 @@ abstract final class Validators {
     final int left = maxMessageLength - used;
     return left < 0 ? 0 : left;
   }
+
+  /// Validates a caregiver form where every field is required.
+  ///
+  /// Returns one sentence per empty field, keyed by field, in the order given
+  /// — empty when the form may be saved.
+  static Map<String, String> requiredFields(
+    List<({String name, String label})> fields,
+    Map<String, String> values,
+  ) {
+    final Map<String, String> errors = <String, String>{};
+    for (final field in fields) {
+      if ((values[field.name] ?? '').trim().isEmpty) {
+        errors[field.name] = '${field.label} is required.';
+      }
+    }
+    return errors;
+  }
+
+  /// "1 thing needs fixing" / "3 things need fixing".
+  static String fixSummary(int count) =>
+      count == 1 ? '1 thing needs fixing' : '$count things need fixing';
 }

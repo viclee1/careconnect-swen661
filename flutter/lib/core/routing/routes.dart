@@ -38,6 +38,26 @@ abstract final class Routes {
   static const String settings = '/settings';
   static const String settingsName = 'settings';
 
+  /// After sign-in: who is using the app.
+  static const String roleChooser = '/role';
+  static const String roleChooserName = 'roleChooser';
+
+  // The caregiver's screens.
+  static const String dashboard = '/caregiver';
+  static const String dashboardName = 'dashboard';
+
+  static const String manageMedicines = '/caregiver/medicines';
+  static const String manageMedicinesName = 'manageMedicines';
+
+  static const String manageAppointments = '/caregiver/appointments';
+  static const String manageAppointmentsName = 'manageAppointments';
+
+  static const String activity = '/caregiver/activity';
+  static const String activityName = 'activity';
+
+  static const String notes = '/caregiver/notes';
+  static const String notesName = 'notes';
+
   /// Where the app opens: the welcome screen, ahead of sign in/sign up.
   static const String initial = welcome;
 

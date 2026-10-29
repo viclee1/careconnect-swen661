@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-10-29 14:02:27</td>
+            <td class="headerValue">2026-10-29 18:05:30</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryHi">-</td>
@@ -134,12 +134,12 @@
 <span id="L72"><span class="lineNum">      72</span>              : /// Used by widget tests that are not exercising persistence, so they do not</span>
 <span id="L73"><span class="lineNum">      73</span>              : /// need to install the `shared_preferences` mock channel.</span>
 <span id="L74"><span class="lineNum">      74</span>              : class InMemorySettingsRepository implements SettingsRepository {</span>
-<span id="L75"><span class="lineNum">      75</span> <span class="tlaGNC">          10 :   InMemorySettingsRepository([this._settings = AccessibilitySettings.defaults]);</span></span>
+<span id="L75"><span class="lineNum">      75</span> <span class="tlaGNC">          13 :   InMemorySettingsRepository([this._settings = AccessibilitySettings.defaults]);</span></span>
 <span id="L76"><span class="lineNum">      76</span>              : </span>
 <span id="L77"><span class="lineNum">      77</span>              :   AccessibilitySettings _settings;</span>
 <span id="L78"><span class="lineNum">      78</span>              : </span>
-<span id="L79"><span class="lineNum">      79</span> <span class="tlaGNC">           6 :   @override</span></span>
-<span id="L80"><span class="lineNum">      80</span> <span class="tlaGNC">           6 :   Future&lt;AccessibilitySettings&gt; load() async =&gt; _settings;</span></span>
+<span id="L79"><span class="lineNum">      79</span> <span class="tlaGNC">           7 :   @override</span></span>
+<span id="L80"><span class="lineNum">      80</span> <span class="tlaGNC">           7 :   Future&lt;AccessibilitySettings&gt; load() async =&gt; _settings;</span></span>
 <span id="L81"><span class="lineNum">      81</span>              : </span>
 <span id="L82"><span class="lineNum">      82</span> <span class="tlaGNC">           3 :   @override</span></span>
 <span id="L83"><span class="lineNum">      83</span>              :   Future&lt;void&gt; save(AccessibilitySettings settings) async {</span>

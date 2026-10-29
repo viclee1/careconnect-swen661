@@ -32,12 +32,12 @@
             <td></td>
             <td class="headerItem">Lines:</td>
             <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
-            <td class="headerCovTableEntry">11</td>
-            <td class="headerCovTableEntry">11</td>
+            <td class="headerCovTableEntry">18</td>
+            <td class="headerCovTableEntry">18</td>
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-10-29 14:02:27</td>
+            <td class="headerValue">2026-10-29 18:05:30</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryHi">-</td>
@@ -95,7 +95,28 @@
 <span id="L33"><span class="lineNum">      33</span> <span class="tlaGNC">           5 :     final int left = maxMessageLength - used;</span></span>
 <span id="L34"><span class="lineNum">      34</span> <span class="tlaGNC">           5 :     return left &lt; 0 ? 0 : left;</span></span>
 <span id="L35"><span class="lineNum">      35</span>              :   }</span>
-<span id="L36"><span class="lineNum">      36</span>              : }</span>
+<span id="L36"><span class="lineNum">      36</span>              : </span>
+<span id="L37"><span class="lineNum">      37</span>              :   /// Validates a caregiver form where every field is required.</span>
+<span id="L38"><span class="lineNum">      38</span>              :   ///</span>
+<span id="L39"><span class="lineNum">      39</span>              :   /// Returns one sentence per empty field, keyed by field, in the order given</span>
+<span id="L40"><span class="lineNum">      40</span>              :   /// — empty when the form may be saved.</span>
+<span id="L41"><span class="lineNum">      41</span> <span class="tlaGNC">           3 :   static Map&lt;String, String&gt; requiredFields(</span></span>
+<span id="L42"><span class="lineNum">      42</span>              :     List&lt;({String name, String label})&gt; fields,</span>
+<span id="L43"><span class="lineNum">      43</span>              :     Map&lt;String, String&gt; values,</span>
+<span id="L44"><span class="lineNum">      44</span>              :   ) {</span>
+<span id="L45"><span class="lineNum">      45</span> <span class="tlaGNC">           3 :     final Map&lt;String, String&gt; errors = &lt;String, String&gt;{};</span></span>
+<span id="L46"><span class="lineNum">      46</span> <span class="tlaGNC">           6 :     for (final field in fields) {</span></span>
+<span id="L47"><span class="lineNum">      47</span> <span class="tlaGNC">           9 :       if ((values[field.name] ?? '').trim().isEmpty) {</span></span>
+<span id="L48"><span class="lineNum">      48</span> <span class="tlaGNC">           6 :         errors[field.name] = '${field.label} is required.';</span></span>
+<span id="L49"><span class="lineNum">      49</span>              :       }</span>
+<span id="L50"><span class="lineNum">      50</span>              :     }</span>
+<span id="L51"><span class="lineNum">      51</span>              :     return errors;</span>
+<span id="L52"><span class="lineNum">      52</span>              :   }</span>
+<span id="L53"><span class="lineNum">      53</span>              : </span>
+<span id="L54"><span class="lineNum">      54</span>              :   /// &quot;1 thing needs fixing&quot; / &quot;3 things need fixing&quot;.</span>
+<span id="L55"><span class="lineNum">      55</span> <span class="tlaGNC">           3 :   static String fixSummary(int count) =&gt;</span></span>
+<span id="L56"><span class="lineNum">      56</span> <span class="tlaGNC">           6 :       count == 1 ? '1 thing needs fixing' : '$count things need fixing';</span></span>
+<span id="L57"><span class="lineNum">      57</span>              : }</span>
         </pre>
               </td>
             </tr>

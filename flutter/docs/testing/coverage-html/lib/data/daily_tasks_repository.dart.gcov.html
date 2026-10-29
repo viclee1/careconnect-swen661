@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-10-29 14:02:27</td>
+            <td class="headerValue">2026-10-29 18:05:30</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryHi">-</td>
@@ -125,18 +125,18 @@
 <span id="L63"><span class="lineNum">      63</span>              :     ),</span>
 <span id="L64"><span class="lineNum">      64</span>              :   };</span>
 <span id="L65"><span class="lineNum">      65</span>              : </span>
-<span id="L66"><span class="lineNum">      66</span> <span class="tlaGNC">           5 :   @override</span></span>
-<span id="L67"><span class="lineNum">      67</span> <span class="tlaGNC">          15 :   List&lt;DailyTask&gt; getTasks() =&gt; _tasks.values.toList();</span></span>
+<span id="L66"><span class="lineNum">      66</span> <span class="tlaGNC">           7 :   @override</span></span>
+<span id="L67"><span class="lineNum">      67</span> <span class="tlaGNC">          21 :   List&lt;DailyTask&gt; getTasks() =&gt; _tasks.values.toList();</span></span>
 <span id="L68"><span class="lineNum">      68</span>              : </span>
-<span id="L69"><span class="lineNum">      69</span> <span class="tlaGNC">           2 :   @override</span></span>
+<span id="L69"><span class="lineNum">      69</span> <span class="tlaGNC">           4 :   @override</span></span>
 <span id="L70"><span class="lineNum">      70</span>              :   void updateTask(String id, bool isDone) {</span>
-<span id="L71"><span class="lineNum">      71</span> <span class="tlaGNC">           4 :     if (_tasks.containsKey(id)) {</span></span>
-<span id="L72"><span class="lineNum">      72</span> <span class="tlaGNC">          10 :       _tasks[id] = _tasks[id]!.copyWith(isDone: isDone);</span></span>
+<span id="L71"><span class="lineNum">      71</span> <span class="tlaGNC">           8 :     if (_tasks.containsKey(id)) {</span></span>
+<span id="L72"><span class="lineNum">      72</span> <span class="tlaGNC">          20 :       _tasks[id] = _tasks[id]!.copyWith(isDone: isDone);</span></span>
 <span id="L73"><span class="lineNum">      73</span>              :     }</span>
 <span id="L74"><span class="lineNum">      74</span>              :   }</span>
 <span id="L75"><span class="lineNum">      75</span>              : </span>
-<span id="L76"><span class="lineNum">      76</span> <span class="tlaGNC">           5 :   @override</span></span>
-<span id="L77"><span class="lineNum">      77</span> <span class="tlaGNC">           5 :   bool isNotificationVisible() =&gt; _notificationVisible;</span></span>
+<span id="L76"><span class="lineNum">      76</span> <span class="tlaGNC">           6 :   @override</span></span>
+<span id="L77"><span class="lineNum">      77</span> <span class="tlaGNC">           6 :   bool isNotificationVisible() =&gt; _notificationVisible;</span></span>
 <span id="L78"><span class="lineNum">      78</span>              : </span>
 <span id="L79"><span class="lineNum">      79</span> <span class="tlaGNC">           1 :   @override</span></span>
 <span id="L80"><span class="lineNum">      80</span>              :   void dismissNotification() {</span>

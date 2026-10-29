@@ -1,10 +1,13 @@
 import 'package:careconnect_mobile/app.dart';
 import 'package:careconnect_mobile/core/routing/routes.dart';
+import 'package:careconnect_mobile/data/appointment_repository.dart';
 import 'package:careconnect_mobile/data/contact_repository.dart';
 import 'package:careconnect_mobile/data/daily_tasks_repository.dart';
+import 'package:careconnect_mobile/data/medicine_repository.dart';
 import 'package:careconnect_mobile/data/message_repository.dart';
 import 'package:careconnect_mobile/data/settings_repository.dart';
 import 'package:careconnect_mobile/models/accessibility_settings.dart';
+import 'package:careconnect_mobile/models/caregiver.dart';
 import 'package:careconnect_mobile/models/contact.dart';
 import 'package:careconnect_mobile/models/message.dart';
 import 'package:flutter/material.dart';
@@ -56,6 +59,9 @@ Future<SettingsRepository> pumpApp(
   ContactRepository? contactRepository,
   MessageRepository? messageRepository,
   DailyTasksRepository? dailyTasksRepository,
+  MedicineRepository? medicineRepository,
+  AppointmentRepository? appointmentRepository,
+  Role role = Role.patient,
 }) async {
   final SettingsRepository repository = settingsRepository ??
       InMemorySettingsRepository(settings ?? AccessibilitySettings.defaults);
@@ -69,6 +75,9 @@ Future<SettingsRepository> pumpApp(
       settingsRepository: repository,
       dailyTasksRepository:
           dailyTasksRepository ?? InMemoryDailyTasksRepository(),
+      medicineRepository: medicineRepository,
+      appointmentRepository: appointmentRepository,
+      initialRole: role,
       initialLocation: initialLocation,
     ),
   );

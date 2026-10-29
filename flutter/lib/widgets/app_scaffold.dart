@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../core/routing/routes.dart';
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_theme.dart';
+import '../state/caregiver_controller.dart';
 import 'responsive.dart';
 
 /// The top-level destinations, in the order the Week 3 prototype shows them.
@@ -15,6 +17,12 @@ enum AppDestination {
   memories,
   contacts,
   settings,
+  // The caregiver's.
+  dashboard,
+  manageMedicines,
+  manageAppointments,
+  activity,
+  notes,
 }
 
 /// One navigation destination.
@@ -99,6 +107,53 @@ const List<NavEntry> kDestinations = <NavEntry>[
   ),
 ];
 
+/// The caregiver's destinations, in the web client's order, then Settings.
+const List<NavEntry> kCaregiverDestinations = <NavEntry>[
+  NavEntry(
+    destination: AppDestination.dashboard,
+    icon: Icons.dashboard_outlined,
+    shortLabel: 'Dashboard',
+    label: 'Dashboard',
+    path: Routes.dashboard,
+  ),
+  NavEntry(
+    destination: AppDestination.manageMedicines,
+    icon: Icons.medication_outlined,
+    shortLabel: 'Medicines',
+    label: 'Medicines',
+    path: Routes.manageMedicines,
+  ),
+  NavEntry(
+    destination: AppDestination.manageAppointments,
+    icon: Icons.event_outlined,
+    shortLabel: 'Appts',
+    label: 'Appointments',
+    path: Routes.manageAppointments,
+  ),
+  NavEntry(
+    destination: AppDestination.activity,
+    icon: Icons.timeline,
+    shortLabel: 'Activity',
+    label: 'Activity',
+    path: Routes.activity,
+  ),
+  NavEntry(
+    destination: AppDestination.notes,
+    icon: Icons.note_alt_outlined,
+    shortLabel: 'Notes',
+    label: 'Notes',
+    path: Routes.notes,
+  ),
+  NavEntry(
+    destination: AppDestination.settings,
+    icon: Icons.settings_outlined,
+    shortLabel: 'Settings',
+    label: 'Settings',
+    path: Routes.settings,
+    inBottomBar: false,
+  ),
+];
+
 /// The six destinations that appear in the phone's bottom bar.
 List<NavEntry> get kBottomBarEntries =>
     kDestinations.where((NavEntry entry) => entry.inBottomBar).toList();
@@ -106,7 +161,7 @@ List<NavEntry> get kBottomBarEntries =>
 /// Which destination a route path belongs to, or null if it is not a
 /// destination at all.
 AppDestination? destinationForLocation(String location) {
-  for (final NavEntry entry in kDestinations) {
+  for (final NavEntry entry in <NavEntry>[...kDestinations, ...kCaregiverDestinations]) {
     if (location == entry.path) return entry.destination;
   }
   return null;
@@ -135,14 +190,20 @@ class AppShell extends StatelessWidget {
   Widget build(BuildContext context) {
     final AppDestination? current = destinationForLocation(location);
     final bool isTablet = Breakpoints.isTablet(context);
+    final List<NavEntry> entries = context.watch<CaregiverController>().isCaregiver
+        ? kCaregiverDestinations
+        : kDestinations;
 
     if (isTablet) {
       return Scaffold(
         body: Row(
           children: <Widget>[
-            _Sidebar(current: current),
+            _Sidebar(current: current, entries: entries),
             const VerticalDivider(width: 1, color: AppColors.border),
-            Expanded(child: child),
+            // The page is its own semantics container. Otherwise the routed
+            // navigator, painted after the sidebar in the same container,
+            // blocks the sidebar's semantics and a screen reader never finds it.
+            Expanded(child: Semantics(container: true, child: child)),
           ],
         ),
       );
@@ -152,7 +213,10 @@ class AppShell extends StatelessWidget {
       body: child,
       bottomNavigationBar: current == AppDestination.settings
           ? null
-          : _BottomBar(current: current),
+          : _BottomBar(
+              current: current,
+              entries: entries.where((NavEntry entry) => entry.inBottomBar).toList(),
+            ),
     );
   }
 }
@@ -259,9 +323,10 @@ void _goTo(BuildContext context, NavEntry entry) {
 
 /// The phone navigation bar: six destinations, icon above a short label.
 class _BottomBar extends StatelessWidget {
-  const _BottomBar({required this.current});
+  const _BottomBar({required this.current, required this.entries});
 
   final AppDestination? current;
+  final List<NavEntry> entries;
 
   @override
   Widget build(BuildContext context) {
@@ -275,10 +340,12 @@ class _BottomBar extends StatelessWidget {
         child: SizedBox(
           height: 64,
           child: Row(
-            children: kBottomBarEntries.map((NavEntry entry) {
+            children: entries.map((NavEntry entry) {
               final bool selected = entry.destination == current;
               return Expanded(
                 child: Semantics(
+                  // Its own node, so a screen reader stops on each tab.
+                  container: true,
                   button: true,
                   selected: selected,
                   label: selected
@@ -336,9 +403,10 @@ class _BottomBar extends StatelessWidget {
 /// The tablet sidebar, listing every destination including Settings, as the
 /// prototype's desktop layout does.
 class _Sidebar extends StatelessWidget {
-  const _Sidebar({required this.current});
+  const _Sidebar({required this.current, required this.entries});
 
   final AppDestination? current;
+  final List<NavEntry> entries;
 
   @override
   Widget build(BuildContext context) {
@@ -349,9 +417,12 @@ class _Sidebar extends StatelessWidget {
         right: false,
         child: ListView(
           padding: const EdgeInsets.symmetric(vertical: 12),
-          children: kDestinations.map((NavEntry entry) {
+          children: entries.map((NavEntry entry) {
             final bool selected = entry.destination == current;
             return Semantics(
+              // Its own node: without it the sidebar's labels never reach the
+              // semantics tree, and a screen reader cannot stop on each item.
+              container: true,
               button: true,
               selected: selected,
               label: selected

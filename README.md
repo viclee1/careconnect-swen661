@@ -113,7 +113,7 @@ Instructor-assigned hearing-impairment constraints, mapped to WCAG 2.2:
 | Mobile — Android and iOS | React Native + Expo | `mobile/` | Every care recipient screen built; release APK in `apk-submission/`; linted, typechecked and tested in CI. See [React Native mobile client](#react-native-mobile-client) |
 | Desktop — Windows, macOS, Linux | Electron + React | `desktop/` | All eleven pages ported; CI tests the app and packages the Windows `.exe`, macOS `.dmg` and Linux `.AppImage`/`.deb` installers. See [Electron desktop client](#electron-desktop-client) |
 
-**Platform scope.** Every client carries the same care recipient screens: Welcome, Sign In, Sign Up, Home, My Day, Appointments, Medicines, Memories, Contacts, Messaging and Accessibility Settings. The caregiver role — role chooser, dashboard, managing medicines and appointments, activity log and care notes — is on the web, desktop and React Native clients; Flutter is in #26.
+**Platform scope.** Every client carries the same care recipient screens: Welcome, Sign In, Sign Up, Home, My Day, Appointments, Medicines, Memories, Contacts, Messaging and Accessibility Settings — and the same caregiver role: a role chooser, dashboard, managing medicines and appointments, activity log and care notes, sharing one plan with the care recipient's screens.
 
 ---
 
@@ -593,7 +593,7 @@ Timestamped log of taken/skipped doses and check-ins.
   | Web (React) | 434 | 94.7% | 88.3% | 93.8% | 95.7% | [`coverage/lcov-report/`](coverage/lcov-report/index.html) |
   | Desktop (Electron) | 523 | 97.1% | 91.6% | 96.1% | 98.2% | [`desktop/docs/testing/coverage-html/`](desktop/docs/testing/coverage-html/index.html) |
   | React Native | 318 | 97.9% | 89.6% | 95.9% | 98.0% | [`mobile/docs/testing/coverage-html/`](mobile/docs/testing/coverage-html/index.html) |
-  | Flutter | 234 | — | — | — | 98.9% | [`flutter/docs/testing/coverage-html/`](flutter/docs/testing/coverage-html/index.html) |
+  | Flutter | 277 | — | — | — | 99.0% | [`flutter/docs/testing/coverage-html/`](flutter/docs/testing/coverage-html/index.html) |
 
   `flutter test` reports line coverage only. No client uses snapshot tests: assertions name the behaviour — what the user sees, hears announced, or can do next.
 - **End-to-end** — Playwright (`npm run test:e2e`) against the production build (`vite preview`, service worker active) in Chromium, Firefox, WebKit and mobile Safari at 375px. Specs in [`e2e/`](e2e): medicines by keyboard, appointments (My Day and calendar export read back from the real file), memories (form errors, save, pin, remove, filter), the memory book offline, every care page at every width with axe; contacts → conversation → send → reload, silent alert, captioned calls and video messages, quick replies, offline queueing and offline launch, keyboard-only settings, flash previews, and Settings reachable at every width. Latest local run (Chromium, WebKit, mobile Safari, three repeats each): **59 passed, 7 skipped by design, none failed**. Run `npx playwright install chromium firefox webkit` once first; `npm run test:e2e:report` opens the HTML report.
@@ -775,11 +775,13 @@ The mobile build of CareConnect for care recipients who are deaf or hard of hear
 | Contacts | `/contacts` | Roster with waiting-message counts shown as a number and a word, never a bare dot. |
 | Messaging | `/contacts/:contactId` | Conversation view with transcripts for voicemail, caption status for video, and **Notify** in place of a phone call. |
 | Accessibility Settings | `/settings` | Visual Alerts (cannot be disabled), Captions, Audio, Vibration, persisted with `SharedPreferences`. |
-| Appointments | `/appointments` | Upcoming appointments list. |
-| Medicines | `/medicines` | Pill inventory with dosage, frequency and persistent taken-status tracking. |
+| Appointments | `/appointments` | Upcoming visits — doctor, specialty, date, time and location — read as one sentence each, with a loading state and a retry banner when the load fails (never shown as "none"). |
+| Medicines | `/medicines` | Today's medicines with dose and time, a taken count, and a checkbox per medicine. The same seed doses as the React Native and desktop clients. |
 | Memories | `/memories` | Memory journal with categorization and persistent storage. |
 
-That's 9 functional screens against the assignment's 7–10 target.
+| Caregiver role | `/role`, `/caregiver/…` | A role chooser after sign-in; the caregiver's own tabs (a sidebar on a tablet) — Dashboard, Manage medicines, Manage appointments, Activity, Care notes — sharing one plan with the care recipient's screens through `MedicinesController`, `AppointmentsController` and `CaregiverController`; switch views from Settings › Account. |
+
+That's 9 functional screens against the assignment's 7–10 target, plus the caregiver role ported from the web client.
 
 **How it meets the assigned constraints**
 
@@ -812,7 +814,7 @@ flutter analyze
 flutter test --coverage
 ```
 
-234 tests at 98.9% line coverage against an 85% floor that CI enforces — including the 14-test
+277 tests at 99.0% line coverage against an 85% floor that CI enforces — including the 22-test
 `test/accessibility/accessibility_guideline_test.dart` suite, which runs Flutter's
 built-in `AccessibilityGuideline` API (`androidTapTargetGuideline`,
 `textContrastGuideline`, `labeledTapTargetGuideline`) against every routed screen. An

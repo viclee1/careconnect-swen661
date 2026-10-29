@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/routing/routes.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/haptics.dart';
 import '../../models/accessibility_settings.dart';
+import '../../models/caregiver.dart';
 import '../../models/vibration_pattern.dart';
+import '../../state/caregiver_controller.dart';
 import '../../state/settings_controller.dart';
 import '../../widgets/alert_banner.dart';
 import '../../widgets/app_back_button.dart';
@@ -46,8 +50,7 @@ class SettingsScreen extends StatelessWidget {
             SettingsSection(
               icon: Icons.visibility_outlined,
               title: 'Visual Alerts',
-              description:
-                  'What appears on screen when CareConnect needs you.',
+              description: 'What appears on screen when CareConnect needs you.',
               children: <Widget>[
                 SettingsSwitchTile(
                   title: 'Visual alert banners',
@@ -104,8 +107,7 @@ class SettingsScreen extends StatelessWidget {
             SettingsSection(
               icon: Icons.volume_up_outlined,
               title: 'Audio',
-              description:
-                  'Sound is never the only way CareConnect tells you '
+              description: 'Sound is never the only way CareConnect tells you '
                   'something. These controls decide how much of it there is.',
               children: <Widget>[
                 SettingsSliderTile(
@@ -121,8 +123,7 @@ class SettingsScreen extends StatelessWidget {
                   divisions: 10,
                   minLabel: '0%',
                   maxLabel: '100%',
-                  onChanged: (double value) =>
-                      controller.setAlertVolume(value),
+                  onChanged: (double value) => controller.setAlertVolume(value),
                   semanticFormatter: (double v) =>
                       'Alert volume ${(v * 100).round()} per cent',
                 ),
@@ -184,8 +185,11 @@ class SettingsScreen extends StatelessWidget {
             SettingsSection(
               icon: Icons.person_outline,
               title: 'Account',
-              description: 'Margaret Whitfield · Care Recipient',
+              description: context.watch<CaregiverController>().isCaregiver
+                  ? 'Margaret Whitfield · Caregiver view'
+                  : 'Margaret Whitfield · Care Recipient',
               children: <Widget>[
+                const _SwitchRoleTile(),
                 _SignOutTile(onSignOut: () => _confirmSignOut(context)),
               ],
             ),
@@ -421,7 +425,38 @@ class _PatternsHeading extends StatelessWidget {
   }
 }
 
-/// The Account section's single control.
+/// Switches between the care recipient's and the caregiver's view, landing on
+/// that role's home.
+class _SwitchRoleTile extends StatelessWidget {
+  const _SwitchRoleTile();
+
+  @override
+  Widget build(BuildContext context) {
+    final CaregiverController caregiver = context.watch<CaregiverController>();
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+      child: OutlinedButton.icon(
+        onPressed: () {
+          final Role next =
+              caregiver.isCaregiver ? Role.patient : Role.caregiver;
+          caregiver.setRole(next);
+          context.go(next == Role.caregiver ? Routes.dashboard : Routes.home);
+        },
+        icon: const Icon(Icons.swap_horiz),
+        style: OutlinedButton.styleFrom(
+          minimumSize: const Size(double.infinity, AppTheme.minTouchTarget),
+        ),
+        label: Text(
+          caregiver.isCaregiver
+              ? 'Switch to care recipient view'
+              : 'Switch to caregiver view',
+        ),
+      ),
+    );
+  }
+}
+
+/// The Account section's sign-out control.
 class _SignOutTile extends StatelessWidget {
   const _SignOutTile({required this.onSignOut});
 
