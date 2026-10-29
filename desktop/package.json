@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "description": "CareConnect desktop client — an accessible medical companion for deaf and hard-of-hearing users",
   "author": "SWEN 661 Team 2 — The Acuity Health Group",
+  "homepage": "https://github.com/viclee1/careconnect-swen661",
   "license": "MIT",
   "private": true,
   "main": "dist/main/main.js",

@@ -1,0 +1,77 @@
+name: Desktop tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'desktop/**'
+      - '.github/workflows/desktop-tests.yml'
+  pull_request:
+    paths:
+      - 'desktop/**'
+      - '.github/workflows/desktop-tests.yml'
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: desktop
+
+jobs:
+  unit-and-component:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run test:coverage
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: desktop-coverage-report
+          path: desktop/coverage/lcov-report
+
+  # Builds the unsigned installer on each desktop OS, so Windows, macOS and
+  # Linux are each proven to package rather than only claimed in the README.
+  package:
+    needs: unit-and-component
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-2022
+            script: package:win
+          # Intel: the arm64 macOS runners were too short of capacity to
+          # pick the job up, and macos-13 is retired. package:mac builds for
+          # the host, so an x64 .dmg.
+          - os: macos-15-intel
+            script: package:mac
+          - os: ubuntu-24.04
+            script: package:linux
+    runs-on: ${{ matrix.os }}
+    env:
+      # No signing certificates in CI; the README documents the unsigned builds.
+      CSC_IDENTITY_AUTO_DISCOVERY: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+      - run: npm ci
+      - run: npm run ${{ matrix.script }} -- --publish never
+      - uses: actions/upload-artifact@v4
+        with:
+          name: desktop-installer-${{ matrix.os }}
+          path: |
+            desktop/release/*.exe
+            desktop/release/*.dmg
+            desktop/release/*.AppImage
+            desktop/release/*.deb
+          if-no-files-found: error

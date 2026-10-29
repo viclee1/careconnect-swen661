@@ -109,9 +109,11 @@ Instructor-assigned hearing-impairment constraints, mapped to WCAG 2.2:
 | Target | Stack | Folder | Status |
 |:-------|:------|:-------|:-------|
 | Web — responsive application / PWA | React 18 + Vite + TypeScript + Tailwind | repository root | Assignment 11: every screen built and aligned to the Figma web design. See [React web client](#react-web-client) |
-| Mobile — Android and iOS | Flutter + Dart | `flutter/` | In progress — see [Flutter mobile client](#flutter-mobile-client) |
-| Mobile — Android and iOS | React Native + Expo | `mobile/` | In progress — see [React Native mobile client](#react-native-mobile-client) |
-| Desktop — Windows (also builds for macOS, Linux) | Electron + React | `desktop/` | Built for Assignment 8 — Windows installer; all eleven pages ported. See [Electron desktop client](#electron-desktop-client) |
+| Mobile — Android and iOS | Flutter + Dart | `flutter/` | Every care recipient screen built; release APK in `apk-submission/`; analyzed and tested in CI. See [Flutter mobile client](#flutter-mobile-client) |
+| Mobile — Android and iOS | React Native + Expo | `mobile/` | Every care recipient screen built; release APK in `apk-submission/`; linted, typechecked and tested in CI. See [React Native mobile client](#react-native-mobile-client) |
+| Desktop — Windows, macOS, Linux | Electron + React | `desktop/` | All eleven pages ported; CI tests the app and packages the Windows `.exe`, macOS `.dmg` and Linux `.AppImage`/`.deb` installers. See [Electron desktop client](#electron-desktop-client) |
+
+**Platform scope.** Every client carries the same care recipient screens: Welcome, Sign In, Sign Up, Home, My Day, Appointments, Medicines, Memories, Contacts, Messaging and Accessibility Settings. The caregiver role — role chooser, caregiver dashboard, activity log, and managing medications and appointments — is web-only.
 
 ---
 
@@ -428,15 +430,7 @@ Release artifacts: `flutter build apk --release` or `flutter build ios --release
 
 ### React Native — Expo
 
-The Expo implementation carries Rehman Uddin's three fully-tested screens (Appointments, Medications, Memories) with 60.16% coverage. Run the app:
-
-```bash
-cd mobile/careconnect-app
-npm install
-npx expo start           # press a for Android, i for iOS, w for web
-```
-
-For testing, see the [React Native mobile client (Expo)](#react-native-mobile-client-expo) section below. The separate `mobile/` project (Victor Lee's, Justin Zhang's and Rehman Uddin's screens, all ported into one app) is documented under [React Native mobile client](#react-native-mobile-client); running it works the same way:
+The Expo client in `mobile/` carries every care recipient screen (Victor Lee's, Justin Zhang's and Rehman Uddin's, ported into one app) and is documented under [React Native mobile client](#react-native-mobile-client):
 
 ```bash
 cd mobile
@@ -589,9 +583,13 @@ Timestamped log of taken/skipped doses and check-ins.
 - **Static checks** — ESLint (`npm run lint`) and TypeScript strict mode (`npm run typecheck`). Both must pass before a pull request merges.
 - **Playwright** — used by the screenshot scripts, the accessibility audit (`npm run a11y:web`), the `verify-pwa` / `verify-responsive` helpers and the end-to-end tests.
 - **Unit & component tests** — Jest + React Testing Library + `user-event` + jest-axe (`npm test`). `npm run test:coverage` writes `coverage/lcov-report/index.html` (committed) and fails below **75%** on statements, branches, functions or lines. The web suite has **375 tests in 29 suites, all passing**, at **95.8% statements / 91.1% branches / 94.1% functions / 96.4% lines** over the measured files (every Assignment 11 screen, the app shell, and their models, contexts, hooks and utilities). Each client has its own suite — see the [Flutter](#flutter-mobile-client), [React Native](#react-native-mobile-client) and [Electron](#electron-desktop-client) sections.
-- **End-to-end** — Playwright (`npm run test:e2e`) against the production build (`vite preview`, service worker active) in Chromium, Firefox, WebKit and mobile Safari at 375px. Specs in [`e2e/`](e2e): medicines by keyboard, appointments (My Day and calendar export read back from the real file), memories (form errors, save, pin, remove, filter), the memory book offline, every care page at every width with axe; contacts → conversation → send → reload, silent alert, captioned calls and video messages, quick replies, offline queueing and offline launch, keyboard-only settings, flash previews, and Settings reachable at every width. Latest local run (Chromium, WebKit, mobile Safari): **58 passed, 7 skipped by design, 1 failed** — see [known issues](#known-issues-and-limitations-web). Run `npx playwright install chromium firefox webkit` once first; `npm run test:e2e:report` opens the HTML report.
+- **End-to-end** — Playwright (`npm run test:e2e`) against the production build (`vite preview`, service worker active) in Chromium, Firefox, WebKit and mobile Safari at 375px. Specs in [`e2e/`](e2e): medicines by keyboard, appointments (My Day and calendar export read back from the real file), memories (form errors, save, pin, remove, filter), the memory book offline, every care page at every width with axe; contacts → conversation → send → reload, silent alert, captioned calls and video messages, quick replies, offline queueing and offline launch, keyboard-only settings, flash previews, and Settings reachable at every width. Latest local run (Chromium, WebKit, mobile Safari, three repeats each): **59 passed, 7 skipped by design, none failed**. Run `npx playwright install chromium firefox webkit` once first; `npm run test:e2e:report` opens the HTML report.
 - **Accessibility audit** — `npm run a11y:web`: 17 routes and the shell's interactive states at three widths, **64 scans, 0 violations, 53/53 keyboard and structure checks**.
-- **CI** — [`.github/workflows/web-tests.yml`](.github/workflows/web-tests.yml) runs lint, typecheck, coverage and every Playwright project (Firefox included) on each pull request.
+- **CI** — one GitHub Actions workflow per client, each run on pull requests and pushes to `main` that touch it, and each uploading its coverage report as a build artifact:
+  - [`web-tests.yml`](.github/workflows/web-tests.yml) — lint, typecheck, coverage and every Playwright project (Firefox included).
+  - [`desktop-tests.yml`](.github/workflows/desktop-tests.yml) — lint, typecheck and coverage for the Electron client, then packages the unsigned installer on Windows, macOS and Linux runners and uploads each one.
+  - [`mobile-tests.yml`](.github/workflows/mobile-tests.yml) — lint, typecheck and coverage for the React Native client.
+  - [`flutter-tests.yml`](.github/workflows/flutter-tests.yml) — `flutter analyze` and `flutter test --coverage` on Flutter 3.47.1.
 
 Assignment 11 write-ups: [team overview](docs/web/week11/README.md) · [Contacts, Messaging, Accessibility Settings and the app shell](docs/web/week11/victor/README.md) · [Appointments, Medicines and Memories](docs/web/week11/upneet/README.md).
 
@@ -655,7 +653,7 @@ npm run build       # outputs to /dist
 
 Deploy `/dist` to Netlify or Vercel. Configure the assistant's Supabase Edge Function and set `ANTHROPIC_API_KEY` in the host's environment settings — never client-side.
 
-Windows desktop artifacts are produced by Electron. Members without a native Windows install should build through GitHub Actions on a `windows-latest` runner and treat CI as the authoritative build environment.
+Desktop installers are produced by Electron. The `package` job in [`desktop-tests.yml`](.github/workflows/desktop-tests.yml) builds the Windows, macOS and Linux installers on native runners — members without a given OS should download that job's artifacts and treat CI as the authoritative build environment.
 
 ---
 
@@ -716,7 +714,6 @@ npm run lint && npm run typecheck
 
 ### Known issues and limitations (web)
 
-- **One end-to-end check is timing-sensitive.** In Chromium only, the Memories flow sometimes measures the focused field before the browser has finished scrolling it below the sticky header, and fails. It fails the same way on the commit before the Figma work and passed in one of the latest runs; WebKit and mobile Safari pass.
 - **Firefox cannot launch locally on macOS 27** (Playwright's Firefox build hangs at its sandbox). CI runs the Firefox project on Ubuntu.
 - **Home and My Day keep their own task list** rather than reading the medicines and appointments stores, so ticking a medicine on Medicines does not tick it on My Day.
 - **The Medicines reminder caption** names the next medicine still to come today, not an overdue one.
@@ -744,7 +741,7 @@ Documentation for the Flutter client is organized below to match the course's Pa
 
 ### Project description
 
-The mobile build of CareConnect for care recipients who are deaf or hard of hearing, built against the Week 3 design prototype. It carries Victor Lee's three screens (Contacts, Messaging, Accessibility Settings) and the shared app shell, merged with Justin Zhang's Welcome/Sign In/Sign Up/Home/My Day screens and Rehman Uddin's Appointments, Medications and Memories screens.
+The mobile build of CareConnect for care recipients who are deaf or hard of hearing, built against the Week 3 design prototype. It carries Victor Lee's three screens (Contacts, Messaging, Accessibility Settings) and the shared app shell, merged with Justin Zhang's Welcome/Sign In/Sign Up/Home/My Day screens and Rehman Uddin's Appointments, Medicines and Memories screens.
 
 **Screens**
 
@@ -758,7 +755,7 @@ The mobile build of CareConnect for care recipients who are deaf or hard of hear
 | Messaging | `/contacts/:contactId` | Conversation view with transcripts for voicemail, caption status for video, and **Notify** in place of a phone call. |
 | Accessibility Settings | `/settings` | Visual Alerts (cannot be disabled), Captions, Audio, Vibration, persisted with `SharedPreferences`. |
 | Appointments | `/appointments` | Upcoming appointments list. |
-| Medications | `/medications` | Pill inventory with dosage, frequency and persistent taken-status tracking. |
+| Medicines | `/medicines` | Pill inventory with dosage, frequency and persistent taken-status tracking. |
 | Memories | `/memories` | Memory journal with categorization and persistent storage. |
 
 That's 9 functional screens against the assignment's 7–10 target.
@@ -820,7 +817,7 @@ A pre-rendered copy is also checked in at [`flutter/coverage/html/index.html`](f
 ### Adding a screen
 
 1. Add the path and name to `lib/core/routing/routes.dart` (most already exist).
-2. Replace the `PendingScreen` in `lib/core/routing/app_router.dart` with the real screen — one line per route, inside the `ShellRoute` and wrapped in `page(...)` so it inherits the persistent navigation and swaps without a transition.
+2. Add a `GoRoute` for it in `lib/core/routing/app_router.dart` — inside the `ShellRoute` and wrapped in `page(...)` so it inherits the persistent navigation and swaps without a transition.
 3. Build the screen inside `AppScaffold`, which supplies the app bar. Navigation is not the screen's concern — `AppShell` owns it, and `kDestinations` already lists every destination.
 
 ### Known issues or limitations
@@ -834,7 +831,7 @@ Week 4:
 | Member | Screens |
 |:-------|:--------|
 | Justin Zhang | Welcome, Sign In, Sign Up, Home, My Day — merged into this branch from `WK4-Justin` |
-| Rehman Uddin | Appointments, Medicines, Memories — pending, still on his own branch |
+| Rehman Uddin | Appointments, Medicines, Memories — still on his own branch at Week 4; merged since, and every route now opens a real screen |
 | Victor Lee | Contacts, Messaging, Accessibility Settings — plus the shared shell: theme, router, navigation, models, repositories, Provider controllers, and shared widgets; merged in Justin's screens and fixed a tablet-layout overflow bug in `StatusBadge` uncovered while screenshotting |
 
 ### AI usage summary
@@ -849,7 +846,7 @@ Documentation for the React Native client is organized below to match the course
 
 ### Project description
 
-The Expo build of CareConnect for care recipients who are deaf or hard of hearing, built feature-for-feature with the Flutter client above, against the same Week 3 design prototype. It carries Victor Lee's three screens (Contacts, Messaging, Accessibility Settings) and the shared app shell, merged with Justin Zhang's Welcome/Sign In/Sign Up/Home/My Day screens and Rehman Uddin's Appointments, Medicines and Memories — the same split as the Flutter client. Rehman's screens were originally scaffolded as a standalone prototype at [`mobile/careconnect-app`](mobile/careconnect-app/) (kept for reference, documented under [React Native mobile client (Expo)](#react-native-mobile-client-expo) below) and are ported into this app below, rebuilt against its Context/repository pattern and theme.
+The Expo build of CareConnect for care recipients who are deaf or hard of hearing, built feature-for-feature with the Flutter client above, against the same Week 3 design prototype. It carries Victor Lee's three screens (Contacts, Messaging, Accessibility Settings) and the shared app shell, merged with Justin Zhang's Welcome/Sign In/Sign Up/Home/My Day screens and Rehman Uddin's Appointments, Medicines and Memories — the same split as the Flutter client. Rehman's screens were originally scaffolded as a [standalone Expo prototype](https://github.com/viclee1/careconnect-swen661/tree/2bcb8e4/mobile/careconnect-app), since removed from the repository, and are ported into this app below, rebuilt against its Context/repository pattern and theme.
 
 **Screens**
 
@@ -938,7 +935,7 @@ Week 5:
 | Member | Screens |
 |:-------|:--------|
 | Justin Zhang | Welcome, Sign In, Sign Up, Home, My Day — merged into this branch from `WK5-Justin`, later adding a full test suite for all four |
-| Rehman Uddin | Appointments, Medicines, Memories — scaffolded on his own branch as a standalone Expo prototype ([`mobile/careconnect-app`](mobile/careconnect-app/)), then ported into this app's Context/repository pattern and theme |
+| Rehman Uddin | Appointments, Medicines, Memories — scaffolded on his own branch as a [standalone Expo prototype](https://github.com/viclee1/careconnect-swen661/tree/2bcb8e4/mobile/careconnect-app), then ported into this app's Context/repository pattern and theme |
 | Victor Lee | Contacts, Messaging, Accessibility Settings — plus the shared shell: theme, navigation, models, repositories, Context providers, and the test harness; merged in Justin's screens across two follow-up commits, added the tablet left-sidebar navigation, and ported Rehman's Appointments/Medicines/Memories into the shared app |
 
 ### AI usage summary
@@ -948,93 +945,6 @@ Claude (Opus) and Gemini were used on this branch to scaffold the Expo project a
 ### Framework comparison: Flutter vs. React Native
 
 Assignment 5, Part 3 deliverable — development experience, performance, accessibility implementation, code complexity, and a recommendation, grounded in the Contacts and Accessibility Settings ports above: **[`docs/framework-comparison.md`](docs/framework-comparison.md)**.
-
----
-
-## React Native mobile client (Expo)
-
-### Project description
-
-Rehman Uddin's original standalone prototype of the Appointments, Medications and Memories screens, with comprehensive Jest testing achieving **60.16% overall test coverage** across the care recipient interface. This is a separate Expo project at [`mobile/careconnect-app`](mobile/careconnect-app/), kept for reference; its screens have since been ported into the shared app documented above in [React Native mobile client](#react-native-mobile-client).
-
-### Screens implemented
-
-| Screen | Features | Test Coverage |
-|:-------|:---------|:-------------:|
-| **Appointments** | Date-based filtering, doctor name search, appointment status tracking, time calculations, sorting by date/doctor/specialty, cancellation & rescheduling support | **92.15%** |
-| **Medications** | Time-based reminders with 12-hour formatting, dosage management, frequency tracking, taken-status persistence via localStorage, medication adherence tracking | **40.90%** |
-| **Memories** | Memory categorization, filtering by category, date sorting, persistent storage | **26.08%** |
-
-**Overall Coverage:** 60.16% (249/256 tests passing)
-
-### How to run the app
-
-```bash
-cd mobile/careconnect-app
-npm install
-npx expo start           # press a for Android, i for iOS, w for web
-```
-
-### How to run tests
-
-From the **web app root** (runs Jest tests against the three screens):
-
-```bash
-npm test                 # runs all test suites
-npm test -- --coverage   # runs with coverage report
-npm test -- --testPathPatterns=Medications  # run only Medications tests
-npm test -- --testPathPatterns=Appointments # run only Appointments tests
-```
-
-**Test Summary:**
-- **Total tests:** 256 (249 passing, 7 minor edge-case failures)
-- **Coverage report:** `coverage/lcov-report/index.html`
-- **Key test categories:**
-  - Time formatting & calculations (12-hour format conversion, timezone handling)
-  - LocalStorage persistence (save/load medication taken status, JSON error handling)
-  - Filtering & sorting (by date, doctor name, specialty, status)
-  - State management (loading, error, data transitions)
-  - Data validation (date format, time format, required fields)
-
-### Architecture
-
-```
-mobile/careconnect-app/
-├── App.tsx                          # Root with React Navigation bottom tabs
-├── src/
-│   ├── screens/
-│   │   ├── AppointmentsScreen.tsx   # 92% coverage
-│   │   ├── MedicinesScreen.tsx      # 41% coverage
-│   │   └── MemoriesScreen.tsx       # 26% coverage
-│   ├── setupTests.ts                # React Native mock environment
-│   └── [data stores & utilities]
-├── jest.config.cjs                  # Jest + React Native config
-├── tsconfig.json                    # TypeScript for Expo
-├── app.json                         # Expo app configuration
-└── package.json                     # Dependencies + build scripts
-```
-
-**Key utilities exported for testing:**
-- `formatTime(time: string)` — Convert 24-hour format to 12-hour with am/pm
-- `loadTakenFromStorage()` — Load medication taken status from localStorage
-- `saveTakenToStorage(map)` — Persist medication taken status
-
-### Testing strategy
-
-This implementation demonstrates **unit-testing patterns for React Native components in a jsdom environment** — a common limitation since React Native components (`<View>`, `<Text>`, `<ScrollView>`) cannot render in jsdom. To achieve 60%+ coverage within this constraint:
-
-1. **Exported utility functions** — Testable business logic extracted from component bodies
-2. **Storage layer tests** — Comprehensive JSON persistence tests with error handling
-3. **Time formatting edge cases** — All 24 hours, DST transitions, midnight boundaries
-4. **State management** — Loading, error, and data transition scenarios
-5. **Complex filtering/sorting** — Multi-criteria search with realistic appointment data
-
-### Known limitations
-
-- Appointments & Medications screens render in web/jsdom but not in actual React Native
-- Memories screen placeholder (not fully implemented)
-- Storage tests use web localStorage; native React Native uses `AsyncStorage`
-- This is the **web app's test suite**; the Expo build runs separately with its own testing infrastructure
 
 ---
 
@@ -1115,7 +1025,7 @@ npm run package:mac      # .dmg (host architecture)
 npm run package:linux    # .AppImage and .deb
 ```
 
-Installers land in `desktop/release/`: `CareConnect-Setup-1.0.0.exe` for Windows and `CareConnect-1.0.0-arm64.dmg` for Apple-silicon Macs. `package:win` runs on macOS as well as Windows; `--x64` is pinned because `electron-builder` otherwise builds for the host's architecture.
+Installers land in `desktop/release/`: `CareConnect-Setup-1.0.0.exe` for Windows, `CareConnect-1.0.0-arm64.dmg` for Apple-silicon Macs, and an `.AppImage` and `.deb` for Linux. CI builds all three on native runners (the macOS one on an Intel runner, so its `.dmg` is x64); download them from the `desktop-installer-*` artifacts of the latest [Desktop tests](.github/workflows/desktop-tests.yml) run. `package:win` runs on macOS as well as Windows; `--x64` is pinned because `electron-builder` otherwise builds for the host's architecture.
 
 Both installers are over GitHub's 100 MB file limit, so they are not committed: download them from the [latest release](https://github.com/viclee1/careconnect-swen661/releases/latest).
 

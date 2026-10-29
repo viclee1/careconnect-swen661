@@ -46,6 +46,8 @@ nsis:
 
 linux:
   category: Utility
+  # Required by .deb; the homepage comes from package.json.
+  maintainer: SWEN 661 Team 2 <viclee1@users.noreply.github.com>
   target:
     - AppImage
     - deb
