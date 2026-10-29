@@ -1025,7 +1025,7 @@ npm run package:mac      # .dmg (host architecture)
 npm run package:linux    # .AppImage and .deb
 ```
 
-Installers land in `desktop/release/`: `CareConnect-Setup-1.0.0.exe` for Windows, `CareConnect-1.0.0-arm64.dmg` for Apple-silicon Macs, and an `.AppImage` and `.deb` for Linux. CI builds all three on native runners; download them from the `desktop-installer-*` artifacts of the latest [Desktop tests](.github/workflows/desktop-tests.yml) run. `package:win` runs on macOS as well as Windows; `--x64` is pinned because `electron-builder` otherwise builds for the host's architecture.
+Installers land in `desktop/release/`: `CareConnect-Setup-1.0.0.exe` for Windows, `CareConnect-1.0.0-arm64.dmg` for Apple-silicon Macs, and an `.AppImage` and `.deb` for Linux. CI builds all three on native runners (the macOS one on an Intel runner, so its `.dmg` is x64); download them from the `desktop-installer-*` artifacts of the latest [Desktop tests](.github/workflows/desktop-tests.yml) run. `package:win` runs on macOS as well as Windows; `--x64` is pinned because `electron-builder` otherwise builds for the host's architecture.
 
 Both installers are over GitHub's 100 MB file limit, so they are not committed: download them from the [latest release](https://github.com/viclee1/careconnect-swen661/releases/latest).
 
