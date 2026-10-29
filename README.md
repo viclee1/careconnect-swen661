@@ -323,6 +323,8 @@ careconnect-swen661/
 │   ├── coverage/                    # lcov-report + lcov.info (generated locally, gitignored)
 │   ├── release/                     # installers (generated locally, gitignored)
 │   └── README.md                    # points back to this section
+├── .github/                         # CI workflows, pull request template, issue forms
+├── CONTRIBUTING.md                  # branching, commits, tests, review — the checklist
 ├── .env.example                     # placeholder environment variables
 ├── .gitignore
 ├── ACCESSIBILITY.md                 # WCAG conformance mapping
@@ -603,7 +605,14 @@ Assignment 11 write-ups: [team overview](docs/web/week11/README.md) · [Contacts
 
 ## Git workflow
 
-`main` is always in a working, demonstrable state. Nobody commits directly to `main` — the branch is protected, and merges arrive only through reviewed pull requests. Each member commits at minimum once a week.
+**How the term has run so far (Weeks 1–11).** Each member worked on per-week branches named `WK<week>-<Name>` (for example `WK11-Victor`), with topic branches for cross-cutting work (`wk10-web-a11y`, `wk11-figma-align`). Most work reached `main` through pull requests, but not all of it: some commits were pushed to `main` directly, pull requests were merged without a recorded review, issues were switched off, and `main` had no branch protection. CI covered only the web app until [#16](https://github.com/viclee1/careconnect-swen661/pull/16). Those branches and that history stay as they are; the rules below apply from Week 12, and [`CONTRIBUTING.md`](CONTRIBUTING.md) is the step-by-step version.
+
+**From Week 12.** `main` is always in a working, demonstrable state, and changes reach it only through reviewed pull requests with CI green. Each member commits at minimum once a week. GitHub's branch protection on `main` (require a pull request, an approval and passing checks) is how this is meant to be enforced; until a repository admin turns it on, it is a team rule.
+
+**Issues and the project board**
+
+- Every piece of work starts as an issue, opened from a form in [`.github/ISSUE_TEMPLATE/`](.github/ISSUE_TEMPLATE): **Bug report**, **Feature** or **Accessibility issue**. A barrier for someone who cannot hear is always a Must-have.
+- Each issue goes on the team's project board and moves across it as the work does. The pull request that finishes it says `Closes #<number>`.
 
 **Branch naming:** `type/short-kebab-description`
 
@@ -616,13 +625,15 @@ Assignment 11 write-ups: [team overview](docs/web/week11/README.md) · [Contacts
 | `test/` | Tests only | `test/playwright-caption-flow` |
 | `chore/` | Tooling, dependencies, config | `chore/electron-windows-build` |
 
+**Commit messages:** an imperative subject that says what the commit does (`Fix message composer hidden by the keyboard`, not `fix` or `testing`), and a body explaining why when it is not obvious.
+
 **Pull requests**
 
-- Fill in the template: what changed, why, how it was tested, screenshots for anything user-visible.
+- Fill in the [template](.github/pull_request_template.md): what changed, why, the linked issue, how it was tested, the accessibility checks, screenshots for anything user-visible.
 - At least one approving review before merge. Nobody merges their own PR.
 - Shared code needs the current Technical Lead's approval.
 - Care recipient UI changes also need the QA Lead's accessibility sign-off.
-- CI green — lint, typecheck, build.
+- CI green — every client workflow the change triggers: lint, typecheck, tests and coverage, plus Playwright for the web app and the installer builds for the desktop app.
 
 **Merge policy**
 
