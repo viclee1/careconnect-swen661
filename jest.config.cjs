@@ -14,49 +14,27 @@ module.exports = {
       tsconfig: '<rootDir>/tsconfig.jest.json',
     }],
   },
+  // Every source file counts, so the figure is the whole app's. The three
+  // exclusions are code no unit test can reach:
   collectCoverageFrom: [
-    'src/pages/Appointments.tsx',
-    'src/pages/Medications.tsx',
-    'src/pages/Memories.tsx',
-    // Appointments, Medicines and Memories (Upneet)
-    'src/components/PageHeader.tsx',
-    'src/components/appointments/**/*.tsx',
-    'src/components/medicines/**/*.tsx',
-    'src/components/memories/**/*.tsx',
-    'src/context/AppointmentsContext.tsx',
-    'src/context/MedicinesContext.tsx',
-    'src/context/MemoriesContext.tsx',
-    'src/context/appointments.ts',
-    'src/context/medicines.ts',
-    'src/context/memories.ts',
-    // Contacts, Messaging and Accessibility Settings (Victor)
-    'src/pages/Contacts.tsx',
-    'src/pages/MessageThread.tsx',
-    'src/pages/AccessibilitySettings.tsx',
-    'src/pages/PlaceholderPage.tsx',
-    'src/components/contacts/**/*.tsx',
-    'src/components/messaging/**/*.tsx',
-    'src/components/settings/**/*.tsx',
-    'src/context/MessagesContext.tsx',
-    'src/context/SettingsContext.tsx',
-    'src/context/messages.ts',
-    'src/context/settings.ts',
-    // App shell aligned to the Figma design (Victor)
-    'src/components/Layout.tsx',
-    'src/components/navigation/**/*.{ts,tsx}',
-    'src/components/AppointmentBanner.tsx',
-    'src/components/CaptionStrip.tsx',
-    'src/hooks/useFocusTrap.ts',
-    'src/hooks/useHighContrast.ts',
-    'src/hooks/useLocalStorageState.ts',
-    'src/hooks/useOnlineStatus.ts',
-    'src/hooks/useMediaQuery.ts',
-    'src/models/**/*.ts',
-    'src/utils/**/*.ts',
+    'src/**/*.{ts,tsx}',
+    '!src/**/*.test.{ts,tsx}',
     '!src/**/__tests__/**',
+    '!src/**/*.d.ts',
+    '!src/test-utils/**',
+    '!src/setupTests.ts',
+    // The Vite entry point and the service-worker registration read
+    // import.meta.env, which Jest cannot load; Playwright covers both
+    // (e2e: offline launch and the PWA tests).
+    '!src/main.tsx',
+    '!src/pwa/registerSW.ts',
+    // The AI assistant is not mounted anywhere since the Week 11 Landing page;
+    // its accessibility checks still run in src/accessibility.test.tsx.
+    '!src/components/ChatBot.tsx',
   ],
-  coverageReporters: ['text', 'text-summary', 'lcov', 'html'],
+  // lcov writes the HTML report too, to coverage/lcov-report.
+  coverageReporters: ['text', 'text-summary', 'lcov'],
   coverageThreshold: {
-    global: { statements: 75, branches: 75, functions: 75, lines: 75 },
+    global: { statements: 85, branches: 85, functions: 85, lines: 85 },
   },
 };

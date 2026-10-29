@@ -29,8 +29,21 @@ jobs:
       - run: flutter pub get
       - run: flutter analyze
       - run: flutter test --coverage
+      # The same 85% floor the Jest clients enforce, on line coverage (the
+      # only figure flutter test reports).
+      - name: Check line coverage is at least 85%
+        run: |
+          awk -F: '/^LF:/ { found += $2 } /^LH:/ { hit += $2 }
+            END { pct = hit * 100 / found; printf "Line coverage: %.2f%% (%d of %d)\n", pct, hit, found; exit (pct < 85) }' coverage/lcov.info
+      - name: Render the HTML coverage report
+        if: always()
+        run: |
+          sudo apt-get install -y --no-install-recommends lcov
+          genhtml coverage/lcov.info --output-directory coverage/html --quiet
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: flutter-coverage-lcov
-          path: flutter/coverage/lcov.info
+          name: flutter-coverage-report
+          path: |
+            flutter/coverage/html
+            flutter/coverage/lcov.info
