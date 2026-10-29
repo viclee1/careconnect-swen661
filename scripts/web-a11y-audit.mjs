@@ -10,6 +10,10 @@
  * focus trap and focus return in the modals and the drawer, Escape on the
  * account menu, and one main / one banner landmark per page.
  *
+ * Every route is then scanned again with the header's high-contrast mode on,
+ * with axe's AAA rules added: high contrast is how the app meets WCAG 1.4.6
+ * Contrast (Enhanced), and it must never introduce an AA failure of its own.
+ *
  * (Assignment 10 also scanned the AI assistant panel; it has not been
  * mounted since the Week 11 Landing page.)
  *
@@ -30,6 +34,7 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const outDir = path.resolve(here, '../docs/web/accessibility/audit');
 const base = (process.env.WEB_URL ?? 'http://localhost:5180').replace(/\/$/, '');
 const tags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'];
+const aaaTags = ['wcag2aaa', 'wcag21aaa'];
 
 const breakpoints = [
   { id: 'mobile', width: 375, height: 812 },
@@ -68,15 +73,18 @@ const check = (name, pass, note = '') => {
   console.log(`${pass ? '✔' : '✘'} ${name}${note ? ` — ${note}` : ''}`);
 };
 
-async function open(context, pagePath, role) {
+async function open(context, pagePath, role, { highContrast = false } = {}) {
   const page = await context.newPage();
-  await page.goto(`${base}/`);
+  // Seed storage from a static file: Landing clears the session on mount, and
+  // could do so after the write below.
+  await page.goto(`${base}/icons/icon-192.png`);
   await page.evaluate(
-    ([s]) => {
+    ([s, hc]) => {
       localStorage.clear();
       if (s) localStorage.setItem('careconnect_session', s);
+      if (hc) localStorage.setItem('careconnect_high_contrast', 'true');
     },
-    [role === null ? null : session(role === 'none' ? null : role)],
+    [role === null ? null : session(role === 'none' ? null : role), highContrast],
   );
   await page.goto(`${base}${pagePath}`);
   await page.locator('h1').first().waitFor({ timeout: 8000 });
@@ -84,9 +92,9 @@ async function open(context, pagePath, role) {
   return page;
 }
 
-async function scan(page, id, label, bp) {
+async function scan(page, id, label, bp, extraTags = []) {
   const axe = await new AxeBuilder({ page })
-    .withTags(tags)
+    .withTags([...tags, ...extraTags])
     .options({ rules: { 'label-content-name-mismatch': { enabled: true } } })
     .analyze();
   const entry = {
@@ -296,12 +304,26 @@ async function run() {
   }
   await narrow.close();
 
+  // High contrast on: no AA failures of its own, and AAA contrast throughout.
+  for (const bp of breakpoints) {
+    const context = await browser.newContext({ viewport: { width: bp.width, height: bp.height } });
+    for (const [id, label, pagePath, role] of pages) {
+      const page = await open(context, pagePath, role, { highContrast: true });
+      const on = await page.evaluate(() => document.documentElement.classList.contains('high-contrast'));
+      check(`${label} (${bp.id}): high contrast applied`, on);
+      await scan(page, `hc-${id}`, `${label} — high contrast`, bp, aaaTags);
+      await page.close();
+    }
+    await context.close();
+  }
+
   // ── Report ───────────────────────────────────────────────────────────────
   const total = results.reduce((s, r) => s + r.violations.length, 0);
   const failed = checks.filter((c) => !c.pass).length;
   const summary = {
     engine: `axe-core ${(await import('axe-core')).default.version}`,
     tags,
+    highContrastTags: [...tags, ...aaaTags],
     date: new Date().toISOString(),
     scans: results.length,
     violations: total,

@@ -13,6 +13,7 @@ import { ProtectedRoute, RoleRoute, AuthRoute } from './components/ProtectedRout
 import Layout from './components/Layout';
 import PlaceholderPage, { type PageOwner } from './pages/PlaceholderPage';
 import { SHOW_TEAMMATE_PAGES } from './branchScope';
+import { useHighContrast } from './hooks/useHighContrast';
 
 // Public pages (do not modify) — shown only when SHOW_TEAMMATE_PAGES is on
 import Landing     from './pages/Landing';
@@ -53,6 +54,17 @@ function teammate(
   return SHOW_TEAMMATE_PAGES ? page : (
     <PlaceholderPage title={title} owner={owner} standalone={standalone} />
   );
+}
+
+/**
+ * Applies the stored high-contrast choice to a page outside the app shell.
+ * Only the shell has the switch, but someone who turned it on should not lose
+ * it on the sign-in screens. The shell and these pages never mount together,
+ * so the two hook instances cannot disagree.
+ */
+function StoredContrast({ children }: { children: ReactElement }) {
+  useHighContrast();
+  return children;
 }
 
 function PageLoading() {
@@ -116,12 +128,12 @@ function AppRoutes() {
   return (
     <Routes>
       {/* Public */}
-      <Route path="/"       element={teammate(<Landing />, 'Welcome', 'Justin Zhang', true)} />
-      <Route path="/signin" element={<AuthRoute>{teammate(<SignIn />, 'Sign In', 'Justin Zhang', true)}</AuthRoute>} />
-      <Route path="/signup" element={<AuthRoute>{teammate(<SignUp />, 'Sign Up', 'Justin Zhang', true)}</AuthRoute>} />
+      <Route path="/"       element={<StoredContrast>{teammate(<Landing />, 'Welcome', 'Justin Zhang', true)}</StoredContrast>} />
+      <Route path="/signin" element={<AuthRoute><StoredContrast>{teammate(<SignIn />, 'Sign In', 'Justin Zhang', true)}</StoredContrast></AuthRoute>} />
+      <Route path="/signup" element={<AuthRoute><StoredContrast>{teammate(<SignUp />, 'Sign Up', 'Justin Zhang', true)}</StoredContrast></AuthRoute>} />
 
       {/* Post-auth role chooser */}
-      <Route path="/role"   element={<RoleRoute><RoleChooser /></RoleRoute>} />
+      <Route path="/role"   element={<RoleRoute><StoredContrast><RoleChooser /></StoredContrast></RoleRoute>} />
 
       {/* Protected app */}
       <Route path="/app/*"  element={<AppShell />} />

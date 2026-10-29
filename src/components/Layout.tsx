@@ -228,7 +228,7 @@ export default function Layout({
             {/* Logo — a router link, so going home does not reload the app */}
             <Link
               to="/app"
-              className="flex items-center gap-2.5 no-underline flex-shrink-0"
+              className="flex items-center gap-2.5 min-h-[2.75rem] min-w-[2.75rem] no-underline flex-shrink-0"
               aria-label="CareConnect — go to home"
             >
               <span

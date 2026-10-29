@@ -1,0 +1,280 @@
+{
+  "engine": "Lighthouse 13.6.0",
+  "date": "2026-10-29T17:35:57.330Z",
+  "runs": 34,
+  "perfect": 34,
+  "results": [
+    {
+      "page": "Landing",
+      "path": "/",
+      "formFactor": "mobile",
+      "score": 100,
+      "failed": [],
+      "landed": "/"
+    },
+    {
+      "page": "Landing",
+      "path": "/",
+      "formFactor": "desktop",
+      "score": 100,
+      "failed": [],
+      "landed": "/"
+    },
+    {
+      "page": "Sign in",
+      "path": "/signin",
+      "formFactor": "mobile",
+      "score": 100,
+      "failed": [],
+      "landed": "/signin"
+    },
+    {
+      "page": "Sign in",
+      "path": "/signin",
+      "formFactor": "desktop",
+      "score": 100,
+      "failed": [],
+      "landed": "/signin"
+    },
+    {
+      "page": "Sign up",
+      "path": "/signup",
+      "formFactor": "mobile",
+      "score": 100,
+      "failed": [],
+      "landed": "/signup"
+    },
+    {
+      "page": "Sign up",
+      "path": "/signup",
+      "formFactor": "desktop",
+      "score": 100,
+      "failed": [],
+      "landed": "/signup"
+    },
+    {
+      "page": "Role chooser",
+      "path": "/role",
+      "formFactor": "mobile",
+      "score": 100,
+      "failed": [],
+      "landed": "/role"
+    },
+    {
+      "page": "Role chooser",
+      "path": "/role",
+      "formFactor": "desktop",
+      "score": 100,
+      "failed": [],
+      "landed": "/role"
+    },
+    {
+      "page": "Home (patient)",
+      "path": "/app",
+      "formFactor": "mobile",
+      "score": 100,
+      "failed": [],
+      "landed": "/app"
+    },
+    {
+      "page": "Home (patient)",
+      "path": "/app",
+      "formFactor": "desktop",
+      "score": 100,
+      "failed": [],
+      "landed": "/app"
+    },
+    {
+      "page": "My Day",
+      "path": "/app/schedule",
+      "formFactor": "mobile",
+      "score": 100,
+      "failed": [],
+      "landed": "/app/schedule"
+    },
+    {
+      "page": "My Day",
+      "path": "/app/schedule",
+      "formFactor": "desktop",
+      "score": 100,
+      "failed": [],
+      "landed": "/app/schedule"
+    },
+    {
+      "page": "Appointments",
+      "path": "/app/appointments",
+      "formFactor": "mobile",
+      "score": 100,
+      "failed": [],
+      "landed": "/app/appointments"
+    },
+    {
+      "page": "Appointments",
+      "path": "/app/appointments",
+      "formFactor": "desktop",
+      "score": 100,
+      "failed": [],
+      "landed": "/app/appointments"
+    },
+    {
+      "page": "Medicines",
+      "path": "/app/medications",
+      "formFactor": "mobile",
+      "score": 100,
+      "failed": [],
+      "landed": "/app/medications"
+    },
+    {
+      "page": "Medicines",
+      "path": "/app/medications",
+      "formFactor": "desktop",
+      "score": 100,
+      "failed": [],
+      "landed": "/app/medications"
+    },
+    {
+      "page": "Memories",
+      "path": "/app/memories",
+      "formFactor": "mobile",
+      "score": 100,
+      "failed": [],
+      "landed": "/app/memories"
+    },
+    {
+      "page": "Memories",
+      "path": "/app/memories",
+      "formFactor": "desktop",
+      "score": 100,
+      "failed": [],
+      "landed": "/app/memories"
+    },
+    {
+      "page": "Contacts",
+      "path": "/app/contacts",
+      "formFactor": "mobile",
+      "score": 100,
+      "failed": [],
+      "landed": "/app/contacts"
+    },
+    {
+      "page": "Contacts",
+      "path": "/app/contacts",
+      "formFactor": "desktop",
+      "score": 100,
+      "failed": [],
+      "landed": "/app/contacts"
+    },
+    {
+      "page": "Conversation",
+      "path": "/app/contacts/c3",
+      "formFactor": "mobile",
+      "score": 100,
+      "failed": [],
+      "landed": "/app/contacts/c3"
+    },
+    {
+      "page": "Conversation",
+      "path": "/app/contacts/c3",
+      "formFactor": "desktop",
+      "score": 100,
+      "failed": [],
+      "landed": "/app/contacts/c3"
+    },
+    {
+      "page": "Accessibility Settings",
+      "path": "/app/settings",
+      "formFactor": "mobile",
+      "score": 100,
+      "failed": [],
+      "landed": "/app/settings"
+    },
+    {
+      "page": "Accessibility Settings",
+      "path": "/app/settings",
+      "formFactor": "desktop",
+      "score": 100,
+      "failed": [],
+      "landed": "/app/settings"
+    },
+    {
+      "page": "Caregiver dashboard",
+      "path": "/app",
+      "formFactor": "mobile",
+      "score": 100,
+      "failed": [],
+      "landed": "/app"
+    },
+    {
+      "page": "Caregiver dashboard",
+      "path": "/app",
+      "formFactor": "desktop",
+      "score": 100,
+      "failed": [],
+      "landed": "/app"
+    },
+    {
+      "page": "Manage medications",
+      "path": "/app/manage-medications",
+      "formFactor": "mobile",
+      "score": 100,
+      "failed": [],
+      "landed": "/app/manage-medications"
+    },
+    {
+      "page": "Manage medications",
+      "path": "/app/manage-medications",
+      "formFactor": "desktop",
+      "score": 100,
+      "failed": [],
+      "landed": "/app/manage-medications"
+    },
+    {
+      "page": "Manage appointments",
+      "path": "/app/manage-appointments",
+      "formFactor": "mobile",
+      "score": 100,
+      "failed": [],
+      "landed": "/app/manage-appointments"
+    },
+    {
+      "page": "Manage appointments",
+      "path": "/app/manage-appointments",
+      "formFactor": "desktop",
+      "score": 100,
+      "failed": [],
+      "landed": "/app/manage-appointments"
+    },
+    {
+      "page": "Activity log",
+      "path": "/app/activity",
+      "formFactor": "mobile",
+      "score": 100,
+      "failed": [],
+      "landed": "/app/activity"
+    },
+    {
+      "page": "Activity log",
+      "path": "/app/activity",
+      "formFactor": "desktop",
+      "score": 100,
+      "failed": [],
+      "landed": "/app/activity"
+    },
+    {
+      "page": "Caregiver notes",
+      "path": "/app/caregiver",
+      "formFactor": "mobile",
+      "score": 100,
+      "failed": [],
+      "landed": "/app/caregiver"
+    },
+    {
+      "page": "Caregiver notes",
+      "path": "/app/caregiver",
+      "formFactor": "desktop",
+      "score": 100,
+      "failed": [],
+      "landed": "/app/caregiver"
+    }
+  ]
+}

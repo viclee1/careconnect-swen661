@@ -1,4 +1,5 @@
-import { useEffect, useId, useMemo, useRef, useState } from 'react';
+import { useId, useMemo, useRef, useState } from 'react';
+import type { KeyboardEvent } from 'react';
 import { BellRing, Search } from 'lucide-react';
 
 import ContactRow from './ContactRow';
@@ -13,8 +14,10 @@ import { filterContacts, searchResultSummary } from '../../utils/search';
  * Shared by the Contacts screen and, on a desktop, the left-hand pane of an
  * open conversation, so the list looks and behaves the same wherever it is.
  *
- * "/" focuses the search from anywhere on the page — the web convention for a
- * page's search — and Escape clears it.
+ * "/" focuses the search from anywhere in the list — the web convention for a
+ * page's search — and Escape clears it. Only while focus is in the list: a
+ * single-key shortcut that works page-wide can be set off by speech input or a
+ * slip of the finger, and cannot be turned off (WCAG 2.1.4).
  */
 export default function ContactList({ selectedId }: { selectedId?: string }) {
   const { contacts, previewFor, waitingFor } = useMessages();
@@ -25,21 +28,16 @@ export default function ContactList({ selectedId }: { selectedId?: string }) {
 
   const visible = useMemo(() => filterContacts(contacts, query), [contacts, query]);
 
-  useEffect(() => {
-    function onKeyDown(event: KeyboardEvent) {
-      if (event.key !== '/' || event.ctrlKey || event.metaKey || event.altKey) return;
-      const target = event.target as HTMLElement | null;
-      // Never steal a "/" the user is typing into a field.
-      if (target?.closest('input, textarea, select, [contenteditable="true"]')) return;
-      event.preventDefault();
-      searchRef.current?.focus();
-    }
-    document.addEventListener('keydown', onKeyDown);
-    return () => document.removeEventListener('keydown', onKeyDown);
-  }, []);
+  function onKeyDown(event: KeyboardEvent) {
+    if (event.key !== '/' || event.ctrlKey || event.metaKey || event.altKey) return;
+    // Never steal a "/" the user is typing into a field.
+    if ((event.target as HTMLElement).closest('input, textarea, select, [contenteditable="true"]')) return;
+    event.preventDefault();
+    searchRef.current?.focus();
+  }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" onKeyDown={onKeyDown}>
       <p className="flex items-start gap-3 rounded-xl border-l-4 border-calm-600 bg-calm-50 px-4 py-3 text-sm text-calm-900">
         <BellRing className="w-5 h-5 flex-shrink-0 mt-0.5 text-warm-700" aria-hidden="true" />
         <span>
@@ -77,7 +75,7 @@ export default function ContactList({ selectedId }: { selectedId?: string }) {
           />
         </div>
         <p id={hintId} className="text-sm text-neutral-600 mt-1">
-          Press <kbd className="font-mono font-semibold">/</kbd> to jump here, Escape to clear.
+          In the list, press <kbd className="font-mono font-semibold">/</kbd> to jump here. Escape clears.
         </p>
       </div>
 
