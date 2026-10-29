@@ -308,7 +308,7 @@ careconnect-swen661/
 │   ├── lib/                         # app, screens, state, models, data, widgets
 │   ├── test/                        # 217 tests — models, state, widgets, utils
 │   ├── docs/                        # screenshots + security-scan.md
-│   ├── coverage/                    # lcov.info + rendered HTML report
+│   ├── coverage/                    # lcov.info (HTML copy in docs/testing/coverage-html)
 │   └── README.md                    # points back to this section
 ├── mobile/                          # React Native + Expo — Android & iOS (in progress, see below)
 │   ├── src/                         # screens, navigation, state, models, data, components, theme
@@ -321,6 +321,7 @@ careconnect-swen661/
 │   ├── src/renderer/                # the React app — pages, state, models, data, components
 │   ├── src/**/__tests__/            # 498 tests — models, main process, IPC, pages, keyboard, a11y
 │   ├── coverage/                    # lcov-report + lcov.info (generated locally, gitignored)
+│   ├── docs/testing/                # committed copy of the HTML coverage report + lcov.info
 │   ├── release/                     # installers (generated locally, gitignored)
 │   └── README.md                    # points back to this section
 ├── .env.example                     # placeholder environment variables
@@ -471,7 +472,7 @@ These are the scripts currently defined in `package.json`:
 | `npm run typecheck` | TypeScript check, no emit (`tsconfig.app.json`) |
 | `npm run screenshots` | Regenerate the README screenshots via Playwright |
 | `npm test` | Jest + React Testing Library |
-| `npm run test:coverage` | Jest with a coverage report in `coverage/lcov-report/` (fails under 75%) |
+| `npm run test:coverage` | Jest with a coverage report in `coverage/lcov-report/` (fails under 85%) |
 | `npm run test:e2e` | Playwright against the production build (builds, serves on :4173) |
 | `npm run test:e2e:report` | Open the Playwright HTML report |
 | `npm run a11y:web` | axe-core audit and keyboard checks at 375 / 820 / 1280 px → `docs/web/accessibility/audit/` (needs `npm run dev -- --port 5180`) |
@@ -582,7 +583,17 @@ Timestamped log of taken/skipped doses and check-ins.
 
 - **Static checks** — ESLint (`npm run lint`) and TypeScript strict mode (`npm run typecheck`). Both must pass before a pull request merges.
 - **Playwright** — used by the screenshot scripts, the accessibility audit (`npm run a11y:web`), the `verify-pwa` / `verify-responsive` helpers and the end-to-end tests.
-- **Unit & component tests** — Jest + React Testing Library + `user-event` + jest-axe (`npm test`). `npm run test:coverage` writes `coverage/lcov-report/index.html` (committed) and fails below **75%** on statements, branches, functions or lines. The web suite has **375 tests in 29 suites, all passing**, at **95.8% statements / 91.1% branches / 94.1% functions / 96.4% lines** over the measured files (every Assignment 11 screen, the app shell, and their models, contexts, hooks and utilities). Each client has its own suite — see the [Flutter](#flutter-mobile-client), [React Native](#react-native-mobile-client) and [Electron](#electron-desktop-client) sections.
+- **Unit & component tests** — Jest + React Testing Library + `user-event` + jest-axe (`npm test`). `npm run test:coverage` writes `coverage/lcov-report/index.html` (committed) and fails below **85%** on statements, branches, functions or lines. Coverage counts **every file in `src/`** except three no unit test can reach (the Vite entry point and service-worker registration, both covered by Playwright, and the unmounted AI assistant — the reasons are in `jest.config.cjs`). The web suite has **434 tests in 37 suites, all passing**, at **94.7% statements / 88.3% branches / 93.8% functions / 95.7% lines**. Each client has its own suite — see the [Flutter](#flutter-mobile-client), [React Native](#react-native-mobile-client) and [Electron](#electron-desktop-client) sections.
+- **Coverage across all four clients** — every client fails its CI job below 85%, and each has an HTML report committed and uploaded by CI:
+
+  | Client | Tests | Statements | Branches | Functions | Lines | HTML report |
+  |:--|--:|--:|--:|--:|--:|:--|
+  | Web (React) | 434 | 94.7% | 88.3% | 93.8% | 95.7% | [`coverage/lcov-report/`](coverage/lcov-report/index.html) |
+  | Desktop (Electron) | 498 | 96.8% | 90.0% | 95.7% | 98.1% | [`desktop/docs/testing/coverage-html/`](desktop/docs/testing/coverage-html/index.html) |
+  | React Native | 286 | 96.9% | 88.1% | 94.3% | 97.0% | [`mobile/docs/testing/coverage-html/`](mobile/docs/testing/coverage-html/index.html) |
+  | Flutter | 234 | — | — | — | 98.9% | [`flutter/docs/testing/coverage-html/`](flutter/docs/testing/coverage-html/index.html) |
+
+  `flutter test` reports line coverage only. No client uses snapshot tests: assertions name the behaviour — what the user sees, hears announced, or can do next.
 - **End-to-end** — Playwright (`npm run test:e2e`) against the production build (`vite preview`, service worker active) in Chromium, Firefox, WebKit and mobile Safari at 375px. Specs in [`e2e/`](e2e): medicines by keyboard, appointments (My Day and calendar export read back from the real file), memories (form errors, save, pin, remove, filter), the memory book offline, every care page at every width with axe; contacts → conversation → send → reload, silent alert, captioned calls and video messages, quick replies, offline queueing and offline launch, keyboard-only settings, flash previews, and Settings reachable at every width. Latest local run (Chromium, WebKit, mobile Safari, three repeats each): **59 passed, 7 skipped by design, none failed**. Run `npx playwright install chromium firefox webkit` once first; `npm run test:e2e:report` opens the HTML report.
 - **Accessibility audit** — `npm run a11y:web`: 17 routes and the shell's interactive states at three widths, **64 scans, 0 violations, 53/53 keyboard and structure checks**.
 - **CI** — one GitHub Actions workflow per client, each run on pull requests and pushes to `main` that touch it, and each uploading its coverage report as a build artifact:
@@ -700,7 +711,7 @@ Sign in with any well-formed email and password, then choose **care recipient** 
 
 ```bash
 npm test                            # Jest + React Testing Library (375 tests)
-npm run test:coverage               # + coverage/lcov-report/index.html, fails under 75%
+npm run test:coverage               # + coverage/lcov-report/index.html, fails under 85%
 npx playwright install chromium firefox webkit   # once
 npm run test:e2e                    # Playwright, every browser project
 npm run test:e2e -- --project=chromium           # one browser
@@ -710,7 +721,7 @@ npm run lint && npm run typecheck
 
 ### Link to test coverage report
 
-[`coverage/lcov-report/index.html`](coverage/lcov-report/index.html) (committed): **95.82% statements, 91.14% branches, 94.1% functions, 96.44% lines** over the measured files listed in `jest.config.cjs`.
+[`coverage/lcov-report/index.html`](coverage/lcov-report/index.html) (committed): **94.7% statements, 88.3% branches, 93.8% functions, 95.7% lines** over the whole of `src/` (exclusions and their reasons in `jest.config.cjs`).
 
 ### Known issues and limitations (web)
 
@@ -791,7 +802,7 @@ flutter analyze
 flutter test --coverage
 ```
 
-234 tests at 98.9% line coverage against a 60% floor (75% target) — including the 14-test
+234 tests at 98.9% line coverage against an 85% floor that CI enforces — including the 14-test
 `test/accessibility/accessibility_guideline_test.dart` suite, which runs Flutter's
 built-in `AccessibilityGuideline` API (`androidTapTargetGuideline`,
 `textContrastGuideline`, `labeledTapTargetGuideline`) against every routed screen. An
@@ -812,7 +823,7 @@ Raw report: [`flutter/coverage/lcov.info`](flutter/coverage/lcov.info). Render i
 genhtml flutter/coverage/lcov.info -o flutter/coverage/html && open flutter/coverage/html/index.html
 ```
 
-A pre-rendered copy is also checked in at [`flutter/coverage/html/index.html`](flutter/coverage/html/index.html), and a per-file breakdown is in [`flutter/docs/testing/coverage-summary.md`](flutter/docs/testing/coverage-summary.md).
+A rendered copy is checked in at [`flutter/docs/testing/coverage-html/index.html`](flutter/docs/testing/coverage-html/index.html) (CI also uploads it as the `flutter-coverage-report` artifact), and a per-file breakdown is in [`flutter/docs/testing/coverage-summary.md`](flutter/docs/testing/coverage-summary.md).
 
 ### Adding a screen
 
@@ -896,7 +907,7 @@ npm run typecheck
 npm run test:coverage
 ```
 
-286 tests at 97.0% line coverage against a 60% floor (75% target) — including the RNTL
+286 tests at 97.0% line coverage against an 85% floor that CI enforces — including the RNTL
 accessibility-role/label suites (`accessibility_theme.test.tsx`,
 `accessibility_motion_targets.test.tsx`) and the full-app `navigation.test.tsx`
 integration suite. An `npm audit` plus a
@@ -998,7 +1009,7 @@ npm run typecheck        # three TypeScript projects: renderer, main, tests
 npm run test:coverage    # Jest + React Testing Library
 ```
 
-**498 tests across 39 suites, 96.8% statement coverage** — the assignments require 60%. Assignment 9's accessibility testing report, WCAG 2.1 AA conformance table and desktop VPAT are in [`docs/accessibility/`](docs/accessibility/README.md). The report is written to `desktop/coverage/lcov-report/index.html`; the submitted screenshot is [`docs/screenshots/desktop/coverage.png`](docs/screenshots/desktop/coverage.png).
+**498 tests across 39 suites, 96.8% statement coverage**, against an 85% floor on every measure that CI enforces. Assignment 9's accessibility testing report, WCAG 2.1 AA conformance table and desktop VPAT are in [`docs/accessibility/`](docs/accessibility/README.md). The report is written to `desktop/coverage/lcov-report/index.html`, with a copy committed at [`desktop/docs/testing/coverage-html/index.html`](desktop/docs/testing/coverage-html/index.html); the submitted screenshot is [`docs/screenshots/desktop/coverage.png`](docs/screenshots/desktop/coverage.png).
 
 | Area | What is covered |
 |:-----|:----------------|

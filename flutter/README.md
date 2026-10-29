@@ -15,7 +15,7 @@ flutter pub get
 
 ```bash
 flutter analyze
-flutter test --coverage    # writes coverage/lcov.info; 234 tests, 98.9% line coverage
+flutter test --coverage    # writes coverage/lcov.info; 234 tests, 98.9% line coverage (85% floor in CI)
 ```
 
 That includes the accessibility guideline suite

@@ -27,4 +27,7 @@ module.exports = {
     '!src/renderer/test-support/**',
   ],
   coverageReporters: ['text', 'text-summary', 'lcov', 'html'],
+  coverageThreshold: {
+    global: { statements: 85, branches: 85, functions: 85, lines: 85 },
+  },
 };

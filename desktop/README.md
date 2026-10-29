@@ -68,7 +68,7 @@ npm test             # Jest + React Testing Library
 npm run test:coverage
 ```
 
-Current state: **498 tests, 39 suites, 96.8% statement coverage** (60% required).
+Current state: **498 tests, 39 suites, 96.8% statement coverage**; `test:coverage` fails below 85% on any measure.
 `src/renderer/__tests__/accessibility.test.tsx` runs jest-axe on every page and
 pins each Assignment 9 accessibility fix. The HTML report lands in `coverage/lcov-report/index.html`; a
 screenshot of it is at
