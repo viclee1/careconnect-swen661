@@ -20,15 +20,15 @@ import { useAlerts } from './navigation/useAlerts';
 
 const SCREEN_TITLES: Record<string, string> = {
   '/app':                     'Home',
-  '/app/schedule':            'My Day',
+  '/app/my-day':              'My Day',
   '/app/appointments':        'My Appointments',
-  '/app/medications':         'Medicines',
+  '/app/medicines':           'Medicines',
   '/app/memories':            'Memories',
   '/app/contacts':            'Contacts',
   '/app/settings':            'Accessibility Settings',
   '/app/caregiver':           'Caregiver Notes',
   '/app/activity':            'Activity Log',
-  '/app/manage-medications':  'Manage Medications',
+  '/app/manage-medicines':    'Manage Medicines',
   '/app/manage-appointments': 'Manage Appointments',
 };
 

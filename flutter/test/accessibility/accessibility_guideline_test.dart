@@ -35,7 +35,7 @@ void main() {
       Routes.home: 'Home / Dashboard',
       Routes.myDay: 'My Day',
       Routes.appointments: 'Appointments',
-      Routes.medicines: 'Medications',
+      Routes.medicines: 'Medicines',
       Routes.memories: 'Memories',
       Routes.contacts: 'Contacts',
       Routes.threadPath('c1'): 'Message thread',

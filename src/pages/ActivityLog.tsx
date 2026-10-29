@@ -18,13 +18,13 @@ const KIND_CFG: Record<
   { label: string; Icon: React.FC<{ className?: string }>; dot: string; border: string }
 > = {
   med_taken: {
-    label: 'Medication taken',
+    label: 'Medicine taken',
     Icon: Pill,
     dot:    'bg-success-500',
     border: 'border-success-200',
   },
   med_skipped: {
-    label: 'Medication unmarked',
+    label: 'Medicine unmarked',
     Icon: AlertCircle,
     dot:    'bg-warm-500',
     border: 'border-warm-200',

@@ -8,9 +8,9 @@ import { signInAsPatient } from './helpers';
 // it must never add a failure of its own, such as dark text on a dark button.
 const screens = [
   '/app',
-  '/app/schedule',
+  '/app/my-day',
   '/app/appointments',
-  '/app/medications',
+  '/app/medicines',
   '/app/memories',
   '/app/contacts',
   '/app/contacts/c1',

@@ -87,7 +87,7 @@ void main() {
       for (final MapEntry<String, String> tab in <String, String>{
         'My Day': 'My Day',
         'Appts': 'Appointments',
-        'Medicines': 'Medications',
+        'Medicines': 'Medicines',
         'Memories': 'Memories',
         'Contacts': 'Contacts',
       }.entries) {

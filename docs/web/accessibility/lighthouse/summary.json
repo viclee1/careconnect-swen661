@@ -1,6 +1,6 @@
 {
   "engine": "Lighthouse 13.6.0",
-  "date": "2026-10-29T17:35:57.330Z",
+  "date": "2026-10-29T21:18:57.338Z",
   "runs": 34,
   "perfect": 34,
   "results": [
@@ -86,19 +86,19 @@
     },
     {
       "page": "My Day",
-      "path": "/app/schedule",
+      "path": "/app/my-day",
       "formFactor": "mobile",
       "score": 100,
       "failed": [],
-      "landed": "/app/schedule"
+      "landed": "/app/my-day"
     },
     {
       "page": "My Day",
-      "path": "/app/schedule",
+      "path": "/app/my-day",
       "formFactor": "desktop",
       "score": 100,
       "failed": [],
-      "landed": "/app/schedule"
+      "landed": "/app/my-day"
     },
     {
       "page": "Appointments",
@@ -118,19 +118,19 @@
     },
     {
       "page": "Medicines",
-      "path": "/app/medications",
+      "path": "/app/medicines",
       "formFactor": "mobile",
       "score": 100,
       "failed": [],
-      "landed": "/app/medications"
+      "landed": "/app/medicines"
     },
     {
       "page": "Medicines",
-      "path": "/app/medications",
+      "path": "/app/medicines",
       "formFactor": "desktop",
       "score": 100,
       "failed": [],
-      "landed": "/app/medications"
+      "landed": "/app/medicines"
     },
     {
       "page": "Memories",
@@ -213,20 +213,20 @@
       "landed": "/app"
     },
     {
-      "page": "Manage medications",
-      "path": "/app/manage-medications",
+      "page": "Manage medicines",
+      "path": "/app/manage-medicines",
       "formFactor": "mobile",
       "score": 100,
       "failed": [],
-      "landed": "/app/manage-medications"
+      "landed": "/app/manage-medicines"
     },
     {
-      "page": "Manage medications",
-      "path": "/app/manage-medications",
+      "page": "Manage medicines",
+      "path": "/app/manage-medicines",
       "formFactor": "desktop",
       "score": 100,
       "failed": [],
-      "landed": "/app/manage-medications"
+      "landed": "/app/manage-medicines"
     },
     {
       "page": "Manage appointments",

@@ -91,7 +91,7 @@ function StatusSummaryCard({
               aria-hidden="true"
             />
             <span className="text-sm font-semibold text-neutral-600 uppercase tracking-wide">
-              Medications
+              Medicines
             </span>
           </div>
           <p className={`text-2xl font-bold tabular-nums ${allTaken ? 'text-success-700' : 'text-warm-700'}`}>
@@ -210,12 +210,12 @@ const EVENT_CONFIG: Record<
   { label: string; iconClass: string; rowClass: string }
 > = {
   med_taken: {
-    label: 'Medication taken',
+    label: 'Medicine taken',
     iconClass: 'text-success-600',
     rowClass: 'border-success-200',
   },
   med_skipped: {
-    label: 'Medication unmarked',
+    label: 'Medicine unmarked',
     iconClass: 'text-warm-700',
     rowClass: 'border-warm-200',
   },  schedule_done: {
@@ -315,7 +315,7 @@ export default function CaregiverDashboard() {
         <div
           className="inline-flex items-center gap-2 rounded-pill px-4 py-2 text-sm font-semibold border-2"
           style={{ borderColor: 'transparent' }}
-          aria-label={`Schedule: ${schedAdherence.doneCount} of ${schedAdherence.totalCount} tasks done`}
+          aria-label={`My Day: ${schedAdherence.doneCount} of ${schedAdherence.totalCount} tasks done`}
         >
           <span className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-pill text-sm font-bold ${
             schedAdherence.doneCount === schedAdherence.totalCount
@@ -451,7 +451,7 @@ export default function CaregiverDashboard() {
           </h2>
           <div className="space-y-3">
             <Link
-              to="/app/manage-medications"
+              to="/app/manage-medicines"
               className="flex items-center gap-4 bg-white rounded-xl border-2 border-neutral-300 shadow-card px-5 py-4 no-underline group hover:border-calm-400 hover:shadow-card-hover transition-all"
             >
               <span
@@ -462,7 +462,7 @@ export default function CaregiverDashboard() {
               </span>
               <div className="min-w-0 flex-1">
                 <p className="font-semibold text-neutral-800 leading-tight">
-                  Manage medications
+                  Manage medicines
                 </p>
                 <p className="text-sm text-neutral-500 mt-0.5">
                   {medAdherence.takenCount}/{medAdherence.totalCount} taken today

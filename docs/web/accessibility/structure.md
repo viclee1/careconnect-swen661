@@ -1,6 +1,6 @@
 # Page structure — CareConnect web app
 
-Generated from the running app by `scripts/web-a11y-structure.mjs` (2026-10-27).
+Generated from the running app by `scripts/web-a11y-structure.mjs` (2026-10-29).
 This is what a screen-reader user can navigate by: landmarks (VoiceOver rotor, NVDA `D`),
 headings (`H`), links and form fields. "Shown at": M = mobile 375px, T = tablet 820px,
 D = desktop 1280px.
@@ -136,7 +136,7 @@ h1  Here's your day, Margaret
 
 ---
 
-## My Day — `/app/schedule` (patient)
+## My Day — `/app/my-day` (patient)
 
 **Title:** My Day — CareConnect
 
@@ -201,7 +201,7 @@ h1  My Appointments
 
 ---
 
-## Medicines — `/app/medications` (patient)
+## Medicines — `/app/medicines` (patient)
 
 **Title:** Medicines — CareConnect
 
@@ -420,7 +420,7 @@ Named regions inside main: “Margaret's status today”, “Alerts”, “Recen
 ```
 h1  Dashboard
   h2  Margaret's status today
-  h2  Alerts3
+  h2  Alerts5
   h2  Recent activity
   h2  Quick links
 ```
@@ -429,15 +429,15 @@ h1  Dashboard
 |:--|:--|:--|:--|
 | Search medicines, appointments and people | search |  | off |
 
-**Links (13):** “Skip to main content” · “CareConnect” (named “CareConnect — go to home”) · “View all activity” · “Manage medications1/4 taken today” · “Manage appointments3 in the next 24 h” · “Caregiver notesDaily observations log” · “Full activity logNo events yet today” · “Dashboard” · “Medications” · “Appointments” · “Activity” · “Notes” · “Settings”
+**Links (13):** “Skip to main content” · “CareConnect” (named “CareConnect — go to home”) · “View all activity” · “Manage medicines1/4 taken today” · “Manage appointments3 in the next 24 h” · “Caregiver notesDaily observations log” · “Full activity logNo events yet today” · “Dashboard” · “Medicines” · “Appointments” · “Activity” · “Notes” · “Settings”
 
-**Live regions:** status · region/polite “Alerts3Appointment todayBlood pressure check — Dr. Sharma at”
+**Live regions:** status · region/polite “Alerts5Lisinopril — overdue10 mg — 1 tablet was due at 9:00 ”
 
 ---
 
-## Manage medications — `/app/manage-medications` (caregiver)
+## Manage medicines — `/app/manage-medicines` (caregiver)
 
-**Title:** Manage Medications — CareConnect
+**Title:** Manage Medicines — CareConnect
 
 | Landmark | Element | Accessible name | Shown at |
 |:--|:--|:--|:--|
@@ -451,7 +451,7 @@ Named regions inside main: “Current medications”, “Amlodipine”, “Lisin
 **Heading outline (desktop)**
 
 ```
-h1  Manage medications
+h1  Manage medicines
   h2  Current medications
     h3  Amlodipine
     h3  Lisinopril
@@ -463,7 +463,7 @@ h1  Manage medications
 |:--|:--|:--|:--|
 | Search medicines, appointments and people | search |  | off |
 
-**Links (8):** “Skip to main content” · “CareConnect” (named “CareConnect — go to home”) · “Dashboard” · “Medications” · “Appointments” · “Activity” · “Notes” · “Settings”
+**Links (8):** “Skip to main content” · “CareConnect” (named “CareConnect — go to home”) · “Dashboard” · “Medicines” · “Appointments” · “Activity” · “Notes” · “Settings”
 
 **Live regions:** status
 
@@ -501,7 +501,7 @@ h1  Manage appointments
 |:--|:--|:--|:--|
 | Search medicines, appointments and people | search |  | off |
 
-**Links (8):** “Skip to main content” · “CareConnect” (named “CareConnect — go to home”) · “Dashboard” · “Medications” · “Appointments” · “Activity” · “Notes” · “Settings”
+**Links (8):** “Skip to main content” · “CareConnect” (named “CareConnect — go to home”) · “Dashboard” · “Medicines” · “Appointments” · “Activity” · “Notes” · “Settings”
 
 **Live regions:** status
 
@@ -530,7 +530,7 @@ h1  Activity log
 |:--|:--|:--|:--|
 | Search medicines, appointments and people | search |  | off |
 
-**Links (8):** “Skip to main content” · “CareConnect” (named “CareConnect — go to home”) · “Dashboard” · “Medications” · “Appointments” · “Activity” · “Notes” · “Settings”
+**Links (8):** “Skip to main content” · “CareConnect” (named “CareConnect — go to home”) · “Dashboard” · “Medicines” · “Appointments” · “Activity” · “Notes” · “Settings”
 
 **Live regions:** status
 
@@ -562,7 +562,7 @@ h1  Caregiver Notes
 |:--|:--|:--|:--|
 | Search medicines, appointments and people | search |  | off |
 
-**Links (8):** “Skip to main content” · “CareConnect” (named “CareConnect — go to home”) · “Dashboard” · “Medications” · “Appointments” · “Activity” · “Notes” · “Settings”
+**Links (8):** “Skip to main content” · “CareConnect” (named “CareConnect — go to home”) · “Dashboard” · “Medicines” · “Appointments” · “Activity” · “Notes” · “Settings”
 
 **Live regions:** status
 

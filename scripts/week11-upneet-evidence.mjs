@@ -32,7 +32,7 @@ const widths = [
 
 const screens = [
   ['01-appointments', '/app/appointments'],
-  ['02-medicines', '/app/medications'],
+  ['02-medicines', '/app/medicines'],
   ['03-memories', '/app/memories'],
 ];
 
@@ -119,7 +119,7 @@ console.log('✔ navigation');
   await ctx.close();
 }
 {
-  const { ctx, page } = await open(1440, 900, '/app/medications');
+  const { ctx, page } = await open(1440, 900, '/app/medicines');
   await page.getByRole('button', { name: /^Metformin/ }).click();
   await shot(page, 'features/medicines-detail-selected');
   await page.getByRole('button', { name: 'Mark Metformin as taken' }).click();
@@ -169,7 +169,7 @@ console.log('✔ features');
 
 // ── Keyboard focus states (desktop, real key presses) ────────────────────────
 {
-  const { ctx, page } = await open(1440, 900, '/app/medications');
+  const { ctx, page } = await open(1440, 900, '/app/medicines');
   await page.getByRole('checkbox', { name: 'Amlodipine taken' }).focus();
   await page.keyboard.press('Tab'); // the next row (shows it in detail with Enter)
   await page.keyboard.press('Tab'); // that row's tick

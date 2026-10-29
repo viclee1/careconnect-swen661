@@ -40,7 +40,7 @@ function useEntries(view: AppView): Entry[] {
         id: `medicine-${m.id}`,
         label: m.name,
         detail: `Medicine · ${m.dosage}`,
-        to: '/app/medications',
+        to: '/app/medicines',
       })),
       ...appointments.map((a) => ({
         id: `appointment-${a.id}`,

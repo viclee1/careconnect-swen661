@@ -80,15 +80,15 @@ const routes: Array<[string, string, 'patient' | 'caregiver' | null]> = [
   ['Sign in', '/signin', null],
   ['Sign up', '/signup', null],
   ['Today', '/app', 'patient'],
-  ['My Day', '/app/schedule', 'patient'],
+  ['My Day', '/app/my-day', 'patient'],
   ['Appointments', '/app/appointments', 'patient'],
-  ['Medicines', '/app/medications', 'patient'],
+  ['Medicines', '/app/medicines', 'patient'],
   ['Memories', '/app/memories', 'patient'],
   ['Contacts', '/app/contacts', 'patient'],
   ['Conversation', '/app/contacts/c2', 'patient'],
   ['Accessibility Settings', '/app/settings', 'patient'],
   ['Caregiver dashboard', '/app', 'caregiver'],
-  ['Manage medications', '/app/manage-medications', 'caregiver'],
+  ['Manage medicines', '/app/manage-medicines', 'caregiver'],
 ];
 
 describe('axe-core finds no violations', () => {
@@ -155,7 +155,7 @@ describe('page structure', () => {
   });
 
   it('marks the current page in the app navigation with aria-current', async () => {
-    renderAt('/app/medications', 'patient');
+    renderAt('/app/medicines', 'patient');
     const nav = await screen.findByRole('navigation', { name: 'Main navigation' });
     expect(within(nav).getByRole('link', { name: 'Medicines' })).toHaveAttribute('aria-current', 'page');
     expect(within(nav).getByRole('link', { name: 'Contacts' })).not.toHaveAttribute('aria-current');
@@ -291,7 +291,7 @@ describe('responsive navigation', () => {
     const toggle = within(nav).getByRole('button', { name: /alerts?$/ });
     fireEvent.click(toggle);
     expect(toggle).toHaveAttribute('aria-expanded', 'true');
-    expect(within(nav).getByRole('link', { name: /still to take today/ })).toHaveAttribute('href', '/app/medications');
+    expect(within(nav).getByRole('link', { name: /still to take today/ })).toHaveAttribute('href', '/app/medicines');
   });
 
   it.each(['patient', 'caregiver'] as const)(

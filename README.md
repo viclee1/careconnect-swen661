@@ -198,7 +198,7 @@ CareConnect lowers the daily cognitive load for people who need help remembering
 **Caregiver**
 
 - Dashboard with adherence summary, an alerts region for missed/overdue items, and a recent-activity timeline.
-- Manage medications and manage appointments with accessible create/edit forms, inline validation, and delete confirmation.
+- Manage medicines and manage appointments with accessible create/edit forms, inline validation, and delete confirmation.
 - All caregiver edits propagate to the patient screens.
 
 **Shared**
@@ -553,7 +553,7 @@ Margaret's status today (medicines, check-in, next appointment), alerts for over
 
 ![Caregiver dashboard](docs/screenshots/10-caregiver-dashboard.png)
 
-### 11. Caregiver — Manage medications
+### 11. Caregiver — Manage medicines
 
 Medication list with edit and confirm-on-delete.
 
@@ -697,14 +697,14 @@ The web app is the repository root (`src/`, `public/`, `e2e/`). It is the projec
 |:--|:--|:--|
 | Landing, Sign in, Sign up, Role chooser | `/`, `/signin`, `/signup`, `/role` | States the "no sound required" promise up front; accessible forms; mock sign-in |
 | Home | `/app` | The **Upcoming appointment** visual alert (Pause, OK) and its **[CC]** caption; today's progress; the next thing to do; a simulated incoming **video call** whose live captions, volume and balance follow Settings |
-| My Day | `/app/schedule` | Everything to do today, ticked off in place; progress written as words and a bar |
+| My Day | `/app/my-day` | Everything to do today, ticked off in place; progress written as words and a bar |
 | Appointments | `/app/appointments` | Grouped list and detail: full-word dates, the place, who is taking you, directions, **Add to My Day**; **Export to calendar** with on-screen reminders, never a sound |
-| Medicines | `/app/medications` | List and detail; tick a medicine or mark it from the detail; "still to take" count announced; the next reminder as a caption |
+| Medicines | `/app/medicines` | List and detail; tick a medicine or mark it from the detail; "still to take" count announced; the next reminder as a caption |
 | Memories | `/app/memories` | A memory book with photos that opens offline; add, pin, filter and remove, with validation |
 | Contacts | `/app/contacts` | Written conversations, never voice calls; search; a **captioned video call** to the primary caregiver |
 | Conversation | `/app/contacts/:id` | Voicemail as a transcript, video messages with captions, a silent **Alert** (screen flash and vibration) instead of a ring, quick replies, messages kept and sent when an offline connection returns |
 | Accessibility Settings | `/app/settings` | Visual alert banners (always on), captions (size, colour, preview), audio volume and balance, screen flash and desktop notifications, vibration rhythms, sign out |
-| Caregiver dashboard, Manage medications, Manage appointments, Activity log, Notes | `/app`, `/app/manage-*`, `/app/activity`, `/app/caregiver` | The caregiver's view of the same plan, with accessible forms and confirm-on-delete |
+| Caregiver dashboard, Manage medicines, Manage appointments, Activity log, Notes | `/app`, `/app/manage-*`, `/app/activity`, `/app/caregiver` | The caregiver's view of the same plan, with accessible forms and confirm-on-delete |
 
 **Architecture.** React 18 + TypeScript + Vite, React Router 7 with lazy-loaded routes, Tailwind design tokens, and the Context API for state (`AppointmentsProvider`, `MedicinesProvider`, `MemoriesProvider`, `MessagesProvider`, `SettingsProvider`), each persisted through `useLocalStorageState`, which repairs corrupt saved data. Domain rules live in `src/models/` and `src/utils/`, shared with the desktop and mobile clients where they existed first. A service worker caches the app shell, lazy chunks and memory photos for offline use.
 

@@ -11,7 +11,7 @@ import { addDays, localISODate } from '../utils/dates';
 jest.mock('../data/caregiverStore');
 
 function renderPage() {
-  return renderWithProviders(<Medications />, { path: '/app/medications', route: '/app/medications' });
+  return renderWithProviders(<Medications />, { path: '/app/medicines', route: '/app/medicines' });
 }
 
 const stored = () => JSON.parse(localStorage.getItem(MEDS_TAKEN_KEY) ?? 'null');

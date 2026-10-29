@@ -60,7 +60,7 @@ export default function Home({ view: _view }: HomeProps) {
             <span>
               {doneCount} of {totalCount} things done today
             </span>
-            <Link to="/app/schedule" className="text-calm-700 font-medium">
+            <Link to="/app/my-day" className="text-calm-700 font-medium">
               View My Day →
             </Link>
           </p>

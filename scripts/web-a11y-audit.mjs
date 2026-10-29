@@ -52,15 +52,15 @@ const pages = [
   ['signup', 'Sign up', '/signup', null],
   ['role', 'Role chooser', '/role', 'none'],
   ['today', 'Home (patient)', '/app', 'patient'],
-  ['schedule', 'My Day', '/app/schedule', 'patient'],
+  ['schedule', 'My Day', '/app/my-day', 'patient'],
   ['appointments', 'Appointments', '/app/appointments', 'patient'],
-  ['medications', 'Medicines', '/app/medications', 'patient'],
+  ['medications', 'Medicines', '/app/medicines', 'patient'],
   ['memories', 'Memories', '/app/memories', 'patient'],
   ['contacts', 'Contacts', '/app/contacts', 'patient'],
   ['conversation', 'Conversation', '/app/contacts/c3', 'patient'],
   ['settings', 'Accessibility Settings', '/app/settings', 'patient'],
   ['dashboard', 'Caregiver dashboard', '/app', 'caregiver'],
-  ['manage-meds', 'Manage medications', '/app/manage-medications', 'caregiver'],
+  ['manage-meds', 'Manage medicines', '/app/manage-medicines', 'caregiver'],
   ['manage-appts', 'Manage appointments', '/app/manage-appointments', 'caregiver'],
   ['activity', 'Activity log', '/app/activity', 'caregiver'],
   ['notes', 'Caregiver notes', '/app/caregiver', 'caregiver'],
@@ -206,7 +206,7 @@ async function run() {
     }
 
     // Confirm dialog (Manage medications → Delete).
-    page = await open(context, '/app/manage-medications', 'caregiver');
+    page = await open(context, '/app/manage-medicines', 'caregiver');
     const del = page.getByRole('button', { name: /^Delete /i }).first();
     await del.focus();
     await page.keyboard.press('Enter');
@@ -256,7 +256,7 @@ async function run() {
 
     if (bp.id === 'desktop') {
       // Focus on load: nothing should be focused before the user acts.
-      for (const [p, role] of [['/app/manage-medications', 'caregiver'], ['/app/manage-appointments', 'caregiver']]) {
+      for (const [p, role] of [['/app/manage-medicines', 'caregiver'], ['/app/manage-appointments', 'caregiver']]) {
         const pg = await open(context, p, role);
         const active = await pg.evaluate(() => {
           const el = document.activeElement;

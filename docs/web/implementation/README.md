@@ -88,8 +88,8 @@ src/
 | Area | Screens (route) |
 |:--|:--|
 | Public | Landing `/`, Sign in `/signin`, Sign up `/signup`, Role chooser `/role` |
-| Care recipient | Home `/app`, My Day `/app/schedule`, Appointments `/app/appointments`, Medicines `/app/medications`, Memories `/app/memories`, Contacts `/app/contacts`, Conversation `/app/contacts/:id`, Accessibility Settings `/app/settings` |
-| Caregiver | Dashboard `/app`, Manage medications `/app/manage-medications`, Manage appointments `/app/manage-appointments`, Activity log `/app/activity`, Notes `/app/caregiver` |
+| Care recipient | Home `/app`, My Day `/app/my-day`, Appointments `/app/appointments`, Medicines `/app/medicines`, Memories `/app/memories`, Contacts `/app/contacts`, Conversation `/app/contacts/:id`, Accessibility Settings `/app/settings` |
+| Caregiver | Dashboard `/app`, Manage medicines `/app/manage-medicines`, Manage appointments `/app/manage-appointments`, Activity log `/app/activity`, Notes `/app/caregiver` |
 
 Primary workflows that work end to end: sign up / sign in → choose a role; mark
 today's medicines and tasks done (and undo); add an appointment to My Day; check in;
@@ -150,9 +150,9 @@ desktop.
 
 ![Memories](screenshots/overview/09-memories.png)
 
-**Manage medications**
+**Manage medicines**
 
-![Manage medications](screenshots/overview/12-manage-medications.png)
+![Manage medicines](screenshots/overview/12-manage-medications.png)
 
 The other screens: [Landing](screenshots/overview/01-landing.png) ·
 [Sign in](screenshots/overview/02-sign-in.png) · [Sign up](screenshots/overview/03-sign-up.png) ·

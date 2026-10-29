@@ -43,7 +43,7 @@ export function useAlerts(): AppAlert[] {
       alerts.push({
         id: 'medicines',
         label: `${medicinesCount(left)} still to take today`,
-        to: '/app/medications',
+        to: '/app/medicines',
       });
     }
 
