@@ -47,8 +47,9 @@ jobs:
           - os: windows-2022
             script: package:win
           # Intel: the arm64 macOS runners were too short of capacity to
-          # pick the job up. package:mac builds for the host, so an x64 .dmg.
-          - os: macos-13
+          # pick the job up, and macos-13 is retired. package:mac builds for
+          # the host, so an x64 .dmg.
+          - os: macos-15-intel
             script: package:mac
           - os: ubuntu-24.04
             script: package:linux
