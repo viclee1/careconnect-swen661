@@ -92,7 +92,7 @@
   },
   {
     "id": "mobile-manage-meds",
-    "page": "Manage medications",
+    "page": "Manage medicines",
     "breakpoint": "mobile 375px",
     "violations": [],
     "passes": 40
@@ -144,7 +144,7 @@
     "page": "Caregiver — Menu drawer open",
     "breakpoint": "mobile 375px",
     "violations": [],
-    "passes": 45
+    "passes": 44
   },
   {
     "id": "tablet-landing",
@@ -239,7 +239,7 @@
   },
   {
     "id": "tablet-manage-meds",
-    "page": "Manage medications",
+    "page": "Manage medicines",
     "breakpoint": "tablet 820px",
     "violations": [],
     "passes": 40
@@ -386,7 +386,7 @@
   },
   {
     "id": "desktop-manage-meds",
-    "page": "Manage medications",
+    "page": "Manage medicines",
     "breakpoint": "desktop 1280px",
     "violations": [],
     "passes": 44
@@ -540,7 +540,7 @@
   },
   {
     "id": "mobile-hc-manage-meds",
-    "page": "Manage medications — high contrast",
+    "page": "Manage medicines — high contrast",
     "breakpoint": "mobile 375px",
     "violations": [],
     "passes": 40
@@ -659,7 +659,7 @@
   },
   {
     "id": "tablet-hc-manage-meds",
-    "page": "Manage medications — high contrast",
+    "page": "Manage medicines — high contrast",
     "breakpoint": "tablet 820px",
     "violations": [],
     "passes": 40
@@ -778,7 +778,7 @@
   },
   {
     "id": "desktop-hc-manage-meds",
-    "page": "Manage medications — high contrast",
+    "page": "Manage medicines — high contrast",
     "breakpoint": "desktop 1280px",
     "violations": [],
     "passes": 44

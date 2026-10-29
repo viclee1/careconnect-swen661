@@ -8,8 +8,8 @@ const LIST_KEY = 'careconnect_medications_list';
 
 function renderPage() {
   return renderWithProviders(<ManageMedications />, {
-    path: '/app/manage-medications',
-    route: '/app/manage-medications',
+    path: '/app/manage-medicines',
+    route: '/app/manage-medicines',
   });
 }
 
@@ -20,10 +20,10 @@ beforeEach(() => {
   localStorage.clear();
 });
 
-describe('Manage medications', () => {
+describe('Manage medicines', () => {
   it("lists Margaret's prescriptions with dose and 12-hour times", () => {
     renderPage();
-    expect(screen.getByRole('heading', { level: 1, name: 'Manage medications' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: 'Manage medicines' })).toBeInTheDocument();
     expect(screen.getAllByRole('heading', { level: 3 }).map((h) => h.textContent)).toEqual([
       'Amlodipine',
       'Lisinopril',
@@ -39,13 +39,13 @@ describe('Manage medications', () => {
   it('refuses to save an empty form, listing every missing field and marking the time invalid', async () => {
     const user = userEvent.setup();
     renderPage();
-    await user.click(screen.getByRole('button', { name: 'Add medication' }));
-    expect(screen.getByRole('heading', { level: 2, name: 'Add new medication' })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Add medicine' }));
+    expect(screen.getByRole('heading', { level: 2, name: 'Add new medicine' })).toBeInTheDocument();
 
-    await user.click(screen.getByRole('button', { name: 'Add medication' }));
+    await user.click(screen.getByRole('button', { name: 'Add medicine' }));
     const summary = screen.getByText('Please fix the following before saving:').closest('[role="alert"]')!;
     expect(within(summary as HTMLElement).getAllByRole('listitem').map((li) => li.textContent)).toEqual([
-      'Medication name is required.',
+      'Medicine name is required.',
       'Dosage is required.',
       'At least one scheduled time is required.',
     ]);
@@ -56,17 +56,17 @@ describe('Manage medications', () => {
   it('adds a medication with two times, trimming the text, and keeps it after a remount', async () => {
     const user = userEvent.setup();
     const { unmount } = renderPage();
-    await user.click(screen.getByRole('button', { name: 'Add medication' }));
+    await user.click(screen.getByRole('button', { name: 'Add medicine' }));
 
-    await user.type(screen.getByRole('textbox', { name: /Medication name/ }), '  Vitamin D  ');
+    await user.type(screen.getByRole('textbox', { name: /Medicine name/ }), '  Vitamin D  ');
     await user.type(screen.getByRole('textbox', { name: /Dose/ }), '1000 IU');
     await user.type(screen.getByLabelText('Time'), '07:15');
     await user.click(screen.getByRole('button', { name: 'Add another scheduled time' }));
     await user.type(screen.getByLabelText('Time 2'), '19:45');
     await user.type(screen.getByRole('textbox', { name: /Instructions/ }), 'With breakfast and dinner.');
-    await user.click(screen.getByRole('button', { name: 'Add medication' }));
+    await user.click(screen.getByRole('button', { name: 'Add medicine' }));
 
-    expect(screen.queryByRole('heading', { name: 'Add new medication' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Add new medicine' })).not.toBeInTheDocument();
     const added = card('Vitamin D');
     expect(within(added).getByText('7:15 am')).toBeInTheDocument();
     expect(within(added).getByText('7:45 pm')).toBeInTheDocument();
@@ -86,8 +86,8 @@ describe('Manage medications', () => {
   it('removes an extra time and drops blank ones, saving only the times filled in', async () => {
     const user = userEvent.setup();
     renderPage();
-    await user.click(screen.getByRole('button', { name: 'Add medication' }));
-    await user.type(screen.getByRole('textbox', { name: /Medication name/ }), 'Aspirin');
+    await user.click(screen.getByRole('button', { name: 'Add medicine' }));
+    await user.type(screen.getByRole('textbox', { name: /Medicine name/ }), 'Aspirin');
     await user.type(screen.getByRole('textbox', { name: /Dose/ }), '75 mg');
     await user.click(screen.getByRole('button', { name: 'Add another scheduled time' }));
     await user.click(screen.getByRole('button', { name: 'Add another scheduled time' }));
@@ -95,7 +95,7 @@ describe('Manage medications', () => {
 
     await user.click(screen.getByRole('button', { name: 'Remove time 1' }));
     await user.type(screen.getByLabelText('Time 1'), '10:00');
-    await user.click(screen.getByRole('button', { name: 'Add medication' }));
+    await user.click(screen.getByRole('button', { name: 'Add medicine' }));
 
     expect(stored().at(-1)).toMatchObject({ name: 'Aspirin', times: ['10:00'] });
     expect(stored().at(-1).instructions).toBeUndefined();
@@ -105,7 +105,7 @@ describe('Manage medications', () => {
     const user = userEvent.setup();
     renderPage();
     await user.click(within(card('Lisinopril')).getByRole('button', { name: 'Edit Lisinopril' }));
-    expect(screen.getByRole('heading', { level: 2, name: 'Edit medication' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2, name: 'Edit medicine' })).toBeInTheDocument();
     const dose = screen.getByRole('textbox', { name: /Dose/ });
     expect(dose).toHaveValue('10 mg — 1 tablet');
 
@@ -122,16 +122,16 @@ describe('Manage medications', () => {
   it('cancels without saving, from either the Cancel button or the close button, and returns focus to Add', async () => {
     const user = userEvent.setup();
     renderPage();
-    await user.click(screen.getByRole('button', { name: 'Add medication' }));
-    await user.type(screen.getByRole('textbox', { name: /Medication name/ }), 'Never saved');
+    await user.click(screen.getByRole('button', { name: 'Add medicine' }));
+    await user.type(screen.getByRole('textbox', { name: /Medicine name/ }), 'Never saved');
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(screen.queryByRole('region', { name: 'Never saved' })).not.toBeInTheDocument();
     await new Promise((resolve) => requestAnimationFrame(resolve));
-    expect(screen.getByRole('button', { name: 'Add medication' })).toHaveFocus();
+    expect(screen.getByRole('button', { name: 'Add medicine' })).toHaveFocus();
 
-    await user.click(screen.getByRole('button', { name: 'Add medication' }));
+    await user.click(screen.getByRole('button', { name: 'Add medicine' }));
     await user.click(screen.getByRole('button', { name: 'Cancel and close form' }));
-    expect(screen.queryByRole('heading', { name: 'Add new medication' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Add new medicine' })).not.toBeInTheDocument();
     expect(stored()).toBeNull();
   });
 
@@ -144,14 +144,14 @@ describe('Manage medications', () => {
     renderPage();
 
     await user.click(screen.getByRole('button', { name: 'Delete Amlodipine' }));
-    const dialog = screen.getByRole('dialog', { name: 'Delete medication' });
+    const dialog = screen.getByRole('dialog', { name: 'Delete medicine' });
     expect(dialog).toHaveTextContent('Are you sure you want to delete Amlodipine?');
     await user.click(within(dialog).getByRole('button', { name: 'Cancel' }));
     expect(card('Amlodipine')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Delete Amlodipine' }));
     await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Yes, delete' }));
-    expect(screen.getByText('No medications added yet')).toBeInTheDocument();
+    expect(screen.getByText('No medicines added yet')).toBeInTheDocument();
     expect(stored()).toEqual([]);
   });
 

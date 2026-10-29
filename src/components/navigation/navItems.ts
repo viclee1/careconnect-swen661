@@ -24,15 +24,15 @@ export interface NavItem {
 export const navItems: Record<AppView, NavItem[]> = {
   patient: [
     { to: '/app', label: 'Home', Icon: Home },
-    { to: '/app/schedule', label: 'My Day', Icon: ListChecks },
+    { to: '/app/my-day', label: 'My Day', Icon: ListChecks },
     { to: '/app/appointments', label: 'Appointments', Icon: CalendarDays },
-    { to: '/app/medications', label: 'Medicines', Icon: Pill },
+    { to: '/app/medicines', label: 'Medicines', Icon: Pill },
     { to: '/app/memories', label: 'Memories', Icon: BookOpen },
     { to: '/app/contacts', label: 'Contacts', Icon: Users },
   ],
   caregiver: [
     { to: '/app', label: 'Dashboard', Icon: LayoutDashboard },
-    { to: '/app/manage-medications', label: 'Medications', Icon: Pill },
+    { to: '/app/manage-medicines', label: 'Medicines', Icon: Pill },
     { to: '/app/manage-appointments', label: 'Appointments', Icon: CalendarDays },
     { to: '/app/activity', label: 'Activity', Icon: Activity },
     { to: '/app/caregiver', label: 'Notes', Icon: ShieldCheck },

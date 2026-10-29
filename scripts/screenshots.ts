@@ -137,13 +137,13 @@ const shots: Shot[] = [
   {
     file: '07-patient-medications.png',
     seed: 'patient',
-    path: '/app/medications',
+    path: '/app/medicines',
     waitFor: (p) => p.getByRole('heading', { level: 1, name: /^medicines$/i }).waitFor({ state: 'visible' }),
   },
   {
     file: '08-medication-taken.png',
     seed: 'patient',
-    path: '/app/medications',
+    path: '/app/medicines',
     prepare: async (p) => {
       // Choose Lisinopril in the list and mark it from the detail panel, to
       // show the "Taken — tap to undo" state and the updated count.
@@ -169,17 +169,17 @@ const shots: Shot[] = [
   {
     file: '11-caregiver-medications.png',
     seed: 'patient',
-    path: '/app/manage-medications',
+    path: '/app/manage-medicines',
     caregiver: true,
     waitFor: (p) => p.getByRole('heading', { level: 1, name: /manage medications/i }).waitFor({ state: 'visible' }),
   },
   {
     file: '12-caregiver-medication-form.png',
     seed: 'patient',
-    path: '/app/manage-medications',
+    path: '/app/manage-medicines',
     caregiver: true,
     prepare: async (p) => {
-      await p.getByRole('button', { name: 'Add medication', exact: true }).click();
+      await p.getByRole('button', { name: 'Add medicine', exact: true }).click();
     },
     waitFor: (p) => p.getByRole('heading', { name: /add new medication/i }).waitFor({ state: 'visible' }),
   },

@@ -103,16 +103,20 @@ function AppShell() {
             <Route index                        element={view === 'patient'
               ? teammate(<Home view={view} />, 'Home', 'Justin Zhang')
               : teammate(<CaregiverDashboard />, 'Caregiver dashboard')} />
-            <Route path="schedule"              element={teammate(<Schedule />, 'My Day', 'Justin Zhang')} />
+            <Route path="my-day"                element={teammate(<Schedule />, 'My Day', 'Justin Zhang')} />
             <Route path="appointments"          element={teammate(<Appointments />, 'Appointments', 'Upneet Bir')} />
-            <Route path="medications"           element={teammate(<Medications />, 'Medicines', 'Upneet Bir')} />
+            <Route path="medicines"             element={teammate(<Medications />, 'Medicines', 'Upneet Bir')} />
             <Route path="memories"              element={teammate(<Memories />, 'Memories', 'Upneet Bir')} />
             <Route path="contacts"              element={<Contacts />} />
             <Route path="contacts/:contactId"   element={<MessageThread />} />
             <Route path="settings"              element={<AccessibilitySettings />} />
             <Route path="caregiver"             element={teammate(<Caregiver />, 'Caregiver notes')} />
             <Route path="activity"              element={teammate(<ActivityLog />, 'Activity log')} />
-            <Route path="manage-medications"    element={teammate(<ManageMedications />, 'Manage medications')} />
+            <Route path="manage-medicines"      element={teammate(<ManageMedications />, 'Manage medicines')} />
+            {/* The screens' earlier addresses, so bookmarks still work. */}
+            <Route path="schedule"              element={<Navigate to="/app/my-day" replace />} />
+            <Route path="medications"           element={<Navigate to="/app/medicines" replace />} />
+            <Route path="manage-medications"    element={<Navigate to="/app/manage-medicines" replace />} />
             <Route path="manage-appointments"   element={teammate(<ManageAppointments />, 'Manage appointments')} />
             <Route path="*"                     element={<Navigate to="/app" replace />} />
           </Routes>
@@ -140,8 +144,8 @@ function AppRoutes() {
 
       {/* Legacy path shims — Home.tsx still links to these old paths.
           Redirect them into the /app/* namespace so they resolve correctly. */}
-      <Route path="/schedule"    element={<Navigate to="/app/schedule"    replace />} />
-      <Route path="/medications" element={<Navigate to="/app/medications" replace />} />
+      <Route path="/schedule"    element={<Navigate to="/app/my-day"      replace />} />
+      <Route path="/medications" element={<Navigate to="/app/medicines"   replace />} />
       <Route path="/memories"    element={<Navigate to="/app/memories"    replace />} />
       <Route path="/contacts"    element={<Navigate to="/app/contacts"    replace />} />
       <Route path="/caregiver"   element={<Navigate to="/app/caregiver"   replace />} />

@@ -13,7 +13,7 @@ import { signInAsPatient } from './helpers';
 
 test.describe('Medicines', () => {
   test('tick medicines from the keyboard; the count is announced and survives a reload', async ({ page, browserName }) => {
-    await signInAsPatient(page, '/app/medications');
+    await signInAsPatient(page, '/app/medicines');
     const status = page.getByRole('status').filter({ hasText: 'taken' });
     await expect(status).toContainText('1 of 4 taken. 3 medicines still to take today.');
     await expect(status).toContainText('3 still to take today');
@@ -193,7 +193,7 @@ test.describe('Memories', () => {
 });
 
 test.describe('My screens at every width', () => {
-  for (const path of ['/app/appointments', '/app/medications', '/app/memories']) {
+  for (const path of ['/app/appointments', '/app/medicines', '/app/memories']) {
     test(`${path} never scrolls sideways, keeps controls at least 44px and passes axe`, async ({ page }) => {
       await signInAsPatient(page, path);
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
@@ -212,6 +212,22 @@ test.describe('My screens at every width', () => {
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
         .analyze();
       expect(violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target).join(', ')}`)).toEqual([]);
+    });
+  }
+});
+
+test.describe('Screen addresses', () => {
+  // The screens moved to match their names on every client; earlier links and
+  // bookmarks still arrive.
+  for (const [from, to, heading] of [
+    ['/app/medications', '/app/medicines', 'Medicines'],
+    ['/app/schedule', '/app/my-day', 'My Day'],
+    ['/medications', '/app/medicines', 'Medicines'],
+  ]) {
+    test(`${from} leads to ${to}`, async ({ page }) => {
+      await signInAsPatient(page, from);
+      await expect(page).toHaveURL(new RegExp(`${to}$`));
+      await expect(page.getByRole('heading', { level: 1, name: heading })).toBeVisible();
     });
   }
 });

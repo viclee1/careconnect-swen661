@@ -55,7 +55,8 @@ void main() {
       await tester.tap(find.text('Medicines'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Medications'), findsOneWidget);
+      // The tab and the screen title both read Medicines; check the title.
+      expect(find.descendant(of: find.byType(AppBar), matching: find.text('Medicines')), findsOneWidget);
       expect(find.text('Aspirin'), findsOneWidget);
       expect(find.byType(ContactCard), findsNothing);
 

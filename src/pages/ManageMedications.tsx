@@ -41,7 +41,7 @@ const emptyForm: MedForm = { name: '', dosage: '', times: [''], instructions: ''
 
 function validate(form: MedForm): MedErrors {
   const e: MedErrors = {};
-  if (!form.name.trim()) e.name = 'Medication name is required.';
+  if (!form.name.trim()) e.name = 'Medicine name is required.';
   if (!form.dosage.trim()) e.dosage = 'Dosage is required.';
   if (!form.times.some((t) => t.trim())) e.times = 'At least one scheduled time is required.';
   return e;
@@ -146,7 +146,7 @@ function MedForm({
     >
       <div className="flex items-center justify-between gap-4">
         <h2 id="med-form-heading" className="text-xl font-bold text-neutral-800">
-          {initial ? 'Edit medication' : 'Add new medication'}
+          {initial ? 'Edit medicine' : 'Add new medicine'}
         </h2>
         <button
           type="button"
@@ -190,7 +190,7 @@ function MedForm({
       >
         {/* Name */}
         <Field
-          label="Medication name"
+          label="Medicine name"
           required
           placeholder="e.g. Amlodipine"
           value={form.name}
@@ -283,7 +283,7 @@ function MedForm({
         {/* Actions */}
         <div className="flex flex-wrap gap-3 pt-2 border-t border-neutral-200">
           <Button type="submit" variant="primary" icon={<CheckCircle2 className="w-5 h-5" />}>
-            {initial ? 'Save changes' : 'Add medication'}
+            {initial ? 'Save changes' : 'Add medicine'}
           </Button>
           <Button type="button" variant="secondary" onClick={onCancel}>
             Cancel
@@ -342,7 +342,7 @@ function MedRow({
             <Button
               variant="danger"
               onClick={onDelete}
-              confirmTitle="Delete medication"
+              confirmTitle="Delete medicine"
               confirmDescription={`Are you sure you want to delete ${med.name}? This cannot be undone and will remove it from Margaret's medicines list.`}
               confirmLabel="Yes, delete"
               aria-label={`Delete ${med.name}`}
@@ -396,7 +396,7 @@ export default function ManageMedications() {
         <div>
           <h1 className="text-3xl font-bold text-neutral-800 leading-tight flex items-center gap-3">
             <Pill className="w-8 h-8 text-warm-700" aria-hidden="true" />
-            Manage medications
+            Manage medicines
           </h1>
           <p className="mt-1 text-lg text-neutral-500">
             Add, edit, or remove Margaret's prescriptions
@@ -410,7 +410,7 @@ export default function ManageMedications() {
             className="inline-flex items-center gap-2 font-bold rounded-xl px-5 py-3 min-h-[2.75rem] text-base bg-calm-600 text-white border-2 border-calm-600 hover:bg-calm-700 transition-colors"
           >
             <PlusCircle className="w-5 h-5" aria-hidden="true" />
-            Add medication
+            Add medicine
           </button>
         )}
       </div>
@@ -443,9 +443,9 @@ export default function ManageMedications() {
               >
                 <Pill className="w-8 h-8 text-warm-700" />
               </span>
-              <p className="text-xl font-bold text-neutral-800">No medications added yet</p>
+              <p className="text-xl font-bold text-neutral-800">No medicines added yet</p>
               <p className="text-neutral-500">
-                Use the "Add medication" button above to add Margaret's first prescription.
+                Use the "Add medicine" button above to add Margaret's first prescription.
               </p>
             </div>
           ) : (

@@ -7,7 +7,7 @@ void main() {
     await tester.pumpWidget(const MaterialApp(home: MedicineScreen()));
 
     // Verify UI components render
-    expect(find.text('Medications'), findsOneWidget);
+    expect(find.text('Medicines'), findsOneWidget);
     expect(find.text('Aspirin'), findsOneWidget);
     expect(find.text('Lisinopril'), findsOneWidget);
 

@@ -18,7 +18,7 @@ class _MedicineScreenState extends State<MedicineScreen> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      title: 'Medications',
+      title: 'Medicines',
       body: ListView.builder(
         itemCount: medications.length,
         itemBuilder: (context, index) {

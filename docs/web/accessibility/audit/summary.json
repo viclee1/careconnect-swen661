@@ -16,7 +16,7 @@
     "wcag2aaa",
     "wcag21aaa"
   ],
-  "date": "2026-10-29T17:28:28.177Z",
+  "date": "2026-10-29T21:11:27.930Z",
   "scans": 115,
   "violations": 0,
   "checks": {
@@ -117,7 +117,7 @@
     },
     {
       "id": "mobile-manage-meds",
-      "page": "Manage medications",
+      "page": "Manage medicines",
       "breakpoint": "mobile 375px",
       "violations": 0,
       "passes": 40
@@ -169,7 +169,7 @@
       "page": "Caregiver — Menu drawer open",
       "breakpoint": "mobile 375px",
       "violations": 0,
-      "passes": 45
+      "passes": 44
     },
     {
       "id": "tablet-landing",
@@ -264,7 +264,7 @@
     },
     {
       "id": "tablet-manage-meds",
-      "page": "Manage medications",
+      "page": "Manage medicines",
       "breakpoint": "tablet 820px",
       "violations": 0,
       "passes": 40
@@ -411,7 +411,7 @@
     },
     {
       "id": "desktop-manage-meds",
-      "page": "Manage medications",
+      "page": "Manage medicines",
       "breakpoint": "desktop 1280px",
       "violations": 0,
       "passes": 44
@@ -565,7 +565,7 @@
     },
     {
       "id": "mobile-hc-manage-meds",
-      "page": "Manage medications — high contrast",
+      "page": "Manage medicines — high contrast",
       "breakpoint": "mobile 375px",
       "violations": 0,
       "passes": 40
@@ -684,7 +684,7 @@
     },
     {
       "id": "tablet-hc-manage-meds",
-      "page": "Manage medications — high contrast",
+      "page": "Manage medicines — high contrast",
       "breakpoint": "tablet 820px",
       "violations": 0,
       "passes": 40
@@ -803,7 +803,7 @@
     },
     {
       "id": "desktop-hc-manage-meds",
-      "page": "Manage medications — high contrast",
+      "page": "Manage medicines — high contrast",
       "breakpoint": "desktop 1280px",
       "violations": 0,
       "passes": 44
@@ -917,7 +917,7 @@
       "note": "main=1 banner=1 h1=1"
     },
     {
-      "name": "Manage medications: one <main>, one top-level banner, one <h1>",
+      "name": "Manage medicines: one <main>, one top-level banner, one <h1>",
       "pass": true,
       "note": "main=1 banner=1 h1=1"
     },
@@ -977,7 +977,7 @@
       "note": "Delete Amlodipine"
     },
     {
-      "name": "/app/manage-medications: focus is not moved on page load",
+      "name": "/app/manage-medicines: focus is not moved on page load",
       "pass": true,
       "note": "focused: body"
     },
@@ -1077,7 +1077,7 @@
       "note": ""
     },
     {
-      "name": "Manage medications: no horizontal scroll at 320px",
+      "name": "Manage medicines: no horizontal scroll at 320px",
       "pass": true,
       "note": ""
     },
@@ -1162,7 +1162,7 @@
       "note": ""
     },
     {
-      "name": "Manage medications (mobile): high contrast applied",
+      "name": "Manage medicines (mobile): high contrast applied",
       "pass": true,
       "note": ""
     },
@@ -1247,7 +1247,7 @@
       "note": ""
     },
     {
-      "name": "Manage medications (tablet): high contrast applied",
+      "name": "Manage medicines (tablet): high contrast applied",
       "pass": true,
       "note": ""
     },
@@ -1332,7 +1332,7 @@
       "note": ""
     },
     {
-      "name": "Manage medications (desktop): high contrast applied",
+      "name": "Manage medicines (desktop): high contrast applied",
       "pass": true,
       "note": ""
     },

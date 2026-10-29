@@ -32,8 +32,8 @@ describe('Activity log', () => {
     render(<ActivityLog />);
     const legend = screen.getByRole('list', { name: 'Activity type legend' });
     expect(within(legend).getAllByRole('listitem').map((li) => li.textContent)).toEqual([
-      'Medication taken',
-      'Medication unmarked',
+      'Medicine taken',
+      'Medicine unmarked',
       'Task completed',
       'Checked in',
     ]);
@@ -56,7 +56,7 @@ describe('Activity log', () => {
     const today = screen.getByRole('list', { name: 'Events for Today' });
     const [first] = within(today).getAllByRole('listitem');
     expect(first).toHaveTextContent('Took Amlodipine');
-    expect(first).toHaveTextContent('Medication taken');
+    expect(first).toHaveTextContent('Medicine taken');
     expect(within(first).getByText('8:35 AM')).toHaveAttribute('datetime', at(0, 8, 35));
   });
 
