@@ -23,12 +23,13 @@ test('diagnose the Pets filter click', async ({ page }) => {
       const v = (el as HTMLInputElement).value;
       return `${el.tagName.toLowerCase()}${v ? `[${v}]` : ''} "${(el.textContent ?? '').trim().slice(0, 12)}"`;
     };
-    for (const type of ['pointerdown', 'pointerup', 'mousedown', 'mouseup', 'click', 'input', 'change', 'focusin', 'focusout', 'selectstart', 'dblclick', 'touchstart', 'touchend']) {
+    for (const type of ['pointerdown', 'pointerup', 'mousedown', 'mouseup', 'click', 'input', 'change', 'focusin', 'focusout', 'selectstart', 'dblclick', 'touchstart', 'touchend', 'scroll']) {
       document.addEventListener(type, (e) => {
         const checked = (document.querySelector('input[value="pet"]') as HTMLInputElement).checked;
-        log.push(`${Math.round(performance.now() - t0)}ms ${type} ${describe(e.target)} pet=${checked}`);
+        log.push(`${Math.round(performance.now() - t0)}ms ${type} ${type === 'scroll' ? '' : describe(e.target)} pet=${checked} y=${scrollY.toFixed(1)} mainTop=${document.getElementById('main-content')!.getBoundingClientRect().top.toFixed(1)}`);
       }, true);
     }
+    log.push(`scroll-padding-top=${getComputedStyle(document.documentElement).scrollPaddingTop}`);
     new MutationObserver(() => {
       const checked = (document.querySelector('input[value="pet"]') as HTMLInputElement).checked;
       log.push(`${Math.round(performance.now() - t0)}ms render pet=${checked}`);
