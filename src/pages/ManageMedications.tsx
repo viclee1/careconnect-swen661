@@ -190,7 +190,7 @@ function MedForm({
       >
         {/* Name */}
         <Field
-          label="Medication name (required)"
+          label="Medication name"
           required
           placeholder="e.g. Amlodipine"
           value={form.name}
@@ -201,7 +201,7 @@ function MedForm({
 
         {/* Dosage */}
         <Field
-          label="Dose (required)"
+          label="Dose"
           required
           placeholder="e.g. 5 mg — 1 tablet"
           hint="Include strength, form, and quantity."
@@ -216,9 +216,9 @@ function MedForm({
             id={timesLegendId}
             className="block text-base font-semibold text-neutral-700"
           >
-            Schedule times (required)
+            Schedule times
             <span className="ml-1 text-alert-600" aria-hidden="true">*</span>
-            <span className="sr-only"> — at least one time is required</span>
+            <span className="sr-only"> (required — at least one time)</span>
           </legend>
 
           <div className="space-y-2">
@@ -389,13 +389,13 @@ export default function ManageMedications() {
     typeof mode === 'object' ? meds.find((m) => m.id === mode.edit) : undefined;
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto">
+    <div className="space-y-8 page-container">
 
       {/* ── Page heading ──────────────────────────────────────────────────── */}
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-3xl font-bold text-neutral-800 leading-tight flex items-center gap-3">
-            <Pill className="w-8 h-8 text-warm-600" aria-hidden="true" />
+            <Pill className="w-8 h-8 text-warm-700" aria-hidden="true" />
             Manage medications
           </h1>
           <p className="mt-1 text-lg text-neutral-500">
@@ -408,7 +408,6 @@ export default function ManageMedications() {
             ref={addButtonRef}
             onClick={() => setMode('add')}
             className="inline-flex items-center gap-2 font-bold rounded-xl px-5 py-3 min-h-[2.75rem] text-base bg-calm-600 text-white border-2 border-calm-600 hover:bg-calm-700 transition-colors"
-            aria-label="Add new medication"
           >
             <PlusCircle className="w-5 h-5" aria-hidden="true" />
             Add medication
@@ -442,7 +441,7 @@ export default function ManageMedications() {
                 className="inline-flex w-16 h-16 rounded-full bg-warm-100 items-center justify-center mx-auto"
                 aria-hidden="true"
               >
-                <Pill className="w-8 h-8 text-warm-600" />
+                <Pill className="w-8 h-8 text-warm-700" />
               </span>
               <p className="text-xl font-bold text-neutral-800">No medications added yet</p>
               <p className="text-neutral-500">
@@ -450,7 +449,7 @@ export default function ManageMedications() {
               </p>
             </div>
           ) : (
-            <ul className="grid grid-cols-1 lg:grid-cols-2 gap-4 list-none p-0 m-0" role="list">
+            <ul className="card-grid" role="list">
               {meds.map((med) => (
                 <MedRow
                   key={med.id}

@@ -1,169 +1,221 @@
-import { useState } from 'react';
-import { CheckCircle2, Circle, Clock } from 'lucide-react';
-import { scheduleItems as initialItems } from '../data/mockData';
-import type { ScheduleItem } from '../types';
+import { useState, useEffect } from 'react';
+import { Pill, Calendar, Video, Heart } from 'lucide-react';
 
-const categoryLabel: Record<ScheduleItem['category'], string> = {
-  meal: 'Meal',
-  medication: 'Medicine',
-  activity: 'Activity',
-  appointment: 'Appointment',
-  rest: 'Rest',
-};
+import AppointmentBanner from '../components/AppointmentBanner';
 
-const categoryColour: Record<ScheduleItem['category'], string> = {
-  meal:        'bg-warm-100 text-warm-700',
-  medication:  'bg-calm-100 text-calm-700',
-  activity:    'bg-success-100 text-success-700',
-  appointment: 'bg-neutral-200 text-neutral-700',
-  rest:        'bg-neutral-100 text-neutral-600',
-};
-
-function formatTime(time: string) {
-  const [h, m] = time.split(':').map(Number);
-  const suffix = h >= 12 ? 'pm' : 'am';
-  return `${h % 12 || 12}:${String(m).padStart(2, '0')} ${suffix}`;
+interface MyDayTask {
+  id: string;
+  title: string;
+  description: string;
+  time: string;
+  category: string;
+  done: boolean;
+  icon: 'pill' | 'calendar' | 'video' | 'heart';
 }
 
+const defaultTasks: MyDayTask[] = [
+  {
+    id: 't1',
+    title: 'Take Amlodipine',
+    description: '5 mg — 1 tablet with food',
+    time: '8:30 am',
+    category: 'Medication',
+    done: true,
+    icon: 'pill',
+  },
+  {
+    id: 't2',
+    title: 'Morning check-in',
+    description: "Tap to confirm you're doing well",
+    time: '9:00 am',
+    category: 'Check-in',
+    done: false,
+    icon: 'heart',
+  },
+  {
+    id: 't3',
+    title: 'Blood pressure check',
+    description: 'Greenfield Surgery — Dr. Sharma',
+    time: '10:30 am',
+    category: 'Appointment',
+    done: false,
+    icon: 'calendar',
+  },
+  {
+    id: 't4',
+    title: 'Take Metformin',
+    description: '500 mg — 1 tablet with lunch',
+    time: '12:00 pm',
+    category: 'Medication',
+    done: false,
+    icon: 'pill',
+  },
+  {
+    id: 't5',
+    title: 'Video call with Maria',
+    description: 'Your daughter — she will call you',
+    time: '3:00 pm',
+    category: 'Appointment',
+    done: false,
+    icon: 'video',
+  },
+  {
+    id: 't6',
+    title: 'Take Atorvastatin',
+    description: '20 mg — 1 tablet',
+    time: '8:00 pm',
+    category: 'Medication',
+    done: false,
+    icon: 'pill',
+  },
+  {
+    id: 't7',
+    title: 'Bedtime rest',
+    description: 'Wind down for sleep',
+    time: '9:30 pm',
+    category: 'Rest',
+    done: false,
+    icon: 'calendar',
+  },
+];
+
+const STORAGE_KEY = 'careconnect_web_myday_tasks';
+
 export default function Schedule() {
-  const [items, setItems] = useState<ScheduleItem[]>(initialItems);
+  const [tasks, setTasks] = useState<MyDayTask[]>(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const stored = JSON.parse(raw) as MyDayTask[];
+        return defaultTasks.map((init) => {
+          const found = stored.find((s) => s.id === init.id);
+          return found ? { ...init, done: found.done } : init;
+        });
+      }
+    } catch {
+      // fallback
+    }
+    return defaultTasks;
+  });
 
-  const doneCount = items.filter((i) => i.done).length;
-  const progress = Math.round((doneCount / items.length) * 100);
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+    } catch {
+      // fallback
+    }
+  }, [tasks]);
 
-  function toggleDone(id: string) {
-    setItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, done: !item.done } : item))
+  const doneCount = tasks.filter((t) => t.done).length;
+  const totalCount = tasks.length;
+  const percentage = Math.round((doneCount / totalCount) * 100);
+
+  function toggleTask(id: string) {
+    setTasks((current) =>
+      current.map((t) => (t.id === id ? { ...t, done: !t.done } : t))
     );
   }
 
+  const todayDateStr = new Date().toLocaleDateString('en-GB', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  });
+
   return (
     <div className="space-y-6">
-      {/* ── Page header ─────────────────────────────────────────────────── */}
-      <div>
-        <h1 className="text-2xl font-bold text-neutral-800">My Day</h1>
-        <p className="text-neutral-500 mt-1 text-base">
-          {new Date().toLocaleDateString('en-GB', {
-            weekday: 'long', day: 'numeric', month: 'long',
-          })}
+      <AppointmentBanner />
+      <div className="space-y-6 max-w-4xl mx-auto">
+      {/* Page Title & Subtitle */}
+      <div className="space-y-2">
+        <h1 className="text-2xl md:text-3xl font-normal text-neutral-800">My Day</h1>
+        <p className="text-neutral-600 text-base font-medium">
+          Everything to do — {todayDateStr}
         </p>
-      </div>
 
-      {/* ── Progress ────────────────────────────────────────────────────── */}
-      <section aria-label="Day progress">
-        <div className="card p-4 flex items-center gap-4">
-          <div className="flex-1">
-            <div className="flex items-center justify-between mb-1.5">
-              <span className="text-sm font-semibold text-neutral-700">
-                {doneCount} of {items.length} tasks complete
-              </span>
-              <span className="text-sm font-bold text-calm-700">{progress}%</span>
-            </div>
+        {/* Progress Bar Component */}
+        <div className="bg-white border border-neutral-200 rounded-xl p-4 shadow-sm space-y-2">
+          <div className="flex items-center justify-between text-sm font-bold text-neutral-700">
+            <span>
+              {doneCount} of {totalCount} done
+            </span>
+            <span className="text-calm-700">{percentage}%</span>
+          </div>
+          <div
+            className="w-full bg-neutral-200 h-3 rounded-full overflow-hidden border border-neutral-300"
+            role="progressbar"
+            aria-valuenow={doneCount}
+            aria-valuemin={0}
+            aria-valuemax={totalCount}
+            aria-label={`${doneCount} of ${totalCount} done`}
+          >
             <div
-              className="h-3 bg-neutral-200 rounded-pill overflow-hidden"
-              role="progressbar"
-              aria-valuenow={progress}
-              aria-valuemin={0}
-              aria-valuemax={100}
-              aria-label={`${progress}% of today's tasks complete`}
-            >
-              <div
-                className="h-full bg-calm-600 rounded-pill transition-all duration-500"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
+              className="bg-calm-600 h-full rounded-full transition-all duration-300"
+              style={{ width: `${percentage}%` }}
+            />
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* ── Schedule list ───────────────────────────────────────────────── */}
-      <section aria-label="Today's schedule">
-        <h2 className="sr-only">Today's schedule</h2>
-        <ol className="space-y-3 list-none p-0 m-0" role="list">
-          {items.map((item) => (
-            <li key={item.id}>
-              <article
-                className={`card card-hover flex items-start gap-4 p-4 transition-opacity duration-200 ${
-                  item.done ? 'opacity-60' : ''
+      {/* Task List */}
+      <ul className="space-y-3 list-none p-0 m-0" role="list">
+        {tasks.map((task) => {
+          const isDone = task.done;
+          return (
+            <li key={task.id}>
+              <button
+                type="button"
+                onClick={() => toggleTask(task.id)}
+                aria-pressed={isDone}
+                className={`w-full text-left bg-white border-2 rounded-2xl p-5 flex items-center gap-4 transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md ${
+                  isDone
+                    ? 'border-neutral-300 bg-neutral-50'
+                    : 'border-neutral-200 hover:border-calm-500'
                 }`}
-                aria-label={`${formatTime(item.time)}: ${item.label}${item.done ? ' — done' : ''}`}
               >
-                {/* Time */}
-                <time
-                  dateTime={item.time}
-                  className="text-calm-700 font-semibold tabular-nums text-sm w-14 flex-shrink-0 pt-0.5"
-                >
-                  {formatTime(item.time)}
-                </time>
-
-                {/* Details */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <p
-                      className={`font-semibold text-base leading-tight ${
-                        item.done ? 'line-through text-neutral-400' : 'text-neutral-800'
-                      }`}
-                    >
-                      {item.label}
-                    </p>
-                    <span className={`badge text-xs ${categoryColour[item.category]}`}>
-                      {categoryLabel[item.category]}
-                    </span>
-                  </div>
-                  {item.description && (
-                    <p className="text-sm text-neutral-500 mt-1">{item.description}</p>
-                  )}
+                {/* Icon */}
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                  isDone ? 'bg-neutral-200 text-neutral-600' : 'bg-calm-100 text-calm-700'
+                }`}>
+                  {task.icon === 'pill' && <Pill className="w-6 h-6" />}
+                  {task.icon === 'calendar' && <Calendar className="w-6 h-6" />}
+                  {task.icon === 'video' && <Video className="w-6 h-6" />}
+                  {task.icon === 'heart' && <Heart className="w-6 h-6" />}
                 </div>
 
-                {/* Toggle button */}
-                <button
-                  onClick={() => toggleDone(item.id)}
-                  className="flex-shrink-0 w-11 h-11 flex items-center justify-center rounded-full transition-colors duration-200 hover:bg-neutral-100 focus-visible:bg-neutral-100"
-                  aria-label={item.done ? `Mark "${item.label}" as not done` : `Mark "${item.label}" as done`}
-                  aria-pressed={item.done}
-                >
-                  {item.done ? (
-                    <CheckCircle2 className="w-7 h-7 text-success-600" aria-hidden="true" />
-                  ) : (
-                    <Circle className="w-7 h-7 text-neutral-300" aria-hidden="true" />
-                  )}
-                </button>
-              </article>
+                {/* Info */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <strong className={`text-lg font-bold ${isDone ? 'line-through text-neutral-500' : 'text-neutral-900'}`}>
+                      {task.title}
+                    </strong>
+                    <span className="px-2.5 py-0.5 bg-neutral-100 text-neutral-700 rounded text-xs font-semibold">
+                      {task.category}
+                    </span>
+                  </div>
+                  <p className={`text-sm mt-0.5 m-0 ${isDone ? 'text-neutral-500' : 'text-neutral-600'}`}>
+                    {task.description}
+                  </p>
+                </div>
+
+                {/* Time & Check */}
+                <div className="flex items-center gap-4 flex-shrink-0">
+                  <span className={`text-sm font-bold tabular-nums ${isDone ? 'text-neutral-500' : 'text-calm-700'}`}>
+                    {task.time}
+                  </span>
+                  <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-colors ${
+                    isDone
+                      ? 'bg-success-600 border-success-600 text-white font-bold'
+                      : 'border-neutral-300 bg-white'
+                  }`}>
+                    {isDone ? '✓' : ''}
+                  </div>
+                </div>
+              </button>
             </li>
-          ))}
-        </ol>
-      </section>
-
-      {/* ── All done state ────────────────────────────────────────────────── */}
-      {doneCount === items.length && (
-        <div
-          role="status"
-          aria-live="polite"
-          className="card text-center py-10 border-success-200 bg-success-50"
-        >
-          <CheckCircle2 className="w-12 h-12 text-success-600 mx-auto mb-3" aria-hidden="true" />
-          <p className="text-xl font-bold text-success-700">Wonderful job today!</p>
-          <p className="text-neutral-600 mt-1">Every task is complete. Enjoy your evening.</p>
-        </div>
-      )}
-
-      {/* ── Legend ────────────────────────────────────────────────────────── */}
-      <section aria-label="Category legend">
-        <h2 className="text-sm font-semibold text-neutral-500 uppercase tracking-wide mb-2">
-          Category key
-        </h2>
-        <div className="flex flex-wrap gap-2">
-          {(Object.keys(categoryLabel) as ScheduleItem['category'][]).map((cat) => (
-            <span key={cat} className={`badge ${categoryColour[cat]}`}>
-              {categoryLabel[cat]}
-            </span>
-          ))}
-        </div>
-      </section>
-
-      <div className="flex items-center gap-2 text-sm text-neutral-400">
-        <Clock className="w-4 h-4" aria-hidden="true" />
-        <span>Tap the circle to mark a task done</span>
+          );
+        })}
+      </ul>
       </div>
     </div>
   );

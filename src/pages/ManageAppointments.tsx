@@ -286,7 +286,7 @@ function ApptForm({
       >
         {/* Title */}
         <Field
-          label="Appointment title (required)"
+          label="Appointment title"
           required
           placeholder="e.g. Blood pressure check — Dr. Sharma"
           hint="Use plain language Margaret will recognise."
@@ -298,7 +298,7 @@ function ApptForm({
         {/* Date + Time row */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <Field
-            label="Date (required)"
+            label="Date"
             required
             type="date"
             min={todayStr()}
@@ -307,7 +307,7 @@ function ApptForm({
             error={errors.date}
           />
           <Field
-            label="Time (required)"
+            label="Time"
             required
             type="time"
             value={form.time}
@@ -324,7 +324,7 @@ function ApptForm({
 
           {/* Location type select */}
           <SelectField
-            label="Location type (required)"
+            label="Location type"
             id={locTypeId}
             value={form.locationType}
             onChange={(v) =>
@@ -346,7 +346,7 @@ function ApptForm({
 
           {/* Location name */}
           <Field
-            label="Location name (required)"
+            label="Location name"
             required
             placeholder={
               form.locationType === 'telephone'
@@ -437,7 +437,7 @@ function ApptRow({
         <div className="space-y-3">
           {/* Date + time */}
           <div className="flex items-center gap-2 text-sm text-neutral-600 flex-wrap">
-            <Clock className="w-4 h-4 text-neutral-400 flex-shrink-0" aria-hidden="true" />
+            <Clock className="w-4 h-4 text-neutral-500 flex-shrink-0" aria-hidden="true" />
             <time dateTime={`${appt.date}T${appt.time}`} className="font-semibold text-neutral-800">
               {formatFullDate(appt.date)} — {fmt12(appt.time)}
             </time>
@@ -449,7 +449,7 @@ function ApptRow({
             <span>
               {appt.location.name}
               {appt.location.address && (
-                <span className="text-neutral-400"> — {appt.location.address}</span>
+                <span className="text-neutral-500"> — {appt.location.address}</span>
               )}
             </span>
           </div>
@@ -538,7 +538,7 @@ export default function ManageAppointments() {
   });
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto">
+    <div className="space-y-8 page-container">
 
       {/* ── Page heading ──────────────────────────────────────────────────── */}
       <div className="flex items-start justify-between gap-4 flex-wrap">
@@ -557,7 +557,6 @@ export default function ManageAppointments() {
             ref={addButtonRef}
             onClick={() => setMode('add')}
             className="inline-flex items-center gap-2 font-bold rounded-xl px-5 py-3 min-h-[2.75rem] text-base bg-calm-600 text-white border-2 border-calm-600 hover:bg-calm-700 transition-colors"
-            aria-label="Add new appointment"
           >
             <PlusCircle className="w-5 h-5" aria-hidden="true" />
             Add appointment
@@ -598,7 +597,7 @@ export default function ManageAppointments() {
               </p>
             </div>
           ) : (
-            <ul className="grid grid-cols-1 lg:grid-cols-2 gap-4 list-none p-0 m-0" role="list">
+            <ul className="card-grid" role="list">
               {sorted.map((appt) => (
                 <ApptRow
                   key={appt.id}

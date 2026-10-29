@@ -1,3 +1,5 @@
+import { addDays } from '../utils/dates';
+
 // ── Type ──────────────────────────────────────────────────────────────────────
 
 export type AppointmentLocationType = 'clinic' | 'hospital' | 'telephone' | 'home';
@@ -28,10 +30,10 @@ export interface Appointment {
 // ── Date helpers ───────────────────────────────────────────────────────────────
 // Dates are computed relative to today so the demo always looks current.
 
+// Local calendar days: toISOString() is UTC, which on the US east coast reads
+// tomorrow every evening and pushed today's visits into "Later this week".
 function daysFromNow(n: number): string {
-  const d = new Date();
-  d.setDate(d.getDate() + n);
-  return d.toISOString().split('T')[0];
+  return addDays(n);
 }
 
 // ── Mock data ──────────────────────────────────────────────────────────────────

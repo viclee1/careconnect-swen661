@@ -22,6 +22,8 @@ export interface Medication {
   dosage: string;
   times: string[];     // ["08:00", "20:00"]
   instructions?: string;
+  /** What the medicine is for, in plain words. */
+  purpose?: string;
   colour: string;      // Tailwind bg class for pill visualisation
   taken: Record<string, boolean>; // date "YYYY-MM-DD" → taken?
 }
@@ -33,23 +35,16 @@ export interface MemoryCard {
   title: string;
   body: string;
   imageUrl?: string;
+  /** Wider versions of the photo for `srcset`, e.g. "/memories/mc1-800.webp 800w". */
+  imageSrcSet?: string;
+  /** What the photo shows, for people who cannot see it. */
+  imageAlt?: string;
   category: 'family' | 'place' | 'event' | 'hobby' | 'pet';
   pinned: boolean;
-}
-
-// ── Contacts ─────────────────────────────────────────────────────────────
-
-export type ContactRole = 'caregiver' | 'family' | 'doctor' | 'emergency';
-
-export interface Contact {
-  id: string;
-  name: string;
-  role: ContactRole;
-  phone: string;
-  avatarInitials: string;
-  avatarColour: string; // Tailwind bg class
-  notes?: string;
-  isEmergency: boolean;
+  /** When it happened, in the user's own words — "Summer 1975". */
+  when?: string;
+  /** Saved by the user on the Memories screen, so they may remove it. */
+  addedByUser?: boolean;
 }
 
 // ── Caregiver notes ───────────────────────────────────────────────────────

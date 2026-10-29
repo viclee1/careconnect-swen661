@@ -1,171 +1,99 @@
-import { useState, useEffect } from 'react';
-import { CheckCircle2, Circle, Pill, AlertCircle } from 'lucide-react';
-import { getMedications } from '../data/medsStore';
-import { appendActivityEvent } from '../data/caregiverStore';
-import type { Medication } from '../types';
+import { useState } from 'react';
 
-const TODAY = new Date().toISOString().split('T')[0];
+import AppointmentBanner from '../components/AppointmentBanner';
+import CaptionStrip from '../components/CaptionStrip';
+import PageHeader from '../components/PageHeader';
+import MedicineDetail from '../components/medicines/MedicineDetail';
+import MedicineProgress from '../components/medicines/MedicineProgress';
+import MedicineRow from '../components/medicines/MedicineRow';
+import { useMedicines } from '../context/medicines';
+import type { Medication } from '../models/medicine';
+import { formatTime12 } from '../utils/dates';
 
-const LS_MEDS_KEY = 'careconnect_meds_taken';
-
-export function loadTakenFromStorage(): Record<string, boolean> {
-  try {
-    const raw = localStorage.getItem(LS_MEDS_KEY);
-    return raw ? JSON.parse(raw) : {};
-  } catch {
-    return {};
-  }
+/** The next medicine still to take — later today if any, else the first one left. */
+function nextToTake(medications: Medication[], isTaken: (id: string) => boolean): Medication | undefined {
+  const now = new Date();
+  const hhmm = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+  const left = medications.filter((m) => !isTaken(m.id));
+  return left.find((m) => m.times.some((t) => t >= hhmm)) ?? left[0];
 }
 
-export function saveTakenToStorage(takenMap: Record<string, boolean>) {
-  localStorage.setItem(LS_MEDS_KEY, JSON.stringify(takenMap));
-}
-
-export function formatTime(time: string) {
-  const [h, m] = time.split(':').map(Number);
-  const suffix = h >= 12 ? 'pm' : 'am';
-  return `${h % 12 || 12}:${String(m).padStart(2, '0')} ${suffix}`;
-}
-
+/**
+ * The Medicines screen, laid out as the web design: today's medicines in a
+ * list on the left, the chosen one in detail on the right (stacked below on a
+ * phone), the "still to take" count beside the title, and the reminder for
+ * the next medicine written out as a caption under the appointment alert.
+ *
+ * Each row's tick is a native checkbox, so Tab moves between medicines and
+ * Space ticks one. Ticks are kept above the router and in localStorage, so
+ * they survive navigation, a reload and a lost connection, and the caregiver
+ * dashboard sees the same ones.
+ */
 export default function Medications() {
-  const [meds, setMeds] = useState<Medication[]>(() => {
-    const stored = loadTakenFromStorage();
-    return getMedications().map((m) => ({
-      ...m,
-      taken: {
-        ...m.taken,
-        ...(stored[m.id] !== undefined ? { [TODAY]: stored[m.id] } : {}),
-      },
-    }));
-  });
-
-  useEffect(() => {
-    const takenMap: Record<string, boolean> = {};
-    meds.forEach((m) => {
-      if (m.taken[TODAY] !== undefined) takenMap[m.id] = m.taken[TODAY];
-    });
-    saveTakenToStorage(takenMap);
-  }, [meds]);
-
-  function toggleTaken(id: string) {
-    setMeds((prev) => {
-      const updated = prev.map((m) =>
-        m.id === id
-          ? { ...m, taken: { ...m.taken, [TODAY]: !m.taken[TODAY] } }
-          : m
-      );
-      const med = updated.find((m) => m.id === id);
-      if (med) {
-        appendActivityEvent({
-          kind: med.taken[TODAY] ? 'med_taken' : 'med_skipped',
-          label: med.taken[TODAY]
-            ? `Marked ${med.name} as taken`
-            : `Unmarked ${med.name} (not taken)`,
-          timestamp: new Date().toISOString(),
-        });
-      }
-      return updated;
-    });
-  }
-
-  const takenCount = meds.filter((m) => m.taken[TODAY]).length;
-  const pendingCount = meds.length - takenCount;
+  const { medications, isTaken, setTaken, progress } = useMedicines();
+  const [selectedId, setSelectedId] = useState(() => medications[0]?.id);
+  const selected = medications.find((m) => m.id === selectedId) ?? medications[0];
+  const reminder = nextToTake(medications, isTaken);
 
   return (
-    <div className="space-y-6 max-w-3xl mx-auto">
-      {/* ── Page header ─────────────────────────────────────────────────── */}
-      <div>
-        <h1 className="text-2xl font-bold text-neutral-800">Medicines</h1>
-        <p className="text-neutral-500 mt-1">Today's medication tracker</p>
+    <div className="space-y-5">
+      <PageHeader
+        title="Medicines"
+        subtitle="Today’s medication tracker"
+        action={medications.length > 0 && <MedicineProgress progress={progress} />}
+      />
+
+      <div className="space-y-1">
+        <AppointmentBanner />
+        {reminder && (
+          <CaptionStrip>
+            Reminder: {reminder.name}, {reminder.dosage} — take at {formatTime12([...reminder.times].sort()[0])}.{' '}
+            {reminder.instructions}
+          </CaptionStrip>
+        )}
       </div>
 
-      {/* ── Status summary ───────────────────────────────────────────────── */}
-      {pendingCount > 0 ? (
-        <div
-          role="status"
-          aria-live="polite"
-          className="card border-warm-300 bg-warm-50 flex items-center gap-3 p-4"
-        >
-          <AlertCircle className="w-6 h-6 text-warm-600 flex-shrink-0" aria-hidden="true" />
-          <p className="text-warm-800 font-medium">
-            {pendingCount} medicine{pendingCount > 1 ? 's' : ''} still to take today.
+      {medications.length === 0 || !selected ? (
+        <div className="bg-white rounded-xl border-2 border-neutral-300 p-10 text-center space-y-2">
+          <h2 className="text-xl font-bold text-neutral-800">No medicines today</h2>
+          <p className="text-neutral-700">
+            Medicines your care team adds will appear here, with the time to take each one.
           </p>
         </div>
       ) : (
-        <div
-          role="status"
-          aria-live="polite"
-          className="card border-success-200 bg-success-50 flex items-center gap-3 p-4"
-        >
-          <CheckCircle2 className="w-6 h-6 text-success-600 flex-shrink-0" aria-hidden="true" />
-          <p className="text-success-800 font-medium">
-            All medicines taken for today. Well done!
-          </p>
+        <div className="grid gap-5 md:grid-cols-[minmax(15rem,18rem)_1fr] lg:gap-6">
+          <section aria-labelledby="medicine-list-title">
+            <h2 id="medicine-list-title" className="sr-only">
+              Today’s medicines
+            </h2>
+            <p className="text-sm text-neutral-600 mb-3">Tick the circle once you’ve taken a medicine.</p>
+            <ul className="list-none p-0 m-0 space-y-2" role="list">
+              {medications.map((medication) => (
+                <li key={medication.id}>
+                  <MedicineRow
+                    medication={medication}
+                    taken={isTaken(medication.id)}
+                    selected={medication.id === selected.id}
+                    onSelect={() => setSelectedId(medication.id)}
+                    onChange={(taken) => setTaken(medication.id, taken)}
+                  />
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <div className="md:border-l md:border-neutral-200 md:pl-6">
+            <MedicineDetail
+              medication={selected}
+              taken={isTaken(selected.id)}
+              onChange={(taken) => setTaken(selected.id, taken)}
+            />
+          </div>
         </div>
       )}
 
-      {/* ── Medication cards ─────────────────────────────────────────────── */}
-      <section aria-label="Medication list">
-        <h2 className="sr-only">Medication list</h2>
-        <ul className="space-y-4 list-none p-0 m-0" role="list">
-          {meds.map((med) => {
-            const taken = med.taken[TODAY] ?? false;
-            return (
-              <li key={med.id}>
-                <article
-                  className={`card card-hover flex items-start gap-4 p-5 transition-opacity duration-200 ${taken ? 'opacity-60' : ''}`}
-                  aria-label={`${med.name} ${med.dosage}${taken ? ' — taken' : ' — not yet taken'}`}
-                >
-                  {/* Pill colour swatch */}
-                  <div
-                    className={`w-12 h-12 rounded-full flex-shrink-0 flex items-center justify-center ${med.colour}`}
-                    aria-hidden="true"
-                  >
-                    <Pill className="w-6 h-6 text-neutral-600" />
-                  </div>
-
-                  {/* Details */}
-                  <div className="flex-1 min-w-0">
-                    <p className={`font-bold text-lg leading-tight ${taken ? 'line-through text-neutral-400' : 'text-neutral-800'}`}>
-                      {med.name}
-                    </p>
-                    <p className="text-neutral-600 text-sm mt-0.5">{med.dosage}</p>
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      {med.times.map((t) => (
-                        <span key={t} className="badge badge-calm text-xs">
-                          {formatTime(t)}
-                        </span>
-                      ))}
-                    </div>
-                    {med.instructions && (
-                      <p className="text-sm text-neutral-500 mt-2 italic">
-                        {med.instructions}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Toggle */}
-                  <button
-                    onClick={() => toggleTaken(med.id)}
-                    className="flex-shrink-0 w-11 h-11 flex items-center justify-center rounded-full transition-colors duration-200 hover:bg-neutral-100"
-                    aria-label={taken ? `Mark ${med.name} as not taken` : `Mark ${med.name} as taken`}
-                    aria-pressed={taken}
-                  >
-                    {taken ? (
-                      <CheckCircle2 className="w-7 h-7 text-success-600" aria-hidden="true" />
-                    ) : (
-                      <Circle className="w-7 h-7 text-neutral-300" aria-hidden="true" />
-                    )}
-                  </button>
-                </article>
-              </li>
-            );
-          })}
-        </ul>
-      </section>
-
-      <p className="text-sm text-neutral-400 text-center">
-        Always take medicines as prescribed by your doctor. If unsure, ask your carer.
+      <p className="text-sm text-neutral-600 text-center">
+        Always take medicines as prescribed by your doctor. If unsure, ask your caregiver.
       </p>
     </div>
   );

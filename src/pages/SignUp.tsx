@@ -3,8 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Heart, UserPlus } from 'lucide-react';
 import { Field } from '../components';
 import { useAuth } from '../auth/AuthContext';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 
 export default function SignUp() {
+  useDocumentTitle('Create an account');
   const { signUp } = useAuth();
   const navigate = useNavigate();
   const errorSummaryId = useId();
@@ -60,6 +62,11 @@ export default function SignUp() {
 
   return (
     <div className="min-h-screen bg-neutral-50 flex flex-col">
+      {/* Skip link — first focusable element, as on every other shell */}
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
+
       {/* ── Page header ──────────────────────────────────────────────────── */}
       <header className="bg-white border-b border-neutral-200" role="banner">
         <div className="max-w-5xl mx-auto px-4 md:px-6 h-16 flex items-center">
@@ -77,6 +84,7 @@ export default function SignUp() {
       {/* ── Main ─────────────────────────────────────────────────────────── */}
       <main
         id="main-content"
+        tabIndex={-1}
         className="flex-1 flex items-center justify-center px-4 py-12"
         aria-label="Sign up"
       >
@@ -168,7 +176,7 @@ export default function SignUp() {
             </form>
 
             {/* Privacy assurance */}
-            <p className="text-center text-xs text-neutral-400 leading-relaxed">
+            <p className="text-center text-xs text-neutral-500 leading-relaxed">
               CareConnect never gives medical advice and never shares your information with third parties.
             </p>
 

@@ -15,6 +15,14 @@
     scroll-behavior: smooth;
   }
 
+  /* The header is sticky at every width; keep focused and scrolled-to
+     content clear of it. --header-height is measured in Layout.tsx. */
+  html {
+    scroll-padding-top: calc(var(--header-height, 0px) + 1rem);
+    /* ...and clear of the sticky status bar along the foot. */
+    scroll-padding-bottom: 3.5rem;
+  }
+
   /* ── Horizontal-overflow guard ───────────────────────────────────────────
      `clip` (not `hidden`) prevents any stray wide element from causing a
      horizontal scrollbar at narrow widths (verified down to 320px) WITHOUT
@@ -54,6 +62,13 @@
 
   /* Remove default outline only when focus-visible is supported */
   *:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* <main tabindex="-1"> receives focus from the skip link and after each
+     in-app navigation. It is a landmark, not a control, so it is not ringed;
+     the next Tab lands on a real control, which is. */
+  main[tabindex='-1']:focus {
     outline: none;
   }
 
@@ -98,6 +113,30 @@
 
 /* ── Component Layer ─────────────────────────────────────────────────────── */
 @layer components {
+  /* ── Responsive layout primitives (web design system grid) ────────────── */
+  /* Page column: a readable width on mobile, the full content width on
+     tablet, capped on desktop so lines and cards stay scannable. */
+  .page-container {
+    @apply mx-auto w-full max-w-3xl md:max-w-none lg:max-w-6xl;
+  }
+
+  /* Card list: 1 column on mobile (<768px), 2 from tablet up. Desktop gains
+     width rather than a third column: at CareConnect's 18px base size a third
+     column beside the sidebar wraps titles a word per line. Short cards
+     (Memories) use a 3-column grid on desktop instead.
+     Used on <ul role="list">, so list semantics are kept. */
+  .card-grid {
+    @apply grid grid-cols-1 gap-4 md:grid-cols-2 lg:gap-6 list-none p-0 m-0;
+  }
+
+  .card-grid > li {
+    @apply flex flex-col;
+  }
+
+  .card-grid > li > * {
+    @apply flex-1;
+  }
+
   /* ── Skip Link ────────────────────────────────────────────────────────── */
   .skip-link {
     @apply absolute left-4 top-4 z-50 px-4 py-2 rounded font-semibold;
@@ -202,8 +241,107 @@
     animation: pageEnter 220ms ease forwards;
   }
 
+  /* The phone/tablet navigation drawer slides in from the left. */
+  .drawer-enter {
+    animation: drawerEnter 200ms ease-out;
+  }
+
+  @keyframes drawerEnter {
+    from { transform: translateX(-100%); }
+    to   { transform: translateX(0); }
+  }
+
   @keyframes pageEnter {
     from { opacity: 0; transform: translateY(6px); }
     to   { opacity: 1; transform: translateY(0); }
   }
+
+  /* Alert sent: one slow fade in and out — never a strobe (WCAG 2.3.1). */
+  .visual-flash {
+    animation: visualFlash 1600ms ease-in-out forwards;
+  }
+
+  /* Reduced motion: a steady panel for the same time, not a fade. The global
+     rule shortens every animation to ~0ms, which would jump straight to the
+     last frame (invisible) and hide the words. */
+  @media (prefers-reduced-motion: reduce) {
+    .visual-flash {
+      animation: none !important;
+    }
+  }
+
+  @keyframes visualFlash {
+    0%   { opacity: 0; }
+    20%  { opacity: 1; }
+    75%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  /* Vibration-pattern lamp: the visual stand-in for a buzz. */
+  .pattern-lamp {
+    transition: background-color 60ms linear, box-shadow 60ms linear;
+  }
+}
+
+/* ── Appointments, Medicines and Memories (Upneet) ───────────────────────── */
+@layer components {
+  /* A key name in running text: "Press Tab". */
+  .kbd {
+    @apply inline-block rounded border border-neutral-400 bg-neutral-50 px-1.5 py-0.5 font-mono text-sm text-neutral-800;
+  }
+
+  /* The medicines progress bar. A native <progress>, drawn the same in every
+     browser: a 3:1 track border, a success-green fill. */
+  .medicine-progress {
+    @apply h-4 rounded-pill overflow-hidden border border-neutral-500 bg-white;
+    appearance: none;
+  }
+  .medicine-progress::-webkit-progress-bar {
+    @apply bg-white;
+  }
+  .medicine-progress::-webkit-progress-value {
+    @apply bg-success-600 rounded-pill;
+  }
+  .medicine-progress::-moz-progress-bar {
+    @apply bg-success-600 rounded-pill;
+  }
+}
+
+/* Windows High Contrast / forced colours: keep the bar visible. */
+@media (forced-colors: active) {
+  .medicine-progress::-webkit-progress-value { background-color: Highlight; }
+  .medicine-progress::-moz-progress-bar { background-color: Highlight; }
+}
+
+/* ── High contrast (the header's ◐ button, useHighContrast) ──────────────────
+   White surfaces, near-black secondary text, dark borders and a black focus
+   ring. Utilities are overridden here rather than re-themed, so every screen
+   — the team's and Victor's — follows without changes of its own. */
+html.high-contrast body,
+html.high-contrast .bg-neutral-50,
+html.high-contrast .bg-neutral-100 {
+  background-color: #ffffff !important;
+}
+html.high-contrast .text-neutral-400,
+html.high-contrast .text-neutral-500,
+html.high-contrast .text-neutral-600,
+html.high-contrast .text-neutral-700 {
+  color: #111720 !important;
+}
+html.high-contrast .text-calm-500,
+html.high-contrast .text-calm-600,
+html.high-contrast .text-calm-700 {
+  color: #062738 !important;
+}
+html.high-contrast .border-neutral-100,
+html.high-contrast .border-neutral-200,
+html.high-contrast .border-neutral-300 {
+  border-color: #303845 !important;
+}
+html.high-contrast ::placeholder {
+  color: #303845 !important;
+}
+html.high-contrast *:focus-visible {
+  outline: 4px solid #000000 !important;
+  outline-offset: 3px;
 }

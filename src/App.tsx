@@ -1,24 +1,28 @@
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
+import type { ReactElement } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './auth/AuthContext';
 import { getSession } from './auth/mockAuth';
 import { AppProvider } from './context/AppContext';
+import { MessagesProvider } from './context/MessagesContext';
+import { SettingsProvider } from './context/SettingsContext';
+import { AppointmentsProvider } from './context/AppointmentsContext';
+import { MedicinesProvider } from './context/MedicinesContext';
+import { MemoriesProvider } from './context/MemoriesContext';
 import { ProtectedRoute, RoleRoute, AuthRoute } from './components/ProtectedRoute';
 import Layout from './components/Layout';
+import PlaceholderPage, { type PageOwner } from './pages/PlaceholderPage';
+import { SHOW_TEAMMATE_PAGES } from './branchScope';
 
-// Public pages (do not modify)
+// Public pages (do not modify) — shown only when SHOW_TEAMMATE_PAGES is on
 import Landing     from './pages/Landing';
 import SignIn      from './pages/SignIn';
 import SignUp      from './pages/SignUp';
 import RoleChooser from './pages/RoleChooser';
 
-// App pages (do not modify)
-import Today        from './pages/Today';
+// App pages (do not modify) — teammates' screens, see SHOW_TEAMMATE_PAGES
+import Home         from './pages/Home';
 import Schedule     from './pages/Schedule';
-import Appointments from './pages/Appointments';
-import Medications  from './pages/Medications';
-import Memories     from './pages/Memories';
-import Contacts     from './pages/Contacts';
 import Caregiver    from './pages/Caregiver';
 import CaregiverDashboard    from './pages/CaregiverDashboard';
 import ActivityLog           from './pages/ActivityLog';
@@ -26,6 +30,34 @@ import ManageMedications     from './pages/ManageMedications';
 import ManageAppointments    from './pages/ManageAppointments';
 
 import type { AppView } from './types';
+
+// Contacts, conversations and settings are split into their own chunks and
+// fetched on first visit, so the Home screen loads without them.
+const Contacts              = lazy(() => import('./pages/Contacts'));
+const MessageThread         = lazy(() => import('./pages/MessageThread'));
+const AccessibilitySettings = lazy(() => import('./pages/AccessibilitySettings'));
+// Appointments, Medicines and Memories, likewise (Memories carries the photos).
+const Appointments          = lazy(() => import('./pages/Appointments'));
+const Medications           = lazy(() => import('./pages/Medications'));
+const Memories              = lazy(() => import('./pages/Memories'));
+
+// ── Teammates' screens ─────────────────────────────────────────────────────────
+// A placeholder stands in for each one while SHOW_TEAMMATE_PAGES is off.
+
+function teammate(
+  page: ReactElement,
+  title: string,
+  owner?: PageOwner,
+  standalone = false,
+): ReactElement {
+  return SHOW_TEAMMATE_PAGES ? page : (
+    <PlaceholderPage title={title} owner={owner} standalone={standalone} />
+  );
+}
+
+function PageLoading() {
+  return <p role="status" className="text-neutral-600">Loading…</p>;
+}
 
 // ── Inner app shell ────────────────────────────────────────────────────────────
 
@@ -53,20 +85,26 @@ function AppShell() {
   return (
     <ProtectedRoute>
       <Layout view={view} onSwitchRole={handleSwitchRole} onSignOut={signOut}>
-        <Routes>
-          {/* Patient sees the calm "Today" screen; caregiver sees the dashboard */}
-          <Route index                        element={view === 'patient' ? <Today /> : <CaregiverDashboard />} />
-          <Route path="schedule"              element={<Schedule />} />
-          <Route path="appointments"          element={<Appointments />} />
-          <Route path="medications"           element={<Medications />} />
-          <Route path="memories"              element={<Memories />} />
-          <Route path="contacts"              element={<Contacts />} />
-          <Route path="caregiver"             element={<Caregiver />} />
-          <Route path="activity"              element={<ActivityLog />} />
-          <Route path="manage-medications"    element={<ManageMedications />} />
-          <Route path="manage-appointments"   element={<ManageAppointments />} />
-          <Route path="*"                     element={<Navigate to="/app" replace />} />
-        </Routes>
+        <Suspense fallback={<PageLoading />}>
+          <Routes>
+            {/* Patient sees the calm "Home" screen (Home.tsx); caregiver sees the dashboard */}
+            <Route index                        element={view === 'patient'
+              ? teammate(<Home view={view} />, 'Home', 'Justin Zhang')
+              : teammate(<CaregiverDashboard />, 'Caregiver dashboard')} />
+            <Route path="schedule"              element={teammate(<Schedule />, 'My Day', 'Justin Zhang')} />
+            <Route path="appointments"          element={teammate(<Appointments />, 'Appointments', 'Upneet Bir')} />
+            <Route path="medications"           element={teammate(<Medications />, 'Medicines', 'Upneet Bir')} />
+            <Route path="memories"              element={teammate(<Memories />, 'Memories', 'Upneet Bir')} />
+            <Route path="contacts"              element={<Contacts />} />
+            <Route path="contacts/:contactId"   element={<MessageThread />} />
+            <Route path="settings"              element={<AccessibilitySettings />} />
+            <Route path="caregiver"             element={teammate(<Caregiver />, 'Caregiver notes')} />
+            <Route path="activity"              element={teammate(<ActivityLog />, 'Activity log')} />
+            <Route path="manage-medications"    element={teammate(<ManageMedications />, 'Manage medications')} />
+            <Route path="manage-appointments"   element={teammate(<ManageAppointments />, 'Manage appointments')} />
+            <Route path="*"                     element={<Navigate to="/app" replace />} />
+          </Routes>
+        </Suspense>
       </Layout>
     </ProtectedRoute>
   );
@@ -78,9 +116,9 @@ function AppRoutes() {
   return (
     <Routes>
       {/* Public */}
-      <Route path="/"       element={<Landing />} />
-      <Route path="/signin" element={<AuthRoute><SignIn /></AuthRoute>} />
-      <Route path="/signup" element={<AuthRoute><SignUp /></AuthRoute>} />
+      <Route path="/"       element={teammate(<Landing />, 'Welcome', 'Justin Zhang', true)} />
+      <Route path="/signin" element={<AuthRoute>{teammate(<SignIn />, 'Sign In', 'Justin Zhang', true)}</AuthRoute>} />
+      <Route path="/signup" element={<AuthRoute>{teammate(<SignUp />, 'Sign Up', 'Justin Zhang', true)}</AuthRoute>} />
 
       {/* Post-auth role chooser */}
       <Route path="/role"   element={<RoleRoute><RoleChooser /></RoleRoute>} />
@@ -102,14 +140,24 @@ function AppRoutes() {
   );
 }
 
-// ── Root ───────────────────────────────────────────────────────────────────────
+// ── Root ───────────────────────────────────────────────────────
 
 export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <AppProvider>
-          <AppRoutes />
+          <SettingsProvider>
+            <MessagesProvider>
+              <AppointmentsProvider>
+                <MedicinesProvider>
+                  <MemoriesProvider>
+                    <AppRoutes />
+                  </MemoriesProvider>
+                </MedicinesProvider>
+              </AppointmentsProvider>
+            </MessagesProvider>
+          </SettingsProvider>
         </AppProvider>
       </AuthProvider>
     </BrowserRouter>
