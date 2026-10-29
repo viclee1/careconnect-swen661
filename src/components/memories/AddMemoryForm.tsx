@@ -1,4 +1,4 @@
-import { useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import type { FormEvent, KeyboardEvent } from 'react';
 import { Save } from 'lucide-react';
 
@@ -14,6 +14,20 @@ import {
 } from '../../models/memory';
 
 const categoryOptions = Object.entries(categoryLabel) as Array<[MemoryCategory, string]>;
+
+/**
+ * Scrolls `el` into view below the sticky header, at once. Focus alone is not
+ * enough: WebKit's focus scroll ignores `scroll-padding-top` (or does not
+ * scroll up at all), and `scrollIntoView` animates in Chromium even under
+ * reduced motion, so the field can be measured — and seen — under the header.
+ */
+function revealBelowHeader(el: HTMLElement) {
+  const clearance = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+  const { top, bottom } = el.getBoundingClientRect();
+  if (top < clearance || bottom > window.innerHeight) {
+    window.scrollTo({ top: window.scrollY + top - clearance, behavior: 'instant' });
+  }
+}
 
 /**
  * The Add a memory form.
@@ -44,6 +58,19 @@ export default function AddMemoryForm({
   const categoryId = useId();
   const categoryErrorId = useId();
   const pinId = useId();
+  // The field to focus after Save, set as a fresh object each time so that a
+  // second failed Save moves focus again. Handled after render, once the error
+  // messages are in the layout and can no longer shift the field.
+  const [focusRequest, setFocusRequest] = useState<{ name: string } | null>(null);
+
+  useEffect(() => {
+    if (!focusRequest) return;
+    const field = formRef.current?.elements.namedItem(focusRequest.name);
+    if (field instanceof HTMLElement) {
+      field.focus({ preventScroll: true });
+      revealBelowHeader(field);
+    }
+  }, [focusRequest]);
 
   function update(change: Partial<MemoryDraft>) {
     const next = { ...draft, ...change };
@@ -58,8 +85,7 @@ export default function AddMemoryForm({
     setErrors(found);
     const first = firstErrorField(found);
     if (first) {
-      const field = formRef.current?.elements.namedItem(first);
-      if (field instanceof HTMLElement) field.focus();
+      setFocusRequest({ name: first });
       return;
     }
     onSave(draft);
