@@ -27,3 +27,25 @@ export function charactersRemaining(value: string | null | undefined): number {
   const used = (value ?? '').trim().length;
   return Math.max(0, maxMessageLength - used);
 }
+
+/**
+ * Validates a caregiver form where every field is required.
+ *
+ * Returns one sentence per empty field, keyed by field, in the order given —
+ * empty when the form may be saved.
+ */
+export function requiredFieldErrors<K extends string>(
+  fields: { name: K; label: string }[],
+  values: Record<K, string>,
+): Partial<Record<K, string>> {
+  const errors: Partial<Record<K, string>> = {};
+  for (const field of fields) {
+    if (!(values[field.name] ?? '').trim()) errors[field.name] = `${field.label} is required.`;
+  }
+  return errors;
+}
+
+/** "1 thing needs fixing" / "3 things need fixing". */
+export function fixSummary(count: number): string {
+  return count === 1 ? '1 thing needs fixing' : `${count} things need fixing`;
+}

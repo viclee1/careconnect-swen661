@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
 import { DailyTask } from '../models/DailyTask';
 import { DailyTasksRepository } from '../data/dailyTasksRepository';
+import { activityForTask } from '../models/caregiver';
+import { useActivityRecorder } from './CaregiverProvider';
 
 interface DailyTasksContextValue {
   tasks: DailyTask[];
@@ -22,6 +24,7 @@ export function DailyTasksProvider({
   children: React.ReactNode;
 }) {
   const [tasks, setTasks] = useState(() => repository.getTasks());
+  const record = useActivityRecorder();
   const [showNotification, setShowNotification] = useState(() => repository.isNotificationVisible());
 
   const doneCount = useMemo(() => tasks.filter((t) => t.isDone).length, [tasks]);
@@ -35,9 +38,14 @@ export function DailyTasksProvider({
         const nextDone = !task.isDone;
         repository.updateTask(id, nextDone);
         setTasks(repository.getTasks());
+        // Finishing something is news for the caregiver; un-ticking a slip is not.
+        if (nextDone) {
+          const event = activityForTask(task);
+          record(event.kind, event.label);
+        }
       }
     },
-    [tasks, repository]
+    [tasks, repository, record]
   );
 
   const dismissNotification = useCallback(() => {

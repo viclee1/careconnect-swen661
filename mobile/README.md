@@ -17,7 +17,7 @@ targeting care recipients who are deaf or hard of hearing.
 > Both clients are built to match the **Week 3 design prototype**. Where the
 > prototype and the original React web client disagreed, the prototype won.
 
-**Status:** 286 tests passing, **97.0 % line coverage**, `eslint` and `tsc`
+**Status:** 318 tests passing, **98.0 % line coverage**, `eslint` and `tsc`
 clean. The framework comparison (Assignment 5 Part 3) is not in this branch.
 
 ---
@@ -63,8 +63,9 @@ screen will not let you switch the visible alert banner off.
 | **Appointments** | Upcoming medical visits — doctor, specialty, date, time and location — each rendered as one accessible card. Loading and failed-load states match Contacts: a spinner, then a retry banner that explains what happened rather than showing an empty list. |
 | **Medicines** | Today's medication tracker: dosage and time under each name, a taken/total summary, and a tap on the row toggles taken status with `accessibilityRole="checkbox"` carrying the state in words, never colour alone. |
 | **Memories** | The care recipient's saved memories — title, date and description — laid out one column on a phone and two across from the tablet breakpoint up, matching Contacts' and Appointments' layout rule. |
+| **Caregiver role** | After sign-in, a role chooser. A caregiver gets their own tabs — **Dashboard** (medicines taken, My Day progress, check-in, next appointment, recent activity), **Manage medicines** and **Manage appointments** (add, edit, delete with an in-place confirm), **Activity** and **Care notes** — and either role switches from Settings › Account. One shared plan: a caregiver's edit shows on the care recipient's screens, and the care recipient's ticks appear in the activity log. Confirmations are dismissible in-page banners, never toasts. |
 
-That's ten functional screens against the assignment's 7–10 target.
+That's ten functional screens against the assignment's 7–10 target, plus the caregiver role's six (role chooser, Dashboard, Manage medicines, Manage appointments, Activity, Care notes) ported from the web client.
 
 ### Accessibility Addons (09/20/26)
 
@@ -301,17 +302,17 @@ line after every `expo prebuild`.)
 ```bash
 npm run lint            # eslint — expected: no output
 npm run typecheck       # tsc --noEmit — expected: no output
-npm test                # 286 tests
+npm test                # 318 tests
 npm run test:coverage   # writes coverage/lcov-report/index.html
 ```
 
 ### Coverage
 
 ```
-Statements   : 96.91 % ( 755/779 )
-Branches     : 88.07 % ( 443/503 )
-Functions    : 94.31 % ( 282/299 )
-Lines        : 96.97 % ( 673/694 )
+Statements   : 97.92 % ( 1039/1061 )
+Branches     : 89.59 % ( 577/644 )
+Functions    : 95.93 % ( 401/418 )
+Lines        : 98.01 % ( 936/955 )
 ```
 
 Open `coverage/lcov-report/index.html` for the browsable report and screenshot

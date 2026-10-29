@@ -5,10 +5,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Icon, type IconName } from '../components/Icon';
 import { colors } from '../theme/colors';
 import { layout } from '../theme/layout';
-import { destinations, type AppDestination, type NavEntry } from './destinations';
+import { destinations, type TabEntry } from './destinations';
 
 interface TabItem {
-  entry: NavEntry;
+  entry: TabEntry;
   key: string;
   selected: boolean;
 }
@@ -38,15 +38,21 @@ export function TabBar({
   navigation,
   isTablet,
   onOpenSettings,
-}: BottomTabBarProps & { isTablet: boolean; onOpenSettings: () => void }) {
+  entries = destinations,
+}: BottomTabBarProps & {
+  isTablet: boolean;
+  onOpenSettings: () => void;
+  /** Which role's destinations; the care recipient's by default. */
+  entries?: TabEntry[];
+}) {
   const insets = useSafeAreaInsets();
 
   const items: TabItem[] = state.routes.flatMap((route, index) => {
-    const entry = destinations.find((item) => item.destination === route.name);
+    const entry = entries.find((item) => item.destination === route.name);
     return entry ? [{ entry, key: route.key, selected: state.index === index }] : [];
   });
 
-  const goTo = (destination: AppDestination, selected: boolean) => {
+  const goTo = (destination: string, selected: boolean) => {
     if (!selected) navigation.navigate(destination);
   };
 

@@ -113,7 +113,7 @@ Instructor-assigned hearing-impairment constraints, mapped to WCAG 2.2:
 | Mobile — Android and iOS | React Native + Expo | `mobile/` | Every care recipient screen built; release APK in `apk-submission/`; linted, typechecked and tested in CI. See [React Native mobile client](#react-native-mobile-client) |
 | Desktop — Windows, macOS, Linux | Electron + React | `desktop/` | All eleven pages ported; CI tests the app and packages the Windows `.exe`, macOS `.dmg` and Linux `.AppImage`/`.deb` installers. See [Electron desktop client](#electron-desktop-client) |
 
-**Platform scope.** Every client carries the same care recipient screens: Welcome, Sign In, Sign Up, Home, My Day, Appointments, Medicines, Memories, Contacts, Messaging and Accessibility Settings. The caregiver role — role chooser, dashboard, managing medicines and appointments, activity log and care notes — is on the web and desktop clients; React Native and Flutter are next.
+**Platform scope.** Every client carries the same care recipient screens: Welcome, Sign In, Sign Up, Home, My Day, Appointments, Medicines, Memories, Contacts, Messaging and Accessibility Settings. The caregiver role — role chooser, dashboard, managing medicines and appointments, activity log and care notes — is on the web, desktop and React Native clients; Flutter is in #26.
 
 ---
 
@@ -592,7 +592,7 @@ Timestamped log of taken/skipped doses and check-ins.
   |:--|--:|--:|--:|--:|--:|:--|
   | Web (React) | 434 | 94.7% | 88.3% | 93.8% | 95.7% | [`coverage/lcov-report/`](coverage/lcov-report/index.html) |
   | Desktop (Electron) | 523 | 97.1% | 91.6% | 96.1% | 98.2% | [`desktop/docs/testing/coverage-html/`](desktop/docs/testing/coverage-html/index.html) |
-  | React Native | 286 | 96.9% | 88.1% | 94.3% | 97.0% | [`mobile/docs/testing/coverage-html/`](mobile/docs/testing/coverage-html/index.html) |
+  | React Native | 318 | 97.9% | 89.6% | 95.9% | 98.0% | [`mobile/docs/testing/coverage-html/`](mobile/docs/testing/coverage-html/index.html) |
   | Flutter | 234 | — | — | — | 98.9% | [`flutter/docs/testing/coverage-html/`](flutter/docs/testing/coverage-html/index.html) |
 
   `flutter test` reports line coverage only. No client uses snapshot tests: assertions name the behaviour — what the user sees, hears announced, or can do next.
@@ -883,8 +883,9 @@ The Expo build of CareConnect for care recipients who are deaf or hard of hearin
 | Appointments | Upcoming medical visits — doctor, specialty, date, time and location — each an accessible card, with a loading spinner and a retry banner on a failed load. |
 | Medicines | Today's medication tracker: dosage and time under each name, a taken/total summary, and a tap on the row toggles taken status. |
 | Memories | Saved memories — title, date and description — one column on a phone, two across from the tablet breakpoint up. |
+| Caregiver role | A role chooser after sign-in; the caregiver's own tabs — Dashboard, Manage medicines, Manage appointments, Activity, Care notes — sharing one plan with the care recipient's screens; switch views from Settings › Account. |
 
-That's 10 functional screens against the assignment's 7–10 target.
+That's 10 functional screens against the assignment's 7–10 target, plus the caregiver role ported from the web client.
 
 **How it meets the assigned constraints**
 
@@ -917,7 +918,7 @@ npm run typecheck
 npm run test:coverage
 ```
 
-286 tests at 97.0% line coverage against an 85% floor that CI enforces — including the RNTL
+318 tests at 98.0% line coverage against an 85% floor that CI enforces — including the RNTL
 accessibility-role/label suites (`accessibility_theme.test.tsx`,
 `accessibility_motion_targets.test.tsx`) and the full-app `navigation.test.tsx`
 integration suite. An `npm audit` plus a

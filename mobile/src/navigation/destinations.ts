@@ -9,6 +9,16 @@ export type AppDestination =
   | 'Memories'
   | 'Contacts';
 
+/** One item of the tab bar or tablet sidebar, for either role. */
+export interface TabEntry {
+  destination: string;
+  icon: IconName;
+  /** The cramped label used in the bottom bar — "Appts". */
+  shortLabel: string;
+  /** The full label used in accessibility announcements — "Appointments". */
+  label: string;
+}
+
 export interface NavEntry {
   destination: AppDestination;
   icon: IconName;
@@ -45,4 +55,21 @@ export const destinations: NavEntry[] = [
     owner: 'Rehman',
   },
   { destination: 'Contacts', icon: 'people-outline', shortLabel: 'Contacts', label: 'Contacts' },
+];
+
+/** The caregiver's top-level screens. */
+export type CaregiverDestination =
+  | 'Dashboard'
+  | 'ManageMedicines'
+  | 'ManageAppointments'
+  | 'Activity'
+  | 'Notes';
+
+/** The caregiver's tabs, in the web client's order. */
+export const caregiverDestinations: (TabEntry & { destination: CaregiverDestination })[] = [
+  { destination: 'Dashboard', icon: 'dashboard', shortLabel: 'Dashboard', label: 'Dashboard' },
+  { destination: 'ManageMedicines', icon: 'medication', shortLabel: 'Medicines', label: 'Medicines' },
+  { destination: 'ManageAppointments', icon: 'event', shortLabel: 'Appts', label: 'Appointments' },
+  { destination: 'Activity', icon: 'timeline', shortLabel: 'Activity', label: 'Activity' },
+  { destination: 'Notes', icon: 'note-alt', shortLabel: 'Notes', label: 'Notes' },
 ];

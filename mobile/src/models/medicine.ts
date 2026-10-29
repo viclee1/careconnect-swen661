@@ -9,6 +9,9 @@ export interface Medicine {
   taken: boolean;
 }
 
+/** What a caregiver fills in to add or change a medicine. */
+export type MedicineInput = Pick<Medicine, 'name' | 'dosage' | 'time'>;
+
 /**
  * The single sentence assistive technology announces for this medicine.
  * Status is stated in words — "Taken" / "Not taken" — never colour alone.

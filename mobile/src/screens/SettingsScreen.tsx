@@ -19,6 +19,7 @@ import {
   type CaptionSize,
 } from '../models/accessibilitySettings';
 import { vibrationPatterns } from '../models/vibrationPattern';
+import { useCaregiver } from '../state/CaregiverProvider';
 import { useSettings } from '../state/SettingsProvider';
 import { colors } from '../theme/colors';
 import { layout } from '../theme/layout';
@@ -41,11 +42,16 @@ import { VibrationPatternRow } from './settings/VibrationPatternRow';
 export function SettingsScreen({
   onBack,
   onSignOut,
+  onSwitchRole,
 }: {
   onBack: () => void;
   onSignOut?: () => void;
+  /** Switches between the care recipient's and the caregiver's view. */
+  onSwitchRole?: () => void;
 }) {
   const { settings, update } = useSettings();
+  const { role } = useCaregiver();
+  const isCaregiver = role === 'caregiver';
   const [signOutNotice, setSignOutNotice] = useState(false);
 
   const compliant = meetsHearingConstraints(settings);
@@ -247,9 +253,20 @@ export function SettingsScreen({
           <SettingsSection
             icon="person-outline"
             title="Account"
-            description="Margaret Whitfield · Care Recipient"
+            description={`Margaret Whitfield · ${isCaregiver ? 'Caregiver view' : 'Care Recipient'}`}
           >
             <View style={styles.accountBlock}>
+              {onSwitchRole ? (
+                <View style={{ marginBottom: 12 }}>
+                  <AppButton
+                    label={isCaregiver ? 'Switch to care recipient view' : 'Switch to caregiver view'}
+                    icon="swap-horiz"
+                    variant="outlined"
+                    fullWidth
+                    onPress={onSwitchRole}
+                  />
+                </View>
+              ) : null}
               <AppButton
                 label="Sign out"
                 icon="logout"

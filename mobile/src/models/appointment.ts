@@ -10,6 +10,9 @@ export interface Appointment {
   location: string;
 }
 
+/** What a caregiver fills in to add or change an appointment. */
+export type AppointmentInput = Omit<Appointment, 'id'>;
+
 /**
  * The single sentence assistive technology announces for this appointment —
  * everything the card shows visually, said as one sentence rather than four
