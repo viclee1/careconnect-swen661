@@ -1,4 +1,6 @@
 import 'package:careconnect_mobile/core/routing/routes.dart';
+import 'package:careconnect_mobile/models/caregiver.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../support/harness.dart';
@@ -53,6 +55,60 @@ void main() {
         handle.dispose();
       });
     }
+  });
+
+  group('WCAG 2.1 AA guideline checks — caregiver screens', () {
+    for (final MapEntry<String, String> route in <String, String>{
+      Routes.roleChooser: 'Role chooser',
+      Routes.dashboard: 'Dashboard',
+      Routes.manageMedicines: 'Manage medicines',
+      Routes.manageAppointments: 'Manage appointments',
+      Routes.activity: 'Activity',
+      Routes.notes: 'Care notes',
+    }.entries) {
+      testWidgets('${route.value} meets tap target, contrast and label guidelines', (
+        WidgetTester tester,
+      ) async {
+        final SemanticsHandle handle = tester.ensureSemantics();
+        usePhoneSurface(tester);
+        await pumpApp(tester, initialLocation: route.key, role: Role.caregiver);
+
+        await _expectMeetsAllGuidelines(tester);
+
+        handle.dispose();
+      });
+    }
+
+    testWidgets('the medicine form with errors, and the delete confirmation, meet all guidelines', (
+      WidgetTester tester,
+    ) async {
+      final SemanticsHandle handle = tester.ensureSemantics();
+      usePhoneSurface(tester);
+      await pumpApp(tester, initialLocation: Routes.manageMedicines, role: Role.caregiver);
+
+      await tester.tap(find.bySemanticsLabel('Delete Amlodipine'));
+      await tester.pumpAndSettle();
+      await _expectMeetsAllGuidelines(tester);
+
+      await tester.tap(find.widgetWithText(FilledButton, 'Add medicine'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(FilledButton, 'Add medicine'));
+      await tester.pumpAndSettle();
+      expect(find.text('3 things need fixing'), findsOneWidget);
+      await _expectMeetsAllGuidelines(tester);
+
+      handle.dispose();
+    });
+
+    testWidgets('the caregiver sidebar on a tablet meets all guidelines', (WidgetTester tester) async {
+      final SemanticsHandle handle = tester.ensureSemantics();
+      useTabletSurface(tester);
+      await pumpApp(tester, initialLocation: Routes.dashboard, role: Role.caregiver);
+
+      await _expectMeetsAllGuidelines(tester);
+
+      handle.dispose();
+    });
   });
 
   group('WCAG 2.1 AA guideline checks — tablet layout', () {

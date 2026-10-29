@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-10-29 14:02:27</td>
+            <td class="headerValue">2026-10-29 18:05:30</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryHi">-</td>
@@ -182,15 +182,15 @@
 <span id="L120"><span class="lineNum">     120</span>              :   }</span>
 <span id="L121"><span class="lineNum">     121</span>              : </span>
 <span id="L122"><span class="lineNum">     122</span>              :   /// The caption text size in logical pixels.</span>
-<span id="L123"><span class="lineNum">     123</span> <span class="tlaGNC">          16 :   double get captionFontSize =&gt; 18.0 * captionSize.scale;</span></span>
+<span id="L123"><span class="lineNum">     123</span> <span class="tlaGNC">          20 :   double get captionFontSize =&gt; 18.0 * captionSize.scale;</span></span>
 <span id="L124"><span class="lineNum">     124</span>              : </span>
 <span id="L125"><span class="lineNum">     125</span>              :   /// Alert volume as a whole percentage, for display.</span>
-<span id="L126"><span class="lineNum">     126</span> <span class="tlaGNC">          16 :   int get volumePercent =&gt; (alertVolume * 100).round();</span></span>
+<span id="L126"><span class="lineNum">     126</span> <span class="tlaGNC">          20 :   int get volumePercent =&gt; (alertVolume * 100).round();</span></span>
 <span id="L127"><span class="lineNum">     127</span>              : </span>
 <span id="L128"><span class="lineNum">     128</span>              :   /// The audio balance written out — &quot;Centre&quot;, &quot;60% left&quot;, &quot;25% right&quot;.</span>
-<span id="L129"><span class="lineNum">     129</span> <span class="tlaGNC">           4 :   String get balanceLabel {</span></span>
-<span id="L130"><span class="lineNum">     130</span> <span class="tlaGNC">          16 :     final int magnitude = (audioBalance.abs() * 100).round();</span></span>
-<span id="L131"><span class="lineNum">     131</span> <span class="tlaGNC">           4 :     if (magnitude == 0) return 'Centre';</span></span>
+<span id="L129"><span class="lineNum">     129</span> <span class="tlaGNC">           5 :   String get balanceLabel {</span></span>
+<span id="L130"><span class="lineNum">     130</span> <span class="tlaGNC">          20 :     final int magnitude = (audioBalance.abs() * 100).round();</span></span>
+<span id="L131"><span class="lineNum">     131</span> <span class="tlaGNC">           5 :     if (magnitude == 0) return 'Centre';</span></span>
 <span id="L132"><span class="lineNum">     132</span> <span class="tlaGNC">           8 :     return audioBalance &lt; 0 ? '$magnitude% left' : '$magnitude% right';</span></span>
 <span id="L133"><span class="lineNum">     133</span>              :   }</span>
 <span id="L134"><span class="lineNum">     134</span>              : </span>
@@ -199,10 +199,10 @@
 <span id="L137"><span class="lineNum">     137</span>              :   ///</span>
 <span id="L138"><span class="lineNum">     138</span>              :   /// The banner is fixed on, so the only way to fall out of conformance is to</span>
 <span id="L139"><span class="lineNum">     139</span>              :   /// switch captions off and leave spoken content with nothing to read.</span>
-<span id="L140"><span class="lineNum">     140</span> <span class="tlaGNC">          12 :   bool get meetsHearingConstraints =&gt; visualAlertBanners &amp;&amp; captionsEnabled;</span></span>
+<span id="L140"><span class="lineNum">     140</span> <span class="tlaGNC">          15 :   bool get meetsHearingConstraints =&gt; visualAlertBanners &amp;&amp; captionsEnabled;</span></span>
 <span id="L141"><span class="lineNum">     141</span>              : </span>
 <span id="L142"><span class="lineNum">     142</span>              :   /// The sentence printed under the conformance badge.</span>
-<span id="L143"><span class="lineNum">     143</span> <span class="tlaGNC">           8 :   String get conformanceMessage =&gt; meetsHearingConstraints</span></span>
+<span id="L143"><span class="lineNum">     143</span> <span class="tlaGNC">          10 :   String get conformanceMessage =&gt; meetsHearingConstraints</span></span>
 <span id="L144"><span class="lineNum">     144</span>              :       ? 'Hearing-accessibility requirements met'</span>
 <span id="L145"><span class="lineNum">     145</span>              :       : 'Captions are off, so some spoken content will have no text';</span>
 <span id="L146"><span class="lineNum">     146</span>              : </span>

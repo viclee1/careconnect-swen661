@@ -4,6 +4,10 @@ import 'package:go_router/go_router.dart';
 import '../../screens/appointments/appts_screen.dart';
 import '../../screens/auth/sign_in_screen.dart';
 import '../../screens/auth/sign_up_screen.dart';
+import '../../screens/caregiver/dashboard_screen.dart';
+import '../../screens/caregiver/manage_screens.dart';
+import '../../screens/caregiver/notes_screen.dart';
+import '../../screens/caregiver/role_chooser_screen.dart';
 import '../../screens/contacts/contacts_screen.dart';
 import '../../screens/home/home_screen.dart';
 import '../../screens/medicines/medicine_screen.dart';
@@ -71,6 +75,12 @@ GoRouter buildRouter({String initialLocation = Routes.initial}) {
         builder: (BuildContext context, GoRouterState state) =>
             const SignUpScreen(),
       ),
+      GoRoute(
+        path: Routes.roleChooser,
+        name: Routes.roleChooserName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const RoleChooserScreen(),
+      ),
       ShellRoute(
         navigatorKey: shellKey,
         builder: (BuildContext context, GoRouterState state, Widget child) =>
@@ -119,6 +129,37 @@ GoRouter buildRouter({String initialLocation = Routes.initial}) {
             name: Routes.memoriesName,
             pageBuilder: (BuildContext context, GoRouterState state) =>
                 page(const MemoriesScreen()),
+          ),
+          // The caregiver's, inside the same shell so the bar stays put.
+          GoRoute(
+            path: Routes.dashboard,
+            name: Routes.dashboardName,
+            pageBuilder: (BuildContext context, GoRouterState state) =>
+                page(const DashboardScreen()),
+          ),
+          GoRoute(
+            path: Routes.manageMedicines,
+            name: Routes.manageMedicinesName,
+            pageBuilder: (BuildContext context, GoRouterState state) =>
+                page(const ManageMedicinesScreen()),
+          ),
+          GoRoute(
+            path: Routes.manageAppointments,
+            name: Routes.manageAppointmentsName,
+            pageBuilder: (BuildContext context, GoRouterState state) =>
+                page(const ManageAppointmentsScreen()),
+          ),
+          GoRoute(
+            path: Routes.activity,
+            name: Routes.activityName,
+            pageBuilder: (BuildContext context, GoRouterState state) =>
+                page(const ActivityScreen()),
+          ),
+          GoRoute(
+            path: Routes.notes,
+            name: Routes.notesName,
+            pageBuilder: (BuildContext context, GoRouterState state) =>
+                page(const NotesScreen()),
           ),
         ],
       ),

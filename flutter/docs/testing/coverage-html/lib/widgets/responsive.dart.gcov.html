@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-10-29 14:02:27</td>
+            <td class="headerValue">2026-10-29 18:05:30</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryHi">-</td>
@@ -75,13 +75,13 @@
 <span id="L13"><span class="lineNum">      13</span>              :   /// than usual when the reader is also managing a larger text scale.</span>
 <span id="L14"><span class="lineNum">      14</span>              :   static const double readableWidth = 680.0;</span>
 <span id="L15"><span class="lineNum">      15</span>              : </span>
-<span id="L16"><span class="lineNum">      16</span> <span class="tlaGNC">          11 :   static bool isTablet(BuildContext context) =&gt;</span></span>
-<span id="L17"><span class="lineNum">      17</span> <span class="tlaGNC">          33 :       MediaQuery.sizeOf(context).width &gt;= tablet;</span></span>
+<span id="L16"><span class="lineNum">      16</span> <span class="tlaGNC">          12 :   static bool isTablet(BuildContext context) =&gt;</span></span>
+<span id="L17"><span class="lineNum">      17</span> <span class="tlaGNC">          36 :       MediaQuery.sizeOf(context).width &gt;= tablet;</span></span>
 <span id="L18"><span class="lineNum">      18</span>              : }</span>
 <span id="L19"><span class="lineNum">      19</span>              : </span>
 <span id="L20"><span class="lineNum">      20</span>              : /// Centres [child] and stops it stretching past [maxWidth] on a tablet.</span>
 <span id="L21"><span class="lineNum">      21</span>              : class ReadableWidth extends StatelessWidget {</span>
-<span id="L22"><span class="lineNum">      22</span> <span class="tlaGNC">           5 :   const ReadableWidth({</span></span>
+<span id="L22"><span class="lineNum">      22</span> <span class="tlaGNC">           7 :   const ReadableWidth({</span></span>
 <span id="L23"><span class="lineNum">      23</span>              :     super.key,</span>
 <span id="L24"><span class="lineNum">      24</span>              :     required this.child,</span>
 <span id="L25"><span class="lineNum">      25</span>              :     this.maxWidth = Breakpoints.readableWidth,</span>
@@ -90,12 +90,12 @@
 <span id="L28"><span class="lineNum">      28</span>              :   final Widget child;</span>
 <span id="L29"><span class="lineNum">      29</span>              :   final double maxWidth;</span>
 <span id="L30"><span class="lineNum">      30</span>              : </span>
-<span id="L31"><span class="lineNum">      31</span> <span class="tlaGNC">           5 :   @override</span></span>
+<span id="L31"><span class="lineNum">      31</span> <span class="tlaGNC">           7 :   @override</span></span>
 <span id="L32"><span class="lineNum">      32</span>              :   Widget build(BuildContext context) {</span>
-<span id="L33"><span class="lineNum">      33</span> <span class="tlaGNC">           5 :     return Center(</span></span>
-<span id="L34"><span class="lineNum">      34</span> <span class="tlaGNC">           5 :       child: ConstrainedBox(</span></span>
-<span id="L35"><span class="lineNum">      35</span> <span class="tlaGNC">          10 :         constraints: BoxConstraints(maxWidth: maxWidth),</span></span>
-<span id="L36"><span class="lineNum">      36</span> <span class="tlaGNC">           5 :         child: child,</span></span>
+<span id="L33"><span class="lineNum">      33</span> <span class="tlaGNC">           7 :     return Center(</span></span>
+<span id="L34"><span class="lineNum">      34</span> <span class="tlaGNC">           7 :       child: ConstrainedBox(</span></span>
+<span id="L35"><span class="lineNum">      35</span> <span class="tlaGNC">          14 :         constraints: BoxConstraints(maxWidth: maxWidth),</span></span>
+<span id="L36"><span class="lineNum">      36</span> <span class="tlaGNC">           7 :         child: child,</span></span>
 <span id="L37"><span class="lineNum">      37</span>              :       ),</span>
 <span id="L38"><span class="lineNum">      38</span>              :     );</span>
 <span id="L39"><span class="lineNum">      39</span>              :   }</span>

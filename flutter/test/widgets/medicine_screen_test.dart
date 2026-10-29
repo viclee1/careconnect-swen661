@@ -1,21 +1,44 @@
-import 'package:careconnect_mobile/screens/medicines/medicine_screen.dart';
+import 'package:careconnect_mobile/core/routing/routes.dart';
+import 'package:careconnect_mobile/data/medicine_repository.dart';
+import 'package:careconnect_mobile/models/medicine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../support/harness.dart';
+
 void main() {
-  testWidgets('MedicineScreen renders medications and toggles state', (WidgetTester tester) async {
-    await tester.pumpWidget(const MaterialApp(home: MedicineScreen()));
+  group('MedicineScreen', () {
+    testWidgets('lists the shared medicines with their dose, time and a taken count', (WidgetTester tester) async {
+      usePhoneSurface(tester);
+      await pumpApp(tester, initialLocation: Routes.medicines);
 
-    // Verify UI components render
-    expect(find.text('Medicines'), findsOneWidget);
-    expect(find.text('Aspirin'), findsOneWidget);
-    expect(find.text('Lisinopril'), findsOneWidget);
+      expect(find.text('Amlodipine'), findsOneWidget);
+      expect(find.text('Metformin'), findsOneWidget);
+      expect(find.text('Atorvastatin'), findsOneWidget);
+      expect(find.text('5 mg — 1 tablet with food\n8:30 am'), findsOneWidget);
+      expect(find.text('1 of 3 taken'), findsOneWidget);
+    });
 
-    // Find a checkbox and tap it to verify user interaction
-    final checkboxFinder = find.byType(CheckboxListTile).first;
-    expect(checkboxFinder, findsOneWidget);
+    testWidgets('ticking a medicine marks it taken and updates the count', (WidgetTester tester) async {
+      usePhoneSurface(tester);
+      await pumpApp(tester, initialLocation: Routes.medicines);
 
-    await tester.tap(checkboxFinder);
-    await tester.pump();
+      final Finder metformin = find.byKey(const ValueKey<String>('medicine-med2'));
+      expect(tester.widget<CheckboxListTile>(metformin).value, isFalse);
+      await tester.tap(metformin);
+      await tester.pumpAndSettle();
+      expect(tester.widget<CheckboxListTile>(metformin).value, isTrue);
+      expect(find.text('2 of 3 taken'), findsOneWidget);
+    });
+
+    testWidgets('says so when there are no medicines today', (WidgetTester tester) async {
+      usePhoneSurface(tester);
+      await pumpApp(
+        tester,
+        initialLocation: Routes.medicines,
+        medicineRepository: InMemoryMedicineRepository(const <Medicine>[]),
+      );
+      expect(find.text('No medicines today'), findsOneWidget);
+    });
   });
 }

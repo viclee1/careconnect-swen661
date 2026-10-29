@@ -41,7 +41,7 @@ class SignInScreen extends StatelessWidget {
               const SizedBox(height: 12),
               Align(alignment: Alignment.centerRight, child: TextButton(onPressed: () {}, child: Text('Forgot password?', style: textTheme.bodyMedium?.copyWith(color: AppColors.primaryDark, fontWeight: FontWeight.bold)))),
               const SizedBox(height: 32),
-              FilledButton(onPressed: () => context.go(Routes.home), style: FilledButton.styleFrom(backgroundColor: AppColors.primaryDark, foregroundColor: Colors.white, minimumSize: const Size.fromHeight(56), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radius))), child: const Text('Sign in', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
+              FilledButton(onPressed: () => context.go(Routes.roleChooser), style: FilledButton.styleFrom(backgroundColor: AppColors.primaryDark, foregroundColor: Colors.white, minimumSize: const Size.fromHeight(56), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radius))), child: const Text('Sign in', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
               const SizedBox(height: 24),
               Wrap(alignment: WrapAlignment.center, crossAxisAlignment: WrapCrossAlignment.center, children: [
                 const Text('New here? '),

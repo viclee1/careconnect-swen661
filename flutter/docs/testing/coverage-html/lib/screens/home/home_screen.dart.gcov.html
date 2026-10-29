@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-10-29 14:02:27</td>
+            <td class="headerValue">2026-10-29 18:05:30</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryHi">-</td>
@@ -70,8 +70,8 @@
 <span id="L8"><span class="lineNum">       8</span>              : </span>
 <span id="L9"><span class="lineNum">       9</span>              : class HomeScreen extends StatefulWidget {</span>
 <span id="L10"><span class="lineNum">      10</span> <span class="tlaGNC">           4 :   const HomeScreen({super.key});</span></span>
-<span id="L11"><span class="lineNum">      11</span> <span class="tlaGNC">           3 :   @override</span></span>
-<span id="L12"><span class="lineNum">      12</span> <span class="tlaGNC">           3 :   State&lt;HomeScreen&gt; createState() =&gt; _HomeScreenState();</span></span>
+<span id="L11"><span class="lineNum">      11</span> <span class="tlaGNC">           4 :   @override</span></span>
+<span id="L12"><span class="lineNum">      12</span> <span class="tlaGNC">           4 :   State&lt;HomeScreen&gt; createState() =&gt; _HomeScreenState();</span></span>
 <span id="L13"><span class="lineNum">      13</span>              : }</span>
 <span id="L14"><span class="lineNum">      14</span>              : </span>
 <span id="L15"><span class="lineNum">      15</span>              : class _HomeScreenState extends State&lt;HomeScreen&gt; with SingleTickerProviderStateMixin {</span>
@@ -85,51 +85,51 @@
 <span id="L23"><span class="lineNum">      23</span>              :   bool _isPaused = false;</span>
 <span id="L24"><span class="lineNum">      24</span>              :   bool _isCCEnabled = true;</span>
 <span id="L25"><span class="lineNum">      25</span>              : </span>
-<span id="L26"><span class="lineNum">      26</span> <span class="tlaGNC">           3 :   @override</span></span>
+<span id="L26"><span class="lineNum">      26</span> <span class="tlaGNC">           4 :   @override</span></span>
 <span id="L27"><span class="lineNum">      27</span>              :   void initState() {</span>
-<span id="L28"><span class="lineNum">      28</span> <span class="tlaGNC">           3 :     super.initState();</span></span>
-<span id="L29"><span class="lineNum">      29</span> <span class="tlaGNC">           6 :     _flashController = AnimationController(vsync: this, duration: const Duration(milliseconds: 1500));</span></span>
-<span id="L30"><span class="lineNum">      30</span> <span class="tlaGNC">          15 :     _flashAnimation = Tween&lt;double&gt;(begin: 0.6, end: 1.0).animate(CurvedAnimation(parent: _flashController, curve: Curves.easeInOut));</span></span>
+<span id="L28"><span class="lineNum">      28</span> <span class="tlaGNC">           4 :     super.initState();</span></span>
+<span id="L29"><span class="lineNum">      29</span> <span class="tlaGNC">           8 :     _flashController = AnimationController(vsync: this, duration: const Duration(milliseconds: 1500));</span></span>
+<span id="L30"><span class="lineNum">      30</span> <span class="tlaGNC">          20 :     _flashAnimation = Tween&lt;double&gt;(begin: 0.6, end: 1.0).animate(CurvedAnimation(parent: _flashController, curve: Curves.easeInOut));</span></span>
 <span id="L31"><span class="lineNum">      31</span>              :   }</span>
 <span id="L32"><span class="lineNum">      32</span>              : </span>
-<span id="L33"><span class="lineNum">      33</span> <span class="tlaGNC">           3 :   @override</span></span>
-<span id="L34"><span class="lineNum">      34</span> <span class="tlaGNC">           9 :   void dispose() { _flashController.dispose(); super.dispose(); }</span></span>
+<span id="L33"><span class="lineNum">      33</span> <span class="tlaGNC">           4 :   @override</span></span>
+<span id="L34"><span class="lineNum">      34</span> <span class="tlaGNC">          12 :   void dispose() { _flashController.dispose(); super.dispose(); }</span></span>
 <span id="L35"><span class="lineNum">      35</span>              : </span>
 <span id="L36"><span class="lineNum">      36</span> <span class="tlaGNC">          12 :   void _simulateCall() { setState(() =&gt; _isIncomingCall = true); _flashController.repeat(reverse: true); }</span></span>
 <span id="L37"><span class="lineNum">      37</span> <span class="tlaGNC">           6 :   void _declineCall() { setState(() =&gt; _isIncomingCall = false); _flashController.stop(); }</span></span>
 <span id="L38"><span class="lineNum">      38</span> <span class="tlaGNC">          14 :   void _answerCall() { setState(() { _isIncomingCall = false; _isActiveCall = true; }); _flashController.stop(); }</span></span>
 <span id="L39"><span class="lineNum">      39</span> <span class="tlaGNC">           4 :   void _endCall() { setState(() =&gt; _isActiveCall = false); }</span></span>
 <span id="L40"><span class="lineNum">      40</span>              : </span>
-<span id="L41"><span class="lineNum">      41</span> <span class="tlaGNC">           3 :   @override</span></span>
+<span id="L41"><span class="lineNum">      41</span> <span class="tlaGNC">           4 :   @override</span></span>
 <span id="L42"><span class="lineNum">      42</span>              :   Widget build(BuildContext context) {</span>
-<span id="L43"><span class="lineNum">      43</span> <span class="tlaGNC">           7 :     if (_isActiveCall) return Scaffold(body: _buildActiveCallOverlay());</span></span>
-<span id="L44"><span class="lineNum">      44</span> <span class="tlaGNC">           3 :     return AppScaffold(</span></span>
+<span id="L43"><span class="lineNum">      43</span> <span class="tlaGNC">           8 :     if (_isActiveCall) return Scaffold(body: _buildActiveCallOverlay());</span></span>
+<span id="L44"><span class="lineNum">      44</span> <span class="tlaGNC">           4 :     return AppScaffold(</span></span>
 <span id="L45"><span class="lineNum">      45</span>              :       title: 'Dashboard',</span>
-<span id="L46"><span class="lineNum">      46</span> <span class="tlaGNC">           3 :       body: Stack(</span></span>
-<span id="L47"><span class="lineNum">      47</span> <span class="tlaGNC">           3 :         children: [</span></span>
-<span id="L48"><span class="lineNum">      48</span> <span class="tlaGNC">           3 :           _buildHomeContent(),</span></span>
-<span id="L49"><span class="lineNum">      49</span> <span class="tlaGNC">           7 :           if (_isIncomingCall) Positioned.fill(child: _buildIncomingCallOverlay()),</span></span>
+<span id="L46"><span class="lineNum">      46</span> <span class="tlaGNC">           4 :       body: Stack(</span></span>
+<span id="L47"><span class="lineNum">      47</span> <span class="tlaGNC">           4 :         children: [</span></span>
+<span id="L48"><span class="lineNum">      48</span> <span class="tlaGNC">           4 :           _buildHomeContent(),</span></span>
+<span id="L49"><span class="lineNum">      49</span> <span class="tlaGNC">           8 :           if (_isIncomingCall) Positioned.fill(child: _buildIncomingCallOverlay()),</span></span>
 <span id="L50"><span class="lineNum">      50</span>              :         ],</span>
 <span id="L51"><span class="lineNum">      51</span>              :       ),</span>
 <span id="L52"><span class="lineNum">      52</span>              :     );</span>
 <span id="L53"><span class="lineNum">      53</span>              :   }</span>
 <span id="L54"><span class="lineNum">      54</span>              : </span>
-<span id="L55"><span class="lineNum">      55</span> <span class="tlaGNC">           3 :   Widget _buildHomeContent() {</span></span>
-<span id="L56"><span class="lineNum">      56</span> <span class="tlaGNC">           6 :     final dailyTasks = context.watch&lt;DailyTasksController&gt;();</span></span>
+<span id="L55"><span class="lineNum">      55</span> <span class="tlaGNC">           4 :   Widget _buildHomeContent() {</span></span>
+<span id="L56"><span class="lineNum">      56</span> <span class="tlaGNC">           8 :     final dailyTasks = context.watch&lt;DailyTasksController&gt;();</span></span>
 <span id="L57"><span class="lineNum">      57</span>              : </span>
-<span id="L58"><span class="lineNum">      58</span> <span class="tlaGNC">           3 :     return ListView(</span></span>
+<span id="L58"><span class="lineNum">      58</span> <span class="tlaGNC">           4 :     return ListView(</span></span>
 <span id="L59"><span class="lineNum">      59</span>              :       padding: const EdgeInsets.all(AppTheme.gutter),</span>
-<span id="L60"><span class="lineNum">      60</span> <span class="tlaGNC">           3 :       children: [</span></span>
-<span id="L61"><span class="lineNum">      61</span> <span class="tlaGNC">           6 :         if (dailyTasks.showNotification) ...[</span></span>
-<span id="L62"><span class="lineNum">      62</span> <span class="tlaGNC">           3 :           Padding(</span></span>
+<span id="L60"><span class="lineNum">      60</span> <span class="tlaGNC">           4 :       children: [</span></span>
+<span id="L61"><span class="lineNum">      61</span> <span class="tlaGNC">           8 :         if (dailyTasks.showNotification) ...[</span></span>
+<span id="L62"><span class="lineNum">      62</span> <span class="tlaGNC">           4 :           Padding(</span></span>
 <span id="L63"><span class="lineNum">      63</span>              :             padding: const EdgeInsets.only(bottom: 16),</span>
-<span id="L64"><span class="lineNum">      64</span> <span class="tlaGNC">           3 :             child: AlertBanner(</span></span>
+<span id="L64"><span class="lineNum">      64</span> <span class="tlaGNC">           4 :             child: AlertBanner(</span></span>
 <span id="L65"><span class="lineNum">      65</span>              :               tone: AlertTone.info,</span>
 <span id="L66"><span class="lineNum">      66</span>              :               title: 'Upcoming appointment',</span>
 <span id="L67"><span class="lineNum">      67</span>              :               message: 'You have a video call with Maria today at 3:00 PM.',</span>
-<span id="L68"><span class="lineNum">      68</span> <span class="tlaGNC">           3 :               action: FilledButton(</span></span>
+<span id="L68"><span class="lineNum">      68</span> <span class="tlaGNC">           4 :               action: FilledButton(</span></span>
 <span id="L69"><span class="lineNum">      69</span> <span class="tlaUNC">           0 :                 onPressed: () =&gt; dailyTasks.dismissNotification(),</span></span>
-<span id="L70"><span class="lineNum">      70</span> <span class="tlaGNC">           3 :                 style: FilledButton.styleFrom(</span></span>
+<span id="L70"><span class="lineNum">      70</span> <span class="tlaGNC">           4 :                 style: FilledButton.styleFrom(</span></span>
 <span id="L71"><span class="lineNum">      71</span>              :                   backgroundColor: AppColors.primaryDark,</span>
 <span id="L72"><span class="lineNum">      72</span>              :                   foregroundColor: Colors.white,</span>
 <span id="L73"><span class="lineNum">      73</span>              :                 ),</span>
@@ -137,20 +137,20 @@
 <span id="L75"><span class="lineNum">      75</span>              :               ),</span>
 <span id="L76"><span class="lineNum">      76</span>              :             ),</span>
 <span id="L77"><span class="lineNum">      77</span>              :           ),</span>
-<span id="L78"><span class="lineNum">      78</span> <span class="tlaGNC">           3 :           Container(</span></span>
+<span id="L78"><span class="lineNum">      78</span> <span class="tlaGNC">           4 :           Container(</span></span>
 <span id="L79"><span class="lineNum">      79</span>              :             padding: const EdgeInsets.all(12),</span>
-<span id="L80"><span class="lineNum">      80</span> <span class="tlaGNC">           3 :             decoration: BoxDecoration(</span></span>
+<span id="L80"><span class="lineNum">      80</span> <span class="tlaGNC">           4 :             decoration: BoxDecoration(</span></span>
 <span id="L81"><span class="lineNum">      81</span>              :               color: AppColors.secondaryLight,</span>
-<span id="L82"><span class="lineNum">      82</span> <span class="tlaGNC">           3 :               borderRadius: BorderRadius.circular(AppTheme.radius),</span></span>
-<span id="L83"><span class="lineNum">      83</span> <span class="tlaGNC">           3 :               border: Border.all(color: AppColors.border),</span></span>
+<span id="L82"><span class="lineNum">      82</span> <span class="tlaGNC">           4 :               borderRadius: BorderRadius.circular(AppTheme.radius),</span></span>
+<span id="L83"><span class="lineNum">      83</span> <span class="tlaGNC">           4 :               border: Border.all(color: AppColors.border),</span></span>
 <span id="L84"><span class="lineNum">      84</span>              :             ),</span>
-<span id="L85"><span class="lineNum">      85</span> <span class="tlaGNC">           3 :             child: Row(</span></span>
-<span id="L86"><span class="lineNum">      86</span> <span class="tlaGNC">           3 :               children: [</span></span>
-<span id="L87"><span class="lineNum">      87</span> <span class="tlaGNC">           3 :                 Container(</span></span>
+<span id="L85"><span class="lineNum">      85</span> <span class="tlaGNC">           4 :             child: Row(</span></span>
+<span id="L86"><span class="lineNum">      86</span> <span class="tlaGNC">           4 :               children: [</span></span>
+<span id="L87"><span class="lineNum">      87</span> <span class="tlaGNC">           4 :                 Container(</span></span>
 <span id="L88"><span class="lineNum">      88</span>              :                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),</span>
-<span id="L89"><span class="lineNum">      89</span> <span class="tlaGNC">           3 :                   decoration: BoxDecoration(</span></span>
+<span id="L89"><span class="lineNum">      89</span> <span class="tlaGNC">           4 :                   decoration: BoxDecoration(</span></span>
 <span id="L90"><span class="lineNum">      90</span>              :                     color: AppColors.primaryDark,</span>
-<span id="L91"><span class="lineNum">      91</span> <span class="tlaGNC">           3 :                     borderRadius: BorderRadius.circular(4),</span></span>
+<span id="L91"><span class="lineNum">      91</span> <span class="tlaGNC">           4 :                     borderRadius: BorderRadius.circular(4),</span></span>
 <span id="L92"><span class="lineNum">      92</span>              :                   ),</span>
 <span id="L93"><span class="lineNum">      93</span>              :                   child: const Text(</span>
 <span id="L94"><span class="lineNum">      94</span>              :                     'CC',</span>
@@ -175,48 +175,48 @@
 <span id="L113"><span class="lineNum">     113</span>              :             ),</span>
 <span id="L114"><span class="lineNum">     114</span>              :           ),</span>
 <span id="L115"><span class="lineNum">     115</span>              :         ],</span>
-<span id="L116"><span class="lineNum">     116</span> <span class="tlaGNC">           3 :         const SizedBox(height: 24),</span></span>
-<span id="L117"><span class="lineNum">     117</span> <span class="tlaGNC">          18 :         Text(&quot;Here's your day, Margaret&quot;, style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontSize: 28, fontWeight: FontWeight.bold)),</span></span>
-<span id="L118"><span class="lineNum">     118</span> <span class="tlaGNC">           3 :         const SizedBox(height: 12),</span></span>
-<span id="L119"><span class="lineNum">     119</span> <span class="tlaGNC">           6 :         Row(children: [</span></span>
-<span id="L120"><span class="lineNum">     120</span> <span class="tlaGNC">          15 :           Expanded(child: ClipRRect(borderRadius: const BorderRadius.all(Radius.circular(4)), child: LinearProgressIndicator(value: dailyTasks.progress, backgroundColor: AppColors.secondaryLight, valueColor: AlwaysStoppedAnimation&lt;Color&gt;(AppColors.primaryDark), minHeight: 12, semanticsLabel: 'Tasks completed today'))),</span></span>
+<span id="L116"><span class="lineNum">     116</span> <span class="tlaGNC">           4 :         const SizedBox(height: 24),</span></span>
+<span id="L117"><span class="lineNum">     117</span> <span class="tlaGNC">          24 :         Text(&quot;Here's your day, Margaret&quot;, style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontSize: 28, fontWeight: FontWeight.bold)),</span></span>
+<span id="L118"><span class="lineNum">     118</span> <span class="tlaGNC">           4 :         const SizedBox(height: 12),</span></span>
+<span id="L119"><span class="lineNum">     119</span> <span class="tlaGNC">           8 :         Row(children: [</span></span>
+<span id="L120"><span class="lineNum">     120</span> <span class="tlaGNC">          20 :           Expanded(child: ClipRRect(borderRadius: const BorderRadius.all(Radius.circular(4)), child: LinearProgressIndicator(value: dailyTasks.progress, backgroundColor: AppColors.secondaryLight, valueColor: AlwaysStoppedAnimation&lt;Color&gt;(AppColors.primaryDark), minHeight: 12, semanticsLabel: 'Tasks completed today'))),</span></span>
 <span id="L121"><span class="lineNum">     121</span>              :           const SizedBox(width: 16),</span>
-<span id="L122"><span class="lineNum">     122</span> <span class="tlaGNC">          27 :           Text('${dailyTasks.doneCount} of ${dailyTasks.totalCount} done', style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600, color: AppColors.secondaryDark)),</span></span>
+<span id="L122"><span class="lineNum">     122</span> <span class="tlaGNC">          36 :           Text('${dailyTasks.doneCount} of ${dailyTasks.totalCount} done', style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600, color: AppColors.secondaryDark)),</span></span>
 <span id="L123"><span class="lineNum">     123</span>              :         ]),</span>
-<span id="L124"><span class="lineNum">     124</span> <span class="tlaGNC">           3 :         const SizedBox(height: 32),</span></span>
-<span id="L125"><span class="lineNum">     125</span> <span class="tlaGNC">          15 :         Text('Next thing to do', style: Theme.of(context).textTheme.titleLarge),</span></span>
-<span id="L126"><span class="lineNum">     126</span> <span class="tlaGNC">           3 :         const SizedBox(height: 12),</span></span>
-<span id="L127"><span class="lineNum">     127</span> <span class="tlaGNC">           3 :         Card(</span></span>
-<span id="L128"><span class="lineNum">     128</span> <span class="tlaGNC">           6 :           elevation: 0, color: AppColors.secondaryLight, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radius), side: const BorderSide(color: AppColors.border, width: 1.5)),</span></span>
-<span id="L129"><span class="lineNum">     129</span> <span class="tlaGNC">           3 :           child: Padding(</span></span>
+<span id="L124"><span class="lineNum">     124</span> <span class="tlaGNC">           4 :         const SizedBox(height: 32),</span></span>
+<span id="L125"><span class="lineNum">     125</span> <span class="tlaGNC">          20 :         Text('Next thing to do', style: Theme.of(context).textTheme.titleLarge),</span></span>
+<span id="L126"><span class="lineNum">     126</span> <span class="tlaGNC">           4 :         const SizedBox(height: 12),</span></span>
+<span id="L127"><span class="lineNum">     127</span> <span class="tlaGNC">           4 :         Card(</span></span>
+<span id="L128"><span class="lineNum">     128</span> <span class="tlaGNC">           8 :           elevation: 0, color: AppColors.secondaryLight, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radius), side: const BorderSide(color: AppColors.border, width: 1.5)),</span></span>
+<span id="L129"><span class="lineNum">     129</span> <span class="tlaGNC">           4 :           child: Padding(</span></span>
 <span id="L130"><span class="lineNum">     130</span>              :             padding: const EdgeInsets.all(AppTheme.gutter),</span>
-<span id="L131"><span class="lineNum">     131</span> <span class="tlaGNC">           6 :             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [</span></span>
-<span id="L132"><span class="lineNum">     132</span> <span class="tlaGNC">           6 :               Row(children: [</span></span>
+<span id="L131"><span class="lineNum">     131</span> <span class="tlaGNC">           8 :             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [</span></span>
+<span id="L132"><span class="lineNum">     132</span> <span class="tlaGNC">           8 :               Row(children: [</span></span>
 <span id="L133"><span class="lineNum">     133</span>              :                 const CircleAvatar(radius: 28, backgroundColor: AppColors.primaryDark, child: Icon(Icons.video_call, color: Colors.white, size: 32)),</span>
 <span id="L134"><span class="lineNum">     134</span>              :                 const SizedBox(width: 16),</span>
-<span id="L135"><span class="lineNum">     135</span> <span class="tlaGNC">           9 :                 Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [</span></span>
-<span id="L136"><span class="lineNum">     136</span> <span class="tlaGNC">          18 :                   Text('Video call with Maria', style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.primaryDark)),</span></span>
-<span id="L137"><span class="lineNum">     137</span> <span class="tlaGNC">          18 :                   Text('3:00 PM · Starts in 10 mins', style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.secondaryDark)),</span></span>
+<span id="L135"><span class="lineNum">     135</span> <span class="tlaGNC">          12 :                 Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [</span></span>
+<span id="L136"><span class="lineNum">     136</span> <span class="tlaGNC">          24 :                   Text('Video call with Maria', style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.primaryDark)),</span></span>
+<span id="L137"><span class="lineNum">     137</span> <span class="tlaGNC">          24 :                   Text('3:00 PM · Starts in 10 mins', style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.secondaryDark)),</span></span>
 <span id="L138"><span class="lineNum">     138</span>              :                 ])),</span>
 <span id="L139"><span class="lineNum">     139</span>              :               ]),</span>
 <span id="L140"><span class="lineNum">     140</span>              :               const SizedBox(height: 20),</span>
-<span id="L141"><span class="lineNum">     141</span> <span class="tlaGNC">          18 :               SizedBox(width: double.infinity, height: 56, child: FilledButton.icon(onPressed: _simulateCall, icon: const Icon(Icons.phone_callback), label: const Text('Simulate incoming call', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)), style: FilledButton.styleFrom(backgroundColor: AppColors.primaryDark, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radius))))),</span></span>
+<span id="L141"><span class="lineNum">     141</span> <span class="tlaGNC">          24 :               SizedBox(width: double.infinity, height: 56, child: FilledButton.icon(onPressed: _simulateCall, icon: const Icon(Icons.phone_callback), label: const Text('Simulate incoming call', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)), style: FilledButton.styleFrom(backgroundColor: AppColors.primaryDark, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radius))))),</span></span>
 <span id="L142"><span class="lineNum">     142</span>              :             ]),</span>
 <span id="L143"><span class="lineNum">     143</span>              :           ),</span>
 <span id="L144"><span class="lineNum">     144</span>              :         ),</span>
-<span id="L145"><span class="lineNum">     145</span> <span class="tlaGNC">           3 :         const SizedBox(height: 32),</span></span>
-<span id="L146"><span class="lineNum">     146</span> <span class="tlaGNC">          15 :         Text('Later today', style: Theme.of(context).textTheme.titleLarge),</span></span>
-<span id="L147"><span class="lineNum">     147</span> <span class="tlaGNC">           3 :         const SizedBox(height: 12),</span></span>
-<span id="L148"><span class="lineNum">     148</span> <span class="tlaGNC">           3 :         _buildTaskCard(icon: Icons.medication, title: 'Atorvastatin', subtitle: 'Take 1 pill with water', time: '5:00 PM'),</span></span>
-<span id="L149"><span class="lineNum">     149</span> <span class="tlaGNC">           3 :         const SizedBox(height: 12),</span></span>
-<span id="L150"><span class="lineNum">     150</span> <span class="tlaGNC">           3 :         _buildTaskCard(icon: Icons.monitor_heart, title: 'Blood pressure check', subtitle: 'Standard daily measurement', time: '8:00 PM'),</span></span>
-<span id="L151"><span class="lineNum">     151</span> <span class="tlaGNC">           3 :         const SizedBox(height: 40),</span></span>
+<span id="L145"><span class="lineNum">     145</span> <span class="tlaGNC">           4 :         const SizedBox(height: 32),</span></span>
+<span id="L146"><span class="lineNum">     146</span> <span class="tlaGNC">          20 :         Text('Later today', style: Theme.of(context).textTheme.titleLarge),</span></span>
+<span id="L147"><span class="lineNum">     147</span> <span class="tlaGNC">           4 :         const SizedBox(height: 12),</span></span>
+<span id="L148"><span class="lineNum">     148</span> <span class="tlaGNC">           4 :         _buildTaskCard(icon: Icons.medication, title: 'Atorvastatin', subtitle: 'Take 1 pill with water', time: '5:00 PM'),</span></span>
+<span id="L149"><span class="lineNum">     149</span> <span class="tlaGNC">           4 :         const SizedBox(height: 12),</span></span>
+<span id="L150"><span class="lineNum">     150</span> <span class="tlaGNC">           4 :         _buildTaskCard(icon: Icons.monitor_heart, title: 'Blood pressure check', subtitle: 'Standard daily measurement', time: '8:00 PM'),</span></span>
+<span id="L151"><span class="lineNum">     151</span> <span class="tlaGNC">           4 :         const SizedBox(height: 40),</span></span>
 <span id="L152"><span class="lineNum">     152</span>              :       ],</span>
 <span id="L153"><span class="lineNum">     153</span>              :     );</span>
 <span id="L154"><span class="lineNum">     154</span>              :   }</span>
 <span id="L155"><span class="lineNum">     155</span>              : </span>
-<span id="L156"><span class="lineNum">     156</span> <span class="tlaGNC">           3 :   Widget _buildTaskCard({required IconData icon, required String title, required String subtitle, required String time}) {</span></span>
-<span id="L157"><span class="lineNum">     157</span> <span class="tlaGNC">          33 :     return Card(elevation: 0, color: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radius), side: const BorderSide(color: AppColors.border)), child: ListTile(contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), leading: CircleAvatar(backgroundColor: AppColors.secondaryLight, child: Icon(icon, color: AppColors.primaryDark)), title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)), subtitle: Text(subtitle), trailing: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.end, children: [Text(time, style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.secondaryDark)), const Icon(Icons.chevron_right, size: 20)])));</span></span>
+<span id="L156"><span class="lineNum">     156</span> <span class="tlaGNC">           4 :   Widget _buildTaskCard({required IconData icon, required String title, required String subtitle, required String time}) {</span></span>
+<span id="L157"><span class="lineNum">     157</span> <span class="tlaGNC">          44 :     return Card(elevation: 0, color: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radius), side: const BorderSide(color: AppColors.border)), child: ListTile(contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), leading: CircleAvatar(backgroundColor: AppColors.secondaryLight, child: Icon(icon, color: AppColors.primaryDark)), title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)), subtitle: Text(subtitle), trailing: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.end, children: [Text(time, style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.secondaryDark)), const Icon(Icons.chevron_right, size: 20)])));</span></span>
 <span id="L158"><span class="lineNum">     158</span>              :   }</span>
 <span id="L159"><span class="lineNum">     159</span>              : </span>
 <span id="L160"><span class="lineNum">     160</span> <span class="tlaGNC">           2 :   Widget _buildIncomingCallOverlay() {</span></span>

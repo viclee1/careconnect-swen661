@@ -32,12 +32,12 @@
             <td></td>
             <td class="headerItem">Lines:</td>
             <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
-            <td class="headerCovTableEntry">17</td>
-            <td class="headerCovTableEntry">17</td>
+            <td class="headerCovTableEntry">22</td>
+            <td class="headerCovTableEntry">22</td>
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-10-29 14:02:27</td>
+            <td class="headerValue">2026-10-29 18:05:30</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryHi">-</td>
@@ -61,56 +61,73 @@
 <pre class="sourceHeading">            Line data    Source code</pre>
 <pre class="source">
 <span id="L1"><span class="lineNum">       1</span>              : import 'package:flutter/material.dart';</span>
-<span id="L2"><span class="lineNum">       2</span>              : </span>
-<span id="L3"><span class="lineNum">       3</span>              : import '../../widgets/app_scaffold.dart';</span>
-<span id="L4"><span class="lineNum">       4</span>              : </span>
-<span id="L5"><span class="lineNum">       5</span>              : class MedicineScreen extends StatefulWidget {</span>
-<span id="L6"><span class="lineNum">       6</span> <span class="tlaGNC">           4 :   const MedicineScreen({super.key});</span></span>
-<span id="L7"><span class="lineNum">       7</span>              : </span>
-<span id="L8"><span class="lineNum">       8</span> <span class="tlaGNC">           3 :   @override</span></span>
-<span id="L9"><span class="lineNum">       9</span> <span class="tlaGNC">           3 :   State&lt;MedicineScreen&gt; createState() =&gt; _MedicineScreenState();</span></span>
-<span id="L10"><span class="lineNum">      10</span>              : }</span>
-<span id="L11"><span class="lineNum">      11</span>              : </span>
-<span id="L12"><span class="lineNum">      12</span>              : class _MedicineScreenState extends State&lt;MedicineScreen&gt; {</span>
-<span id="L13"><span class="lineNum">      13</span>              :   final List&lt;Map&lt;String, dynamic&gt;&gt; medications = [</span>
-<span id="L14"><span class="lineNum">      14</span>              :     {'name': 'Aspirin', 'dosage': '81mg', 'time': 'Morning (8:00 AM)', 'taken': false},</span>
-<span id="L15"><span class="lineNum">      15</span>              :     {'name': 'Lisinopril', 'dosage': '10mg', 'time': 'Evening (6:00 PM)', 'taken': true},</span>
-<span id="L16"><span class="lineNum">      16</span>              :   ];</span>
-<span id="L17"><span class="lineNum">      17</span>              : </span>
-<span id="L18"><span class="lineNum">      18</span> <span class="tlaGNC">           3 :   @override</span></span>
-<span id="L19"><span class="lineNum">      19</span>              :   Widget build(BuildContext context) {</span>
-<span id="L20"><span class="lineNum">      20</span> <span class="tlaGNC">           3 :     return AppScaffold(</span></span>
-<span id="L21"><span class="lineNum">      21</span>              :       title: 'Medications',</span>
-<span id="L22"><span class="lineNum">      22</span> <span class="tlaGNC">           3 :       body: ListView.builder(</span></span>
-<span id="L23"><span class="lineNum">      23</span> <span class="tlaGNC">           6 :         itemCount: medications.length,</span></span>
-<span id="L24"><span class="lineNum">      24</span> <span class="tlaGNC">           3 :         itemBuilder: (context, index) {</span></span>
-<span id="L25"><span class="lineNum">      25</span> <span class="tlaGNC">           6 :           final med = medications[index];</span></span>
-<span id="L26"><span class="lineNum">      26</span>              :           // CheckboxListTile already exposes the correct &quot;checkbox&quot; role plus</span>
-<span id="L27"><span class="lineNum">      27</span>              :           // its checked state and title/subtitle text to screen readers.</span>
-<span id="L28"><span class="lineNum">      28</span>              :           // Wrapping it in a second Semantics node with a hand-written label</span>
-<span id="L29"><span class="lineNum">      29</span>              :           // used to make TalkBack/VoiceOver announce the medication twice —</span>
-<span id="L30"><span class="lineNum">      30</span>              :           // once from the custom label, once from the tile's own semantics —</span>
-<span id="L31"><span class="lineNum">      31</span>              :           // so the native tile is left to speak for itself.</span>
-<span id="L32"><span class="lineNum">      32</span> <span class="tlaGNC">           3 :           return Card(</span></span>
-<span id="L33"><span class="lineNum">      33</span>              :             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),</span>
-<span id="L34"><span class="lineNum">      34</span> <span class="tlaGNC">           3 :             child: CheckboxListTile(</span></span>
-<span id="L35"><span class="lineNum">      35</span> <span class="tlaGNC">           6 :               title: Text(med['name'], style: const TextStyle(fontWeight: FontWeight.bold)),</span></span>
-<span id="L36"><span class="lineNum">      36</span> <span class="tlaGNC">          12 :               subtitle: Text('Dosage: ${med['dosage']}\nTime: ${med['time']}'),</span></span>
-<span id="L37"><span class="lineNum">      37</span>              :               isThreeLine: true,</span>
-<span id="L38"><span class="lineNum">      38</span>              :               secondary: const Icon(Icons.medication, color: Colors.green),</span>
-<span id="L39"><span class="lineNum">      39</span> <span class="tlaGNC">           3 :               value: med['taken'],</span></span>
-<span id="L40"><span class="lineNum">      40</span> <span class="tlaGNC">           1 :               onChanged: (bool? value) {</span></span>
-<span id="L41"><span class="lineNum">      41</span> <span class="tlaGNC">           2 :                 setState(() {</span></span>
-<span id="L42"><span class="lineNum">      42</span> <span class="tlaGNC">           3 :                   medications[index]['taken'] = value ?? false;</span></span>
-<span id="L43"><span class="lineNum">      43</span>              :                 });</span>
-<span id="L44"><span class="lineNum">      44</span>              :               },</span>
-<span id="L45"><span class="lineNum">      45</span>              :             ),</span>
-<span id="L46"><span class="lineNum">      46</span>              :           );</span>
-<span id="L47"><span class="lineNum">      47</span>              :         },</span>
-<span id="L48"><span class="lineNum">      48</span>              :       ),</span>
-<span id="L49"><span class="lineNum">      49</span>              :     );</span>
-<span id="L50"><span class="lineNum">      50</span>              :   }</span>
-<span id="L51"><span class="lineNum">      51</span>              : }</span>
+<span id="L2"><span class="lineNum">       2</span>              : import 'package:provider/provider.dart';</span>
+<span id="L3"><span class="lineNum">       3</span>              : </span>
+<span id="L4"><span class="lineNum">       4</span>              : import '../../core/theme/app_colors.dart';</span>
+<span id="L5"><span class="lineNum">       5</span>              : import '../../models/medicine.dart';</span>
+<span id="L6"><span class="lineNum">       6</span>              : import '../../state/medicines_controller.dart';</span>
+<span id="L7"><span class="lineNum">       7</span>              : import '../../widgets/app_scaffold.dart';</span>
+<span id="L8"><span class="lineNum">       8</span>              : import '../../widgets/empty_state.dart';</span>
+<span id="L9"><span class="lineNum">       9</span>              : </span>
+<span id="L10"><span class="lineNum">      10</span>              : /// Today's medication tracker. The list is shared with the caregiver's Manage</span>
+<span id="L11"><span class="lineNum">      11</span>              : /// medicines screen, so a medicine they add appears here at once.</span>
+<span id="L12"><span class="lineNum">      12</span>              : class MedicineScreen extends StatelessWidget {</span>
+<span id="L13"><span class="lineNum">      13</span> <span class="tlaGNC">           4 :   const MedicineScreen({super.key});</span></span>
+<span id="L14"><span class="lineNum">      14</span>              : </span>
+<span id="L15"><span class="lineNum">      15</span> <span class="tlaGNC">           4 :   @override</span></span>
+<span id="L16"><span class="lineNum">      16</span>              :   Widget build(BuildContext context) {</span>
+<span id="L17"><span class="lineNum">      17</span> <span class="tlaGNC">           4 :     final MedicinesController controller = context.watch&lt;MedicinesController&gt;();</span></span>
+<span id="L18"><span class="lineNum">      18</span> <span class="tlaGNC">           4 :     final List&lt;Medicine&gt; medicines = controller.medicines;</span></span>
+<span id="L19"><span class="lineNum">      19</span>              : </span>
+<span id="L20"><span class="lineNum">      20</span> <span class="tlaGNC">           4 :     return AppScaffold(</span></span>
+<span id="L21"><span class="lineNum">      21</span>              :       title: 'Medicines',</span>
+<span id="L22"><span class="lineNum">      22</span> <span class="tlaGNC">           4 :       body: medicines.isEmpty</span></span>
+<span id="L23"><span class="lineNum">      23</span>              :           ? const EmptyState(</span>
+<span id="L24"><span class="lineNum">      24</span>              :               icon: Icons.medication_outlined,</span>
+<span id="L25"><span class="lineNum">      25</span>              :               title: 'No medicines today',</span>
+<span id="L26"><span class="lineNum">      26</span>              :               message:</span>
+<span id="L27"><span class="lineNum">      27</span>              :                   'Medicines your care team adds will appear here, with the time to take each one.',</span>
+<span id="L28"><span class="lineNum">      28</span>              :             )</span>
+<span id="L29"><span class="lineNum">      29</span> <span class="tlaGNC">           4 :           : ListView(</span></span>
+<span id="L30"><span class="lineNum">      30</span>              :               padding: const EdgeInsets.symmetric(vertical: 8),</span>
+<span id="L31"><span class="lineNum">      31</span> <span class="tlaGNC">           4 :               children: &lt;Widget&gt;[</span></span>
+<span id="L32"><span class="lineNum">      32</span> <span class="tlaGNC">           4 :                 Padding(</span></span>
+<span id="L33"><span class="lineNum">      33</span>              :                   padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),</span>
+<span id="L34"><span class="lineNum">      34</span> <span class="tlaGNC">           4 :                   child: Semantics(</span></span>
+<span id="L35"><span class="lineNum">      35</span>              :                     liveRegion: true,</span>
+<span id="L36"><span class="lineNum">      36</span> <span class="tlaGNC">           4 :                     child: Text(</span></span>
+<span id="L37"><span class="lineNum">      37</span> <span class="tlaGNC">          12 :                       '${controller.takenCount} of ${controller.totalCount} taken',</span></span>
+<span id="L38"><span class="lineNum">      38</span> <span class="tlaGNC">          16 :                       style: Theme.of(context).textTheme.titleMedium?.copyWith(</span></span>
+<span id="L39"><span class="lineNum">      39</span>              :                             color: AppColors.secondaryDark,</span>
+<span id="L40"><span class="lineNum">      40</span>              :                           ),</span>
+<span id="L41"><span class="lineNum">      41</span>              :                     ),</span>
+<span id="L42"><span class="lineNum">      42</span>              :                   ),</span>
+<span id="L43"><span class="lineNum">      43</span>              :                 ),</span>
+<span id="L44"><span class="lineNum">      44</span> <span class="tlaGNC">           4 :                 for (final Medicine medicine in medicines)</span></span>
+<span id="L45"><span class="lineNum">      45</span>              :                   // CheckboxListTile already exposes the &quot;checkbox&quot; role, its</span>
+<span id="L46"><span class="lineNum">      46</span>              :                   // checked state and its title and subtitle to screen readers,</span>
+<span id="L47"><span class="lineNum">      47</span>              :                   // so it is left to speak for itself rather than wrapped in a</span>
+<span id="L48"><span class="lineNum">      48</span>              :                   // second label that would be announced twice.</span>
+<span id="L49"><span class="lineNum">      49</span> <span class="tlaGNC">           4 :                   Card(</span></span>
+<span id="L50"><span class="lineNum">      50</span>              :                     margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),</span>
+<span id="L51"><span class="lineNum">      51</span> <span class="tlaGNC">           4 :                     child: CheckboxListTile(</span></span>
+<span id="L52"><span class="lineNum">      52</span> <span class="tlaGNC">          12 :                       key: ValueKey&lt;String&gt;('medicine-${medicine.id}'),</span></span>
+<span id="L53"><span class="lineNum">      53</span> <span class="tlaGNC">           4 :                       title: Text(</span></span>
+<span id="L54"><span class="lineNum">      54</span> <span class="tlaGNC">           4 :                         medicine.name,</span></span>
+<span id="L55"><span class="lineNum">      55</span>              :                         style: const TextStyle(fontWeight: FontWeight.bold),</span>
+<span id="L56"><span class="lineNum">      56</span>              :                       ),</span>
+<span id="L57"><span class="lineNum">      57</span> <span class="tlaGNC">          16 :                       subtitle: Text('${medicine.dosage}\n${medicine.time}'),</span></span>
+<span id="L58"><span class="lineNum">      58</span>              :                       isThreeLine: true,</span>
+<span id="L59"><span class="lineNum">      59</span>              :                       secondary: const Icon(Icons.medication, color: AppColors.primaryDark),</span>
+<span id="L60"><span class="lineNum">      60</span> <span class="tlaGNC">           4 :                       value: medicine.taken,</span></span>
+<span id="L61"><span class="lineNum">      61</span> <span class="tlaGNC">           6 :                       onChanged: (_) =&gt; controller.toggleTaken(medicine.id),</span></span>
+<span id="L62"><span class="lineNum">      62</span>              :                     ),</span>
+<span id="L63"><span class="lineNum">      63</span>              :                   ),</span>
+<span id="L64"><span class="lineNum">      64</span>              :               ],</span>
+<span id="L65"><span class="lineNum">      65</span>              :             ),</span>
+<span id="L66"><span class="lineNum">      66</span>              :     );</span>
+<span id="L67"><span class="lineNum">      67</span>              :   }</span>
+<span id="L68"><span class="lineNum">      68</span>              : }</span>
         </pre>
               </td>
             </tr>
