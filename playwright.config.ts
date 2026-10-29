@@ -22,8 +22,10 @@ export default defineConfig({
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     // The app turns off smooth scrolling and animation under reduced motion,
-    // which keeps elements still while Playwright scrolls to them.
-    reducedMotion: 'reduce',
+    // which keeps elements still while Playwright scrolls to them. It must go
+    // through contextOptions: as a top-level `use` option it is silently
+    // ignored, and a smooth scroll still moving under a tap cancels the click.
+    contextOptions: { reducedMotion: 'reduce' },
   },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } } },
