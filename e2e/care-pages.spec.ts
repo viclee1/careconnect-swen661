@@ -146,9 +146,13 @@ test.describe('Memories', () => {
     await expect(page.getByRole('article')).toHaveCount(1);
 
     // Arrows wrap: back past All lands on the last choice, Pets. WebKit's
-    // radio arrow handling needs Full Keyboard Access; a click is equivalent.
+    // radio arrow handling needs Full Keyboard Access, so it focuses Pets and
+    // presses Space instead — still the keyboard. (Not a click on the label
+    // text: on CI, WebKit occasionally hit-tests the release onto the gap
+    // between the pills, and the click selects nothing.)
     if (browserName === 'webkit') {
-      await page.getByText('Pets', { exact: true }).click();
+      await page.getByRole('radio', { name: 'Pets' }).focus();
+      await page.keyboard.press('Space');
     } else {
       await page.keyboard.press('ArrowLeft');
       await page.keyboard.press('ArrowLeft');
