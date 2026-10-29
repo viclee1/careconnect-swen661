@@ -64,7 +64,11 @@ describe('createJsonStore', () => {
   it('swallows a write to a path it cannot create', () => {
     // A preference that fails to persist is a nuisance; a crash on a read-only
     // disk is not acceptable.
-    const store = createJsonStore('/proc/definitely-not-writable', 'settings.json', { a: 1 });
+    // A directory under a regular file cannot be created on any OS. (Not
+    // /proc: on Linux a recursive mkdir there never returns.)
+    const blocker = join(directory, 'blocker');
+    writeFileSync(blocker, '', 'utf8');
+    const store = createJsonStore(join(blocker, 'nested'), 'settings.json', { a: 1 });
     expect(() => store.write({ a: 2 })).not.toThrow();
     expect(store.read()).toEqual({ a: 1 });
   });
