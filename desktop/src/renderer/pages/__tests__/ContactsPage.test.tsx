@@ -25,7 +25,9 @@ describe('ContactsPage', () => {
     renderApp({ repositories: repositories() });
 
     await screen.findByTestId('contact-c1');
-    const rows = screen.getAllByRole('button', { name: /caregiver|gp|daughter|son|helpline/i });
+    const rows = within(screen.getByRole('main')).getAllByRole('button', {
+      name: /caregiver|gp|daughter|son|helpline/i,
+    });
 
     expect(rows[0]).toHaveAccessibleName(/Joyce/);
     expect(rows[0]).toHaveAccessibleName(/Primary/);

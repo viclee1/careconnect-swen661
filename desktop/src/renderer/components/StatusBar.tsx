@@ -3,7 +3,7 @@ import { useAuth } from '../state/AuthProvider';
 import { shortcutLabel } from '../../shared/shortcuts';
 
 export function StatusBar({ onShowShortcuts }: { onShowShortcuts?: () => void }) {
-  const { user, isSignedIn } = useAuth();
+  const { user, isSignedIn, role } = useAuth();
   // The visible text is the accessible name (WCAG 2.5.3), and it names this
   // platform's key — Cmd on a Mac — rather than always Ctrl.
   const hint = `Keyboard shortcuts: ${shortcutLabel('CmdOrCtrl+/', isMacPlatform())}`;
@@ -19,7 +19,8 @@ export function StatusBar({ onShowShortcuts }: { onShowShortcuts?: () => void })
             </span>
             <span className="status-bar__divider" aria-hidden="true">|</span>
             <span className="status-bar__item">
-              Care Recipient · {user?.name ? `${user.name}'s plan` : "Margaret's plan"}
+              {role === 'caregiver' ? 'Caregiver view' : 'Care Recipient'} ·{' '}
+              {user?.name ? `${user.name}'s plan` : "Margaret's plan"}
             </span>
             <span className="status-bar__divider" aria-hidden="true">|</span>
             <span className="status-bar__item status-bar__item--alert">

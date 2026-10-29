@@ -20,6 +20,16 @@ folder.
 | Application shell — sidebar, native menu, shortcuts, window state, Windows notifications | Victor | Built |
 | Splash, Sign In, Sign Up, Home, My Day | Justin | Built |
 | Appointments (with Export to calendar), Medicines, Memories | Upneet | Built |
+| Caregiver role — role chooser, Dashboard, Manage medicines, Manage appointments, Activity, Care notes — ported from the web client | Victor | Built |
+
+**Caregiver role.** After signing in, a role chooser asks who is using the
+computer. A caregiver's sidebar holds Dashboard, Medicines, Appointments,
+Activity and Notes, and either role can switch to the other from the foot of
+the sidebar. Both share one set of data: a medicine or appointment the
+caregiver adds appears on the care recipient's pages at once, and the care
+recipient ticking a medicine or finishing a My Day task appears in the
+caregiver's activity log. `Ctrl + 1` opens each role's home; the other numbered
+shortcuts stay with the care recipient's pages, which the native menu names.
 
 **Target platform: Windows.** The submitted installer is
 `release/CareConnect-Setup-1.0.0.exe` (NSIS, x64). A macOS `.dmg` is also built
@@ -68,7 +78,7 @@ npm test             # Jest + React Testing Library
 npm run test:coverage
 ```
 
-Current state: **498 tests, 39 suites, 96.8% statement coverage**; `test:coverage` fails below 85% on any measure.
+Current state: **523 tests, 41 suites, 97.1% statement coverage**; `test:coverage` fails below 85% on any measure.
 `src/renderer/__tests__/accessibility.test.tsx` runs jest-axe on every page and
 pins each Assignment 9 accessibility fix. The HTML report lands in `coverage/lcov-report/index.html`; a
 screenshot of it is at
@@ -303,6 +313,9 @@ screen.
   vibration motor, so activating a rhythm plays it back as a visual pulse in the
   pattern's real timing. The setting itself travels with the account, which is
   why it is edited on this client at all.
+- **Caregiver data is in-memory too.** Added medicines and appointments, the
+  activity log and new care notes last for the session, like messages. The
+  chosen role is remembered.
 - **Data is in-memory.** Contacts and conversations come from the same fixtures
   as the React Native client, seeded from the Week 3 prototype. Messages sent
   during a session survive navigating away and back, and are lost on quit.

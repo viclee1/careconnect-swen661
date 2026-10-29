@@ -3,7 +3,7 @@ import { useRef, type KeyboardEvent } from 'react';
 import { Icon } from '../components/Icon';
 import { isMacPlatform } from '../platform/bridge';
 import { shortcutLabel } from '../../shared/shortcuts';
-import { destinations } from './destinations';
+import { caregiverDestinations, destinations } from './destinations';
 import { useNavigation } from './NavigationProvider';
 import { useAuth } from '../state/AuthProvider';
 
@@ -13,7 +13,8 @@ import { useAuth } from '../state/AuthProvider';
  */
 export function Sidebar({ onShowShortcuts }: { onShowShortcuts: () => void }) {
   const { activeDestination, route, navigate } = useNavigation();
-  const { user } = useAuth();
+  const { user, role, setRole } = useAuth();
+  const isCaregiver = role === 'caregiver';
   const listRef = useRef<HTMLDivElement>(null);
   const isMac = isMacPlatform();
 
@@ -43,39 +44,72 @@ export function Sidebar({ onShowShortcuts }: { onShowShortcuts: () => void }) {
         </div>
 
         <div className="sidebar__recipient-badge">
-          <span>♡ Care Recipient</span>
+          <span>{isCaregiver ? 'Caregiver view' : '♡ Care Recipient'}</span>
         </div>
 
         <div className="sidebar__greeting">
-          <strong>Good morning, {userName}</strong>
+          <strong>{isCaregiver ? `Caring for ${userName}` : `Good morning, ${userName}`}</strong>
           <span className="sidebar__date">Thursday 4 June · 5:38 AM</span>
         </div>
       </div>
 
       <div className="sidebar__nav" ref={listRef} onKeyDown={onKeyDown}>
-        {destinations.map((entry) => {
-          const current = entry.destination === activeDestination;
-          return (
-            <button
-              key={entry.destination}
-              type="button"
-              className="sidebar__item"
-              aria-current={current ? 'page' : undefined}
-              onClick={() => navigate({ name: entry.destination })}
-            >
-              <Icon name={entry.icon} size={22} />
-              <span className="sidebar__label">{entry.label}</span>
-              <span className="sidebar__shortcut" aria-hidden="true">
-                {shortcutLabel(`CmdOrCtrl+${entry.digit}`, isMac)}
-              </span>
-            </button>
-          );
-        })}
+        {isCaregiver
+          ? caregiverDestinations.map((entry, index) => (
+              <button
+                key={entry.destination}
+                type="button"
+                className="sidebar__item"
+                aria-current={entry.destination === activeDestination ? 'page' : undefined}
+                onClick={() => navigate({ name: entry.destination })}
+              >
+                <Icon name={entry.icon} size={22} />
+                <span className="sidebar__label">{entry.label}</span>
+                {index === 0 ? (
+                  <span className="sidebar__shortcut" aria-hidden="true">
+                    {shortcutLabel('CmdOrCtrl+1', isMac)}
+                  </span>
+                ) : null}
+              </button>
+            ))
+          : destinations.map((entry) => {
+              const current = entry.destination === activeDestination;
+              return (
+                <button
+                  key={entry.destination}
+                  type="button"
+                  className="sidebar__item"
+                  aria-current={current ? 'page' : undefined}
+                  onClick={() => navigate({ name: entry.destination })}
+                >
+                  <Icon name={entry.icon} size={22} />
+                  <span className="sidebar__label">{entry.label}</span>
+                  <span className="sidebar__shortcut" aria-hidden="true">
+                    {shortcutLabel(`CmdOrCtrl+${entry.digit}`, isMac)}
+                  </span>
+                </button>
+              );
+            })}
       </div>
 
       <div className="sidebar__spacer" />
 
       <div className="sidebar__footer">
+        <button
+          type="button"
+          className="sidebar__item"
+          onClick={() => {
+            const next = isCaregiver ? 'patient' : 'caregiver';
+            setRole(next);
+            navigate({ name: next === 'caregiver' ? 'Dashboard' : 'Home' });
+          }}
+        >
+          <Icon name={isCaregiver ? 'person' : 'care'} size={22} />
+          <span className="sidebar__label">
+            {isCaregiver ? 'Switch to care recipient view' : 'Switch to caregiver view'}
+          </span>
+        </button>
+
         <button
           type="button"
           className="sidebar__item"

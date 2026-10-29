@@ -27,6 +27,12 @@ import {
 import { Sidebar } from './navigation/Sidebar';
 import { CommandProvider, useCommand } from './platform/CommandProvider';
 import { AppointmentsPage } from './pages/AppointmentsPage';
+import { ActivityPage } from './pages/caregiver/ActivityPage';
+import { DashboardPage } from './pages/caregiver/DashboardPage';
+import { ManageAppointmentsPage } from './pages/caregiver/ManageAppointmentsPage';
+import { ManageMedicinesPage } from './pages/caregiver/ManageMedicinesPage';
+import { NotesPage } from './pages/caregiver/NotesPage';
+import { RoleChooserPage } from './pages/caregiver/RoleChooserPage';
 import { ContactsPage } from './pages/ContactsPage';
 import { HomePage } from './pages/HomePage';
 import { MedicinesPage } from './pages/MedicinesPage';
@@ -38,7 +44,8 @@ import { SignInPage } from './pages/SignInPage';
 import { SignUpPage } from './pages/SignUpPage';
 import { SplashPage } from './pages/SplashPage';
 import { AppointmentsProvider } from './state/AppointmentsProvider';
-import { AuthProvider } from './state/AuthProvider';
+import { AuthProvider, useAuth } from './state/AuthProvider';
+import { CaregiverProvider } from './state/CaregiverProvider';
 import { ContactsProvider, useContacts } from './state/ContactsProvider';
 import { MedicinesProvider } from './state/MedicinesProvider';
 import { MemoriesProvider } from './state/MemoriesProvider';
@@ -95,15 +102,18 @@ export function App({
         <MessagesProvider repository={messages}>
           <SettingsProvider repository={settings}>
             <AppointmentsProvider repository={appointments}>
-              <MedicinesProvider repository={medicines}>
-                <MemoriesProvider repository={memories}>
-                  <NavigationProvider initialRoute={initialRoute ?? { name: 'Splash' }}>
-                    <CommandProvider>
-                      <Shell />
-                    </CommandProvider>
-                  </NavigationProvider>
-                </MemoriesProvider>
-              </MedicinesProvider>
+              {/* Above Medicines, so ticking a dose can reach the activity log. */}
+              <CaregiverProvider>
+                <MedicinesProvider repository={medicines}>
+                  <MemoriesProvider repository={memories}>
+                    <NavigationProvider initialRoute={initialRoute ?? { name: 'Splash' }}>
+                      <CommandProvider>
+                        <Shell />
+                      </CommandProvider>
+                    </NavigationProvider>
+                  </MemoriesProvider>
+                </MedicinesProvider>
+              </CaregiverProvider>
             </AppointmentsProvider>
           </SettingsProvider>
         </MessagesProvider>
@@ -117,6 +127,7 @@ const pageTitles: Record<RouteName, string> = {
   Splash: 'Welcome',
   SignIn: 'Sign in',
   SignUp: 'Sign up',
+  RoleChooser: 'Choose your role',
   Home: 'Home',
   MyDay: 'My Day',
   Appointments: 'Appointments',
@@ -125,6 +136,11 @@ const pageTitles: Record<RouteName, string> = {
   Contacts: 'Contacts',
   MessageThread: 'Conversation',
   Settings: 'Accessibility Settings',
+  Dashboard: 'Dashboard',
+  ManageMedicines: 'Manage medicines',
+  ManageAppointments: 'Manage appointments',
+  Activity: 'Activity',
+  Notes: 'Care notes',
 };
 
 /** "Medicines — CareConnect": which page, then which application (WCAG 2.4.2). */
@@ -143,6 +159,7 @@ function Shell() {
   const { route, navigate, back, canGoBack } = useNavigation();
   const { load: loadSettings } = useSettings();
   const { byId } = useContacts();
+  const { role } = useAuth();
   const [showShortcuts, setShowShortcuts] = useState(false);
 
   const contactName = route.name === 'MessageThread' ? byId(route.contactId)?.name : undefined;
@@ -154,7 +171,10 @@ function Shell() {
     void loadSettings();
   }, [loadSettings]);
 
-  useCommand('navigate:home', () => navigate({ name: 'Home' }));
+  // Ctrl + 1 is each role's home: the Dashboard for a caregiver.
+  useCommand('navigate:home', () =>
+    navigate({ name: role === 'caregiver' ? 'Dashboard' : 'Home' }),
+  );
   useCommand('navigate:myDay', () => navigate({ name: 'MyDay' }));
   useCommand('navigate:appointments', () => navigate({ name: 'Appointments' }));
   useCommand('navigate:medicines', () => navigate({ name: 'Medicines' }));
@@ -222,6 +242,12 @@ function Page({
   if (route.name === 'SignUp') {
     return <SignUpPage onShowShortcuts={onShowShortcuts} />;
   }
+  if (route.name === 'RoleChooser') return <RoleChooserPage />;
+  if (route.name === 'Dashboard') return <DashboardPage />;
+  if (route.name === 'ManageMedicines') return <ManageMedicinesPage />;
+  if (route.name === 'ManageAppointments') return <ManageAppointmentsPage />;
+  if (route.name === 'Activity') return <ActivityPage />;
+  if (route.name === 'Notes') return <NotesPage />;
   if (route.name === 'Home') {
     return <HomePage onShowShortcuts={onShowShortcuts} />;
   }

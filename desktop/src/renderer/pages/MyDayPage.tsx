@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react';
 import { Icon } from '../components/Icon';
 import { TopNotificationHeader } from '../components/TopNotificationHeader';
 import { getStoredTasks, saveStoredTasks, type TaskItem } from '../data/tasksData';
+import { useActivityRecorder } from '../state/CaregiverProvider';
 
 export function MyDayPage({ onShowShortcuts }: { onShowShortcuts?: () => void }) {
   const [tasks, setTasks] = useState<TaskItem[]>(getStoredTasks);
+  const record = useActivityRecorder();
 
   useEffect(() => {
     saveStoredTasks(tasks);
@@ -15,6 +17,12 @@ export function MyDayPage({ onShowShortcuts }: { onShowShortcuts?: () => void })
   const percentage = Math.round((doneCount / totalCount) * 100);
 
   function toggleTask(id: string) {
+    const task = tasks.find((t) => t.id === id);
+    // Finishing something is news for the caregiver; un-ticking a slip is not.
+    if (task && !task.done) {
+      if (task.category === 'Check-in') record('check_in', 'Checked in for the day');
+      else record('task_done', `Finished: ${task.title}`);
+    }
     setTasks((current) =>
       current.map((t) => (t.id === id ? { ...t, done: !t.done } : t)),
     );

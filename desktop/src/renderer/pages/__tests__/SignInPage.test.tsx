@@ -30,6 +30,9 @@ describe('SignInPage', () => {
     const submitBtn = screen.getByRole('button', { name: 'Sign in' });
     await user.click(submitBtn);
 
+    // Signing in leads to choosing who is using the app, then to their home.
+    expect(await screen.findByRole('heading', { level: 1, name: /welcome, margaret/i })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /I am the care recipient/ }));
     expect(
       await screen.findByRole('heading', { level: 1, name: /here's your day/i }),
     ).toBeInTheDocument();
@@ -74,6 +77,9 @@ describe('SignInPage', () => {
     await user.type(screen.getByLabelText(/password/i), 'password123');
     await user.click(screen.getByRole('button', { name: 'Sign in' }));
 
+    // Signing in leads to choosing who is using the app, then to their home.
+    expect(await screen.findByRole('heading', { level: 1, name: /welcome, margaret/i })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /I am the care recipient/ }));
     expect(
       await screen.findByRole('heading', { level: 1, name: /here's your day/i }),
     ).toBeInTheDocument();
