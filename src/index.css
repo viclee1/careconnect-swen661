@@ -15,6 +15,14 @@
     scroll-behavior: smooth;
   }
 
+  /* The header is sticky from 768px (md); keep focused and scrolled-to
+     content clear of it. --header-height is measured in Layout.tsx. */
+  @media (min-width: 768px) {
+    html {
+      scroll-padding-top: calc(var(--header-height, 0px) + 1rem);
+    }
+  }
+
   /* ── Horizontal-overflow guard ───────────────────────────────────────────
      `clip` (not `hidden`) prevents any stray wide element from causing a
      horizontal scrollbar at narrow widths (verified down to 320px) WITHOUT
@@ -263,4 +271,34 @@
   .pattern-lamp {
     transition: background-color 60ms linear, box-shadow 60ms linear;
   }
+}
+
+/* ── Appointments, Medicines and Memories (Upneet) ───────────────────────── */
+@layer components {
+  /* A key name in running text: "Press Tab". */
+  .kbd {
+    @apply inline-block rounded border border-neutral-400 bg-neutral-50 px-1.5 py-0.5 font-mono text-sm text-neutral-800;
+  }
+
+  /* The medicines progress bar. A native <progress>, drawn the same in every
+     browser: a 3:1 track border, a success-green fill. */
+  .medicine-progress {
+    @apply h-4 rounded-pill overflow-hidden border border-neutral-500 bg-white;
+    appearance: none;
+  }
+  .medicine-progress::-webkit-progress-bar {
+    @apply bg-white;
+  }
+  .medicine-progress::-webkit-progress-value {
+    @apply bg-success-600 rounded-pill;
+  }
+  .medicine-progress::-moz-progress-bar {
+    @apply bg-success-600 rounded-pill;
+  }
+}
+
+/* Windows High Contrast / forced colours: keep the bar visible. */
+@media (forced-colors: active) {
+  .medicine-progress::-webkit-progress-value { background-color: Highlight; }
+  .medicine-progress::-moz-progress-bar { background-color: Highlight; }
 }

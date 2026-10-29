@@ -1,6 +1,11 @@
 import { expect, test } from '@playwright/test';
 
+import { SHOW_TEAMMATE_PAGES } from '../src/branchScope';
+
 test.describe("Teammates' screens on this branch", () => {
+  // Only meaningful while the placeholders are switched on (src/branchScope.ts).
+  test.skip(SHOW_TEAMMATE_PAGES, 'Every teammate page is shown, so there are no placeholders to find');
+
   test('start from Welcome, continue to Contacts, and find who is building the other screens', async ({ page, isMobile }) => {
     await page.goto('/');
     await page.evaluate(() => localStorage.clear());

@@ -18,6 +18,17 @@ module.exports = {
     'src/pages/Appointments.tsx',
     'src/pages/Medications.tsx',
     'src/pages/Memories.tsx',
+    // Appointments, Medicines and Memories (Upneet)
+    'src/components/PageHeader.tsx',
+    'src/components/appointments/**/*.tsx',
+    'src/components/medicines/**/*.tsx',
+    'src/components/memories/**/*.tsx',
+    'src/context/AppointmentsContext.tsx',
+    'src/context/MedicinesContext.tsx',
+    'src/context/MemoriesContext.tsx',
+    'src/context/appointments.ts',
+    'src/context/medicines.ts',
+    'src/context/memories.ts',
     // Contacts, Messaging and Accessibility Settings (Victor)
     'src/pages/Contacts.tsx',
     'src/pages/MessageThread.tsx',

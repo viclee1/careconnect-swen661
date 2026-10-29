@@ -6,6 +6,9 @@ import { getSession } from './auth/mockAuth';
 import { AppProvider } from './context/AppContext';
 import { MessagesProvider } from './context/MessagesContext';
 import { SettingsProvider } from './context/SettingsContext';
+import { AppointmentsProvider } from './context/AppointmentsContext';
+import { MedicinesProvider } from './context/MedicinesContext';
+import { MemoriesProvider } from './context/MemoriesContext';
 import { ProtectedRoute, RoleRoute, AuthRoute } from './components/ProtectedRoute';
 import Layout from './components/Layout';
 import PlaceholderPage, { type PageOwner } from './pages/PlaceholderPage';
@@ -20,9 +23,6 @@ import RoleChooser from './pages/RoleChooser';
 // App pages (do not modify) — teammates' screens, see SHOW_TEAMMATE_PAGES
 import Home         from './pages/Home';
 import Schedule     from './pages/Schedule';
-import Appointments from './pages/Appointments';
-import Medications  from './pages/Medications';
-import Memories     from './pages/Memories';
 import Caregiver    from './pages/Caregiver';
 import CaregiverDashboard    from './pages/CaregiverDashboard';
 import ActivityLog           from './pages/ActivityLog';
@@ -36,6 +36,10 @@ import type { AppView } from './types';
 const Contacts              = lazy(() => import('./pages/Contacts'));
 const MessageThread         = lazy(() => import('./pages/MessageThread'));
 const AccessibilitySettings = lazy(() => import('./pages/AccessibilitySettings'));
+// Appointments, Medicines and Memories, likewise (Memories carries the photos).
+const Appointments          = lazy(() => import('./pages/Appointments'));
+const Medications           = lazy(() => import('./pages/Medications'));
+const Memories              = lazy(() => import('./pages/Memories'));
 
 // ── Teammates' screens ─────────────────────────────────────────────────────────
 // A placeholder stands in for each one while SHOW_TEAMMATE_PAGES is off.
@@ -145,7 +149,13 @@ export default function App() {
         <AppProvider>
           <SettingsProvider>
             <MessagesProvider>
-              <AppRoutes />
+              <AppointmentsProvider>
+                <MedicinesProvider>
+                  <MemoriesProvider>
+                    <AppRoutes />
+                  </MemoriesProvider>
+                </MedicinesProvider>
+              </AppointmentsProvider>
             </MessagesProvider>
           </SettingsProvider>
         </AppProvider>
