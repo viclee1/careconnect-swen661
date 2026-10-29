@@ -7,7 +7,9 @@ import type { MedicineRepository } from './data/medicineRepository';
 import type { MemoryRepository } from './data/memoryRepository';
 import type { MessageRepository } from './data/messageRepository';
 import type { SettingsRepository } from './data/settingsRepository';
+import type { Role } from './models/caregiver';
 import { AppointmentsProvider } from './state/AppointmentsProvider';
+import { CaregiverProvider } from './state/CaregiverProvider';
 import { ContactsProvider } from './state/ContactsProvider';
 import { DailyTasksProvider } from './state/DailyTasksProvider';
 import { MedicinesProvider } from './state/MedicinesProvider';
@@ -38,6 +40,7 @@ export function AppProviders({
   appointmentRepository,
   medicineRepository,
   memoryRepository,
+  initialRole,
   children,
 }: {
   contactRepository: ContactRepository;
@@ -47,6 +50,8 @@ export function AppProviders({
   appointmentRepository: AppointmentRepository;
   medicineRepository: MedicineRepository;
   memoryRepository: MemoryRepository;
+  /** Who the session starts as; the role chooser sets it after sign-in. */
+  initialRole?: Role;
   children: ReactNode;
 }) {
   return (
@@ -54,13 +59,16 @@ export function AppProviders({
       <LoadSettings>
         <ContactsProvider repository={contactRepository}>
           <MessagesProvider repository={messageRepository}>
-            <DailyTasksProvider repository={dailyTasksRepository}>
-              <AppointmentsProvider repository={appointmentRepository}>
-                <MedicinesProvider repository={medicineRepository}>
-                  <MemoriesProvider repository={memoryRepository}>{children}</MemoriesProvider>
-                </MedicinesProvider>
-              </AppointmentsProvider>
-            </DailyTasksProvider>
+            {/* Above My Day and Medicines, so ticking one off reaches the activity log. */}
+            <CaregiverProvider initialRole={initialRole}>
+              <DailyTasksProvider repository={dailyTasksRepository}>
+                <AppointmentsProvider repository={appointmentRepository}>
+                  <MedicinesProvider repository={medicineRepository}>
+                    <MemoriesProvider repository={memoryRepository}>{children}</MemoriesProvider>
+                  </MedicinesProvider>
+                </AppointmentsProvider>
+              </DailyTasksProvider>
+            </CaregiverProvider>
           </MessagesProvider>
         </ContactsProvider>
       </LoadSettings>

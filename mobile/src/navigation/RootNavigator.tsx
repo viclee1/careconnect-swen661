@@ -8,6 +8,13 @@ import {
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { useResponsive } from '../hooks/useResponsive';
+import { ActivityScreen } from '../screens/caregiver/ActivityScreen';
+import { DashboardScreen } from '../screens/caregiver/DashboardScreen';
+import { ManageAppointmentsScreen } from '../screens/caregiver/ManageAppointmentsScreen';
+import { ManageMedicinesScreen } from '../screens/caregiver/ManageMedicinesScreen';
+import { NotesScreen } from '../screens/caregiver/NotesScreen';
+import { RoleChooserScreen } from '../screens/caregiver/RoleChooserScreen';
+import { useCaregiver } from '../state/CaregiverProvider';
 import { AppointmentsScreen } from '../screens/AppointmentsScreen';
 import { ContactsScreen } from '../screens/ContactsScreen';
 import { HomeScreen } from '../screens/HomeScreen';
@@ -19,11 +26,12 @@ import { SettingsScreen } from '../screens/SettingsScreen';
 import { SignInScreen } from '../screens/SignInScreen';
 import { SignUpScreen } from '../screens/SignUpScreen';
 import { WelcomeScreen } from '../screens/WelcomeScreen';
-import type { AppDestination } from './destinations';
-import type { RootStackParamList, TabParamList } from './routes';
+import { caregiverDestinations, type AppDestination, type CaregiverDestination } from './destinations';
+import type { CaregiverTabParamList, RootStackParamList, TabParamList } from './routes';
 import { TabBar } from './TabBar';
 
 const Tab = createBottomTabNavigator<TabParamList>();
+const CaregiverTab = createBottomTabNavigator<CaregiverTabParamList>();
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 type RootNav = NavigationProp<RootStackParamList>;
@@ -128,6 +136,88 @@ function TabsNavigator({ initialRouteName = 'Home' }: { initialRouteName?: AppDe
   );
 }
 
+/** A caregiver screen, given the Settings gear on a phone like the care recipient's. */
+function useSettingsOpener() {
+  const navigation = useNavigation<RootNav>();
+  const { isTablet } = useResponsive();
+  return isTablet ? undefined : () => navigation.navigate('Settings');
+}
+
+function DashboardRoute() {
+  const navigation = useNavigation<NavigationProp<CaregiverTabParamList>>();
+  return (
+    <DashboardScreen
+      onOpenSettings={useSettingsOpener()}
+      onNavigate={(destination) => navigation.navigate(destination)}
+    />
+  );
+}
+
+function ManageMedicinesRoute() {
+  return <ManageMedicinesScreen onOpenSettings={useSettingsOpener()} />;
+}
+
+function ManageAppointmentsRoute() {
+  return <ManageAppointmentsScreen onOpenSettings={useSettingsOpener()} />;
+}
+
+function ActivityRoute() {
+  return <ActivityScreen onOpenSettings={useSettingsOpener()} />;
+}
+
+function NotesRoute() {
+  return <NotesScreen onOpenSettings={useSettingsOpener()} />;
+}
+
+/**
+ * The caregiver's five destinations, in the same bar (a sidebar on a tablet)
+ * as the care recipient's six, so the two roles move around the app alike.
+ */
+function CaregiverTabsNavigator({
+  initialRouteName = 'Dashboard',
+}: {
+  initialRouteName?: CaregiverDestination;
+}) {
+  const navigation = useNavigation<RootNav>();
+  const { isTablet } = useResponsive();
+
+  return (
+    <CaregiverTab.Navigator
+      initialRouteName={initialRouteName}
+      backBehavior="none"
+      screenOptions={{
+        headerShown: false,
+        animation: 'none',
+        tabBarPosition: isTablet ? 'left' : 'bottom',
+      }}
+      tabBar={(props) => (
+        <TabBar
+          {...props}
+          isTablet={isTablet}
+          entries={caregiverDestinations}
+          onOpenSettings={() => navigation.navigate('Settings')}
+        />
+      )}
+    >
+      <CaregiverTab.Screen name="Dashboard" component={DashboardRoute} />
+      <CaregiverTab.Screen name="ManageMedicines" component={ManageMedicinesRoute} />
+      <CaregiverTab.Screen name="ManageAppointments" component={ManageAppointmentsRoute} />
+      <CaregiverTab.Screen name="Activity" component={ActivityRoute} />
+      <CaregiverTab.Screen name="Notes" component={NotesRoute} />
+    </CaregiverTab.Navigator>
+  );
+}
+
+/** Each role's home, replacing the history so Back does not return to sign-in. */
+function homeFor(navigation: RootNav, role: 'patient' | 'caregiver') {
+  navigation.reset({ index: 0, routes: [{ name: role === 'caregiver' ? 'CaregiverTabs' : 'Tabs' }] });
+}
+
+function RoleChooserRoute() {
+  const navigation = useNavigation<RootNav>();
+  return <RoleChooserScreen onChosen={(role) => homeFor(navigation, role)} />;
+}
+
 function WelcomeRoute() {
   const navigation = useNavigation<RootNav>();
   return (
@@ -142,7 +232,7 @@ function SignInRoute() {
   const navigation = useNavigation<RootNav>();
   return (
     <SignInScreen
-      onSignIn={() => navigation.navigate('Tabs')}
+      onSignIn={() => navigation.navigate('RoleChooser')}
       onSignUp={() => navigation.navigate('SignUp')}
     />
   );
@@ -152,7 +242,7 @@ function SignUpRoute() {
   const navigation = useNavigation<RootNav>();
   return (
     <SignUpScreen
-      onSignUp={() => navigation.navigate('Tabs')}
+      onSignUp={() => navigation.navigate('RoleChooser')}
       onSignIn={() => navigation.navigate('SignIn')}
     />
   );
@@ -173,10 +263,20 @@ function MessageThreadRoute() {
 
 function SettingsRoute() {
   const navigation = useNavigation<RootNav>();
+  const { role, setRole } = useCaregiver();
   return (
     <SettingsScreen
-      onBack={() => (navigation.canGoBack() ? navigation.goBack() : navigation.navigate('Tabs'))}
+      onBack={() =>
+        navigation.canGoBack()
+          ? navigation.goBack()
+          : navigation.navigate(role === 'caregiver' ? 'CaregiverTabs' : 'Tabs')
+      }
       onSignOut={() => navigation.navigate('Welcome')}
+      onSwitchRole={() => {
+        const next = role === 'caregiver' ? 'patient' : 'caregiver';
+        setRole(next);
+        homeFor(navigation, next);
+      }}
     />
   );
 }
@@ -194,17 +294,23 @@ function SettingsRoute() {
 export function RootNavigator({
   initialRouteName = 'Welcome',
   initialTabName = 'Home',
+  initialCaregiverTabName = 'Dashboard',
 }: {
   initialRouteName?: keyof RootStackParamList;
   initialTabName?: AppDestination;
+  initialCaregiverTabName?: CaregiverDestination;
 }) {
   return (
     <Stack.Navigator initialRouteName={initialRouteName} screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Welcome" component={WelcomeRoute} />
       <Stack.Screen name="SignIn" component={SignInRoute} />
       <Stack.Screen name="SignUp" component={SignUpRoute} />
+      <Stack.Screen name="RoleChooser" component={RoleChooserRoute} />
       <Stack.Screen name="Tabs">
         {() => <TabsNavigator initialRouteName={initialTabName} />}
+      </Stack.Screen>
+      <Stack.Screen name="CaregiverTabs">
+        {() => <CaregiverTabsNavigator initialRouteName={initialCaregiverTabName} />}
       </Stack.Screen>
       <Stack.Screen name="MessageThread" component={MessageThreadRoute} />
       <Stack.Screen name="Settings" component={SettingsRoute} options={{ animation: 'none' }} />

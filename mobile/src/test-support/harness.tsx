@@ -34,7 +34,8 @@ import {
   type SettingsRepository,
 } from '../data/settingsRepository';
 import type { AccessibilitySettings } from '../models/accessibilitySettings';
-import type { AppDestination } from '../navigation/destinations';
+import type { Role } from '../models/caregiver';
+import type { AppDestination, CaregiverDestination } from '../navigation/destinations';
 import type { RootStackParamList } from '../navigation/routes';
 import { RootNavigator } from '../navigation/RootNavigator';
 
@@ -80,6 +81,9 @@ export interface HarnessOptions {
   settings?: Partial<AccessibilitySettings>;
   initialRouteName?: keyof RootStackParamList;
   initialTabName?: AppDestination;
+  initialCaregiverTabName?: CaregiverDestination;
+  /** Who the session starts as. */
+  role?: Role;
 }
 
 function buildRepositories(options: HarnessOptions) {
@@ -117,7 +121,7 @@ export function Harness({
   const repositories = buildRepositories(options);
   return (
     <SafeAreaProvider initialMetrics={metrics}>
-      <AppProviders {...repositories}>
+      <AppProviders {...repositories} initialRole={options.role}>
         <NavigationContainer>{children}</NavigationContainer>
       </AppProviders>
     </SafeAreaProvider>
@@ -137,9 +141,18 @@ export function renderWithProviders(ui: ReactElement, options: HarnessOptions = 
  * assembles them.
  */
 export function renderApp(options: HarnessOptions = {}) {
-  const { initialRouteName = 'Tabs', initialTabName = 'Contacts', ...rest } = options;
+  const {
+    initialRouteName = 'Tabs',
+    initialTabName = 'Contacts',
+    initialCaregiverTabName = 'Dashboard',
+    ...rest
+  } = options;
   return renderWithProviders(
-    <RootNavigator initialRouteName={initialRouteName} initialTabName={initialTabName} />,
+    <RootNavigator
+      initialRouteName={initialRouteName}
+      initialTabName={initialTabName}
+      initialCaregiverTabName={initialCaregiverTabName}
+    />,
     rest,
   );
 }
