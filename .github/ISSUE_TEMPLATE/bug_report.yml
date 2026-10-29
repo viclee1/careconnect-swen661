@@ -1,0 +1,59 @@
+name: Bug report
+description: Something in CareConnect does not work as it should.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        If the bug stops someone using CareConnect without sound, a keyboard or a screen reader, use the **Accessibility issue** form instead.
+  - type: dropdown
+    id: client
+    attributes:
+      label: Client
+      multiple: true
+      options:
+        - Web (React)
+        - Desktop (Electron) — Windows
+        - Desktop (Electron) — macOS
+        - Desktop (Electron) — Linux
+        - Flutter — Android
+        - Flutter — iOS
+        - React Native — Android
+        - React Native — iOS
+    validations:
+      required: true
+  - type: input
+    id: screen
+    attributes:
+      label: Screen
+      placeholder: e.g. Medicines, Contacts → conversation, Accessibility Settings
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Sign in as the care recipient
+        2. Open …
+        3. …
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened instead
+      description: Include any error text, and a screenshot if you can.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Device, OS and browser
+      placeholder: e.g. Pixel 7 emulator, Android 15 · Safari 18 on macOS

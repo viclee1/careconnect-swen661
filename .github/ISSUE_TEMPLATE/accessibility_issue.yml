@@ -1,0 +1,59 @@
+name: Accessibility issue
+description: Something that someone who cannot hear, uses a keyboard, or uses a screen reader cannot do or perceive.
+labels: [accessibility]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        CareConnect's rule: **anything it communicates through sound must also be communicated visually or in text.** Breaking that rule is always a Must-have fix.
+  - type: dropdown
+    id: client
+    attributes:
+      label: Client
+      multiple: true
+      options:
+        - Web (React)
+        - Desktop (Electron)
+        - Flutter
+        - React Native
+    validations:
+      required: true
+  - type: input
+    id: screen
+    attributes:
+      label: Screen and element
+      placeholder: e.g. Home → incoming video call → Decline button
+    validations:
+      required: true
+  - type: dropdown
+    id: barrier
+    attributes:
+      label: What kind of barrier
+      options:
+        - Information given by sound only
+        - Captions or transcript missing or wrong
+        - Not operable by keyboard / focus lost or hidden
+        - Screen reader name, role or state wrong
+        - Colour contrast or high-contrast mode
+        - Target too small
+        - Flashing or motion
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: wcag
+    attributes:
+      label: WCAG success criterion
+      placeholder: e.g. 1.4.3 Contrast (Minimum), 2.1.1 Keyboard
+  - type: input
+    id: assistive-tech
+    attributes:
+      label: Assistive technology or tool that found it
+      placeholder: e.g. VoiceOver + Safari, NVDA + Chrome, TalkBack, axe, Lighthouse, keyboard only
+  - type: textarea
+    id: details
+    attributes:
+      label: What happens, and what should happen
+      description: Steps to reproduce, what was announced or shown, and what a user who cannot hear (or see the screen) needs instead.
+    validations:
+      required: true

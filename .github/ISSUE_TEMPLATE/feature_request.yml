@@ -1,0 +1,55 @@
+name: Feature
+description: New functionality, or a change to how something works.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: Who needs this, and why
+      description: Name the user — care recipient or caregiver — and the problem it solves for them.
+      placeholder: As a care recipient who cannot hear, I need … so that …
+    validations:
+      required: true
+  - type: textarea
+    id: behaviour
+    attributes:
+      label: What it should do
+      description: Describe the behaviour, not the implementation.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: How a reviewer will know it is done. These become the tests.
+      placeholder: |
+        - [ ] …
+        - [ ] Nothing in it is communicated by sound alone
+    validations:
+      required: true
+  - type: dropdown
+    id: clients
+    attributes:
+      label: Clients
+      multiple: true
+      options:
+        - Web (React)
+        - Desktop (Electron)
+        - Flutter
+        - React Native
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: As in the README's key-features table.
+      options:
+        - Must-have
+        - Should-have
+        - Nice-to-have
+  - type: input
+    id: design
+    attributes:
+      label: Figma frame
+      placeholder: Link to the design, if there is one
