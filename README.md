@@ -217,7 +217,7 @@ CareConnect lowers the daily cognitive load for people who need help remembering
 
 The base application is designed and verified against 21 WCAG 2.1 A/AA success criteria, with full conformance mapping in [`ACCESSIBILITY.md`](ACCESSIBILITY.md). Highlights: 4.5:1 text contrast, full keyboard operability, visible focus indicators, semantic landmarks, ARIA live regions (`role="status"` / `role="alert"`), 44×44px minimum targets, 320px reflow with no horizontal scroll, and `prefers-reduced-motion` support.
 
-Assignment 10's web accessibility documentation — semantic HTML, landmarks, skip links, forms, keyboard and focus management, screen-reader patterns, and the audit that brought the web app from 71 axe violations to 0 at mobile, tablet and desktop widths — is in [`docs/web/accessibility/`](docs/web/accessibility/README.md) (also as Word and PDF). Run it with `npm run a11y:web`.
+Assignment 10's web accessibility documentation — semantic HTML, landmarks, skip links, forms, keyboard and focus management, screen-reader patterns, and the audit that brought the web app from 71 axe violations to 0 at mobile, tablet and desktop widths — is in [`docs/web/accessibility/`](docs/web/accessibility/README.md) (also as Word and PDF). Run it with `npm run a11y:web`. The web app's WCAG 2.1 A/AA VPAT is [`docs/web/accessibility/VPAT-WCAG2.1-AA.md`](docs/web/accessibility/VPAT-WCAG2.1-AA.md).
 
 The Assignment 10 early React implementation — the responsive layout, screenshots of every screen at all three breakpoints, the differences from the Figma design and remaining tasks — is written up in [`docs/web/implementation/`](docs/web/implementation/README.md), updated for Week 11, when the app shell was rebuilt to the Figma design (a ☰ Menu drawer below 1024 px, a sidebar from 1024 px). The Assignment 11 write-ups are indexed in [`docs/web/week11/`](docs/web/week11/README.md).
 
@@ -863,8 +863,8 @@ built-in `AccessibilityGuideline` API (`androidTapTargetGuideline`,
 [`integration_test/critical_flows_test.dart`](flutter/integration_test/critical_flows_test.dart)
 flows, and 6 [Maestro](flutter/maestro/) E2E flows — results in
 [`flutter/docs/testing/maestro-results.xml`](flutter/docs/testing/maestro-results.xml). The
-full WCAG 2.1 A/AA criterion-by-criterion VPAT is submitted separately as part of this
-assignment.
+full WCAG 2.1 A/AA criterion-by-criterion VPAT is
+[`flutter/docs/VPAT-WCAG2.1-AA.md`](flutter/docs/VPAT-WCAG2.1-AA.md).
 
 ### Link to test coverage report
 
@@ -969,8 +969,8 @@ dependency advisories and no code-level issues — see
 
 **Assignment 6 accessibility & E2E evidence:** 6 [Maestro](mobile/maestro/) E2E flows —
 results in [`mobile/docs/testing/maestro-results.xml`](mobile/docs/testing/maestro-results.xml).
-The full WCAG 2.1 A/AA criterion-by-criterion VPAT is submitted separately as part of
-this assignment.
+The full WCAG 2.1 A/AA criterion-by-criterion VPAT is
+[`mobile/docs/VPAT-WCAG2.1-AA.md`](mobile/docs/VPAT-WCAG2.1-AA.md).
 
 ### Link to test coverage report
 

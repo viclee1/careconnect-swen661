@@ -27,6 +27,7 @@ claim.
 | WCAG 2.1 AAA criteria met, with evidence | [§10](#10-beyond-aa--wcag-21-aaa) |
 | Audit before the fixes — 71 violations, 5 failed checks | [`audit-before/`](audit-before) |
 | Landmarks, heading outline, links and fields of every page, at every breakpoint | [`structure.md`](structure.md) |
+| WCAG 2.1 A/AA conformance, criterion by criterion (VPAT 2.5) | [`VPAT-WCAG2.1-AA.md`](VPAT-WCAG2.1-AA.md) |
 | Accessibility tests (77) | [`src/accessibility.test.tsx`](../../../src/accessibility.test.tsx) |
 | Earlier project-wide notes (WCAG map, memory-loss design) | [`ACCESSIBILITY.md`](../../../ACCESSIBILITY.md) |
 

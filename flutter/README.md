@@ -90,7 +90,7 @@ audited every screen against WCAG 2.1 Level AA and fixed what it found:
   (iOS) was not evaluated in this environment (no iOS device/simulator available).
 
 Full WCAG 2.1 Level A/AA criterion-by-criterion conformance status, remarks, and known
-limitations are in the team's VPAT, submitted separately as part of this assignment.
+limitations are in [`docs/VPAT-WCAG2.1-AA.md`](docs/VPAT-WCAG2.1-AA.md).
 
 ## Adding a screen
 
