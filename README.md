@@ -377,7 +377,7 @@ flowchart TD
     ChatBot["ChatBot.tsx (not mounted)"] -. would call .-> Edge["Supabase Edge Function<br/>chat-assistant → Anthropic API"]
 ```
 
-The caregiver pages and the care recipient's Medicines and Appointments write to the same stores, which is how a caregiver's edit reaches the care recipient's screens. The desktop client follows the same shape inside Electron's renderer, with a main process for the window, native menu, notifications and on-disk settings (see [Electron desktop client](#electron-desktop-client)); the Flutter and React Native clients use repositories behind providers (see their sections).
+The caregiver pages and the care recipient's Medicines and Appointments write to the same stores, which is how a caregiver's edit reaches the care recipient's screens. The desktop client follows the same shape inside Electron's renderer, with a main process for the window, native menu, notifications and on-disk settings (see [Electron desktop client](#electron-desktop-client)); the Flutter and React Native clients use repositories behind providers (see their sections). The interfaces between these parts — the Electron bridge, the web data stores and every `localStorage` key, the mobile settings repositories — are documented in the **[API reference](docs/api.md)**.
 
 ---
 
@@ -708,13 +708,16 @@ Assignment 11 write-ups: [team overview](docs/web/week11/README.md) · [Contacts
 
 ## Deployment
 
-```bash
-npm run build       # outputs to /dist
-```
+Every platform has a production build, published on the [latest release](https://github.com/viclee1/careconnect-swen661/releases/latest) (v1.1.0: Flutter and React Native APK, AAB and unsigned IPA; the macOS DMG; SHA-256 checksums). The step-by-step guide for each one — build commands, signing, where the output goes, and how to check it — is **[docs/deployment.md](docs/deployment.md)**.
 
-The web app is deployed on Vercel at **<https://careconnect-swen661.vercel.app>**. To host your own copy, deploy `/dist` to Vercel or Netlify. If the AI assistant is ever mounted again, configure the assistant's Supabase Edge Function and set `ANTHROPIC_API_KEY` in the host's environment settings — never client-side.
+| Platform | Build | Published to |
+|:--|:--|:--|
+| Web / PWA | `npm run build` → `dist/` | Vercel, automatically from `main` — **<https://careconnect-swen661.vercel.app>** |
+| Flutter (Android, iOS) | `flutter build apk --release`, `flutter build appbundle --release`, `flutter build ios --release --no-codesign` | GitHub release; APK also in [`apk-submission/`](apk-submission) |
+| React Native (Android, iOS) | `npx expo prebuild`, then `./gradlew assembleRelease bundleRelease`; or `eas build` | GitHub release; APK also in [`apk-submission/`](apk-submission) |
+| Electron (Windows, macOS, Linux) | `npm run package:win` / `:mac` / `:linux` in `desktop/` | GitHub release; the `package` job's artifacts on every CI run |
 
-Desktop installers are produced by Electron. The `package` job in [`desktop-tests.yml`](.github/workflows/desktop-tests.yml) builds the Windows, macOS and Linux installers on native runners — members without a given OS should download that job's artifacts and treat CI as the authoritative build environment.
+No client needs a server or secret. If the AI assistant is ever mounted again, deploy its Supabase function and set `ANTHROPIC_API_KEY` as a function secret — never client-side ([details](docs/api.md#supabase-chat-assistant-function-not-mounted)).
 
 ---
 

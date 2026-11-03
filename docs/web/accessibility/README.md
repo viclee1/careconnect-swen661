@@ -502,7 +502,7 @@ Lighthouse (`npm run a11y:lighthouse`, `scripts/web-lighthouse.mjs`) scores the
 accessibility category **100 on all 17 routes, mobile and desktop** — 34 of 34
 runs; [`lighthouse/summary.md`](lighthouse/summary.md). New end-to-end tests
 (`e2e/high-contrast.spec.ts`) keep high contrast at AA and AAA contrast on
-every care-recipient screen in all four browser projects.
+every care-recipient screen in all five browser projects (Chromium, Edge, Firefox, WebKit, mobile Safari).
 
 ---
 
