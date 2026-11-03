@@ -1,120 +1,15 @@
-import { useState, useEffect } from 'react';
 import { Pill, Calendar, Video, Heart } from 'lucide-react';
 
 import AppointmentBanner from '../components/AppointmentBanner';
-
-interface MyDayTask {
-  id: string;
-  title: string;
-  description: string;
-  time: string;
-  category: string;
-  done: boolean;
-  icon: 'pill' | 'calendar' | 'video' | 'heart';
-}
-
-const defaultTasks: MyDayTask[] = [
-  {
-    id: 't1',
-    title: 'Take Amlodipine',
-    description: '5 mg — 1 tablet with food',
-    time: '8:30 am',
-    category: 'Medication',
-    done: true,
-    icon: 'pill',
-  },
-  {
-    id: 't2',
-    title: 'Morning check-in',
-    description: "Tap to confirm you're doing well",
-    time: '9:00 am',
-    category: 'Check-in',
-    done: false,
-    icon: 'heart',
-  },
-  {
-    id: 't3',
-    title: 'Blood pressure check',
-    description: 'Greenfield Surgery — Dr. Sharma',
-    time: '10:30 am',
-    category: 'Appointment',
-    done: false,
-    icon: 'calendar',
-  },
-  {
-    id: 't4',
-    title: 'Take Metformin',
-    description: '500 mg — 1 tablet with lunch',
-    time: '12:00 pm',
-    category: 'Medication',
-    done: false,
-    icon: 'pill',
-  },
-  {
-    id: 't5',
-    title: 'Video call with Maria',
-    description: 'Your daughter — she will call you',
-    time: '3:00 pm',
-    category: 'Appointment',
-    done: false,
-    icon: 'video',
-  },
-  {
-    id: 't6',
-    title: 'Take Atorvastatin',
-    description: '20 mg — 1 tablet',
-    time: '8:00 pm',
-    category: 'Medication',
-    done: false,
-    icon: 'pill',
-  },
-  {
-    id: 't7',
-    title: 'Bedtime rest',
-    description: 'Wind down for sleep',
-    time: '9:30 pm',
-    category: 'Rest',
-    done: false,
-    icon: 'calendar',
-  },
-];
-
-const STORAGE_KEY = 'careconnect_web_myday_tasks';
+import { useMyDay } from '../hooks/useMyDay';
+import { formatTime12 } from '../utils/dates';
 
 export default function Schedule() {
-  const [tasks, setTasks] = useState<MyDayTask[]>(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const stored = JSON.parse(raw) as MyDayTask[];
-        return defaultTasks.map((init) => {
-          const found = stored.find((s) => s.id === init.id);
-          return found ? { ...init, done: found.done } : init;
-        });
-      }
-    } catch {
-      // fallback
-    }
-    return defaultTasks;
-  });
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-    } catch {
-      // fallback
-    }
-  }, [tasks]);
-
-  const doneCount = tasks.filter((t) => t.done).length;
-  const totalCount = tasks.length;
-  const percentage = Math.round((doneCount / totalCount) * 100);
-
-  function toggleTask(id: string) {
-    setTasks((current) =>
-      current.map((t) => (t.id === id ? { ...t, done: !t.done } : t))
-    );
-  }
+  // Medicines and today's visits come from the Medicines and Appointments
+  // stores, so a tick here is a tick there (and for the caregiver).
+  const { items, doneCount, totalCount, toggle: toggleTask } = useMyDay();
+  const tasks = items.map((item) => ({ ...item, time: formatTime12(item.time) }));
+  const percentage = totalCount ? Math.round((doneCount / totalCount) * 100) : 0;
 
   const todayDateStr = new Date().toLocaleDateString('en-GB', {
     weekday: 'long',

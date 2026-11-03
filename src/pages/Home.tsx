@@ -6,6 +6,7 @@ import { useAuth } from '../auth/AuthContext';
 import AppointmentBanner from '../components/AppointmentBanner';
 import CaptionStrip from '../components/CaptionStrip';
 import MockVideoCall from '../components/MockVideoCall';
+import { useMyDay } from '../hooks/useMyDay';
 
 interface HomeProps {
   view: AppView;
@@ -16,28 +17,9 @@ export default function Home({ view: _view }: HomeProps) {
   const firstName = user?.name?.split(' ')[0] || 'there';
   const [callSimulated, setCallSimulated] = useState(false);
 
-  // Read tasks from localStorage to sync live progress with Schedule page
-  const [tasks] = useState<{ done: boolean }[]>(() => {
-    try {
-      const raw = localStorage.getItem('careconnect_web_myday_tasks');
-      if (raw) return JSON.parse(raw);
-    } catch {
-      // fallback
-    }
-    return [
-      { done: true },
-      { done: false },
-      { done: false },
-      { done: false },
-      { done: false },
-      { done: false },
-      { done: false },
-    ];
-  });
-
-  const doneCount = tasks.filter((t) => t.done).length;
-  const totalCount = tasks.length || 7;
-  const percentage = Math.round((doneCount / totalCount) * 100);
+  // The same list as My Day, so ticking a medicine anywhere moves this line.
+  const { doneCount, totalCount } = useMyDay();
+  const percentage = totalCount ? Math.round((doneCount / totalCount) * 100) : 0;
 
   return (
     <div className="space-y-6">
