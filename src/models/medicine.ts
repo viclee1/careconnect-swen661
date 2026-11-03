@@ -62,3 +62,44 @@ export function reviveTakenMap(stored: unknown): TakenMap {
     ),
   );
 }
+
+export interface MedicineReminder {
+  medication: Medication;
+  /** The dose's time, "HH:MM". */
+  time: string;
+  /** Its time has passed and it is not ticked. */
+  overdue: boolean;
+}
+
+/**
+ * Which dose the reminder caption should name, at `now` ("HH:MM").
+ *
+ * An overdue dose comes first — the one that has waited longest — because it
+ * is the more urgent thing to say, and the caregiver dashboard already counts
+ * it as missed by the same rule (its time has passed and it is not ticked).
+ * Otherwise the soonest dose still to come today. `null` when every medicine
+ * is taken or nothing left has a time.
+ */
+export function medicineReminder(
+  medications: Medication[],
+  isTakenById: (id: string) => boolean,
+  now: string,
+): MedicineReminder | null {
+  const doses = medications
+    .filter((medication) => !isTakenById(medication.id))
+    .flatMap((medication) => medication.times.map((time) => ({ medication, time })))
+    .sort((a, b) => a.time.localeCompare(b.time));
+  const overdue = doses.find((dose) => dose.time < now);
+  if (overdue) return { ...overdue, overdue: true };
+  const next = doses.find((dose) => dose.time >= now);
+  return next ? { ...next, overdue: false } : null;
+}
+
+/** The caption: "Overdue: …, was due at 12:00 pm." or "Reminder: … — take at 8:00 pm." */
+export function reminderSentence({ medication, time, overdue }: MedicineReminder): string {
+  const what = `${medication.name}, ${medication.dosage}`;
+  const when = overdue ? `was due at ${formatTime12(time)}` : `take at ${formatTime12(time)}`;
+  return [`${overdue ? 'Overdue' : 'Reminder'}: ${what} — ${when}.`, medication.instructions]
+    .filter(Boolean)
+    .join(' ');
+}

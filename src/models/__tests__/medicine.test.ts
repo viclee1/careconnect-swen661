@@ -1,8 +1,10 @@
 import {
   isTaken,
   medicineProgress,
+  medicineReminder,
   medicinesCount,
   progressSentence,
+  reminderSentence,
   reviveTakenMap,
   timesSentence,
   type Medication,
@@ -78,5 +80,56 @@ describe('reviveTakenMap', () => {
     expect(reviveTakenMap([true])).toEqual({});
     expect(reviveTakenMap('x')).toEqual({});
     expect(reviveTakenMap(null)).toEqual({});
+  });
+});
+
+describe('medicineReminder', () => {
+  const taken = (...ids: string[]) => (id: string) => ids.includes(id);
+  const meds = [med('a', undefined, ['08:00']), med('b', undefined, ['12:00']), med('c', undefined, ['20:00'])];
+
+  it('names the next dose when nothing is overdue', () => {
+    const reminder = medicineReminder(meds, taken('a'), '07:00');
+    expect(reminder?.medication.id).toBe('b');
+    expect(reminder).toMatchObject({ time: '12:00', overdue: false });
+  });
+
+  it('names the longest-overdue dose first', () => {
+    const reminder = medicineReminder(meds, taken(), '13:00');
+    expect(reminder?.medication.id).toBe('a');
+    expect(reminder).toMatchObject({ time: '08:00', overdue: true });
+  });
+
+  it('counts a dose as due, not overdue, in its own minute', () => {
+    expect(medicineReminder(meds, taken('a'), '12:00')).toMatchObject({ time: '12:00', overdue: false });
+  });
+
+  it('names a twice-a-day medicine by the dose that applies, and never once ticked', () => {
+    // A tick counts for the whole day, so a ticked medicine is never named.
+    const twice = [med('d', undefined, ['20:00', '08:00'])];
+    expect(medicineReminder(twice, taken(), '07:00')).toMatchObject({ time: '08:00', overdue: false });
+    expect(medicineReminder(twice, taken(), '09:00')).toMatchObject({ time: '08:00', overdue: true });
+    expect(medicineReminder(twice, taken('d'), '09:00')).toBeNull();
+  });
+
+  it('is null when everything is taken or nothing has a time', () => {
+    expect(medicineReminder(meds, taken('a', 'b', 'c'), '07:00')).toBeNull();
+    expect(medicineReminder([med('e', undefined, [])], taken(), '07:00')).toBeNull();
+  });
+});
+
+describe('reminderSentence', () => {
+  const metformin = { ...med('m'), name: 'Metformin', dosage: '500 mg', instructions: 'Take with lunch.' };
+
+  it('says when an overdue dose was due', () => {
+    expect(reminderSentence({ medication: metformin, time: '12:00', overdue: true })).toBe(
+      'Overdue: Metformin, 500 mg — was due at 12:00 pm. Take with lunch.',
+    );
+  });
+
+  it('says when to take the next one, and leaves out missing instructions', () => {
+    const plain = { ...metformin, instructions: undefined };
+    expect(reminderSentence({ medication: plain, time: '20:00', overdue: false })).toBe(
+      'Reminder: Metformin, 500 mg — take at 8:00 pm.',
+    );
   });
 });

@@ -7,22 +7,20 @@ import MedicineDetail from '../components/medicines/MedicineDetail';
 import MedicineProgress from '../components/medicines/MedicineProgress';
 import MedicineRow from '../components/medicines/MedicineRow';
 import { useMedicines } from '../context/medicines';
-import type { Medication } from '../models/medicine';
-import { formatTime12 } from '../utils/dates';
+import { medicineReminder, reminderSentence } from '../models/medicine';
 
-/** The next medicine still to take — later today if any, else the first one left. */
-function nextToTake(medications: Medication[], isTaken: (id: string) => boolean): Medication | undefined {
+/** The time now as "HH:MM", to compare with dose times. */
+function nowHHMM(): string {
   const now = new Date();
-  const hhmm = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-  const left = medications.filter((m) => !isTaken(m.id));
-  return left.find((m) => m.times.some((t) => t >= hhmm)) ?? left[0];
+  return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 }
 
 /**
  * The Medicines screen, laid out as the web design: today's medicines in a
  * list on the left, the chosen one in detail on the right (stacked below on a
- * phone), the "still to take" count beside the title, and the reminder for
- * the next medicine written out as a caption under the appointment alert.
+ * phone), the "still to take" count beside the title, and the dose to take
+ * next written out as a caption under the appointment alert — an overdue one
+ * first.
  *
  * Each row's tick is a native checkbox, so Tab moves between medicines and
  * Space ticks one. Ticks are kept above the router and in localStorage, so
@@ -33,7 +31,7 @@ export default function Medications() {
   const { medications, isTaken, setTaken, progress } = useMedicines();
   const [selectedId, setSelectedId] = useState(() => medications[0]?.id);
   const selected = medications.find((m) => m.id === selectedId) ?? medications[0];
-  const reminder = nextToTake(medications, isTaken);
+  const reminder = medicineReminder(medications, isTaken, nowHHMM());
 
   return (
     <div className="space-y-5">
@@ -46,10 +44,7 @@ export default function Medications() {
       <div className="space-y-1">
         <AppointmentBanner />
         {reminder && (
-          <CaptionStrip>
-            Reminder: {reminder.name}, {reminder.dosage} — take at {formatTime12([...reminder.times].sort()[0])}.{' '}
-            {reminder.instructions}
-          </CaptionStrip>
+          <CaptionStrip>{reminderSentence(reminder)}</CaptionStrip>
         )}
       </div>
 

@@ -126,14 +126,45 @@ describe('Medicines page', () => {
     expect(status()).toHaveTextContent('All 4 medicines taken today. Well done!');
   });
 
-  it('writes out the next reminder as a caption, and hides it when captions are off', () => {
-    const { unmount } = renderPage();
-    expect(screen.getByText(/^Reminder: /)).toBeInTheDocument();
-    unmount();
+  describe('the reminder caption', () => {
+    // Today at a given time, so the caption does not depend on when the
+    // suite runs. Amlodipine (8:30 am) starts out taken.
+    function at(hours: number, minutes: number) {
+      const date = new Date();
+      date.setHours(hours, minutes, 0, 0);
+      jest.useFakeTimers({ now: date });
+    }
+    afterEach(() => jest.useRealTimers());
 
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify({ captionsEnabled: false }));
-    renderPage();
-    expect(screen.queryByText(/^Reminder: /)).not.toBeInTheDocument();
+    it('names the next dose before anything is due, and hides when captions are off', () => {
+      at(7, 0);
+      const { unmount } = renderPage();
+      expect(
+        screen.getByText('Reminder: Lisinopril, 10 mg — 1 tablet — take at 9:00 am. Take with a glass of water.'),
+      ).toBeInTheDocument();
+      unmount();
+
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify({ captionsEnabled: false }));
+      renderPage();
+      expect(screen.queryByText(/^Reminder: /)).not.toBeInTheDocument();
+    });
+
+    it('names the longest-overdue dose first, ahead of the next one to come', () => {
+      // 12:30 pm: Lisinopril (9:00) and Metformin (12:00) are both overdue.
+      at(12, 30);
+      renderPage();
+      expect(
+        screen.getByText('Overdue: Lisinopril, 10 mg — 1 tablet — was due at 9:00 am. Take with a glass of water.'),
+      ).toBeInTheDocument();
+    });
+
+    it('moves on once the overdue dose is ticked', () => {
+      at(12, 30);
+      localStorage.setItem(MEDS_TAKEN_KEY, JSON.stringify({ m2: true }));
+      localStorage.setItem(MEDS_TAKEN_DATE_KEY, localISODate());
+      renderPage();
+      expect(screen.getByText(/^Overdue: Metformin, 500 mg — 1 tablet — was due at 12:00 pm\./)).toBeInTheDocument();
+    });
   });
 
   it('keeps today’s ticks after a reload', () => {
