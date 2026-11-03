@@ -635,10 +635,10 @@ Timestamped log of taken/skipped doses and check-ins.
   | Flutter | 277 | — | — | — | 99.0% | [`flutter/docs/testing/coverage-html/`](flutter/docs/testing/coverage-html/index.html) |
 
   `flutter test` reports line coverage only. No client uses snapshot tests: assertions name the behaviour — what the user sees, hears announced, or can do next.
-- **End-to-end** — Playwright (`npm run test:e2e`) against the production build (`vite preview`, service worker active) in Chromium, Firefox, WebKit and mobile Safari at 375px. Specs in [`e2e/`](e2e): medicines by keyboard, appointments (My Day and calendar export read back from the real file), memories (form errors, save, pin, remove, filter), the memory book offline, every care page at every width with axe; contacts → conversation → send → reload, silent alert, captioned calls and video messages, quick replies, offline queueing and offline launch, keyboard-only settings, flash previews, and Settings reachable at every width. Latest local run (Chromium, WebKit, mobile Safari, three repeats each): **59 passed, 7 skipped by design, none failed**. Run `npx playwright install chromium firefox webkit` once first; `npm run test:e2e:report` opens the HTML report.
+- **End-to-end** — Playwright (`npm run test:e2e`) against the production build (`vite preview`, service worker active) in Chromium, Microsoft Edge, Firefox, WebKit and mobile Safari at 375px. Specs in [`e2e/`](e2e): medicines by keyboard, appointments (My Day and calendar export read back from the real file), memories (form errors, save, pin, remove, filter), the memory book offline, every care page at every width with axe; contacts → conversation → send → reload, silent alert, captioned calls and video messages, quick replies, offline queueing and offline launch, keyboard-only settings, flash previews, and Settings reachable at every width. Latest local run (Chromium, WebKit, mobile Safari, three repeats each): **282 passed, 24 skipped by design, none failed**; Edge and Firefox run in CI. Results per browser, the browser differences the tests handle, and the WebKit issues found and fixed are in [Cross-browser testing](docs/web/cross-browser-testing.md). Run `npx playwright install chromium firefox webkit` once first (`npx playwright install msedge` adds Edge locally); `npm run test:e2e:report` opens the HTML report.
 - **Accessibility audit** — `npm run a11y:web`: 17 routes and the shell's interactive states at three widths, plus every route again in high-contrast mode with axe's AAA rules — **115 scans, 0 violations, 104/104 keyboard and structure checks**. `npm run a11y:lighthouse`: Lighthouse accessibility **100 on every route, mobile and desktop** ([summary](docs/web/accessibility/lighthouse/summary.md)). Beyond AA, four WCAG 2.1 AAA criteria are met — listed with their evidence in [the accessibility documentation](docs/web/accessibility/README.md#10-beyond-aa--wcag-21-aaa).
 - **CI** — one GitHub Actions workflow per client, each run on pull requests and pushes to `main` that touch it, and each uploading its coverage report as a build artifact:
-  - [`web-tests.yml`](.github/workflows/web-tests.yml) — lint, typecheck, coverage and every Playwright project (Firefox included).
+  - [`web-tests.yml`](.github/workflows/web-tests.yml) — lint, typecheck, coverage and every Playwright project (Edge and Firefox included).
   - [`desktop-tests.yml`](.github/workflows/desktop-tests.yml) — lint, typecheck and coverage for the Electron client, then packages the unsigned installer on Windows, macOS and Linux runners and uploads each one.
   - [`mobile-tests.yml`](.github/workflows/mobile-tests.yml) — lint, typecheck and coverage for the React Native client.
   - [`flutter-tests.yml`](.github/workflows/flutter-tests.yml) — `flutter analyze` and `flutter test --coverage` on Flutter 3.47.1.
@@ -763,7 +763,8 @@ Sign in with any well-formed email and password, then choose **care recipient** 
 npm test                            # Jest + React Testing Library (434 tests)
 npm run test:coverage               # + coverage/lcov-report/index.html, fails under 85%
 npx playwright install chromium firefox webkit   # once
-npm run test:e2e                    # Playwright, every browser project
+npx playwright install msedge                    # once, optional (needs sudo)
+npm run test:e2e                    # Playwright, every installed browser
 npm run test:e2e -- --project=chromium           # one browser
 npm run dev -- --port 5180 & npm run a11y:web    # axe audit + keyboard checks
 npm run lint && npm run typecheck
@@ -776,6 +777,7 @@ npm run lint && npm run typecheck
 ### Known issues and limitations (web)
 
 - **Firefox cannot launch locally on macOS 27** (Playwright's Firefox build hangs at its sandbox). CI runs the Firefox project on Ubuntu.
+- **Edge runs only where it is installed.** Locally the `edge` project is added only if Microsoft Edge is present; CI always runs it. Per-browser results and known browser differences: [Cross-browser testing](docs/web/cross-browser-testing.md).
 - **Home and My Day keep their own task list** rather than reading the medicines and appointments stores, so ticking a medicine on Medicines does not tick it on My Day.
 - **The Medicines reminder caption** names the next medicine still to come today, not an overdue one.
 - **The AI assistant** (`ChatBot.tsx`) is not mounted since the Week 11 Landing page; whether it returns is a team decision.
