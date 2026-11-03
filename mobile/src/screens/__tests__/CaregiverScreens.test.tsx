@@ -33,9 +33,17 @@ async function switchView() {
   await press(await screen.findByText(/^Switch to (caregiver|care recipient) view$/));
 }
 
+/** Fills a form by testID; the auth forms refuse to submit empty. */
+async function fill(values: Record<string, string>) {
+  for (const [testID, text] of Object.entries(values)) {
+    await fireEvent.changeText(screen.getByTestId(testID), text);
+  }
+}
+
 describe('Signing in leads to choosing a role', () => {
   it('a caregiver lands on the Dashboard, and Back does not return to sign-in', async () => {
     await renderApp({ initialRouteName: 'SignIn' });
+    await fill({ 'sign-in-email': 'joyce@example.com', 'sign-in-password': 'secret' });
     await press(screen.getByText('Sign in'));
     expect(await screen.findByText('Who is using CareConnect right now?')).toBeTruthy();
 
@@ -47,6 +55,12 @@ describe('Signing in leads to choosing a role', () => {
 
   it('the care recipient lands on Home after signing up', async () => {
     await renderApp({ initialRouteName: 'SignUp' });
+    await fill({
+      'sign-up-name': 'Margaret',
+      'sign-up-email': 'margaret@example.com',
+      'sign-up-password': 'secret1',
+      'sign-up-confirm': 'secret1',
+    });
     await press(screen.getByLabelText('Create account'));
     await press(await screen.findByLabelText(/^I am the care recipient/));
     expect(await screen.findByTestId('tab-MyDay')).toBeTruthy();

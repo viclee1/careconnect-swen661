@@ -6,5 +6,13 @@ name: "Critical flow 1 - Welcome to Sign in to Home"
 - assertVisible: "CareConnect"
 - tapOn: "I already have an account"
 - assertVisible: "Welcome back"
+# Sign in refuses an empty form (#44), so fill both fields first.
+- tapOn:
+    id: "sign-in-email"
+- inputText: "margaret@example.com"
+- tapOn:
+    id: "sign-in-password"
+- inputText: "secret"
+- hideKeyboard
 - tapOn: "Sign in"
 - assertVisible: "Here's your day, Margaret"

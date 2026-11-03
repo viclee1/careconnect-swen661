@@ -12,7 +12,10 @@ import { colors } from '../theme/colors';
 import { layout } from '../theme/layout';
 import { type } from '../theme/typography';
 import { Icon } from '../components/Icon';
+import { AlertBanner } from '../components/AlertBanner';
 import { AppButton } from '../components/AppButton';
+import { useCheckedForm } from '../hooks/useCheckedForm';
+import { fixSummary, formErrorSummary, validateSignIn, type SignInField } from '../utils/validators';
 
 export function SignInScreen({
   onSignIn,
@@ -21,6 +24,15 @@ export function SignInScreen({
   onSignIn: () => void;
   onSignUp: () => void;
 }) {
+  // Checked on Sign in, as on the web and desktop: errors under each field, a
+  // summary announced, focus on the first field to fix.
+  const { values, errors, errorCount, setInput, change, submit } = useCheckedForm<SignInField>(
+    ['email', 'password'],
+    { email: '', password: '' },
+    validateSignIn,
+    () => onSignIn(),
+  );
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -39,28 +51,46 @@ export function SignInScreen({
         </View>
 
         <View style={styles.form}>
+          {errorCount > 0 ? (
+            <View style={styles.summary}>
+              <AlertBanner tone="error" title={formErrorSummary} message={`${fixSummary(errorCount)}.`} />
+            </View>
+          ) : null}
+
           <Text style={styles.label}>Email address</Text>
           <TextInput
-            style={styles.input}
+            ref={(input) => setInput('email', input)}
+            testID="sign-in-email"
+            value={values.email}
+            onChangeText={(text) => change('email', text)}
+            style={[styles.input, errors.email ? styles.inputInvalid : null]}
             placeholder="e.g. alex@example.com"
             keyboardType="email-address"
             autoCapitalize="none"
+            autoComplete="email"
             accessible
             accessibilityLabel="Email address"
-            accessibilityHint="Enter the email address you used to sign up"
+            accessibilityHint={errors.email ?? 'Enter the email address you used to sign up'}
           />
+          {errors.email ? <Text style={styles.error}>{errors.email}</Text> : null}
 
           <View style={{ height: 24 }} />
 
           <Text style={styles.label}>Password</Text>
           <TextInput
-            style={styles.input}
+            ref={(input) => setInput('password', input)}
+            testID="sign-in-password"
+            value={values.password}
+            onChangeText={(text) => change('password', text)}
+            style={[styles.input, errors.password ? styles.inputInvalid : null]}
             placeholder="Enter your password"
             secureTextEntry
+            autoComplete="current-password"
             accessible
             accessibilityLabel="Password"
-            accessibilityHint="Enter your account password"
+            accessibilityHint={errors.password ?? 'Enter your account password'}
           />
+          {errors.password ? <Text style={styles.error}>{errors.password}</Text> : null}
 
           <TouchableOpacity
             style={styles.forgotPassword}
@@ -78,7 +108,7 @@ export function SignInScreen({
 
           <AppButton
             label="Sign in"
-            onPress={onSignIn}
+            onPress={submit}
             variant="filled"
             fullWidth
             accessibilityHint="Signs you into your CareConnect account"
@@ -147,6 +177,9 @@ const styles = StyleSheet.create({
     fontSize: 17,
     marginTop: 8,
   },
+  inputInvalid: { borderColor: colors.errorText, borderWidth: 2 },
+  error: { ...type.label, color: colors.errorText, marginTop: 6 },
+  summary: { marginBottom: 24 },
   forgotPassword: {
     alignSelf: 'flex-end',
     marginTop: 12,
