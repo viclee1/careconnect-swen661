@@ -109,7 +109,10 @@ describe('Memories page', () => {
       expect(screen.getByRole('combobox', { name: /kind of memory/i })).toHaveAccessibleDescription(
         'Choose what kind of memory this is.',
       );
-      expect(screen.getAllByRole('alert')).toHaveLength(3);
+      // Three errors, and none of them a live region: focus on the first field
+      // reads its error, instead of three alerts talking over each other.
+      expect(document.querySelectorAll('[aria-invalid="true"]')).toHaveLength(3);
+      expect(screen.queryAllByRole('alert')).toHaveLength(0);
       expect(saved()).toHaveLength(6);
     });
 
@@ -120,7 +123,7 @@ describe('Memories page', () => {
       await user.click(screen.getByRole('button', { name: 'Save memory' }));
       await user.type(screen.getByRole('textbox', { name: /name of the memory/i }), 'Picnic');
       expect(screen.getByRole('textbox', { name: /name of the memory/i })).not.toHaveAttribute('aria-invalid');
-      expect(screen.getAllByRole('alert')).toHaveLength(2);
+      expect(document.querySelectorAll('[aria-invalid="true"]')).toHaveLength(2);
     });
 
     it('focuses the story field when only the story is wrong', async () => {
@@ -132,7 +135,9 @@ describe('Memories page', () => {
       await user.type(screen.getByRole('textbox', { name: /^the memory/i }), 'Nice');
       await user.click(screen.getByRole('button', { name: 'Save memory' }));
       expect(screen.getByRole('textbox', { name: /^the memory/i })).toHaveFocus();
-      expect(screen.getByRole('alert')).toHaveTextContent('Write at least 10 characters');
+      expect(screen.getByRole('textbox', { name: /^the memory/i })).toHaveAccessibleDescription(
+        expect.stringContaining('Write at least 10 characters'),
+      );
     });
 
     it('counts the characters left in the story', async () => {

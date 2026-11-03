@@ -130,21 +130,21 @@
     "page": "Manage medications — confirm dialog",
     "breakpoint": "mobile 375px",
     "violations": [],
-    "passes": 41
+    "passes": 33
   },
   {
     "id": "mobile-drawer-patient",
     "page": "Care recipient — Menu drawer open",
     "breakpoint": "mobile 375px",
     "violations": [],
-    "passes": 46
+    "passes": 35
   },
   {
     "id": "mobile-drawer-caregiver",
     "page": "Caregiver — Menu drawer open",
     "breakpoint": "mobile 375px",
     "violations": [],
-    "passes": 44
+    "passes": 34
   },
   {
     "id": "tablet-landing",
@@ -277,21 +277,21 @@
     "page": "Manage medications — confirm dialog",
     "breakpoint": "tablet 820px",
     "violations": [],
-    "passes": 41
+    "passes": 34
   },
   {
     "id": "tablet-drawer-patient",
     "page": "Care recipient — Menu drawer open",
     "breakpoint": "tablet 820px",
     "violations": [],
-    "passes": 46
+    "passes": 34
   },
   {
     "id": "tablet-drawer-caregiver",
     "page": "Caregiver — Menu drawer open",
     "breakpoint": "tablet 820px",
     "violations": [],
-    "passes": 44
+    "passes": 34
   },
   {
     "id": "desktop-landing",
@@ -438,14 +438,14 @@
     "page": "Keyboard shortcuts dialog",
     "breakpoint": "desktop 1280px",
     "violations": [],
-    "passes": 48
+    "passes": 30
   },
   {
     "id": "desktop-dialog",
     "page": "Manage medications — confirm dialog",
     "breakpoint": "desktop 1280px",
     "violations": [],
-    "passes": 45
+    "passes": 34
   },
   {
     "id": "mobile-hc-landing",

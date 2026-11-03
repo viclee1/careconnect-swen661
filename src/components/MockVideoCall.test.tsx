@@ -57,7 +57,7 @@ describe('Simulated incoming video call', () => {
     await answer(user);
     await user.click(screen.getByRole('button', { name: 'Hide captions' }));
     expect(screen.queryByText('[CC LIVE]')).not.toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Show captions' })).toHaveAttribute('aria-pressed', 'false');
+    expect(screen.getByRole('button', { name: 'Show captions' })).not.toHaveAttribute('aria-pressed');
     expect(storedSettings().captionsEnabled).toBe(false);
 
     await user.click(screen.getByRole('button', { name: 'Show captions' }));
@@ -65,17 +65,18 @@ describe('Simulated incoming video call', () => {
     expect(storedSettings().captionsEnabled).toBe(true);
   });
 
-  it('mutes the microphone and pauses the audio, each as a pressed toggle', async () => {
+  it('mutes the microphone and pauses the audio, each named for what it does next', async () => {
     const user = userEvent.setup();
     renderCall();
     await answer(user);
     await user.click(screen.getByRole('button', { name: 'Mute microphone' }));
-    expect(screen.getByRole('button', { name: 'Unmute microphone' })).toHaveAttribute('aria-pressed', 'true');
+    // One state signal, the name: not also aria-pressed (which read "Unmute, pressed").
+    expect(screen.getByRole('button', { name: 'Unmute microphone' })).not.toHaveAttribute('aria-pressed');
     await user.click(screen.getByRole('button', { name: 'Unmute microphone' }));
-    expect(screen.getByRole('button', { name: 'Mute microphone' })).toHaveAttribute('aria-pressed', 'false');
+    expect(screen.getByRole('button', { name: 'Mute microphone' })).not.toHaveAttribute('aria-pressed');
 
     await user.click(screen.getByRole('button', { name: 'Pause audio' }));
-    expect(screen.getByRole('button', { name: 'Resume audio' })).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByRole('button', { name: 'Resume audio' })).not.toHaveAttribute('aria-pressed');
     await user.click(screen.getByRole('button', { name: 'Resume audio' }));
     expect(screen.getByRole('button', { name: 'Pause audio' })).toBeInTheDocument();
   });

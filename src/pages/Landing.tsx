@@ -32,13 +32,13 @@ export default function Landing() {
             <div className="flex items-center gap-2 sm:gap-3">
               <Link
                 to="/signin"
-                className="px-3 sm:px-5 py-2 rounded-lg text-white border border-white/60 hover:bg-white/10 transition-colors no-underline text-xs sm:text-sm font-semibold"
+                className="inline-flex items-center min-h-[2.75rem] px-3 sm:px-5 py-2 rounded-lg text-white border border-white/60 hover:bg-white/10 transition-colors no-underline text-xs sm:text-sm font-semibold"
               >
                 Sign in
               </Link>
               <Link
                 to="/signup"
-                className="px-3 sm:px-5 py-2 rounded-lg text-white bg-[#0f5272] border border-[#0f5272] hover:bg-[#0d4a67] transition-colors no-underline text-xs sm:text-sm font-semibold"
+                className="inline-flex items-center min-h-[2.75rem] px-3 sm:px-5 py-2 rounded-lg text-white bg-[#0f5272] border border-[#0f5272] hover:bg-[#0d4a67] transition-colors no-underline text-xs sm:text-sm font-semibold"
               >
                 Sign up
               </Link>

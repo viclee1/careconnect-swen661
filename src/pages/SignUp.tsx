@@ -70,7 +70,7 @@ export default function SignUp() {
       {/* ── Page header ──────────────────────────────────────────────────── */}
       <header className="bg-white border-b border-neutral-200" role="banner">
         <div className="max-w-5xl mx-auto px-4 md:px-6 h-16 flex items-center">
-          <Link to="/" className="flex items-center gap-2.5 no-underline" aria-label="CareConnect home">
+          <Link to="/" className="flex items-center gap-2.5 min-h-[2.75rem] no-underline" aria-label="CareConnect home">
             <span className="w-9 h-9 rounded-lg bg-calm-600 flex items-center justify-center" aria-hidden="true">
               <Heart className="w-5 h-5 text-white" strokeWidth={2.5} />
             </span>

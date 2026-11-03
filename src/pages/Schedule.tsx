@@ -203,7 +203,9 @@ export default function Schedule() {
                   <span className={`text-sm font-bold tabular-nums ${isDone ? 'text-neutral-500' : 'text-calm-700'}`}>
                     {task.time}
                   </span>
-                  <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-colors ${
+                  {/* Hidden from screen readers: aria-pressed carries the state, so
+                      the name stays the same whether or not the task is done. */}
+                  <div aria-hidden="true" className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-colors ${
                     isDone
                       ? 'bg-success-600 border-success-600 text-white font-bold'
                       : 'border-neutral-300 bg-white'

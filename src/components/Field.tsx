@@ -86,7 +86,8 @@ export default function Field(props: FieldProps) {
   const hasError = Boolean(error);
 
   // Build aria-describedby from whichever secondary elements exist
-  const describedBy = [hint && hintId, hasError && errorId]
+  // The hint is hidden while there is an error, so it is only referenced when shown.
+  const describedBy = [hint && !hasError && hintId, hasError && errorId]
     .filter(Boolean)
     .join(' ') || undefined;
 
@@ -154,11 +155,13 @@ export default function Field(props: FieldProps) {
         </p>
       )}
 
-      {/* ── Inline error message ──────────────────────────────────────────── */}
+      {/* ── Inline error message ──────────────────────────────────────────────
+          Not a live region: a form with four errors would announce four
+          alerts at once. The field reads it through aria-describedby when
+          focus lands there, and the form moves focus to the first one. */}
       {hasError && (
         <p
           id={errorId}
-          role="alert"
           className="flex items-center gap-1.5 text-sm font-medium text-alert-700 leading-snug"
         >
           {/* Decorative exclamation mark — screen readers get the text */}

@@ -237,6 +237,10 @@ describe('modal dialog', () => {
     expect(dialog).toHaveAttribute('aria-modal', 'true');
     expect(dialog).toHaveAccessibleDescription('This cannot be undone.');
     expect(dialog).toContainElement(document.activeElement as HTMLElement);
+    // The page behind is inert, so the virtual cursor cannot leave the dialog
+    // even where aria-modal is ignored.
+    expect(trigger.closest('[inert]')).not.toBeNull();
+    expect(dialog.closest('[inert]')).toBeNull();
 
     const buttons = within(dialog).getAllByRole('button');
     buttons[buttons.length - 1].focus();
@@ -247,7 +251,36 @@ describe('modal dialog', () => {
 
     fireEvent.keyDown(document, { key: 'Escape' });
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(document.querySelector('[inert]')).toBeNull();
     await waitFor(() => expect(trigger).toHaveFocus());
+  });
+
+  it('gives the page back before onConfirm runs, so the handler can move focus', () => {
+    // Memories focuses "Add a memory" inside onConfirm; a browser ignores
+    // focus() on an inert element, so the page must not be inert by then.
+    let inertDuringConfirm: boolean | null = null;
+    function FocusOnConfirm() {
+      const [open, setOpen] = useState(true);
+      const trigger = useRef<HTMLButtonElement>(null);
+      return (
+        <>
+          <button ref={trigger}>Add a memory</button>
+          <ConfirmDialog
+            open={open}
+            title="Remove memory"
+            triggerRef={trigger}
+            onConfirm={() => {
+              inertDuringConfirm = trigger.current!.closest('[inert]') !== null;
+              setOpen(false);
+            }}
+            onCancel={() => setOpen(false)}
+          />
+        </>
+      );
+    }
+    render(<FocusOnConfirm />);
+    fireEvent.click(screen.getByRole('button', { name: 'Confirm' }));
+    expect(inertDuringConfirm).toBe(false);
   });
 });
 
@@ -310,12 +343,15 @@ describe('responsive navigation', () => {
       const dialog = screen.getByRole('dialog', { name: 'Menu' });
       expect(dialog).toHaveAttribute('aria-modal', 'true');
       expect(dialog).toContainElement(document.activeElement as HTMLElement);
+      expect(menu.closest('[inert]')).not.toBeNull();
+      expect(dialog.closest('[inert]')).toBeNull();
       const panel = within(dialog).getByRole('navigation', { name: 'Main navigation' });
       // Every page plus Settings: six for the care recipient, five for a caregiver.
       expect(within(panel).getAllByRole('link').length).toBeGreaterThanOrEqual(role === 'patient' ? 7 : 6);
 
       fireEvent.keyDown(document, { key: 'Escape' });
       expect(screen.queryByRole('dialog', { name: 'Menu' })).not.toBeInTheDocument();
+      expect(document.querySelector('[inert]')).toBeNull();
       expect(menu).toHaveFocus();
     },
   );
@@ -340,6 +376,20 @@ describe('responsive navigation', () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
     });
     expect(await axe(container, axeOptions)).toHaveNoViolations();
+  });
+});
+
+describe('done toggles', () => {
+  it('My Day: the name stays the same and aria-pressed alone carries the state', async () => {
+    renderAt('/app/my-day', 'patient');
+    await screen.findByRole('heading', { level: 1 });
+    const toggle = within(screen.getByRole('main')).getAllByRole('button', { pressed: false })[0];
+
+    fireEvent.click(toggle);
+    expect(toggle).toHaveAttribute('aria-pressed', 'true');
+    // The check mark is drawn, not read: "…, toggle button, pressed" and not
+    // "… ✓, toggle button, pressed", which said the state twice.
+    expect(screen.queryByRole('button', { name: /✓/ })).not.toBeInTheDocument();
   });
 });
 

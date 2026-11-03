@@ -122,7 +122,7 @@ why the media criteria under 1.2 are Not Applicable.
 | 2.1.4 Character Key Shortcuts (Level A) | Supports | App-wide shortcuts use Ctrl/⌘. The one single-key shortcut, "/" to jump to "Find a contact", works only while focus is in the contact list and never while typing in a field. Fixed in evaluation: it was page-wide, and a "?" shortcut for the shortcuts dialog was removed. |
 | 2.2.1 Timing Adjustable (Level A) | Not Applicable | No time limits: no session timeout, timed form or auto-advancing content. Simulated video-message captions step every 2.5 s only after the user presses Play, can be stopped, and the full text is printed below. |
 | 2.2.2 Pause, Stop, Hide (Level A) | Supports | The appointment reminder banner repeats until paused (`aria-pressed` Pause) or dismissed with OK. The screen flash is a single 1.6 s fade. The caregiver dashboard re-reads its data every 30 s, which changes values in place rather than moving content. Under `prefers-reduced-motion` the global stylesheet removes all non-essential animation, including the incoming-call avatar's slow `animate-pulse` glow, which otherwise runs until the call is answered or declined. |
-| 2.3.1 Three Flashes or Below Threshold (Level A) | Supports | The screen flash is at most two pulses in 1.6 s (`VisualFlash.tsx`). The vibration-pattern preview lamp in Accessibility Settings can blink up to about 7 times a second for the "missed" pattern, but it is a small indicator, well under the WCAG general-flash area threshold; it is the reason AAA 2.3.2 is not claimed ([§9](README.md#9-known-gaps-and-next-steps)). |
+| 2.3.1 Three Flashes or Below Threshold (Level A) | Supports | The screen flash is at most two pulses in 1.6 s (`VisualFlash.tsx`). The vibration-pattern preview draws each rhythm as bars that fill in sequence and stay filled, so nothing blinks; AAA 2.3.2 is met as well ([§10](README.md#10-beyond-aa--wcag-21-aaa)). |
 | 2.4.1 Bypass Blocks (Level A) | Supports | "Skip to main content" is the first focusable element on every shell (Landing, Sign in, Sign up, Role chooser as "Skip to role selection", both app shells), visible on focus, and moves focus to `<main tabindex="-1">`; named landmarks on every page. Fixed in evaluation: Sign in and Sign up had no skip link, and two components stole focus ahead of it on load. |
 | 2.4.2 Page Titled (Level A) | Supports | Every page sets its own title through `useDocumentTitle` ("Medicines — CareConnect", "Dashboard — CareConnect"). Fixed in evaluation: every page shared one title. |
 | 2.4.3 Focus Order (Level A) | Supports | Focus follows source order; route changes move focus to `<main>` (not on first load, so the skip link stays first); dialogs move focus in on open and back to their trigger on close. Fixed in evaluation: the confirm dialog focused every page's first Delete button on load. |
@@ -177,7 +177,8 @@ why the media criteria under 1.2 are Not Applicable.
    zoom nor the WCAG text-spacing overrides have been run as a script; the
    desktop client's `a11y-keyboard.mjs` checks for both could be ported to
    `scripts/web-a11y-audit.mjs`.
-4. **Screen-reader polish (4.1.2, 4.1.3).** Done toggles carry both a
-   state-dependent label and `aria-pressed`; field errors are each
-   `role="alert"`; the page behind a modal dialog is not `inert`. None breaks
-   a criterion; each is tracked in [§9](README.md#9-known-gaps-and-next-steps).
+4. **Screen-reader polish (4.1.2, 4.1.3) — resolved.** Toggles carry their
+   state once (in `aria-pressed`, or in a name that says what they do next,
+   never both); field errors are no longer separate alerts, so a form's
+   summary is announced once; the page behind a modal dialog, drawer or
+   shortcuts card is `inert` (issues #37–#39).

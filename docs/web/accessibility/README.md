@@ -422,7 +422,7 @@ The implementation plan the team follows when building or changing a component.
 | Text field (`Field.tsx`) | `<label for>` + `<input>`/`<textarea>` | Native | `aria-required`, `aria-invalid`, `aria-describedby` (hint, error) | §4 |
 | Select (`SelectField`) | `<label for>` + `<select>` | Arrows, type-ahead | Same as Field | Native list, no custom combobox |
 | Field group | `<fieldset>` + `<legend>` | Native | Legend names the group | Schedule times |
-| Done toggle | `<button aria-pressed>` | Space, Enter | Fixed name ("Breakfast done") + `aria-pressed` — target pattern, see §9 | Reversible |
+| Done toggle | `<button aria-pressed>` | Space, Enter | The task's own text, the same whether done or not; the drawn ✓ is `aria-hidden`, so `aria-pressed` alone carries the state | Reversible |
 | Filter group | `role="group" aria-label` + `aria-pressed` buttons | Tab, Space | Group name | Memories, note priority |
 | Card (`Card.tsx`) | `<section aria-label>` + `<hN>` | — | Region named by its heading | `headingLevel` prop |
 | List items | `<article>` inside `<li>` | — | `aria-label` on the article where the visible text is split | Schedule, medicines, memories, contacts |
@@ -506,17 +506,26 @@ every care-recipient screen in all five browser projects (Chromium, Edge, Firefo
 
 ---
 
+**Screen-reader polish re-run (3 November 2026)** — after fixing #37–#41
+(§9): **115 scans, 0 violations; 104/104 checks**. The eight scans taken with
+a dialog, the Menu drawer or the shortcuts card open now report fewer passing
+rules (for example 41 → 33): the page behind is `inert`, so axe no longer
+evaluates it there. That is the fix working, not lost coverage — every route
+is still scanned on its own with nothing open.
+
+---
+
 ## 9. Known gaps and next steps
 
 | Gap | Plan |
 |:--|:--|
-| The page behind the modal dialog is not `inert`; `aria-modal` relies on the screen reader honouring it | Set `inert` on the app root while a dialog is open |
-| Each field error is also `role="alert"`, so submitting a form with four errors announces five times | Keep the summary as the only alert; field errors are read through `aria-describedby` when focused; move focus to the first invalid field |
-| Done toggles (My Day, Medicines) change their label with the state ("Mark Breakfast as done" ↔ "…as not done") **and** set `aria-pressed`, so a screen reader hears "Mark Breakfast as not done, toggle button, pressed" — two state signals that read as contradictory | Keep `aria-pressed` and give the button a fixed name ("Breakfast done"), as the WAI-ARIA toggle-button pattern advises |
+| ~~The page behind the modal dialog is not `inert`; `aria-modal` relies on the screen reader honouring it~~ | Resolved ([#37](https://github.com/viclee1/careconnect-swen661/issues/37)): `inertOutside()` (`src/utils/inert.ts`) marks everything outside the open confirm dialog, Menu drawer or shortcuts card `inert`, and gives the page back before the dialog's handler runs, so a handler can still move focus |
+| ~~Each field error is also `role="alert"`, so submitting a form with four errors announces five times~~ | Resolved ([#38](https://github.com/viclee1/careconnect-swen661/issues/38)): field errors are no longer live regions (`Field`, Add a memory, Manage medicines/appointments); the summary is the one alert, and each field reads its error through `aria-describedby` |
+| ~~Done toggles carry the state twice — in their name and in `aria-pressed`~~ | Resolved ([#39](https://github.com/viclee1/careconnect-swen661/issues/39)): My Day's toggle keeps one name (its ✓ is `aria-hidden`) and `aria-pressed` carries the state; the video call's Mute / Pause / Captions buttons, whose names say what they do next, dropped `aria-pressed` |
 | ~~The app footer (`contentinfo`) is hidden below 1024px~~ | Resolved in Week 11: the status bar is shown at every width |
 | ~~On Contacts, "/" is a single-character shortcut that cannot be turned off (WCAG 2.1.4)~~ | Resolved: "/" works only while focus is in the contact list |
-| Five links are under the 44 × 44px AAA target size (2.5.5; AA's 24px minimum is met): the logo link on Sign in/Sign up (219 × 41), Landing's Sign in and Sign up (38px tall), Home's "View My Day →" (32px) and the caregiver dashboard's "View all activity" (27px) | `min-h-[2.75rem]` on each — Justin Zhang's pages, and the caregiver dashboard. The app header's logo link was brought to 44px on 29 October |
-| The vibration-pattern preview lamp in Accessibility Settings blinks in time with the buzz — up to about 7 times a second for the "missed" pattern. Within 2.3.1 (Level A) by its size, but it rules out 2.3.2 Three Flashes (AAA), which has no size exception | Show the rhythm as a static bar diagram, or cap the lamp at 3 blinks a second |
+| ~~Five links are under the 44 × 44px AAA target size (2.5.5)~~ | Resolved ([#40](https://github.com/viclee1/careconnect-swen661/issues/40)): `min-h-[2.75rem]` on each; `e2e/care-pages.spec.ts` › *Target size outside the care pages* measures all five in every browser |
+| ~~The vibration-pattern preview lamp blinks up to about 7 times a second, ruling out 2.3.2~~ | Resolved ([#41](https://github.com/viclee1/careconnect-swen661/issues/41)): the rhythm is drawn as bars that fill in sequence and stay filled, so nothing blinks; under reduced motion they fill at once |
 | No manual screen-reader pass on the web app yet | VoiceOver (Safari, macOS and iOS) and NVDA (Chrome/Firefox, Windows) through the main flows before the next submission |
 | Tooltips and tabs are in the Part 1 design system but not built | No Figma frame uses them; build to the patterns in §7 if one does. Menus (account, Quick replies) and a combobox (search) are built |
 | The sticky status bar can sit over the last line of a long page while scrolling | `scroll-padding-bottom` keeps focused elements clear of it (WCAG 2.4.11); content is never hidden at the end of the page |
@@ -534,12 +543,10 @@ criteria are also met. Each is backed by a check that runs, not only by design.
 | **2.4.10 Section Headings** | Every page has one `h1`, and each titled part — every `Card`, date group, Pinned/More in Memories — is a `<section>` with a heading, in order with no skipped levels | [`structure.md`](structure.md): the heading outline of every page at every breakpoint; axe `heading-order` passes everywhere |
 | **2.4.8 Location** | The current page is marked in the navigation (`aria-current="page"` and a visible bar), every page has its own `<title>`, and a route change moves focus to `<main>` | `useDocumentTitle`; the audit's keyboard checks ("Navigating with the keyboard moves focus to `<main>` and updates the title") |
 | **2.2.3 No Timing** | Nothing the user does is timed: no session timeout, no timed form, no auto-advancing content. The screen flash fades on its own, but it is an extra cue: its message stays written in the conversation | By design; reviewed against `setTimeout`/`setInterval` use (the clock, the caregiver dashboard refresh, caption playback and the flash/lamp previews only) |
+| **2.5.5 Target Size** — 44 × 44px | Every button and form control is at least 44px (a base rule in `index.css`), and so is every link outside running text — the app shell, the care pages, and since #40 the logo, Landing's Sign in/Sign up, Home's "View My Day" and the dashboard's "View all activity". Links inside a sentence are exempt | `e2e/care-pages.spec.ts`: *My screens at every width* measures every control on Appointments, Medicines and Memories; *Target size outside the care pages* measures the five links that used to be under — every browser, desktop and 375px |
+| **2.3.2 Three Flashes** | Nothing flashes more than three times in any second. The screen flash is one fade in 1.6 s; the vibration preview draws the rhythm as bars that fill once and stay filled (#41), where it used to blink a lamp up to 7 times a second | `VibrationPatternRow.tsx`; `AccessibilitySettings.test.tsx` checks the bars fill in sequence and do not go back off mid-rhythm; no other animation in `index.css` repeats faster than once in 1.6 s |
 
-**Not claimed:** 2.5.5 Target Size — every button and form control is at
-least 44 × 44px (a base rule in `index.css`), and so is every link in the app
-shell, but five links on the public and dashboard pages are not yet (§9).
-2.3.2 Three Flashes — the vibration-pattern lamp blinks faster
-than 3 a second (§9). 1.2.6 Sign Language and 1.2.8 Media Alternative — the
+**Not claimed:** 1.2.6 Sign Language and 1.2.8 Media Alternative — the
 demo videos are captioned and transcribed (AA) but have no sign-language
 interpretation. 2.1.3 Keyboard (No Exception) is likely met, since nothing needs
 a pointer, but has not been tested path by path.

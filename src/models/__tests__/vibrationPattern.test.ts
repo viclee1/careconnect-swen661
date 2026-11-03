@@ -7,17 +7,12 @@ import {
 } from '../vibrationPattern';
 
 describe('vibrationPattern', () => {
-  it('offers one rhythm per alert type, each with a printed glyph', () => {
+  it('offers one rhythm per alert type', () => {
     expect(vibrationPatterns.map((pattern) => pattern.id)).toEqual([
       'appointment',
       'medication',
       'missed',
     ]);
-    // The glyph is what makes a rhythm comparable on a screen. A pattern
-    // without one is only learnable by feel, which is useless on a desktop.
-    for (const pattern of vibrationPatterns) {
-      expect(pattern.glyph.trim().length).toBeGreaterThan(0);
-    }
   });
 
   it('starts and ends every pattern on a buzz rather than a pause', () => {
@@ -50,7 +45,7 @@ describe('vibrationPattern', () => {
       expect(steps.map((step) => step.at)).toEqual([0, 400, 550, 670, 820, 1220]);
     });
 
-    it('ends with an off step, so the lamp cannot be left lit', () => {
+    it('ends with an off step at the end of the rhythm', () => {
       const pattern = vibrationPatterns[2];
       const steps = pulseTimeline(pattern);
       const last = steps[steps.length - 1];

@@ -50,6 +50,8 @@ describe('Manage medicines', () => {
       'At least one scheduled time is required.',
     ]);
     expect(screen.getByLabelText('Time')).toHaveAttribute('aria-invalid', 'true');
+    // The summary is the one announcement; the field errors are not alerts too.
+    expect(screen.getAllByRole('alert')).toEqual([summary]);
     expect(stored()).toBeNull();
   });
 
