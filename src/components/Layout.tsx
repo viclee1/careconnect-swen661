@@ -102,7 +102,7 @@ interface LayoutProps {
  *
  *   header   logo · search (Ctrl K) · captions · high contrast · shortcuts · avatar
  *   sidebar  role · greeting, date and time · pages · Settings and alerts
- *   footer   connection · active alerts · "WCAG 2.2 AA · No sound required"
+ *   footer   connection · active alerts · "WCAG 2.1 AA · No sound required"
  *
  * From 1024px the sidebar sits beside the page. Below that the header keeps
  * the logo, captions and avatar, and a Menu button opens the same sidebar as

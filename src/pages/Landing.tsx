@@ -135,7 +135,7 @@ export default function Landing() {
             <span>&copy; {new Date().getFullYear()} CareConnect</span>
           </div>
           <div>
-            <span>WCAG 2.2 AA · No sound required</span>
+            <span>WCAG 2.1 AA · No sound required</span>
           </div>
         </footer>
       </div>

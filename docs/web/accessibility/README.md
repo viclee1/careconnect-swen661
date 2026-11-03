@@ -56,7 +56,7 @@ accessible-name rules with it, in every browser and screen reader.
 | `<header>` | The page banner. In the app: ☰ Menu (below 1024px), logo, search, CC, high contrast, keyboard shortcuts, and the avatar with the alerts badge | `Layout.tsx`, `Landing.tsx`, `SignIn.tsx`, `SignUp.tsx`, `RoleChooser.tsx` |
 | `<nav>` | Groups of site navigation links only — never a toolbar of actions | App: the sidebar (1024px+) or the same panel inside the Menu drawer (below 1024px) — `src/components/navigation/`. Landing: Sign in / Sign up (`Landing.tsx`) |
 | `<main id="main-content" tabindex="-1">` | The one primary content area per page; the skip link's and route-change focus target | Every shell |
-| `<footer>` | Landing: copyright and accessibility note. App: the status bar (connection, active alerts, "WCAG 2.2 AA · No sound required") at every width | `Landing.tsx`; `navigation/StatusBar.tsx` |
+| `<footer>` | Landing: copyright and accessibility note. App: the status bar (connection, active alerts, "WCAG 2.1 AA · No sound required") at every width | `Landing.tsx`; `navigation/StatusBar.tsx` |
 | `<section aria-label/aria-labelledby>` | A titled part of a page; becomes a named *region* | `Card.tsx` (every card), Today, Appointments date groups, Memories (Pinned / More), dashboard Alerts |
 | `<article>` | One self-contained item in a feed or list that makes sense on its own: a schedule entry, a medicine, a memory, a contact, a caregiver note | `Schedule.tsx`, `Medications.tsx`, `Memories.tsx`, `Contacts.tsx`, `Caregiver.tsx` |
 | `<aside>` | **Not used.** Nothing in the app is tangential to the main content. The caregiver sidebar is navigation, so it is a `<nav>`, not an `<aside>`. If a "related tips" panel is added, it will be an `<aside aria-label="…">`. | — |

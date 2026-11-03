@@ -7,10 +7,12 @@
 ![Flutter](https://img.shields.io/badge/Flutter-Android%20%7C%20iOS-02569B?logo=flutter&logoColor=white)
 ![React Native](https://img.shields.io/badge/React%20Native-Expo-000020?logo=expo&logoColor=white)
 ![Electron](https://img.shields.io/badge/Electron-Windows-47848F?logo=electron&logoColor=white)
-![WCAG 2.2 AA](https://img.shields.io/badge/WCAG-2.2%20AA-success)
+![WCAG 2.1 AA](https://img.shields.io/badge/WCAG-2.1%20AA%20tested-success)
 ![PWA](https://img.shields.io/badge/PWA-installable-5A0FC8)
 
 A responsive, accessible medical companion application for care recipients and their caregivers, built React-first as an installable Progressive Web App and extended across mobile and desktop.
+
+**Live app: <https://careconnect-swen661.vercel.app>** — sign in with any well-formed email and password, then choose care recipient or caregiver. It runs on mock data in your browser; nothing is sent to a server.
 
 > **SWEN 661 — Human Factors in Software Development / UI Implementation**
 > **Team 2 · The Acuity Health Group** — University of Maryland Global Campus
@@ -31,6 +33,7 @@ A responsive, accessible medical companion application for care recipients and t
 - [Accessibility](#accessibility)
 - [Tech stack](#tech-stack)
 - [Project structure](#project-structure)
+- [Architecture](#architecture)
 - [Application flow](#application-flow)
 - [Getting started](#getting-started)
 - [Available scripts](#available-scripts)
@@ -66,9 +69,9 @@ The governing rule: **anything CareConnect communicates through sound must also 
 
 ## Assigned constraints
 
-Instructor-assigned hearing-impairment constraints, mapped to WCAG 2.2:
+Instructor-assigned hearing-impairment constraints, mapped to WCAG success criteria (these criteria are numbered and worded the same in WCAG 2.1 and 2.2):
 
-| # | Hearing-impairment constraint | CareConnect requirement | WCAG 2.2 |
+| # | Hearing-impairment constraint | CareConnect requirement | WCAG SC |
 |:--|:------------------------------|:------------------------|:---------|
 | 1 | Captions for video | Any video containing speech must provide synchronized captions. | 1.2.2 / 1.2.4 |
 | 2 | Text alternative for audio | Important audio instructions or messages must also be available as readable text. | 1.2.1 |
@@ -122,7 +125,7 @@ Instructor-assigned hearing-impairment constraints, mapped to WCAG 2.2:
 **How will we know the app is successful?**
 
 1. **Users can use the app without needing sound** — users with hearing impairments can check appointments, act on medication reminders, and read important alerts without hearing anything.
-2. **Accessibility requirements are met** — the app meets the hearing-related WCAG 2.2 requirements identified above: captions, text alternatives, visual alerts, and audio controls.
+2. **Accessibility requirements are met** — the app meets the hearing-related WCAG requirements identified above: captions, text alternatives, visual alerts, and audio controls.
 3. **Users can complete tasks easily** — common tasks are completed without confusion or help from another person.
 4. **Users are satisfied** — users find the app easy to understand, easy to use, and accessible.
 
@@ -142,9 +145,9 @@ Instructor-assigned hearing-impairment constraints, mapped to WCAG 2.2:
 | Name | GitHub | Time zone | Computer OS |
 |:-----|:-------|:----------|:------------|
 | Victor Lee | [@viclee1](https://github.com/viclee1) | EST | Windows 11 / macOS |
-| Ashvini Tandale | [@ashvinit10](https://github.com/ashvinit10) | EST | Windows 10 |
 | Rehman Uddin | [@89uddinrt](https://github.com/89uddinrt) | EST | Windows 10 |
 | Justin Zhang | [@jzhang1717](https://github.com/jzhang1717) | EST | Windows 10 |
+| Upneet Bir | [@upneetsb](https://github.com/upneetsb) | — | — |
 
 Email addresses and emergency contact numbers are recorded in the team charter, not in this public repository.
 
@@ -167,11 +170,13 @@ Three roles rotate every two weeks:
 | 9–10 | Victor Lee | Ashvini Tandale | Rehman Uddin |
 | 11–12 | Justin Zhang | Victor Lee | Ashvini Tandale |
 
+This is the rotation as planned in the charter. Ashvini Tandale has since left the team, and Upneet Bir, who is on the team now, is not in the original rotation.
+
 ### Team charter
 
 **[📄 Team Charter — SWEN 661 Team 2 (The Acuity Health Group)](https://docs.google.com/document/d/1CXC4Ii-OSpHTlw7S83jnhrKQ_lcf94RTRDii08QdtM0/edit)**
 
-The charter covers team information, the communication plan, role definitions and rotation, the git repository and workflow, work philosophy, code review standards, contributions, decision making, and conflict resolution. It is signed by all four members.
+The charter covers team information, the communication plan, role definitions and rotation, the git repository and workflow, work philosophy, code review standards, contributions, decision making, and conflict resolution. It is signed by the four original members.
 
 ---
 
@@ -216,7 +221,7 @@ Assignment 10's web accessibility documentation — semantic HTML, landmarks, sk
 
 The Assignment 10 early React implementation — the responsive layout, screenshots of every screen at all three breakpoints, the differences from the Figma design and remaining tasks — is written up in [`docs/web/implementation/`](docs/web/implementation/README.md), updated for Week 11, when the app shell was rebuilt to the Figma design (a ☰ Menu drawer below 1024 px, a sidebar from 1024 px). The Assignment 11 write-ups are indexed in [`docs/web/week11/`](docs/web/week11/README.md).
 
-On top of that baseline, this project adds the five hearing-impairment constraints above, measured against **WCAG 2.2 Level AA**. Accessibility is a merge gate, not a final pass — the QA / Testing Lead can block a merge on a failing check.
+On top of that baseline, this project adds the five hearing-impairment constraints above, measured against **WCAG 2.1 Level AA** — the version every audit, conformance table and VPAT in this repository evaluates. The Playwright end-to-end suite also runs axe's WCAG 2.2 AA rules, but no report yet claims 2.2 conformance. Accessibility is a merge gate, not a final pass — the QA / Testing Lead can block a merge on a failing check.
 
 ---
 
@@ -304,22 +309,22 @@ careconnect-swen661/
 ├── supabase/
 │   └── functions/chat-assistant/    # Edge Function — Anthropic API proxy
 │       └── index.ts
-├── flutter/                         # Flutter + Dart — Android & iOS (in progress, see below)
+├── flutter/                         # Flutter + Dart — Android & iOS (see below)
 │   ├── lib/                         # app, screens, state, models, data, widgets
-│   ├── test/                        # 217 tests — models, state, widgets, utils
+│   ├── test/                        # models, state, widgets, utils (counts under Testing)
 │   ├── docs/                        # screenshots + security-scan.md
 │   ├── coverage/                    # lcov.info (HTML copy in docs/testing/coverage-html)
 │   └── README.md                    # points back to this section
-├── mobile/                          # React Native + Expo — Android & iOS (in progress, see below)
+├── mobile/                          # React Native + Expo — Android & iOS (see below)
 │   ├── src/                         # screens, navigation, state, models, data, components, theme
-│   ├── src/**/__tests__/            # 274 tests — models, state, screens, navigation, component behavior
+│   ├── src/**/__tests__/            # models, state, screens, navigation, component behavior
 │   ├── coverage/                    # lcov-report + lcov.info (generated locally, gitignored)
 │   └── README.md                    # points back to this section
 ├── desktop/                         # Electron + React — desktop, Windows target (see below)
 │   ├── src/main/                    # main process — window, native menu, IPC, notifications, persistence
 │   ├── src/shared/                  # imported by both processes — IPC contract, shortcut table
 │   ├── src/renderer/                # the React app — pages, state, models, data, components
-│   ├── src/**/__tests__/            # 523 tests — models, main process, IPC, pages, keyboard, a11y, caregiver
+│   ├── src/**/__tests__/            # models, main process, IPC, pages, keyboard, a11y, caregiver
 │   ├── coverage/                    # lcov-report + lcov.info (generated locally, gitignored)
 │   ├── docs/testing/                # committed copy of the HTML coverage report + lcov.info
 │   ├── release/                     # installers (generated locally, gitignored)
@@ -339,6 +344,40 @@ careconnect-swen661/
 ```
 
 Each platform folder carries its own `.gitignore`; the root `.gitignore` handles secrets, OS clutter, editor state, and logs across all of them.
+
+---
+
+## Architecture
+
+The four clients are separate apps with no shared runtime code. They carry the same screens, demo data (Margaret's plan) and domain rules, each ported into its own stack; none talks to a server. The web client, the main one, is laid out like this:
+
+```mermaid
+flowchart TD
+    subgraph Browser["Browser — React 18 + Vite PWA"]
+        Router["App.tsx — React Router 7<br/>lazy routes, ProtectedRoute"]
+        Shell["Layout — header, sidebar / Menu drawer, status bar"]
+        Recipient["Care recipient pages<br/>Home, My Day, Appointments, Medicines,<br/>Memories, Contacts, Conversation, Settings"]
+        Caregiver["Caregiver pages<br/>Dashboard, Manage medicines / appointments,<br/>Activity log, Notes"]
+        Auth["AuthContext — mock sign-in, role"]
+        Contexts["Context providers<br/>App, Settings, Messages,<br/>Appointments, Medicines, Memories"]
+        Stores["src/data — medsStore, apptStore,<br/>caregiverStore, mock data"]
+        Logic["src/models, src/utils<br/>domain rules, captions, calendar export"]
+        LS[("localStorage<br/>via useLocalStorageState")]
+        SW["Service worker — public/sw.js<br/>app shell, lazy chunks, memory photos"]
+    end
+    Router --> Shell --> Recipient & Caregiver
+    Router --> Auth --> LS
+    Recipient --> Contexts
+    Caregiver --> Stores
+    Contexts --> Stores --> LS
+    Contexts --> LS
+    Recipient & Caregiver --> Logic
+    SW -. offline .-> Router
+    Vercel["Vercel — static /dist"] --> Browser
+    ChatBot["ChatBot.tsx (not mounted)"] -. would call .-> Edge["Supabase Edge Function<br/>chat-assistant → Anthropic API"]
+```
+
+The caregiver pages and the care recipient's Medicines and Appointments write to the same stores, which is how a caregiver's edit reaches the care recipient's screens. The desktop client follows the same shape inside Electron's renderer, with a main process for the window, native menu, notifications and on-disk settings (see [Electron desktop client](#electron-desktop-client)); the Flutter and React Native clients use repositories behind providers (see their sections).
 
 ---
 
@@ -673,7 +712,7 @@ Assignment 11 write-ups: [team overview](docs/web/week11/README.md) · [Contacts
 npm run build       # outputs to /dist
 ```
 
-Deploy `/dist` to Netlify or Vercel. Configure the assistant's Supabase Edge Function and set `ANTHROPIC_API_KEY` in the host's environment settings — never client-side.
+The web app is deployed on Vercel at **<https://careconnect-swen661.vercel.app>**. To host your own copy, deploy `/dist` to Vercel or Netlify. If the AI assistant is ever mounted again, configure the assistant's Supabase Edge Function and set `ANTHROPIC_API_KEY` in the host's environment settings — never client-side.
 
 Desktop installers are produced by Electron. The `package` job in [`desktop-tests.yml`](.github/workflows/desktop-tests.yml) builds the Windows, macOS and Linux installers on native runners — members without a given OS should download that job's artifacts and treat CI as the authoritative build environment.
 
@@ -681,7 +720,7 @@ Desktop installers are produced by Electron. The `package` job in [`desktop-test
 
 ## React web client
 
-The web app is the repository root (`src/`, `public/`, `e2e/`). It is the project's main client: a responsive, installable PWA for the care recipient and the caregiver, built so that **nothing depends on hearing**. The full Assignment 11 write-ups, with screenshots at 375 / 768 / 1440 px, keyboard evidence and test results, are in [`docs/web/week11/`](docs/web/week11/README.md).
+The web app is the repository root (`src/`, `public/`, `e2e/`), live at **<https://careconnect-swen661.vercel.app>**. It is the project's main client: a responsive, installable PWA for the care recipient and the caregiver, built so that **nothing depends on hearing**. The full Assignment 11 write-ups, with screenshots at 375 / 768 / 1440 px, keyboard evidence and test results, are in [`docs/web/week11/`](docs/web/week11/README.md).
 
 ### Project description
 
@@ -689,7 +728,7 @@ The web app is the repository root (`src/`, `public/`, `e2e/`). It is the projec
 
 - **Header:** ☰ Menu (below 1024 px), logo, **search** for medicines, appointments, people and pages (Ctrl/⌘ K), **CC** (captions on or off everywhere), **high contrast**, **keyboard shortcuts**, and the **avatar** with the number of alerts waiting; its menu switches role and signs out.
 - **Sidebar** (1024 px and up) or **Menu drawer** (phones and tablets): who you are using the app as, "Good morning, Margaret" with the date and time, the pages, **Settings**, and an **alerts** list (unread messages, medicines still to take, today's visits — each a link).
-- **Status bar:** connection state in words, active alerts, "WCAG 2.2 AA · No sound required".
+- **Status bar:** connection state in words, active alerts, "WCAG 2.1 AA · No sound required".
 
 **Screens**
 
@@ -721,7 +760,7 @@ Sign in with any well-formed email and password, then choose **care recipient** 
 ### How to run tests
 
 ```bash
-npm test                            # Jest + React Testing Library (375 tests)
+npm test                            # Jest + React Testing Library (434 tests)
 npm run test:coverage               # + coverage/lcov-report/index.html, fails under 85%
 npx playwright install chromium firefox webkit   # once
 npm run test:e2e                    # Playwright, every browser project
@@ -1094,14 +1133,20 @@ Claude (Claude Code) was used to scaffold the Electron main/preload/renderer spl
 
 ## Roadmap
 
-- Flutter and React Native clients: a real media pipeline for video/audio, and account-backed sign in/up
-- Cross-platform ports: Flutter and React Native mobile clients, Electron desktop client
-- Captioned video component with a required caption track
-- Text alternatives and transcripts for every audio item
-- Multimodal alert architecture — visual first, sound optional
-- Text-first emergency path replacing the phone-call-only action
-- Haptic / vibration alert patterns per alert type
-- Real backend with Supabase + Row Level Security
+**Done**
+
+- Cross-platform ports: web PWA, Flutter and React Native mobile clients, Electron desktop client — every client with the care recipient screens and the caregiver role
+- Captioned video calls and video messages; transcripts for voicemail
+- Visual-first alerts: banners that cannot be switched off, screen flash, desktop notifications; sound optional
+- Written messages and a silent Alert in place of the phone-call-only "Call my caregiver"
+- Vibration rhythms per alert type (configured on desktop, where there is nothing to vibrate)
+
+**Next**
+
+- Home and My Day reading the shared medicines and appointments stores, so a tick on one page shows on the other
+- A real media pipeline for video and audio, with authored and verified caption tracks
+- Account-backed sign in/up and a real backend (Supabase + Row Level Security)
+- A WCAG 2.2 AA review written up alongside the existing 2.1 reports
 - Multi-patient support for caregivers
 - Localization / bilingual support
 
@@ -1112,9 +1157,9 @@ Claude (Claude Code) was used to scaffold the Electron main/preload/renderer spl
 **Team 2 — The Acuity Health Group** (SWEN 661, University of Maryland Global Campus)
 
 - **Victor Lee** — [@viclee1](https://github.com/viclee1)
-- **Ashvini Tandale** — [@ashvinit10](https://github.com/ashvinit10)
 - **Rehman Uddin** — [@89uddinrt](https://github.com/89uddinrt)
 - **Justin Zhang** — [@jzhang1717](https://github.com/jzhang1717)
+- **Upneet Bir** — [@upneetsb](https://github.com/upneetsb)
 
 Roles rotate every two weeks — see [Roles and rotation](#roles-and-rotation).
 

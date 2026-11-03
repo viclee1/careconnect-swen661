@@ -48,7 +48,7 @@ export default function StatusBar({ alertCount }: { alertCount: number }) {
           </span>
         )}
       </p>
-      <p className="m-0 hidden md:block">WCAG 2.2 AA · No sound required</p>
+      <p className="m-0 hidden md:block">WCAG 2.1 AA · No sound required</p>
     </footer>
   );
 }
