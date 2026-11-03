@@ -624,18 +624,18 @@ Timestamped log of taken/skipped doses and check-ins.
 
 - **Static checks** — ESLint (`npm run lint`) and TypeScript strict mode (`npm run typecheck`). Both must pass before a pull request merges.
 - **Playwright** — used by the screenshot scripts, the accessibility audit (`npm run a11y:web`), the `verify-pwa` / `verify-responsive` helpers and the end-to-end tests.
-- **Unit & component tests** — Jest + React Testing Library + `user-event` + jest-axe (`npm test`). `npm run test:coverage` writes `coverage/lcov-report/index.html` (committed) and fails below **85%** on statements, branches, functions or lines. Coverage counts **every file in `src/`** except three no unit test can reach (the Vite entry point and service-worker registration, both covered by Playwright, and the unmounted AI assistant — the reasons are in `jest.config.cjs`). The web suite has **434 tests in 37 suites, all passing**, at **94.7% statements / 88.3% branches / 93.8% functions / 95.7% lines**. Each client has its own suite — see the [Flutter](#flutter-mobile-client), [React Native](#react-native-mobile-client) and [Electron](#electron-desktop-client) sections.
+- **Unit & component tests** — Jest + React Testing Library + `user-event` + jest-axe (`npm test`). `npm run test:coverage` writes `coverage/lcov-report/index.html` (committed) and fails below **85%** on statements, branches, functions or lines. Coverage counts **every file in `src/`** except three no unit test can reach (the Vite entry point and service-worker registration, both covered by Playwright, and the unmounted AI assistant — the reasons are in `jest.config.cjs`). The web suite has **473 tests in 40 suites, all passing**, at **95.3% statements / 89.1% branches / 95.2% functions / 96.2% lines**. Each client has its own suite — see the [Flutter](#flutter-mobile-client), [React Native](#react-native-mobile-client) and [Electron](#electron-desktop-client) sections.
 - **Coverage across all four clients** — every client fails its CI job below 85%, and each has an HTML report committed and uploaded by CI:
 
   | Client | Tests | Statements | Branches | Functions | Lines | HTML report |
   |:--|--:|--:|--:|--:|--:|:--|
-  | Web (React) | 434 | 94.7% | 88.3% | 93.8% | 95.7% | [`coverage/lcov-report/`](coverage/lcov-report/index.html) |
+  | Web (React) | 473 | 95.3% | 89.1% | 95.2% | 96.2% | [`coverage/lcov-report/`](coverage/lcov-report/index.html) |
   | Desktop (Electron) | 523 | 97.1% | 91.6% | 96.1% | 98.2% | [`desktop/docs/testing/coverage-html/`](desktop/docs/testing/coverage-html/index.html) |
-  | React Native | 318 | 97.9% | 89.6% | 95.9% | 98.0% | [`mobile/docs/testing/coverage-html/`](mobile/docs/testing/coverage-html/index.html) |
+  | React Native | 330 | 97.9% | 90.4% | 96.2% | 98.1% | [`mobile/docs/testing/coverage-html/`](mobile/docs/testing/coverage-html/index.html) |
   | Flutter | 277 | — | — | — | 99.0% | [`flutter/docs/testing/coverage-html/`](flutter/docs/testing/coverage-html/index.html) |
 
   `flutter test` reports line coverage only. No client uses snapshot tests: assertions name the behaviour — what the user sees, hears announced, or can do next.
-- **End-to-end** — Playwright (`npm run test:e2e`) against the production build (`vite preview`, service worker active) in Chromium, Microsoft Edge, Firefox, WebKit and mobile Safari at 375px. Specs in [`e2e/`](e2e): medicines by keyboard, appointments (My Day and calendar export read back from the real file), memories (form errors, save, pin, remove, filter), the memory book offline, every care page at every width with axe; contacts → conversation → send → reload, silent alert, captioned calls and video messages, quick replies, offline queueing and offline launch, keyboard-only settings, flash previews, and Settings reachable at every width. Latest local run (Chromium, WebKit, mobile Safari, three repeats each): **282 passed, 24 skipped by design, none failed**; Edge and Firefox run in CI. Results per browser, the browser differences the tests handle, and the WebKit issues found and fixed are in [Cross-browser testing](docs/web/cross-browser-testing.md). Run `npx playwright install chromium firefox webkit` once first (`npx playwright install msedge` adds Edge locally); `npm run test:e2e:report` opens the HTML report.
+- **End-to-end** — Playwright (`npm run test:e2e`) against the production build (`vite preview`, service worker active) in Chromium, Microsoft Edge, Firefox, WebKit and mobile Safari at 375px. Specs in [`e2e/`](e2e): medicines by keyboard, appointments (My Day and calendar export read back from the real file), memories (form errors, save, pin, remove, filter), the memory book offline, every care page at every width with axe; contacts → conversation → send → reload, silent alert, captioned calls and video messages, quick replies, offline queueing and offline launch, keyboard-only settings, flash previews, and Settings reachable at every width. Latest local run (Chromium, WebKit, mobile Safari, three repeats each): **345 passed, 24 skipped by design, none failed**; Edge and Firefox run in CI. Results per browser, the browser differences the tests handle, and the WebKit issues found and fixed are in [Cross-browser testing](docs/web/cross-browser-testing.md). Run `npx playwright install chromium firefox webkit` once first (`npx playwright install msedge` adds Edge locally); `npm run test:e2e:report` opens the HTML report.
 - **Accessibility audit** — `npm run a11y:web`: 17 routes and the shell's interactive states at three widths, plus every route again in high-contrast mode with axe's AAA rules — **115 scans, 0 violations, 104/104 keyboard and structure checks**. `npm run a11y:lighthouse`: Lighthouse accessibility **100 on every route, mobile and desktop** ([summary](docs/web/accessibility/lighthouse/summary.md)). Beyond AA, six WCAG 2.1 AAA criteria are met — listed with their evidence in [the accessibility documentation](docs/web/accessibility/README.md#10-beyond-aa--wcag-21-aaa).
 - **CI** — one GitHub Actions workflow per client, each run on pull requests and pushes to `main` that touch it, and each uploading its coverage report as a build artifact:
   - [`web-tests.yml`](.github/workflows/web-tests.yml) — lint, typecheck, coverage and every Playwright project (Edge and Firefox included).
@@ -763,7 +763,7 @@ Sign in with any well-formed email and password, then choose **care recipient** 
 ### How to run tests
 
 ```bash
-npm test                            # Jest + React Testing Library (434 tests)
+npm test                            # Jest + React Testing Library (473 tests)
 npm run test:coverage               # + coverage/lcov-report/index.html, fails under 85%
 npx playwright install chromium firefox webkit   # once
 npx playwright install msedge                    # once, optional (needs sudo)
@@ -775,14 +775,12 @@ npm run lint && npm run typecheck
 
 ### Link to test coverage report
 
-[`coverage/lcov-report/index.html`](coverage/lcov-report/index.html) (committed): **94.7% statements, 88.3% branches, 93.8% functions, 95.7% lines** over the whole of `src/` (exclusions and their reasons in `jest.config.cjs`).
+[`coverage/lcov-report/index.html`](coverage/lcov-report/index.html) (committed): **95.3% statements, 89.1% branches, 95.2% functions, 96.2% lines** over the whole of `src/` (exclusions and their reasons in `jest.config.cjs`).
 
 ### Known issues and limitations (web)
 
 - **Firefox cannot launch locally on macOS 27** (Playwright's Firefox build hangs at its sandbox). CI runs the Firefox project on Ubuntu.
 - **Edge runs only where it is installed.** Locally the `edge` project is added only if Microsoft Edge is present; CI always runs it. Per-browser results and known browser differences: [Cross-browser testing](docs/web/cross-browser-testing.md).
-- **Home and My Day keep their own task list** rather than reading the medicines and appointments stores, so ticking a medicine on Medicines does not tick it on My Day.
-- **The Medicines reminder caption** names the next medicine still to come today, not an overdue one.
 - **The AI assistant** (`ChatBot.tsx`) is not mounted since the Week 11 Landing page; whether it returns is a team decision.
 - Data is mock data in `localStorage`; nothing is sent to a server.
 
@@ -889,7 +887,7 @@ A rendered copy is checked in at [`flutter/docs/testing/coverage-html/index.html
 
 ### Known issues or limitations
 
-Data lives in memory except for accessibility settings; video, audio, and the captioned call are represented in the UI but not backed by a real media pipeline; vibration patterns are approximated with named haptic impacts; sign in/up validate their forms but don't check a real account store yet.
+Data lives in memory except for accessibility settings; video, audio, and the captioned call are represented in the UI but not backed by a real media pipeline; vibration patterns are approximated with named haptic impacts; sign in/up take input but don't validate it yet (the web, desktop and React Native clients do) or check it against a real account store.
 
 ### Team member contributions this week
 
@@ -964,7 +962,7 @@ npm run typecheck
 npm run test:coverage
 ```
 
-318 tests at 98.0% line coverage against an 85% floor that CI enforces — including the RNTL
+330 tests at 98.1% line coverage against an 85% floor that CI enforces — including the RNTL
 accessibility-role/label suites (`accessibility_theme.test.tsx`,
 `accessibility_motion_targets.test.tsx`) and the full-app `navigation.test.tsx`
 integration suite. An `npm audit` plus a
@@ -994,7 +992,7 @@ open coverage/lcov-report/index.html
 
 ### Known issues or limitations
 
-Data lives in memory except for accessibility settings; video, audio, and the captioned call are represented in the UI but not backed by a real media pipeline; vibration patterns are approximated with named haptic impacts (`expo-haptics` has no arbitrary-waveform API); sign in/up take input but don't validate or store it against a real account.
+Data lives in memory except for accessibility settings; video, audio, and the captioned call are represented in the UI but not backed by a real media pipeline; vibration patterns are approximated with named haptic impacts (`expo-haptics` has no arbitrary-waveform API); sign in/up validate their forms with the web and desktop clients' rules and wording, but don't check a real account store.
 
 ### Team member contributions this week
 

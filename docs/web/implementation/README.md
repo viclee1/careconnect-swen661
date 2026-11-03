@@ -247,9 +247,6 @@ Still to do:
 - Replace mock auth and `localStorage` data with the real backend (the
   Supabase client is installed).
 - Real loading and error states once data is remote.
-- Connect My Day and Home to the medicines and appointments stores (they keep
-  their own task list today), and show an overdue medicine first in the
-  Medicines reminder caption.
 - Decide whether the AI assistant (`ChatBot.tsx`) returns: it has not been
   mounted since the Week 11 Landing page.
 - Manual VoiceOver and NVDA pass on the main flows; test on real phones and tablets.
