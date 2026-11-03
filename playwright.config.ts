@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs';
 import { defineConfig, devices } from '@playwright/test';
 
 /**
@@ -8,8 +9,19 @@ import { defineConfig, devices } from '@playwright/test';
  *   npm run test:e2e -- --project=chromium
  *
  * First run only: `npx playwright install chromium firefox webkit`.
+ * Edge runs from its installed stable channel (`npx playwright install msedge`,
+ * which needs sudo); locally the project is left out where Edge isn't installed.
  */
 const PORT = 4173;
+
+const EDGE_PATHS = [
+  '/Applications/Microsoft Edge.app',
+  '/opt/microsoft/msedge/msedge',
+  'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
+  'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe',
+];
+// Always on in CI, so a broken Edge install fails the run instead of skipping it.
+const hasEdge = !!process.env.CI || EDGE_PATHS.some((path) => existsSync(path));
 
 export default defineConfig({
   testDir: './e2e',
@@ -30,6 +42,9 @@ export default defineConfig({
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } } },
     { name: 'firefox', use: { ...devices['Desktop Firefox'], viewport: { width: 1440, height: 900 } } },
+    ...(hasEdge
+      ? [{ name: 'edge', use: { ...devices['Desktop Edge'], channel: 'msedge', viewport: { width: 1440, height: 900 } } }]
+      : []),
     { name: 'webkit', use: { ...devices['Desktop Safari'], viewport: { width: 1440, height: 900 } } },
     // Mobile Safari at 375px, for the responsive navigation flow.
     { name: 'mobile-safari', use: { ...devices['iPhone 13 Mini'] } },

@@ -86,7 +86,7 @@ test.describe('Appointments', () => {
 });
 
 test.describe('Memories', () => {
-  test('add a memory: errors explained, saved, focused, pinned, kept after reload, then removed', async ({ page }) => {
+  test('add a memory: errors explained, saved, focused, pinned, kept after reload, then removed', async ({ page, browserName }) => {
     await signInAsPatient(page, '/app/memories');
     const addButton = page.getByRole('button', { name: 'Add a memory' });
     await addButton.click();
@@ -126,11 +126,24 @@ test.describe('Memories', () => {
     await page.reload();
     await expect(page.getByRole('region', { name: 'Pinned' }).getByRole('heading', { name: 'Our wedding day' })).toBeVisible();
 
-    await page.getByRole('button', { name: 'Remove: Our wedding day' }).click();
+    // After a reload WebKit restores the old scroll position and then can
+    // jump back to the top; a tap that lands during the jump is taken as a
+    // scroll and fires no click. So WebKit focuses Remove and presses Enter —
+    // no hit-testing, and still the keyboard.
+    const remove = page.getByRole('button', { name: 'Remove: Our wedding day' });
+    const openRemove = async () => {
+      if (browserName === 'webkit') {
+        await remove.focus();
+        await page.keyboard.press('Enter');
+      } else {
+        await remove.click();
+      }
+    };
+    await openRemove();
     const dialog = page.getByRole('dialog', { name: 'Remove “Our wedding day”?' });
     await dialog.press('Escape');
     await expect(dialog).toBeHidden();
-    await page.getByRole('button', { name: 'Remove: Our wedding day' }).click();
+    await openRemove();
     await page.getByRole('button', { name: 'Remove memory' }).click();
     await expect(heading).toBeHidden();
     await expect(addButton).toBeFocused();
