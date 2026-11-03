@@ -8,19 +8,18 @@
  *
  * A desktop machine has no vibration motor, so this screen is where the
  * rhythms are *configured and learned* rather than felt: the pattern is drawn
- * as a glyph, and previewing it plays the rhythm back as a visual pulse in the
- * same timing the paired phone would buzz it. The setting itself still travels
+ * as bars, and previewing it fills them in the same timing the paired phone
+ * would buzz it. The setting itself still travels
  * with the account, which is why it is edited here at all.
  *
  * `pulses` is the rhythm as alternating buzz and pause durations in
- * milliseconds, starting with a buzz. `glyph` is the printed shape shown beside
- * the name, so the rhythm is legible as well as feelable.
+ * milliseconds, starting with a buzz; the same numbers draw the bars, so the
+ * rhythm is legible as well as feelable.
  */
 export interface VibrationPattern {
   id: 'appointment' | 'medication' | 'missed';
   alertType: string;
   rhythmName: string;
-  glyph: string;
   pulses: number[];
 }
 
@@ -29,21 +28,18 @@ export const vibrationPatterns: VibrationPattern[] = [
     id: 'appointment',
     alertType: 'Appointment',
     rhythmName: 'Long-short-long',
-    glyph: '—  ·  —',
     pulses: [400, 150, 120, 150, 400],
   },
   {
     id: 'medication',
     alertType: 'Medication',
     rhythmName: 'Double pulse',
-    glyph: '··   ··',
     pulses: [120, 100, 120, 400, 120, 100, 120],
   },
   {
     id: 'missed',
     alertType: 'Missed / Escalated',
     rhythmName: 'Rapid burst',
-    glyph: '···· ····',
     pulses: [80, 60, 80, 60, 80, 60, 80, 300, 80, 60, 80, 60, 80, 60, 80],
   },
 ];

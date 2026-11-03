@@ -4,6 +4,15 @@ const user = { id: 'u1', name: 'Margaret Whitfield', email: 'margaret@example.co
 
 /** Signs in as the care recipient (sign-in is mocked) and opens `path`. */
 export async function signInAsPatient(page: Page, path: string) {
+  await signInAs(page, path, 'patient');
+}
+
+/** Signs in as the caregiver and opens `path`. */
+export async function signInAsCaregiver(page: Page, path: string) {
+  await signInAs(page, path, 'caregiver');
+}
+
+async function signInAs(page: Page, path: string, role: 'patient' | 'caregiver') {
   // Seed the session before any app code runs. Writing it from a loaded page
   // raced Landing's mount effect, which clears the session — in slower WebKit
   // the effect could land after the write and sign the test back out. The
@@ -13,7 +22,7 @@ export async function signInAsPatient(page: Page, path: string) {
     sessionStorage.setItem('e2e-session-seeded', '1');
     localStorage.clear();
     localStorage.setItem('careconnect_session', session);
-  }, JSON.stringify({ user, role: 'patient' }));
+  }, JSON.stringify({ user, role }));
   await page.goto(path);
   await page.getByRole('heading', { level: 1 }).first().waitFor();
 }

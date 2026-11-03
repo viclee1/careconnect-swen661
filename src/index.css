@@ -281,8 +281,8 @@
     100% { opacity: 0; }
   }
 
-  /* Vibration-pattern lamp: the visual stand-in for a buzz. */
-  .pattern-lamp {
+  /* Vibration-pattern bars: each fills as its buzz starts. */
+  .pattern-bar {
     transition: background-color 60ms linear, box-shadow 60ms linear;
   }
 }

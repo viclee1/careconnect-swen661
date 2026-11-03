@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">62.16% </span>
+                <span class="strong">65% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>23/37</span>
+                <span class='fraction'>26/40</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">36% </span>
+                <span class="strong">37.03% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>9/25</span>
+                <span class='fraction'>10/27</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">69.44% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>22/33</span>
+                <span class='fraction'>25/36</span>
             </div>
         
             
@@ -127,8 +127,17 @@
 <a name='L62'></a><a href='#L62'>62</a>
 <a name='L63'></a><a href='#L63'>63</a>
 <a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -140,16 +149,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">352x</span>
-<span class="cline-any cline-yes">281x</span>
+<span class="cline-any cline-yes">356x</span>
+<span class="cline-any cline-yes">285x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -180,6 +192,8 @@
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
@@ -194,15 +208,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEffect } from 'react';
 import type { RefObject } from 'react';
 &nbsp;
+import { inertOutside } from '../utils/inert';
+&nbsp;
 const TABBABLE =
   'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),' +
   'textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
 &nbsp;
 /**
  * Keeps keyboard focus inside a modal panel while it is open: focus moves in
- * on open, Tab and Shift+Tab wrap at the ends, Escape closes, and focus goes
- * back to `returnTo` when the panel closes — the same contract as
- * ConfirmDialog, shared by the navigation drawer and the shortcuts dialog.
+ * on open, Tab and Shift+Tab wrap at the ends, Escape closes, the page behind
+ * is inert, and focus goes back to `returnTo` when the panel closes — the same
+ * contract as ConfirmDialog, shared by the navigation drawer and the shortcuts
+ * dialog.
  */
 export function useFocusTrap(
   panelRef: RefObject&lt;HTMLElement | null&gt;,
@@ -215,6 +232,8 @@ export function useFocusTrap(
     const panel = panelRef.current;
     <span class="missing-if-branch" title="if path not taken" >I</span>if (!panel) <span class="cstat-no" title="statement not covered" >return;</span>
     const opener = returnTo.current;
+    // The panel's wrapper, not the panel: the backdrop beside it closes on click.
+    const restoreBackground = inertOutside(panel.parentElement ?? <span class="branch-1 cbranch-no" title="branch not covered" >panel)</span>;
 &nbsp;
     const initial =
       panel.querySelector&lt;HTMLElement&gt;('[data-autofocus]') ??
@@ -245,6 +264,8 @@ export function useFocusTrap(
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     return () =&gt; {
+      // First, so the opener is focusable again below.
+      restoreBackground();
       document.removeEventListener('keydown', onKey);
       document.body.style.overflow = previousOverflow;
       // Back to the button that opened it, unless the close moved focus on
@@ -262,7 +283,7 @@ export function useFocusTrap(
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-29T21:09:11.541Z
+                at 2026-11-03T06:19:24.492Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

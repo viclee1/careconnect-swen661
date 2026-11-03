@@ -171,7 +171,9 @@ export default function MockVideoCall({ onClose }: { onClose: () => void }) {
                 : 'bg-neutral-700 border-neutral-600 text-white hover:bg-neutral-600'
             }`}
             onClick={() => setIsMuted(!isMuted)}
-            aria-pressed={isMuted}
+            // The name says what pressing it does next ("Unmute"), so it is not
+            // also aria-pressed: "Unmute microphone, pressed" reads as two
+            // contradictory states. Same for the two buttons below.
             aria-label={isMuted ? 'Unmute microphone' : 'Mute microphone'}
           >
             {isMuted ? <MicOff className="w-6 h-6 mb-1" /> : <Mic className="w-6 h-6 mb-1" />}
@@ -186,7 +188,6 @@ export default function MockVideoCall({ onClose }: { onClose: () => void }) {
                 : 'bg-neutral-700 border-neutral-600 text-white hover:bg-neutral-600'
             }`}
             onClick={() => setIsAudioPaused(!isAudioPaused)}
-            aria-pressed={isAudioPaused}
             aria-label={isAudioPaused ? 'Resume audio' : 'Pause audio'}
           >
             {isAudioPaused ? <Play className="w-6 h-6 mb-1" /> : <Pause className="w-6 h-6 mb-1" />}
@@ -201,7 +202,6 @@ export default function MockVideoCall({ onClose }: { onClose: () => void }) {
                 : 'bg-neutral-700 border-neutral-600 text-white hover:bg-neutral-600'
             }`}
             onClick={() => setCaptionsVisible(!captionsVisible)}
-            aria-pressed={captionsVisible}
             aria-label={captionsVisible ? 'Hide captions' : 'Show captions'}
           >
             <Captions className="w-6 h-6 mb-1" />

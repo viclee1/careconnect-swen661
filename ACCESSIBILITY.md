@@ -156,8 +156,11 @@ The confirmation dialog implements the full WAI-ARIA modal dialog pattern:
 - **Dismissal**: `Escape` calls `onCancel`; the backdrop (`role="presentation"`) closes on
   outside click; an explicit "Close dialog" button (`aria-label`) is provided.
 - **Focus restoration**: on close, focus returns to the triggering button via `triggerRef`.
-- **Background inertness**: `document.body.style.overflow` is locked while open; the dark
-  overlay is `aria-hidden="true"`.
+- **Background inertness**: everything outside the dialog is `inert` while it is open
+  (`src/utils/inert.ts`), so neither the keyboard, the pointer nor a screen reader's virtual
+  cursor can reach the page behind, even where `aria-modal` is ignored. The page is given back
+  before `onConfirm`/`onCancel` run, so a handler can move focus. Body scroll is locked and the
+  dark overlay is `aria-hidden="true"`.
 
 This dialog is invoked automatically by the `danger` variant of the **Button** component
 (`src/components/Button.tsx`), so every destructive action is gated behind a confirm step.
@@ -175,10 +178,12 @@ The reusable **Field** component wires labels, hints, and errors together:
   and `aria-required="true"`.
 - **Invalid state**: when an `error` is present, the input gets `aria-invalid="true"` and a
   red 2px border (color is not the only signal).
-- **Programmatic association**: `aria-describedby` is built from whichever of the hint id and
-  error id exist, so assistive tech reads the helper text and the error with the field.
-- **Inline error**: the error message renders as `<p role="alert">` directly below the field
-  (not as a tooltip), prefixed by an `aria-hidden` "!" with the text available to readers.
+- **Programmatic association**: `aria-describedby` points at the error when there is one and
+  at the hint otherwise, so assistive tech reads it with the field.
+- **Inline error**: the error message renders as a `<p>` directly below the field (not as a
+  tooltip), prefixed by an `aria-hidden` "!". It is deliberately not a live region: a form
+  with four errors would announce four alerts at once. The form-level summary is the one
+  announcement, and focus moves to the first field to fix, which reads its error.
 
 At the form level (`SignIn.tsx` / `SignUp.tsx`):
 
@@ -234,7 +239,7 @@ satisfy it.
 | **2.4.7** | Focus Visible | AA | A global `*:focus-visible` rule draws a 3px `calm-600` outline with offset (`index.css`); default outlines are only removed when `:focus-visible` is supported. |
 | **3.2.3** | Consistent Navigation | AA | The same `Main navigation` landmark, item set, and ordering appear on every app screen (`Layout.tsx`); only the presentation (bottom bar vs sidebar) adapts to viewport/role. |
 | **3.2.4** | Consistent Identification | AA | Shared components (`Button`, `Card`, `Field`, `Banner`) give the same icon + label to the same function everywhere (e.g. the heart logo, the "Call my caregiver" action). |
-| **3.3.1** | Error Identification | A | Invalid fields set `aria-invalid` and show an inline `role="alert"` message; a form-level error summary (`role="alert"`) lists what to fix. |
+| **3.3.1** | Error Identification | A | Invalid fields set `aria-invalid` and show an inline message tied by `aria-describedby`; a form-level error summary (`role="alert"`, the only announcement) lists what to fix. |
 | **3.3.2** | Labels or Instructions | A | `Field` always renders a visible `<label>`, optional hint text, a required marker, and `autoComplete` hints. |
 | **3.3.3** | Error Suggestion | A | Error text suggests the correction ("Please enter a valid email address.", "Please enter your password.") rather than only flagging failure. |
 | **4.1.2** | Name, Role, Value | A | `aria-pressed` on toggles, `aria-expanded`/`aria-controls` on the chat launcher, `aria-current="page"` on active nav, `role="dialog"`+`aria-modal`, `role="progressbar"` with values, `aria-disabled` on disabled buttons. |

@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
-import { signInAsPatient } from './helpers';
+import { signInAsCaregiver, signInAsPatient } from './helpers';
 
 /**
  * Appointments, Medicines and Memories: the critical flows, run against the
@@ -225,6 +225,31 @@ test.describe('My screens at every width', () => {
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
         .analyze();
       expect(violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target).join(', ')}`)).toEqual([]);
+    });
+  }
+});
+
+test.describe('Target size outside the care pages', () => {
+  // WCAG 2.5.5 (AAA): 44 × 44px. These five links were the last ones under it.
+  // Links inside a sentence ("Don't have an account? Sign up for free") are
+  // exempt and not listed.
+  const cases: [string, string, 'patient' | 'caregiver' | null, string][] = [
+    ['Landing', '/', null, 'Sign in'],
+    ['Landing', '/', null, 'Sign up'],
+    ['Sign in', '/signin', null, 'CareConnect home'],
+    ['Sign up', '/signup', null, 'CareConnect home'],
+    ['Home', '/app', 'patient', 'View My Day'],
+    ['Caregiver dashboard', '/app', 'caregiver', 'View all activity'],
+  ];
+  for (const [screen, path, role, name] of cases) {
+    test(`${screen}: "${name}" is at least 44px`, async ({ page }) => {
+      if (role === 'patient') await signInAsPatient(page, path);
+      else if (role === 'caregiver') await signInAsCaregiver(page, path);
+      else await page.goto(path);
+
+      const box = await page.getByRole('link', { name, exact: name !== 'View My Day' }).first().boundingBox();
+      expect(box?.height).toBeGreaterThanOrEqual(44);
+      expect(box?.width).toBeGreaterThanOrEqual(44);
     });
   }
 });

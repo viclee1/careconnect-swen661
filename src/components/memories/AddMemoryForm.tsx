@@ -175,7 +175,6 @@ export default function AddMemoryForm({
         {errors.category && (
           <p
             id={categoryErrorId}
-            role="alert"
             className="flex items-center gap-1.5 text-sm font-medium text-alert-700 leading-snug"
           >
             <span aria-hidden="true" className="font-bold">

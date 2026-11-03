@@ -132,11 +132,13 @@ function apptToForm(appt: Appointment): ApptForm {
 
 // ── Inline error paragraph ─────────────────────────────────────────────────────
 
+// Not a live region: the error summary above the form is the one alert, so a
+// form with several errors is announced once. Each field reads its own error
+// through aria-describedby.
 function InlineError({ id, message }: { id: string; message: string }) {
   return (
     <p
       id={id}
-      role="alert"
       className="flex items-center gap-1.5 text-sm font-medium text-alert-700 leading-snug"
     >
       <span aria-hidden="true" className="flex-shrink-0 font-bold">!</span>

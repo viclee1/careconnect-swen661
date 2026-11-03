@@ -408,7 +408,7 @@ export default function CaregiverDashboard() {
             </h2>
             <Link
               to="/app/activity"
-              className="text-sm font-semibold text-calm-600 no-underline hover:underline flex items-center gap-1"
+              className="text-sm font-semibold text-calm-600 no-underline hover:underline flex items-center gap-1 min-h-[2.75rem]"
             >
               View all
               {/* Named "View all activity" for screen readers listing links

@@ -104,7 +104,7 @@ describe('AccessibilitySettings', () => {
     expect(screen.getByText('Turn vibration on above to play these.')).toBeInTheDocument();
   });
 
-  it('plays a vibration rhythm as a visual pulse and on the device', () => {
+  it('plays a vibration rhythm as bars filling in time, and on the device', () => {
     jest.useFakeTimers();
     const vibrate = jest.fn();
     Object.defineProperty(navigator, 'vibrate', { configurable: true, value: vibrate });
@@ -114,15 +114,44 @@ describe('AccessibilitySettings', () => {
       expect(vibrate).toHaveBeenCalledWith([120, 100, 120, 400, 120, 100, 120]);
       expect(screen.getByText('Playing the Double pulse rhythm.')).toBeInTheDocument();
 
+      // Double pulse: buzzes start at 0, 220, 740 and 960ms. Each bar fills as
+      // its buzz starts and stays filled — nothing blinks on and off (WCAG
+      // 2.3.2 Three Flashes).
+      const lit = () =>
+        Array.from(screen.getByTestId('pattern-bars-medication').querySelectorAll('[data-lit]')).map(
+          (bar) => bar.getAttribute('data-lit'),
+        );
       act(() => jest.advanceTimersByTime(10));
-      expect(screen.getByTestId('pattern-lamp-medication')).toHaveAttribute('data-on', 'true');
+      expect(lit()).toEqual(['true', 'false', 'false', 'false']);
+      act(() => jest.advanceTimersByTime(300));
+      expect(lit()).toEqual(['true', 'true', 'false', 'false']);
+      act(() => jest.advanceTimersByTime(700));
+      expect(lit()).toEqual(['true', 'true', 'true', 'true']);
 
       act(() => jest.advanceTimersByTime(2000));
-      expect(screen.getByTestId('pattern-lamp-medication')).toHaveAttribute('data-on', 'false');
+      expect(lit()).toEqual(['false', 'false', 'false', 'false']);
       expect(screen.queryByText('Playing the Double pulse rhythm.')).not.toBeInTheDocument();
     } finally {
       jest.useRealTimers();
       delete (navigator as { vibrate?: unknown }).vibrate;
+    }
+  });
+
+  it('under reduced motion, fills every bar at once instead of in sequence', () => {
+    jest.useFakeTimers();
+    const original = window.matchMedia;
+    window.matchMedia = ((query: string) => ({
+      ...original(query),
+      matches: query === '(prefers-reduced-motion: reduce)',
+    })) as typeof window.matchMedia;
+    try {
+      renderSettings();
+      fireEvent.click(screen.getByRole('button', { name: /Missed \/ Escalated Rapid burst/ }));
+      const bars = screen.getByTestId('pattern-bars-missed').querySelectorAll('[data-lit]');
+      expect(Array.from(bars).every((bar) => bar.getAttribute('data-lit') === 'true')).toBe(true);
+    } finally {
+      window.matchMedia = original;
+      jest.useRealTimers();
     }
   });
 

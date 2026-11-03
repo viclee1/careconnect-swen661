@@ -2,6 +2,8 @@ import { useEffect, useRef } from 'react';
 import type { RefObject } from 'react';
 import { AlertTriangle, X } from 'lucide-react';
 
+import { inertOutside } from '../utils/inert';
+
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 export interface ConfirmDialogProps {
@@ -44,6 +46,19 @@ export default function ConfirmDialog({
   const dialogRef = useRef<HTMLDivElement>(null);
   const headingId = useRef(`dialog-title-${Math.random().toString(36).slice(2)}`);
   const descId = useRef(`dialog-desc-${Math.random().toString(36).slice(2)}`);
+  const restoreBackgroundRef = useRef<(() => void) | null>(null);
+
+  // The page comes back before the caller's handler runs, so a handler that
+  // moves focus somewhere on the page (Memories focuses "Add a memory" after a
+  // removal) is not blocked by the inert attribute that is about to go.
+  function confirm() {
+    restoreBackgroundRef.current?.();
+    onConfirm();
+  }
+  function cancel() {
+    restoreBackgroundRef.current?.();
+    onCancel();
+  }
 
   // ── Focus management ───────────────────────────────────────────────────────
 
@@ -54,6 +69,12 @@ export default function ConfirmDialog({
     const dialog = dialogRef.current;
     if (!dialog) return;
 
+    // The page behind is inert while the dialog is open, so a screen reader's
+    // virtual cursor cannot leave it even where aria-modal is not honoured. The
+    // backdrop is kept: clicking it cancels.
+    const restoreBackground = inertOutside(dialog.parentElement ?? dialog);
+    restoreBackgroundRef.current = restoreBackground;
+
     const firstFocusable = dialog.querySelectorAll<HTMLElement>(TABBABLE)[0];
     firstFocusable?.focus();
 
@@ -62,6 +83,7 @@ export default function ConfirmDialog({
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === 'Escape') {
         e.preventDefault();
+        restoreBackground();
         onCancel();
         return;
       }
@@ -88,7 +110,13 @@ export default function ConfirmDialog({
     }
 
     document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      // Runs before the effect below returns focus, so the trigger is no
+      // longer inert when it is focused.
+      restoreBackground();
+      restoreBackgroundRef.current = null;
+      document.removeEventListener('keydown', handleKeyDown);
+    };
   }, [open, onCancel]);
 
   // Return focus to trigger on close. Only after the dialog has actually been
@@ -122,7 +150,7 @@ export default function ConfirmDialog({
       role="presentation"
       onClick={(e) => {
         // Close on backdrop click, but not when clicking inside the dialog
-        if (e.target === e.currentTarget) onCancel();
+        if (e.target === e.currentTarget) cancel();
       }}
     >
       {/* Dark overlay */}
@@ -142,7 +170,7 @@ export default function ConfirmDialog({
       >
         {/* Close (X) button — top-right */}
         <button
-          onClick={onCancel}
+          onClick={cancel}
           className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-lg text-neutral-500 hover:bg-neutral-100 hover:text-neutral-800 transition-colors"
           aria-label="Close dialog"
         >
@@ -181,13 +209,13 @@ export default function ConfirmDialog({
         {/* Action row */}
         <div className="flex flex-col-reverse md:flex-row gap-3 justify-end">
           <button
-            onClick={onCancel}
+            onClick={cancel}
             className="inline-flex items-center justify-center gap-2 font-semibold rounded-lg px-5 py-3 min-h-[2.75rem] min-w-[2.75rem] cursor-pointer bg-white text-neutral-700 border-2 border-neutral-300 hover:bg-neutral-50 hover:border-neutral-400 transition-colors"
           >
             {cancelLabel}
           </button>
           <button
-            onClick={onConfirm}
+            onClick={confirm}
             className="inline-flex items-center justify-center gap-2 font-semibold rounded-lg px-5 py-3 min-h-[2.75rem] min-w-[2.75rem] cursor-pointer bg-alert-600 text-white border-2 border-alert-600 hover:bg-alert-700 hover:border-alert-700 transition-colors"
           >
             {confirmLabel}

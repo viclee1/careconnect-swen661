@@ -80,6 +80,8 @@ describe('Manage appointments', () => {
       'Location type is required.',
     ]);
     expect(screen.getByRole('combobox', { name: /Location type/ })).toHaveAttribute('aria-invalid', 'true');
+    // The summary is the one announcement; the field errors are not alerts too.
+    expect(screen.getAllByRole('alert')).toEqual([summary]);
     expect(stored()).toBeNull();
   });
 
