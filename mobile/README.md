@@ -404,10 +404,12 @@ screens, rendered inside the real navigator and providers:
   rather than an arbitrary waveform, so each rhythm plays as a sequence of
   impacts and pauses. That is enough to tell them apart by feel; a true waveform
   needs a native module.
-- **Sign in and sign up are unauthenticated.** Both forms take input but do not
-  validate or store it — "Sign in" and "Create account" navigate straight into
-  the app regardless of what, if anything, was typed. An account store and
-  real validation belong with a backend, which is out of scope this week.
+- **Sign in and sign up are unauthenticated.** Both forms are validated with
+  the web and desktop clients' rules and wording (`validateSignIn` /
+  `validateSignUp` in `src/utils/validators.ts`): an empty or malformed field is
+  explained under the field and in its accessibility hint, the summary is
+  announced, and focus moves to the first field to fix. Any well-formed input
+  then signs in; an account store belongs with a backend, which is out of scope.
 
 ---
 

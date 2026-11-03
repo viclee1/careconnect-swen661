@@ -106,6 +106,10 @@ Plain functions over `localStorage`, seeded the first time from the demo data in
 
 **`useLocalStorageState(key, initial, revive?)`** (`src/hooks/useLocalStorageState.ts`) is `useState` mirrored into `localStorage`. `revive` runs on every read, so a corrupt or outdated entry falls back to a safe value rather than crashing the screen; full or blocked storage (a private window) is tolerated for the session. The Medicines, Appointments, Memories, Messages and Settings contexts use it, which is why those screens work offline.
 
+**`useMyDay()`** (`src/hooks/useMyDay.ts`) is the My Day list, shared by the My Day screen and Home's progress line: `{ items, doneCount, totalCount, toggle(id) }`. `buildMyDay()` (`src/models/myDay.ts`) assembles it from the Medicines context (one row per medicine, `med:<id>`), today's visits on My Day from the Appointments context (`appt:<id>`), and three routines, in time order. Toggling a medicine row calls the Medicines context's `setTaken`, so the tick shows on Medicines and in the caregiver's adherence; routines and visits keep their ticks in `careconnect_myday_done`, which resets each day.
+
+**`medicineReminder(medications, isTaken, now)`** (`src/models/medicine.ts`) picks the dose the Medicines caption names: the longest-overdue untaken dose if any, otherwise the soonest one still to come; `reminderSentence()` words it ("Overdue: … was due at 9:00 am." / "Reminder: … take at 8:00 pm.").
+
 ---
 
 ## Web: `localStorage` keys
@@ -123,7 +127,7 @@ Everything the web app remembers. Clearing site data resets the app to its demo 
 | `careconnect_meds_taken`, `careconnect_meds_taken_date` | Today's ticks (`Record<medId, boolean>`) and the day they belong to | `context/MedicinesContext.tsx` |
 | `careconnect_appointments_list` | `Appointment[]` | `data/apptStore.ts`, `context/AppointmentsContext.tsx` |
 | `careconnect_appointments_my_day` | Visits added to My Day | `context/AppointmentsContext.tsx` |
-| `careconnect_web_myday_tasks` | My Day / Home task list | `pages/Home.tsx`, `pages/Schedule.tsx` |
+| `careconnect_myday_done` | `{ date, done }`: today's ticks on routines and visits (medicine ticks live in `careconnect_meds_taken`); reset each day | `hooks/useMyDay.ts` |
 | `careconnect_schedule_done` | `{ date, ids[] }` | `data/caregiverStore.ts` |
 | `careconnect_checkin` | `{ date, time }` | `data/caregiverStore.ts` |
 | `careconnect_activity_log` | `ActivityEvent[]` | `data/caregiverStore.ts` |

@@ -47,6 +47,28 @@ test.describe('Medicines', () => {
     await expect(lisinopril).toBeChecked();
     await expect(page.getByRole('checkbox', { name: 'Metformin taken' })).toBeChecked();
   });
+
+  test('a medicine ticked on Medicines is ticked on My Day and counted on Home, and back', async ({ page }) => {
+    // One list, not three copies (#42). Amlodipine starts out taken: 1 of 9.
+    await signInAsPatient(page, '/app/medicines');
+    await page.getByRole('checkbox', { name: 'Metformin taken' }).check();
+
+    await page.goto('/app/my-day');
+    const metformin = page.getByRole('button', { name: /^Take Metformin/ });
+    await expect(metformin).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByText('2 of 9 done')).toBeVisible();
+
+    await page.goto('/app');
+    await expect(page.getByText('2 of 9 things done today')).toBeVisible();
+
+    // And the other way: unticked on My Day, unticked on Medicines.
+    await page.goto('/app/my-day');
+    await metformin.focus();
+    await page.keyboard.press('Enter');
+    await expect(metformin).toHaveAttribute('aria-pressed', 'false');
+    await page.goto('/app/medicines');
+    await expect(page.getByRole('checkbox', { name: 'Metformin taken' })).not.toBeChecked();
+  });
 });
 
 test.describe('Appointments', () => {

@@ -1,6 +1,6 @@
 # Cross-browser testing — web client
 
-The Playwright end-to-end suite ([`e2e/`](../../e2e), config in [`playwright.config.ts`](../../playwright.config.ts)) runs against the production build (`vite preview`, service worker active) in five browser projects. Every project runs the same 34 tests; the differences between browsers are listed below, with the reason for each.
+The Playwright end-to-end suite ([`e2e/`](../../e2e), config in [`playwright.config.ts`](../../playwright.config.ts)) runs against the production build (`vite preview`, service worker active) in five browser projects. Every project runs the same 41 tests; the differences between browsers are listed below, with the reason for each.
 
 ## Browsers
 
@@ -23,25 +23,25 @@ npm run test:e2e -- --project=edge               # one browser
 
 ## Results
 
-**Local** — macOS 27, three repeats of the whole suite (`--repeat-each=3`), 3 November 2026:
+**Local** — macOS 27, three repeats of the whole suite (`--repeat-each=3`), 3 November 2026 (after the target-size tests from #47 and the My Day test from #42):
 
 | Project | Passed | Failed | Flaky | Skipped by design |
 |:--|--:|--:|--:|--:|
-| `chromium` | 99 | 0 | 0 | 3 |
-| `webkit` | 93 | 0 | 0 | 9 |
-| `mobile-safari` | 90 | 0 | 0 | 12 |
-| **Total** | **282** | **0** | **0** | **24** |
+| `chromium` | 120 | 0 | 0 | 3 |
+| `webkit` | 114 | 0 | 0 | 9 |
+| `mobile-safari` | 111 | 0 | 0 | 12 |
+| **Total** | **345** | **0** | **0** | **24** |
 
-**CI** — GitHub Actions, Ubuntu 24.04, one run with up to two retries ([run 41584787934](https://github.com/viclee1/careconnect-swen661/actions/runs/41584787934/job/125747620866), 3 November 2026):
+**CI** — GitHub Actions, Ubuntu 24.04, one run with up to two retries ([run 41589834513](https://github.com/viclee1/careconnect-swen661/actions/runs/41589834513/job/125763766320), the last run of #47, 3 November 2026):
 
 | Project | Passed | Failed | Retried | Skipped by design |
 |:--|--:|--:|--:|--:|
-| `chromium` | 33 | 0 | 0 | 1 |
-| `edge` | 33 | 0 | 0 | 1 |
-| `firefox` | 31 | 0 | 0 | 3 |
-| `webkit` | 31 | 0 | 0 | 3 |
-| `mobile-safari` | 30 | 0 | 0 | 4 |
-| **Total** | **158** | **0** | **0** | **12** |
+| `chromium` | 39 | 0 | 0 | 1 |
+| `edge` | 39 | 0 | 0 | 1 |
+| `firefox` | 37 | 0 | 0 | 3 |
+| `webkit` | 37 | 0 | 0 | 3 |
+| `mobile-safari` | 36 | 0 | 0 | 4 |
+| **Total** | **188** | **0** | **0** | **12** |
 
 ### Per test
 
@@ -50,12 +50,14 @@ npm run test:e2e -- --project=edge               # one browser
 | Spec | Test | Chromium | Edge | Firefox | WebKit | Mobile Safari |
 |:--|:--|:-:|:-:|:-:|:-:|:-:|
 | care-pages | Tick medicines from the keyboard; the count is announced and survives a reload | ✓ | ✓ | ✓ | ✓ | ✓ |
+| care-pages | A medicine ticked on Medicines is ticked on My Day and counted on Home, and back | ✓ | ✓ | ✓ | ✓ | ✓ |
 | care-pages | Add a visit to My Day, export every visit to a calendar file with silent reminders | ✓ | ✓ | ✓ | ✓ | ✓ |
 | care-pages | Add a memory: errors, save, focus, pin, reload, remove | ✓ | ✓ | ✓ | ✓ | ✓ |
 | care-pages | Filter memories with the arrow keys; Escape keeps the draft | ✓ | ✓ | ✓ | ✓ | ✓ |
 | care-pages | The memory book, photos included, opens with no connection | ✓ | ✓ | — | — | — |
 | care-pages | Appointments, Medicines, Memories at every width: no sideways scroll, 44px targets, axe (3 tests) | ✓ | ✓ | ✓ | ✓ | ✓ |
 | care-pages | Old screen addresses redirect (3 tests) | ✓ | ✓ | ✓ | ✓ | ✓ |
+| care-pages | Five links outside the care pages are at least 44px (6 tests) | ✓ | ✓ | ✓ | ✓ | ✓ |
 | contacts-messaging | Find a contact, open the conversation, send a message that survives a reload | ✓ | ✓ | ✓ | ✓ | ✓ |
 | contacts-messaging | A voicemail arrives as a transcript; an empty message is refused with a reason | ✓ | ✓ | ✓ | ✓ | ✓ |
 | contacts-messaging | Alert someone silently: a worded flash and a written record | ✓ | ✓ | ✓ | ✓ | ✓ |

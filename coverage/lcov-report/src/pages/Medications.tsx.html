@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>28/28</span>
+                <span class='fraction'>23/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>12/12</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>11/11</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>23/23</span>
+                <span class='fraction'>21/21</span>
             </div>
         
             
@@ -158,12 +158,7 @@
 <a name='L93'></a><a href='#L93'>93</a>
 <a name='L94'></a><a href='#L94'>94</a>
 <a name='L95'></a><a href='#L95'>95</a>
-<a name='L96'></a><a href='#L96'>96</a>
-<a name='L97'></a><a href='#L97'>97</a>
-<a name='L98'></a><a href='#L98'>98</a>
-<a name='L99'></a><a href='#L99'>99</a>
-<a name='L100'></a><a href='#L100'>100</a>
-<a name='L101'></a><a href='#L101'>101</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<a name='L96'></a><a href='#L96'>96</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
@@ -172,15 +167,13 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">41x</span>
-<span class="cline-any cline-yes">41x</span>
-<span class="cline-any cline-yes">160x</span>
-<span class="cline-any cline-yes">41x</span>
+<span class="cline-any cline-yes">43x</span>
+<span class="cline-any cline-yes">43x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -195,14 +188,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">41x</span>
-<span class="cline-any cline-yes">41x</span>
-<span class="cline-any cline-yes">45x</span>
-<span class="cline-any cline-yes">41x</span>
+<span class="cline-any cline-yes">43x</span>
+<span class="cline-any cline-yes">43x</span>
+<span class="cline-any cline-yes">47x</span>
+<span class="cline-any cline-yes">43x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">41x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">43x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -233,8 +224,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">160x</span>
+<span class="cline-any cline-yes">168x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -272,22 +262,20 @@ import MedicineDetail from '../components/medicines/MedicineDetail';
 import MedicineProgress from '../components/medicines/MedicineProgress';
 import MedicineRow from '../components/medicines/MedicineRow';
 import { useMedicines } from '../context/medicines';
-import type { Medication } from '../models/medicine';
-import { formatTime12 } from '../utils/dates';
+import { medicineReminder, reminderSentence } from '../models/medicine';
 &nbsp;
-/** The next medicine still to take — later today if any, else the first one left. */
-function nextToTake(medications: Medication[], isTaken: (id: string) =&gt; boolean): Medication | undefined {
+/** The time now as "HH:MM", to compare with dose times. */
+function nowHHMM(): string {
   const now = new Date();
-  const hhmm = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-  const left = medications.filter((m) =&gt; !isTaken(m.id));
-  return left.find((m) =&gt; m.times.some((t) =&gt; t &gt;= hhmm)) ?? left[0];
+  return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 }
 &nbsp;
 /**
  * The Medicines screen, laid out as the web design: today's medicines in a
  * list on the left, the chosen one in detail on the right (stacked below on a
- * phone), the "still to take" count beside the title, and the reminder for
- * the next medicine written out as a caption under the appointment alert.
+ * phone), the "still to take" count beside the title, and the dose to take
+ * next written out as a caption under the appointment alert — an overdue one
+ * first.
  *
  * Each row's tick is a native checkbox, so Tab moves between medicines and
  * Space ticks one. Ticks are kept above the router and in localStorage, so
@@ -298,7 +286,7 @@ export default function Medications() {
   const { medications, isTaken, setTaken, progress } = useMedicines();
   const [selectedId, setSelectedId] = useState(() =&gt; medications[0]?.id);
   const selected = medications.find((m) =&gt; m.id === selectedId) ?? medications[0];
-  const reminder = nextToTake(medications, isTaken);
+  const reminder = medicineReminder(medications, isTaken, nowHHMM());
 &nbsp;
   return (
     &lt;div className="space-y-5"&gt;
@@ -311,10 +299,7 @@ export default function Medications() {
       &lt;div className="space-y-1"&gt;
         &lt;AppointmentBanner /&gt;
         {reminder &amp;&amp; (
-          &lt;CaptionStrip&gt;
-            Reminder: {reminder.name}, {reminder.dosage} — take at {formatTime12([...reminder.times].sort()[0])}.{' '}
-            {reminder.instructions}
-          &lt;/CaptionStrip&gt;
+          &lt;CaptionStrip&gt;{reminderSentence(reminder)}&lt;/CaptionStrip&gt;
         )}
       &lt;/div&gt;
 &nbsp;
@@ -370,7 +355,7 @@ export default function Medications() {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-03T06:19:24.492Z
+                at 2026-11-03T06:40:44.607Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

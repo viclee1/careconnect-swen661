@@ -49,3 +49,57 @@ export function requiredFieldErrors<K extends string>(
 export function fixSummary(count: number): string {
   return count === 1 ? '1 thing needs fixing' : `${count} things need fixing`;
 }
+
+// ── Sign in and sign up ─────────────────────────────────────────────────────
+// The same rules and the same sentences as the web and desktop clients, so a
+// user who moves between them is told the same thing in the same words.
+
+/** Shortest password Sign up accepts. */
+export const minPasswordLength = 6;
+
+function emailError(email: string): string | undefined {
+  if (!email.trim()) return 'Please enter your email address.';
+  if (!/\S+@\S+\.\S+/.test(email)) return 'Please enter a valid email address.';
+  return undefined;
+}
+
+/** Without the keys whose value is `undefined`, so "no errors" is `{}`. */
+function defined<K extends string>(errors: Record<K, string | undefined>): Partial<Record<K, string>> {
+  return Object.fromEntries(
+    Object.entries(errors).filter((entry) => entry[1] !== undefined),
+  ) as Partial<Record<K, string>>;
+}
+
+export type SignInField = 'email' | 'password';
+
+/** One sentence per field to fix, in screen order; `{}` when it may be sent. */
+export function validateSignIn(values: Record<SignInField, string>): Partial<Record<SignInField, string>> {
+  return defined<SignInField>({
+    email: emailError(values.email),
+    password: values.password ? undefined : 'Please enter your password.',
+  });
+}
+
+export type SignUpField = 'name' | 'email' | 'password' | 'confirm';
+
+/** One sentence per field to fix, in screen order; `{}` when it may be sent. */
+export function validateSignUp(values: Record<SignUpField, string>): Partial<Record<SignUpField, string>> {
+  const { name, email, password, confirm } = values;
+  return defined<SignUpField>({
+    name: name.trim() ? undefined : 'Please enter your name.',
+    email: emailError(email),
+    password: !password
+      ? 'Please create a password.'
+      : password.length < minPasswordLength
+        ? `Password must be at least ${minPasswordLength} characters.`
+        : undefined,
+    confirm: !confirm
+      ? 'Please confirm your password.'
+      : confirm !== password
+        ? 'Passwords do not match.'
+        : undefined,
+  });
+}
+
+/** The summary read out when a form is refused, as on the web. */
+export const formErrorSummary = 'Please correct the errors below to continue.';

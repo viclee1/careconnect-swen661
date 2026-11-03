@@ -12,7 +12,10 @@ import { colors } from '../theme/colors';
 import { layout } from '../theme/layout';
 import { type } from '../theme/typography';
 import { Icon } from '../components/Icon';
+import { AlertBanner } from '../components/AlertBanner';
 import { AppButton } from '../components/AppButton';
+import { useCheckedForm } from '../hooks/useCheckedForm';
+import { fixSummary, formErrorSummary, validateSignUp, type SignUpField } from '../utils/validators';
 
 export function SignUpScreen({
   onSignUp,
@@ -21,6 +24,14 @@ export function SignUpScreen({
   onSignUp: () => void;
   onSignIn: () => void;
 }) {
+  // Checked on Create account, as on the web and desktop.
+  const { values, errors, errorCount, setInput, change, submit } = useCheckedForm<SignUpField>(
+    ['name', 'email', 'password', 'confirm'],
+    { name: '', email: '', password: '', confirm: '' },
+    validateSignUp,
+    () => onSignUp(),
+  );
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -39,59 +50,89 @@ export function SignUpScreen({
         </View>
 
         <View style={styles.form}>
+          {errorCount > 0 ? (
+            <View style={styles.summary}>
+              <AlertBanner tone="error" title={formErrorSummary} message={`${fixSummary(errorCount)}.`} />
+            </View>
+          ) : null}
+
           <Text style={styles.label}>Your name *</Text>
           <Text style={styles.hint}>This is how CareConnect will greet you.</Text>
           <TextInput
-            style={styles.input}
+            ref={(input) => setInput('name', input)}
+            testID="sign-up-name"
+            value={values.name}
+            onChangeText={(text) => change('name', text)}
+            style={[styles.input, errors.name ? styles.inputInvalid : null]}
             placeholder="e.g. Alex Johnson"
+            autoComplete="name"
             accessible
             accessibilityLabel="Your name"
-            accessibilityHint="How you would like to be addressed in the app"
+            accessibilityHint={errors.name ?? 'How you would like to be addressed in the app'}
           />
+          {errors.name ? <Text style={styles.error}>{errors.name}</Text> : null}
 
           <View style={{ height: 24 }} />
 
           <Text style={styles.label}>Email address *</Text>
           <TextInput
-            style={styles.input}
+            ref={(input) => setInput('email', input)}
+            testID="sign-up-email"
+            value={values.email}
+            onChangeText={(text) => change('email', text)}
+            style={[styles.input, errors.email ? styles.inputInvalid : null]}
             placeholder="e.g. alex@example.com"
             keyboardType="email-address"
             autoCapitalize="none"
+            autoComplete="email"
             accessible
             accessibilityLabel="Email address"
-            accessibilityHint="A valid email address for account notifications"
+            accessibilityHint={errors.email ?? 'A valid email address for account notifications'}
           />
+          {errors.email ? <Text style={styles.error}>{errors.email}</Text> : null}
 
           <View style={{ height: 24 }} />
 
           <Text style={styles.label}>Password *</Text>
           <Text style={styles.hint}>At least 6 characters.</Text>
           <TextInput
-            style={styles.input}
+            ref={(input) => setInput('password', input)}
+            testID="sign-up-password"
+            value={values.password}
+            onChangeText={(text) => change('password', text)}
+            style={[styles.input, errors.password ? styles.inputInvalid : null]}
             placeholder="Create a password"
             secureTextEntry
+            autoComplete="new-password"
             accessible
             accessibilityLabel="Password"
-            accessibilityHint="Must be at least 6 characters long"
+            accessibilityHint={errors.password ?? 'Must be at least 6 characters long'}
           />
+          {errors.password ? <Text style={styles.error}>{errors.password}</Text> : null}
 
           <View style={{ height: 24 }} />
 
           <Text style={styles.label}>Confirm password *</Text>
           <TextInput
-            style={styles.input}
+            ref={(input) => setInput('confirm', input)}
+            testID="sign-up-confirm"
+            value={values.confirm}
+            onChangeText={(text) => change('confirm', text)}
+            style={[styles.input, errors.confirm ? styles.inputInvalid : null]}
             placeholder="Re-enter your password"
             secureTextEntry
+            autoComplete="new-password"
             accessible
             accessibilityLabel="Confirm password"
-            accessibilityHint="Must match the password entered above"
+            accessibilityHint={errors.confirm ?? 'Must match the password entered above'}
           />
+          {errors.confirm ? <Text style={styles.error}>{errors.confirm}</Text> : null}
 
           <View style={{ height: 32 }} />
 
           <AppButton
             label="Create account"
-            onPress={onSignUp}
+            onPress={submit}
             variant="filled"
             fullWidth
             accessibilityHint="Creates your CareConnect account and logs you in"
@@ -165,6 +206,9 @@ const styles = StyleSheet.create({
     fontSize: 17,
     marginTop: 8,
   },
+  inputInvalid: { borderColor: colors.errorText, borderWidth: 2 },
+  error: { ...type.label, color: colors.errorText, marginTop: 6 },
+  summary: { marginBottom: 24 },
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
