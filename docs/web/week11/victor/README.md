@@ -67,7 +67,7 @@ I rebuilt the shell to the design:
 | Header | Logo; **search** ("Search medicines, appointments, people…", Ctrl/⌘ K); **CC** (captions on/off, the same setting as Settings); **high contrast**; **keyboard shortcuts**; the **avatar** with the alerts badge, which opens the account menu (Switch role, Sign out) | `Layout.tsx`, `navigation/AppSearch.tsx`, `AccountMenu.tsx`, `ShortcutsDialog.tsx` |
 | Sidebar (1024 px and up) | Role pill, "Good morning, Margaret" with the date and time, the six pages, then **Settings** and **"5 alerts"** pinned to the foot. The alerts button expands into a list of links (unread messages, medicines still to take, today's visits) | `navigation/SideNav.tsx`, `NavPanel.tsx`, `useAlerts.ts` |
 | Menu drawer (below 1024 px) | The same panel slides in from the left when ☰ Menu is pressed, as the design's phone and tablet frames show. It also holds the search field and the high-contrast switch, which the header has no room for there | `navigation/NavDrawer.tsx` |
-| Status bar | "Online · synced just now", the number of active alerts in red, and "WCAG 2.2 AA · No sound required". Sticky along the foot | `navigation/StatusBar.tsx` |
+| Status bar | "Online · synced just now", the number of active alerts in red, and "WCAG 2.1 AA · No sound required". Sticky along the foot | `navigation/StatusBar.tsx` |
 | Visual alert and captions | The **Upcoming appointment** banner (Pause, OK) on Home, My Day, Appointments and Medicines, and the dark **[CC]** caption strip under it. Both read Accessibility Settings, so turning captions off, or changing their size or colour, changes them everywhere | `AppointmentBanner.tsx`, `CaptionStrip.tsx` |
 
 The same pass reworked the teammates' screens that differed from the board

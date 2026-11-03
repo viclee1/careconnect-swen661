@@ -107,7 +107,7 @@ Breakpoints (`tailwind.config.js`), matching the web design spec:
 | Navigation (both roles) | ☰ **Menu** opens a drawer from the left: role, greeting, date and time, pages, Settings, alerts, search and high contrast | Same drawer | **Sidebar** with the same panel; Settings and the alerts list at its foot |
 | Header (68px, sticky) | Menu, logo, CC, avatar with the alerts badge | Same | Logo and name, **search** (Ctrl K), CC, high contrast, keyboard shortcuts, avatar with first name |
 | Page grid | Single column; Medicines and Appointments show the list, then the detail | List beside detail (15–18rem list column) | Same, wider; Memories one column capped at 56rem |
-| Status bar (sticky) | Connection and active alerts | Same, plus "WCAG 2.2 AA · No sound required" | Same |
+| Status bar (sticky) | Connection and active alerts | Same, plus "WCAG 2.1 AA · No sound required" | Same |
 
 Checked at 375, 402, 768, 820, 1280 and 1440px: no horizontal scrolling on any
 screen, and axe reports no violations (jest-axe on every route at phone and

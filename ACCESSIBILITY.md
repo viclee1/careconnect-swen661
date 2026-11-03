@@ -46,8 +46,8 @@ The authenticated layout renders, in DOM order:
 Page content is divided into labeled regions rather than anonymous `<div>`s:
 
 - Pages use `<section aria-label="…">` or `<section aria-labelledby="…">` for each block
-  (e.g. `src/pages/Today.tsx` — `aria-label="Next thing to do"`, `aria-labelledby="later-heading"`,
-  `aria-labelledby="actions-heading"`).
+  (e.g. `src/pages/Home.tsx` — `aria-labelledby="home-title"`, `aria-labelledby="next-title"`,
+  `aria-labelledby="later-title"`).
 - The reusable **Card** component (`src/components/Card.tsx`) renders a
   `<section aria-label={heading}>`, so every card is a self-contained, named region with a
   real heading element inside it.
@@ -80,22 +80,20 @@ Page content is divided into labeled regions rather than anonymous `<div>`s:
 Headings are nested without skipping levels. There is exactly **one `<h1>` per screen**.
 Global heading styles live in `src/index.css` (`h1`→`text-3xl`, `h2`→`text-2xl`, `h3`→`text-xl`).
 
-### 2.1 Patient "Today" screen (`src/pages/Today.tsx`)
+### 2.1 Patient "Home" screen (`src/pages/Home.tsx`)
 
 ```
-h1  Here's your day, Margaret
-├─ h2  Later today                     (id="later-heading")
-│   ├─ h3  [schedule item label]       (one per RemainingCard, via Card headingLevel={3})
-│   ├─ h3  [schedule item label]
-│   └─ …
-└─ h2  Quick actions                   (id="actions-heading")
+h1  Here's your day, Margaret          (id="home-title")
+├─ h2  Video call with Maria           (id="next-title" — the "Next thing to do" item)
+└─ h2  Later today                     (id="later-title")
+    └─ list of the remaining items     (<ul role="list">, one <li> each)
 ```
 
 Notes:
-- The featured "Next thing to do" card uses styled `<p>` text rather than a heading, so it
-  does not introduce a competing top-level heading; the item title is conveyed by the
-  surrounding `<section aria-label="Next thing to do">`.
-- The "Checked in" confirmation is a `Banner` (a live status region, §3.1), not a heading.
+- The "Next thing to do" eyebrow is styled `<span>` text; the section is named by the item's
+  own `<h2>`, so a screen reader announces what the next thing actually is.
+- Progress is a `role="progressbar"` with `aria-valuetext` ("N of M done"), and the same
+  count is written out as text beside it.
 
 ### 2.2 Caregiver "Dashboard" screen (`src/pages/CaregiverDashboard.tsx`)
 
@@ -222,7 +220,7 @@ satisfy it.
 |----|------|:-----:|------------------------------|
 | **1.1.1** | Non-text Content | A | All Lucide icons are `aria-hidden="true"` and paired with visible text or an `aria-label`; decorative color swatches and avatars are `aria-hidden`; icon-only buttons (close, sign-out, send, task toggles) have `aria-label`s. |
 | **1.3.1** | Info and Relationships | A | HTML5 landmarks (`banner`/`main`/`nav`/`contentinfo`); proper heading nesting; `Card` → `<section>`; `<label htmlFor>`; `aria-describedby` for hints/errors; `role="list"` on reset lists; `<time datetime>` for times. |
-| **1.4.1** | Use of Color | A | Status is never color-only: every status carries an icon **and** a text word — see `STATUS_CFG` in `Today.tsx` (Done/Now/Coming up), the badge labels, and the `Banner` titles. |
+| **1.4.1** | Use of Color | A | Status is never color-only: every status carries an icon **and** a text word — see the "Coming up" pill and the Medication/Today badges in `Home.tsx`, the badge labels, and the `Banner` titles. |
 | **1.4.3** | Contrast (Minimum) | AA | Color tokens in `tailwind.config.js` are chosen and annotated for ≥4.5:1 body text and ≥3:1 large text/UI (e.g. `neutral-500` 4.8:1, `calm-600` 6.2:1). |
 | **1.4.4** | Resize Text | AA | All sizing is rem/`em`-based on an 18px root (`src/index.css`); the type scale in `tailwind.config.js` uses `rem`, so text scales with browser zoom without clipping. |
 | **1.4.10** | Reflow | AA | Mobile-first layout (`md`/`lg` breakpoints) reflows to a single column; verified no horizontal scrolling at 320px; an `overflow-x: clip` guard on `html, body` (`index.css`) prevents stray overflow. |
@@ -258,9 +256,9 @@ memory impairment. Each reduces cognitive load and is grounded in a WCAG princip
 | Decision | What it does | Where | WCAG principle |
 |----------|--------------|-------|----------------|
 | **Persistent orientation bar** | The sticky header always shows the **day, date, live time, a greeting by name, and the current screen title**, so the user never has to remember "where/when am I?" | `Layout.tsx` (orientation bar) | **Understandable** — predictable, always-present context (supports 3.2 Predictable; aids 2.4.6) |
-| **Recognition over recall** | The UI surfaces choices instead of asking the user to remember them: a single "Next thing to do" card, large labeled action tiles, icon+word badges, and memory cards for people/places. Nothing relies on remembered commands. | `Today.tsx`, `BigActionTile`, badges | **Understandable** — consistent, recognizable identification (3.2.4) |
+| **Recognition over recall** | The UI surfaces choices instead of asking the user to remember them: a single "Next thing to do" card, large labeled action tiles, icon+word badges, and memory cards for people/places. Nothing relies on remembered commands. | `Home.tsx`, `BigActionTile`, badges | **Understandable** — consistent, recognizable identification (3.2.4) |
 | **Undo / reversible actions** | Marking a task or medication done is a `aria-pressed` toggle that can be reversed at any time; destructive actions are gated behind a confirmation dialog with focus restoration. The user can never get "stuck" after a mistaken tap. | `Schedule.tsx`, `Medications.tsx`, `ConfirmDialog.tsx` | **Operable / Understandable** — error prevention & reversal (aligns with 3.3 Input Assistance; informs 3.3.4) |
-| **No time pressure** | There are no countdowns, auto-advancing screens, or session timeouts. The clock is informational only, and all progress persists in `localStorage`, so a user can step away and return without losing state or being logged out. | `Today.tsx`, `Medications.tsx` (persistence); header clock | **Operable** — Enough Time (2.2.1 Timing Adjustable) |
+| **No time pressure** | There are no countdowns, auto-advancing screens, or session timeouts. The clock is informational only, and all progress persists in `localStorage`, so a user can step away and return without losing state or being logged out. | `Schedule.tsx`, `Medications.tsx` (persistence); header clock | **Operable** — Enough Time (2.2.1 Timing Adjustable) |
 
 Together these choices implement the project's guiding principle: a **calm, low-pressure
 interface that supports the user's memory rather than testing it** — which is also what makes
