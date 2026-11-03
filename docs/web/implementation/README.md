@@ -117,7 +117,7 @@ engines).
 ### Screenshots
 
 Each image shows one screen at mobile (375 × 812), tablet (820 × 1180) and desktop
-(1280 × 800), regenerated on 27 October 2026 with the clock fixed at 9:45 am.
+(1280 × 800), regenerated on 3 November 2026 with the clock fixed at 9:45 am.
 
 **Home (care recipient)** — the appointment banner and [CC] caption, today's
 progress, the next thing to do and Later today; Menu on phone and tablet,

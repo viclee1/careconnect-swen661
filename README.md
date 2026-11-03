@@ -526,7 +526,7 @@ Additional helper scripts in `scripts/` are run directly with Node: `node script
 
 ## Screens & walkthrough
 
-> **Capturing screenshots:** `npm run screenshots` builds the app, serves it and captures these images at 1280 × 800 into `docs/screenshots/`. Every screen at phone, tablet and desktop width is in [`docs/web/implementation/screenshots/`](docs/web/implementation/screenshots); the Assignment 11 screens, features and keyboard states are in [`docs/web/week11/`](docs/web/week11/README.md). All were regenerated on 27 October 2026.
+> **Capturing screenshots:** `npm run screenshots` builds the app, serves it and captures these images at 1280 × 800 into `docs/screenshots/`. Every screen at phone, tablet and desktop width is in [`docs/web/implementation/screenshots/`](docs/web/implementation/screenshots); the Assignment 11 screens, features and keyboard states are in [`docs/web/week11/`](docs/web/week11/README.md). All were regenerated on 3 November 2026.
 
 ### 1. Landing page
 

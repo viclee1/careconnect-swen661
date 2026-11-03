@@ -12,7 +12,7 @@ explains how the pieces fit together and where each member's evidence is.
 | [Upneet Bir](upneet/README.md) | Appointments, Medicines, Memories |
 | Justin Zhang (this page, [below](#justins-screens)) | Landing, Sign in, Sign up, Home, My Day |
 
-Every screenshot linked from these pages was regenerated on 27 October 2026
+Every screenshot linked from these pages was regenerated on 3 November 2026
 from the merged app, with the browser clock fixed at 9:45 am so the demo data
 looks the same whenever the scripts run.
 

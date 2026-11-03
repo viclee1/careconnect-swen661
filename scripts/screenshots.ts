@@ -171,7 +171,7 @@ const shots: Shot[] = [
     seed: 'patient',
     path: '/app/manage-medicines',
     caregiver: true,
-    waitFor: (p) => p.getByRole('heading', { level: 1, name: /manage medications/i }).waitFor({ state: 'visible' }),
+    waitFor: (p) => p.getByRole('heading', { level: 1, name: /manage medicines/i }).waitFor({ state: 'visible' }),
   },
   {
     file: '12-caregiver-medication-form.png',
@@ -181,7 +181,7 @@ const shots: Shot[] = [
     prepare: async (p) => {
       await p.getByRole('button', { name: 'Add medicine', exact: true }).click();
     },
-    waitFor: (p) => p.getByRole('heading', { name: /add new medication/i }).waitFor({ state: 'visible' }),
+    waitFor: (p) => p.getByRole('heading', { name: /add new medicine/i }).waitFor({ state: 'visible' }),
   },
   {
     file: '13-caregiver-appointments.png',
